@@ -37,6 +37,32 @@
       ]
     },
     {
+      "id": "MH12CY006",
+      "credits": 4,
+      "title": "Participate in an Expedition (4 credits)",
+      "mandatory": false,
+      "files": [
+        {
+          "name": "ExpeditionDigital",
+          "filename": "MH12CY006ExpeditionDigital.html",
+          "type": "HTML"
+        }
+      ]
+    },
+    {
+      "id": "MH12CY007",
+      "credits": 6,
+      "title": "Participate in an Expedition (6 credits)",
+      "mandatory": false,
+      "files": [
+        {
+          "name": "ExpeditionDigital",
+          "filename": "MH12CY007ExpeditionDigital.html",
+          "type": "HTML"
+        }
+      ]
+    },
+    {
       "id": "MH12CY010",
       "credits": 3,
       "title": "Use a Map and Compass for a Route",
