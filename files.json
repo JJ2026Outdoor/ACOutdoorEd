@@ -9,26 +9,18 @@
         {
           "name": "PersonalSafetyDigital",
           "filename": "HB92CY002PersonalSafetyDigital.html",
-          "type": "HTML",
-          "icon": "🖥️"
+          "type": "HTML"
         },
         {
           "name": "PersonalSafetySlides",
           "filename": "HB92CY002PersonalSafetySlides.pptx",
-          "type": "PPTX",
-          "icon": "📊"
+          "type": "PPTX"
         },
         {
           "name": "PersonalSafetyWorkbook",
           "filename": "HB92CY002PersonalSafetyWorkbook.docx",
-          "type": "DOCX",
-          "icon": "📝"
+          "type": "DOCX"
         }
-      ],
-      "coming_soon": [
-        "Printable Workbook",
-        "Teacher Answer Key",
-        "Accessibility Workbook"
       ]
     },
     {
@@ -36,73 +28,7 @@
       "credits": 1,
       "title": "Sustainable Use of Natural Resources",
       "mandatory": true,
-      "files": [],
-      "coming_soon": [
-        "Teaching Slides",
-        "Printable Workbook",
-        "Teacher Answer Key",
-        "Accessibility Workbook"
-      ]
-    },
-    {
-      "id": "coming-soon-1",
-      "credits": null,
-      "title": "Practical Skills in the Outdoors",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": [
-        "Resources will appear here when ready"
-      ]
-    },
-    {
-      "id": "coming-soon-2",
-      "credits": null,
-      "title": "Assisting in an Outdoor Learning Activity",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": [
-        "Resources will appear here when ready"
-      ]
-    },
-    {
-      "id": "coming-soon-3",
-      "credits": null,
-      "title": "Physical Geography and Climate of Wales",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": [
-        "Resources will appear here when ready"
-      ]
-    },
-    {
-      "id": "coming-soon-4",
-      "credits": null,
-      "title": "Exploring Land-based Activities",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": [
-        "Resources will appear here when ready"
-      ]
-    },
-    {
-      "id": "coming-soon-5",
-      "credits": null,
-      "title": "Participate in an Expedition",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": [
-        "Resources will appear here when ready"
-      ]
-    },
-    {
-      "id": "coming-soon-6",
-      "credits": null,
-      "title": "Participate in a Water-based Activity",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": [
-        "Resources will appear here when ready"
-      ]
+      "files": []
     }
   ]
 }
