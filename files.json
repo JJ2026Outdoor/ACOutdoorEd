@@ -28,7 +28,13 @@
       "credits": 1,
       "title": "Sustainable Use of Natural Resources",
       "mandatory": true,
-      "files": []
+      "files": [
+        {
+          "name": "SustainableResourcesDigital",
+          "filename": "HB92CY003SustainableResourcesDigital.html",
+          "type": "HTML"
+        }
+      ]
     },
     {
       "id": "MH12CY010",
