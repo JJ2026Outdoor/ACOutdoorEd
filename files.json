@@ -43,9 +43,29 @@
       "mandatory": false,
       "files": [
         {
+          "name": "ExpeditionAccessible",
+          "filename": "MH12CY006ExpeditionAccessible.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "ExpeditionAnswerKey",
+          "filename": "MH12CY006ExpeditionAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "ExpeditionDigital",
           "filename": "MH12CY006ExpeditionDigital.html",
           "type": "HTML"
+        },
+        {
+          "name": "ExpeditionSlides",
+          "filename": "MH12CY006ExpeditionSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "ExpeditionWorkbook",
+          "filename": "MH12CY006ExpeditionWorkbook.docx",
+          "type": "DOCX"
         }
       ]
     },
@@ -56,9 +76,29 @@
       "mandatory": false,
       "files": [
         {
+          "name": "ExpeditionAccessible",
+          "filename": "MH12CY007ExpeditionAccessible.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "ExpeditionAnswerKey",
+          "filename": "MH12CY007ExpeditionAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "ExpeditionDigital",
           "filename": "MH12CY007ExpeditionDigital.html",
           "type": "HTML"
+        },
+        {
+          "name": "ExpeditionSlides",
+          "filename": "MH12CY007ExpeditionSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "ExpeditionWorkbook",
+          "filename": "MH12CY007ExpeditionWorkbook.docx",
+          "type": "DOCX"
         }
       ]
     },
