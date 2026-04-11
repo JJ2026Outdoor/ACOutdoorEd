@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MH12CY010 — Use a Map and Compass for a Route | Agored Cymru Level 2</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f7f7f5; }
+  textarea:focus, input:focus { outline: none; border-color: #1A6B3C !important; }
+  textarea { resize: vertical; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; }
+  ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+  @media print {
+    .no-print { display: none !important; }
+    body { background: white !important; }
+    textarea { border: 1px solid #ccc !important; background: white !important; resize: none !important; }
+    input[type="text"] { border: 1px solid #ccc !important; background: white !important; }
+    [data-wb-section] + [data-wb-section] { page-break-before: always; }
+    @page { margin: 15mm 12mm; size: A4; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+const G="#1A6B3C",LG="#E8F5EE",DG="#145530",MG="#6B6B6B",LGR="#F7F7F5",BD="#D4D4CC";
+const RED="#dc2626",RED_LT="#fef2f2",AMBER="#F59E0B",AMBER_LT="#FFFBEB";
+const BLUE="#1e40af",BLUE_LT="#eff6ff",ASSESSOR_BG="#1e3a8a",ASSESSOR_BD="#3b82f6",ASSESSOR_LT="#eff6ff";
+const ASSESSOR_PASS="Agored2025";
+const LOGO_SRC="data:image/png;base64,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";
+const AGORED_LOGO_SRC="data:image/jpeg;base64,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";
+
+const SECTIONS=["cover","contents","intro","lo1","lo2","lo3","tasks","evidence","checklist","glossary"];
+const SLABELS={
+  cover:"Cover",contents:"Contents",intro:"Introduction",
+  lo1:"LO 1 — Maps & Compasses",lo2:"LO 2 — Route Card",lo3:"LO 3 — Complete the Route",
+  tasks:"Assessment Tasks",evidence:"Photo Evidence",checklist:"Checklist",glossary:"Glossary"
+};
+
+const ACS=[
+  {id:"1.1",lo:1,text:"Described the purpose and features of different types of maps."},
+  {id:"1.2",lo:1,text:"Described the features of a lightweight protractor compass."},
+  {id:"2.1",lo:2,text:"Created a route card for a minimum four-hour outdoor activity including all required elements."},
+  {id:"3.1",lo:3,text:"Completed the planned route demonstrating map and compass skills (min. 4 hours)."},
+  {id:"3.2",lo:3,text:"Reviewed timings and alterations found on ground compared to map planning."},
+];
+
+const GLOSSARY=[
+  ["Contour line","A line on a map connecting points of equal height above sea level."],
+  ["Grid reference","A set of numbers and/or letters used to identify a precise location on a map."],
+  ["Scale","The ratio between distance on a map and actual distance on the ground."],
+  ["Legend","The key on a map explaining what symbols and colours represent."],
+  ["Bearing","A direction expressed as an angle measured clockwise from north, in degrees."],
+  ["Magnetic north","The direction a compass needle points, slightly different from true north."],
+  ["Grid north","The north direction on an OS map grid, used for navigation calculations."],
+  ["Declination","The difference in angle between magnetic north and grid/true north."],
+  ["Protractor compass","A compass with a rotating bezel and baseplate used for taking and following bearings."],
+  ["Baseplate","The flat transparent plate on a compass used to measure distances on a map."],
+  ["Bezel","The rotating ring on a compass marked in degrees, used to set a bearing."],
+  ["Attack point","A distinctive, easily identified feature near your destination used as a final reference point."],
+  ["Handrail","A linear feature such as a fence, river, or path used to guide navigation."],
+  ["Catching feature","A feature beyond your target that tells you if you have gone too far."],
+  ["Route card","A written plan for a journey including bearings, distances, timings, and emergency information."],
+  ["Pace count","A method of estimating distance by counting steps over known terrain."],
+  ["Resection","Finding your position on a map by taking bearings to two or more identifiable features."],
+  ["Triangulation","Using bearings from multiple known points to find an unknown position."],
+  ["Naismith's Rule","A formula for estimating walking time: 1 hour per 5km plus 1 hour per 600m of ascent."],
+  ["Exit route","A pre-planned alternative route away from the main route used in emergencies."],
+];
+
+const init=()=>({
+  studentName:"",className:"",assessorName:"",startDate:"",
+  ac11_types:"",ac12_parts:"",
+  ac21_activity:"",ac21_duration:"",ac21_distance:"",ac21_heightChanges:"",
+  ac21_description:"",ac21_direction:"",ac21_pace:"",ac21_stopping:"",
+  ac21_exitRoutes:"",ac21_pointsOfInterest:"",ac21_bearing:"",
+  ac21_routeRows:Array(8).fill(null).map(()=>({leg:"",bearing:"",distance:"",time:"",height:"",notes:""})),
+  ac31_route:"",ac32_timings:"",
+  t1_mapTypes:"",t1_compass:"",t2_routeCard:"",t3_evidence:"",t3_review:"",
+  checklist:{},studentSig:"",declarationDate:"",evidence_items:[],
+  assessorMode:false,ac_status:{},lo_feedback:{},task_feedback:{},
+  overall_result:"",assessorSig:"",markedDate:"",
+});
+
+function useStorage(){
+  const [data,setData]=useState(init());
+  const [saved,setSaved]=useState(false);
+  const timer=useRef(null);
+  useEffect(()=>{try{const s=localStorage.getItem("mh12cy010v1");if(s)setData({...init(),...JSON.parse(s)});}catch{}},[]);
+  const update=useCallback((patch)=>{
+    setData(prev=>{
+      const next={...prev,...patch};
+      if(timer.current)clearTimeout(timer.current);
+      timer.current=setTimeout(()=>{try{localStorage.setItem("mh12cy010v1",JSON.stringify(next));setSaved(true);setTimeout(()=>setSaved(false),2000);}catch{}},600);
+      return next;
+    });
+  },[]);
+  return{data,update,saved};
+}
+
+const pct=(data)=>{
+  const f=[data.ac11_types,data.ac12_parts,data.ac21_activity,data.ac21_description,
+    data.ac21_bearing,data.ac31_route,data.ac32_timings,data.t1_mapTypes,data.t1_compass,data.t3_review,
+    ...data.ac21_routeRows.slice(0,3).map(r=>r.bearing)].filter(x=>x&&x.trim());
+  return Math.min(100,Math.round((f.length/13)*100));
+};
+const markedCount=(data)=>Object.values(data.ac_status||{}).filter(v=>v==="met"||v==="notyet").length;
+
+const TA=({value,onChange,rows=4,ph="Write your answer here...",disabled=false})=>(
+  <textarea style={{width:"100%",border:`1.5px solid ${disabled?"#e5e7eb":BD}`,borderRadius:8,padding:"10px 12px",
+    fontSize:13,lineHeight:1.7,fontFamily:"inherit",minHeight:rows*22+20,display:"block",
+    background:disabled?"#f9fafb":"#fff",color:"#1a1a1a",cursor:disabled?"not-allowed":"text"}}
+    value={value||""} onChange={e=>!disabled&&onChange(e.target.value)} placeholder={ph} readOnly={disabled}/>
+);
+const Inp=({label,value,onChange,ph="",disabled=false})=>(
+  <div style={{display:"flex",flexDirection:"column",gap:4}}>
+    {label&&<label style={{fontSize:11,color:MG,fontWeight:600}}>{label}</label>}
+    <input style={{border:`1.5px solid ${disabled?"#e5e7eb":BD}`,borderRadius:8,padding:"8px 12px",
+      fontSize:13,fontFamily:"inherit",width:"100%",background:disabled?"#f9fafb":"#fff",
+      color:"#1a1a1a",cursor:disabled?"not-allowed":"text"}}
+      value={value||""} onChange={e=>!disabled&&onChange(e.target.value)} placeholder={ph} readOnly={disabled}/>
+  </div>
+);
+const KB=({title,items})=>(
+  <div style={{background:LG,borderLeft:`4px solid ${G}`,borderRadius:"0 8px 8px 0",padding:"14px 18px",marginBottom:14}}>
+    <div style={{fontSize:12,fontWeight:700,color:G,marginBottom:8}}>📚 {title}</div>
+    {items.map((x,i)=><div key={i} style={{fontSize:13,color:"#2a2a2a",lineHeight:1.7,marginBottom:3}}>{x}</div>)}
+  </div>
+);
+const ACQ=({ac,label,children})=>(
+  <div style={{marginBottom:24}}>
+    <span style={{background:G,color:"#fff",fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:4,display:"inline-block",marginBottom:6}}>AC {ac}</span>
+    <div style={{fontSize:15,fontWeight:600,color:"#1a1a1a",marginBottom:8}}>{label}</div>
+    {children}
+  </div>
+);
+const Divider=()=><hr style={{border:"none",borderTop:`1px solid ${BD}`,margin:"24px 0"}}/>;
+const LOHeader=({num,title})=>(
+  <div style={{background:G,color:"#fff",padding:"14px 18px",borderRadius:10,marginBottom:18}}>
+    <div style={{fontSize:11,opacity:0.7,fontWeight:700,textTransform:"uppercase",letterSpacing:1}}>Learning Outcome {num}</div>
+    <div style={{fontSize:17,fontWeight:700,marginTop:4}}>{title}</div>
+  </div>
+);
+const ContinueBtn=({label,onClick})=>(
+  <button onClick={onClick} style={{background:G,color:"#fff",border:"none",borderRadius:8,padding:"11px 22px",fontSize:13,fontWeight:700,cursor:"pointer",marginTop:8}}>{label}</button>
+);
+
+const RouteTable=({rows,onChange,disabled})=>(
+  <div style={{overflowX:"auto",marginBottom:12}}>
+    <table style={{width:"100%",borderCollapse:"collapse",fontSize:12,minWidth:700}}>
+      <thead>
+        <tr>{["Leg / Checkpoint","Bearing (°)","Distance","Est. Time","Height Change","Notes/Hazards"].map(h=>(
+          <th key={h} style={{background:G,color:"#fff",padding:"8px 10px",textAlign:"left",fontWeight:600,whiteSpace:"nowrap"}}>{h}</th>
+        ))}</tr>
+      </thead>
+      <tbody>
+        {rows.map((row,ri)=>(
+          <tr key={ri}>{Object.keys(row).map((k,ci)=>(
+            <td key={ci} style={{border:`1px solid ${BD}`,padding:0,verticalAlign:"top"}}>
+              <textarea style={{width:"100%",border:"none",padding:"7px 9px",fontSize:12,fontFamily:"inherit",minHeight:55,resize:"vertical",
+                background:disabled?"#f9fafb":"transparent",display:"block",color:"#1a1a1a",cursor:disabled?"not-allowed":"text"}}
+                value={row[k]||""} onChange={e=>{if(disabled)return;const nr=rows.map((r,rr)=>rr===ri?{...r,[k]:e.target.value}:r);onChange(nr);}} readOnly={disabled}/>
+            </td>
+          ))}</tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+const EV_LOS=[
+  {id:1,label:"LO 1 — Maps & Compasses",acs:[{id:"1.1",text:"Types and purpose of maps"},{id:"1.2",text:"Features of a protractor compass"}]},
+  {id:2,label:"LO 2 — Route Card",acs:[{id:"2.1",text:"Route card created with all elements"}]},
+  {id:3,label:"LO 3 — Complete the Route",acs:[{id:"3.1",text:"Completed planned route (min 4hrs)"},{id:"3.2",text:"Reviewed timings and alterations"}]},
+];
+
+const EvidenceSection=({items,onUpdate,assessorMode:am})=>{
+  const [nextId,setNextId]=useState(()=>items.length?Math.max(...items.map(i=>i.id))+1:1);
+  const addItem=()=>{const id=nextId;setNextId(id+1);onUpdate([...items,{id,desc:"",acs:[],mediaType:null,fileName:null,b64:null,objUrl:null,amStatus:"",amFeedback:""}]);};
+  const removeItem=(id)=>onUpdate(items.filter(i=>i.id!==id));
+  const patchItem=(id,patch)=>onUpdate(items.map(i=>i.id===id?{...i,...patch}:i));
+  const toggleAC=(id,ac)=>{const it=items.find(i=>i.id===id);if(!it)return;const acs=it.acs.includes(ac)?it.acs.filter(a=>a!==ac):[...it.acs,ac];patchItem(id,{acs});};
+  const handleFile=(id,file)=>{
+    if(!file)return;
+    if(file.type.startsWith("video")){patchItem(id,{mediaType:"video",fileName:file.name,b64:null,objUrl:URL.createObjectURL(file)});}
+    else{const reader=new FileReader();reader.onload=ev=>patchItem(id,{mediaType:"image",fileName:file.name,b64:ev.target.result,objUrl:null});reader.readAsDataURL(file);}
+  };
+  const statusTag=(s)=>{
+    const styles={met:{bg:"#dcfce7",color:"#14532d",border:"#16a34a",label:"Met"},notyet:{bg:"#fef2f2",color:"#7f1d1d",border:"#dc2626",label:"Not yet met"}};
+    const st=styles[s]||{bg:"#f1f5f9",color:"#334155",border:"#94a3b8",label:"Pending"};
+    return <span style={{display:"inline-flex",alignItems:"center",padding:"3px 9px",borderRadius:12,fontSize:11,fontWeight:600,background:st.bg,color:st.color,border:`1px solid ${st.border}`}}>{st.label}</span>;
+  };
+  const Thumb=({it})=>{
+    if(it.b64)return <img src={it.b64} alt="evidence" style={{width:82,height:82,borderRadius:6,objectFit:"cover",border:`1px solid ${BD}`,flexShrink:0}}/>;
+    if(it.objUrl&&it.mediaType==="video")return(<div style={{width:82,height:82,borderRadius:6,background:"#f3e8ff",border:"1px solid #c4b5fd",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:4,flexShrink:0}}><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5"><polygon points="5,3 19,12 5,21"/></svg><span style={{fontSize:9,fontWeight:700,background:"#7c3aed",color:"#fff",padding:"1px 5px",borderRadius:3}}>VIDEO</span></div>);
+    return(<div style={{width:82,height:82,borderRadius:6,background:LG,border:"1px solid #bbf7d0",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:4,flexShrink:0}}><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span style={{fontSize:9,color:MG}}>no file</span></div>);
+  };
+  const ACSelector=({it})=>(
+    <div style={{marginTop:10}}>
+      <div style={{fontSize:12,fontWeight:600,color:"#374151",marginBottom:6}}>Which assessment criteria does this evidence support?</div>
+      {EV_LOS.map(lo=>(
+        <div key={lo.id} style={{marginBottom:8}}>
+          <div style={{fontSize:11,fontWeight:700,color:G,background:LG,padding:"2px 8px",borderRadius:4,display:"inline-block",marginBottom:5}}>{lo.label}</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:5}}>
+            {lo.acs.map(ac=>{const sel=it.acs.includes(ac.id);return(
+              <div key={ac.id} onClick={()=>!am&&toggleAC(it.id,ac.id)}
+                style={{display:"flex",alignItems:"flex-start",gap:6,padding:"5px 8px",borderRadius:6,cursor:am?"default":"pointer",
+                  border:`1px solid ${sel?G:BD}`,background:sel?LG:"#fff",fontSize:11,lineHeight:1.3}}>
+                <div style={{width:13,height:13,border:`1.5px solid ${sel?G:BD}`,borderRadius:3,background:sel?G:"#fff",
+                  display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:1}}>
+                  {sel&&<span style={{color:"#fff",fontSize:9,fontWeight:700}}>✓</span>}
+                </div>
+                <span style={{fontWeight:sel?700:400,color:sel?"#0F4525":"#374151"}}><strong>AC {ac.id}</strong> — {ac.text}</span>
+              </div>
+            );})}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+  return(
+    <div>
+      <h2 style={{color:G,marginBottom:6,fontSize:22}}>Photo &amp; Video Evidence</h2>
+      <p style={{fontSize:13,color:MG,marginBottom:14}}>{am?"Reviewing student evidence submissions.":"Photo and video evidence is especially important for this unit — AC 3.1 requires practical demonstration. Upload images or video clips of your route completion, map reading, and compass work."}</p>
+      {!am&&(<>
+        <div style={{background:"#fffbeb",border:"1px solid #fcd34d",borderRadius:6,padding:"8px 12px",marginBottom:10,fontSize:12,color:"#92400e"}}><strong>Images</strong> are saved inside your workbook file and will be there when you reload. <strong>Videos</strong> are held in memory for this session only — keep your original video files safe.</div>
+        <div style={{background:LG,borderLeft:`4px solid ${G}`,borderRadius:"0 8px 8px 0",padding:"10px 14px",marginBottom:16,fontSize:12,color:"#0F4525"}}>For each item: write a brief description of what it shows, then tick the criteria it provides evidence for. Your route card photo is essential evidence for AC 2.1.</div>
+      </>)}
+      {items.map((it,idx)=>(
+        <div key={it.id} style={{background:am?"#f0f7ff":"#fff",borderRadius:10,border:`1.5px solid ${am?"#3b82f6":BD}`,borderLeft:`3px solid ${G}`,padding:16,marginBottom:14}}>
+          <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
+            <Thumb it={it}/>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:7}}>
+                <span style={{fontSize:12,fontWeight:700,color:G}}>Evidence item {idx+1}</span>
+                {it.amStatus&&!am&&statusTag(it.amStatus)}
+              </div>
+              {am?<div style={{fontSize:13,color:"#374151",marginBottom:6}}>{it.desc||<em style={{color:MG}}>No description provided</em>}</div>
+                :<textarea style={{width:"100%",border:`1.5px solid ${BD}`,borderRadius:8,padding:"8px 10px",fontSize:12,fontFamily:"inherit",resize:"vertical",minHeight:52,display:"block",color:"#1a1a1a"}}
+                    value={it.desc||""} onChange={e=>patchItem(it.id,{desc:e.target.value})} placeholder="Describe what this photo/video shows and how it demonstrates your navigation skills..."/>}
+              {!am&&<ACSelector it={it}/>}
+              {am&&(<div style={{marginTop:6,display:"flex",flexWrap:"wrap",gap:4}}>{it.acs.length?it.acs.map(a=><span key={a} style={{display:"inline-flex",padding:"3px 9px",borderRadius:12,fontSize:11,fontWeight:600,background:LG,color:"#0F4525",border:`1px solid ${G}`}}>{a}</span>):<span style={{fontSize:11,color:MG}}>No criteria linked</span>}</div>)}
+              {am&&(<div style={{marginTop:12,paddingTop:10,borderTop:"1px solid #bfdbfe"}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+                  <span style={{fontSize:11,fontWeight:700,color:"#1e3a8a"}}>Assessor decision for this item</span>
+                  <div style={{display:"flex",border:`1.5px solid ${BD}`,borderRadius:6,overflow:"hidden",fontSize:11,fontWeight:600}}>
+                    <button onClick={()=>patchItem(it.id,{amStatus:it.amStatus==="met"?"":"met"})} style={{padding:"4px 10px",border:"none",cursor:"pointer",background:it.amStatus==="met"?"#16a34a":"#fff",color:it.amStatus==="met"?"#fff":"#374151"}}>Met</button>
+                    <button onClick={()=>patchItem(it.id,{amStatus:it.amStatus==="notyet"?"":"notyet"})} style={{padding:"4px 10px",border:"none",cursor:"pointer",background:it.amStatus==="notyet"?"#dc2626":"#fff",color:it.amStatus==="notyet"?"#fff":"#374151"}}>Not yet met</button>
+                  </div>
+                </div>
+                <textarea style={{width:"100%",border:"1px solid #93c5fd",borderRadius:6,padding:"7px 10px",fontSize:12,fontFamily:"inherit",background:"#eff6ff",resize:"vertical",minHeight:48,color:"#1e3a8a"}}
+                  value={it.amFeedback||""} onChange={e=>patchItem(it.id,{amFeedback:e.target.value})} placeholder="Assessor feedback on this evidence item..."/>
+              </div>)}
+              {!am&&it.amStatus&&it.amFeedback&&(<div style={{background:"#eff6ff",border:"1px solid #93c5fd",borderRadius:6,padding:"8px 10px",fontSize:12,color:"#1e40af",marginTop:6}}><span style={{fontWeight:700}}>Assessor feedback:</span> {it.amFeedback} {statusTag(it.amStatus)}</div>)}
+            </div>
+          </div>
+          {!am&&(<div style={{display:"flex",gap:8,justifyContent:"flex-end",alignItems:"center",marginTop:10,flexWrap:"wrap"}}>
+            {it.fileName&&<span style={{fontSize:11,color:MG,flex:1,minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{it.fileName}</span>}
+            <label style={{padding:"4px 10px",borderRadius:6,border:`1.5px solid ${G}`,background:"#fff",color:G,fontSize:11,fontWeight:600,cursor:"pointer"}}>{it.fileName?"Replace file":"Upload photo/video"}<input type="file" accept="image/*,video/*" style={{display:"none"}} onChange={e=>handleFile(it.id,e.target.files[0])}/></label>
+            <button onClick={()=>removeItem(it.id)} style={{padding:"4px 10px",borderRadius:6,border:"1.5px solid #dc2626",background:"#dc2626",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer"}}>Remove</button>
+          </div>)}
+        </div>
+      ))}
+      {!am&&(<button onClick={addItem} style={{width:"100%",padding:10,borderRadius:8,border:`1.5px solid ${G}`,background:"#fff",color:G,fontSize:13,fontWeight:600,cursor:"pointer",marginTop:2}}>+ Add photo / video evidence</button>)}
+    </div>
+  );
+};
+
+const AssessorFeedback=({label,value,onChange,assessorMode})=>{
+  if(!assessorMode&&!value)return null;
+  return(
+    <div data-wb-feedback="true" style={{background:assessorMode?ASSESSOR_LT:BLUE_LT,border:`1.5px solid ${assessorMode?ASSESSOR_BD:"#93c5fd"}`,borderRadius:8,padding:"12px 14px",marginTop:12}}>
+      <div style={{fontSize:11,fontWeight:700,color:assessorMode?ASSESSOR_BG:BLUE,marginBottom:6}}>Assessor Feedback — {label}</div>
+      {assessorMode?<TA rows={3} value={value} onChange={onChange} ph="Enter feedback for this section..."/>
+        :<div style={{fontSize:13,color:ASSESSOR_BG,lineHeight:1.6}}>{value}</div>}
+    </div>
+  );
+};
+
+const ACStatus=({id,status,onChange})=>(
+  <div style={{display:"flex",gap:6,alignItems:"center",marginTop:8}}>
+    <span style={{fontSize:11,fontWeight:700,color:ASSESSOR_BG}}>Assessor decision:</span>
+    {[["Met","met","#16a34a"],["Not yet met","notyet",RED]].map(([l,v,c])=>(
+      <button key={v} onClick={()=>onChange(status===v?"":v)}
+        style={{padding:"3px 10px",borderRadius:4,border:`1.5px solid ${status===v?c:BD}`,
+          background:status===v?c:"#fff",color:status===v?"#fff":MG,fontSize:10,fontWeight:700,cursor:"pointer"}}>{l}</button>
+    ))}
+  </div>
+);
+
+const PasswordModal=({onSuccess,onCancel})=>{
+  const [pw,setPw]=useState("");const [err,setErr]=useState(false);
+  const check=()=>{if(pw===ASSESSOR_PASS){setErr(false);onSuccess();}else{setErr(true);setPw("");}};
+  return(
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.55)",zIndex:9999,display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div style={{background:"#fff",borderRadius:14,padding:"32px 36px",width:360,boxShadow:"0 8px 32px rgba(0,0,0,0.25)"}}>
+        <div style={{fontSize:20,fontWeight:700,color:ASSESSOR_BG,marginBottom:6}}>Assessor Access</div>
+        <div style={{fontSize:13,color:MG,marginBottom:20,lineHeight:1.6}}>Enter the assessor password to continue.</div>
+        <input type="password" autoFocus value={pw} onChange={e=>{setPw(e.target.value);setErr(false);}}
+          onKeyDown={e=>e.key==="Enter"&&check()} placeholder="Enter assessor password"
+          style={{width:"100%",border:`2px solid ${err?"#dc2626":ASSESSOR_BD}`,borderRadius:8,padding:"10px 14px",
+            fontSize:14,fontFamily:"inherit",marginBottom:8,background:"#fff",color:"#1a1a1a"}}/>
+        {err&&<div style={{fontSize:12,color:"#dc2626",marginBottom:10,fontWeight:600}}>Incorrect password. Please try again.</div>}
+        <div style={{display:"flex",gap:10,marginTop:12}}>
+          <button onClick={check} style={{flex:1,padding:"10px",borderRadius:8,border:"none",background:ASSESSOR_BG,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>Unlock</button>
+          <button onClick={onCancel} style={{flex:1,padding:"10px",borderRadius:8,border:`1.5px solid ${BD}`,background:"#fff",color:MG,fontSize:13,cursor:"pointer"}}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+function App(){
+  const {data,update,saved}=useStorage();
+  const [sec,setSec]=useState("cover");
+  const [showPwModal,setShowPwModal]=useState(false);
+  const [showPrintMenu,setShowPrintMenu]=useState(false);
+  const [printMode,setPrintMode]=useState("all");
+  const [printWithFeedback,setPrintWithFeedback]=useState(false);
+  const [importMsg,setImportMsg]=useState(null);
+  const fileRef=useRef(null);
+  const am=data.assessorMode;
+  const p=pct(data);
+  const mc=markedCount(data);
+  const metCount=Object.values(data.ac_status||{}).filter(v=>v==="met").length;
+  const upd=k=>v=>update({[k]:v});
+  const acStatus=id=>(data.ac_status||{})[id]||"";
+  const setACStatus=(id,val)=>{const s={...(data.ac_status||{})};s[id]=val;update({ac_status:s});};
+  const loFb=lo=>(data.lo_feedback||{})[lo]||"";
+  const setLOFeedback=(lo,val)=>{const f={...(data.lo_feedback||{})};f[lo]=val;update({lo_feedback:f});};
+  const taskFb=t=>(data.task_feedback||{})[t]||"";
+  const setTaskFeedback=(t,val)=>{const f={...(data.task_feedback||{})};f[t]=val;update({task_feedback:f});};
+
+  const exportData=()=>{
+    const name=(data.studentName||"student").replace(/\s+/g,"_").toLowerCase();
+    const blob=new Blob([JSON.stringify({...data,_exported:new Date().toISOString(),_unit:"MH12CY010"},null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");
+    a.href=url;a.download=`MH12CY010_${name}_workbook.json`;a.click();URL.revokeObjectURL(url);
+  };
+  const importData=e=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const parsed=JSON.parse(ev.target.result);
+        if(!parsed._unit||parsed._unit!=="MH12CY010"){setImportMsg({ok:false,text:"This file is not an MH12CY010 workbook."});}
+        else{const{_exported,_unit,...rest}=parsed;update({...init(),...rest});setImportMsg({ok:true,text:`Workbook loaded for ${parsed.studentName||"student"}.`});}
+      }catch{setImportMsg({ok:false,text:"Could not read file."});}
+      setTimeout(()=>setImportMsg(null),4000);
+    };
+    reader.readAsText(file);e.target.value="";
+  };
+
+  const doPrint=(mode,withFeedback)=>{
+    setShowPrintMenu(false);
+    setTimeout(()=>{
+      const panels=document.querySelectorAll("[data-wb-section]");
+      const savedDisplays=[];
+      const EV_SECTIONS=["tasks","evidence","checklist"];
+      panels.forEach((p,i)=>{
+        savedDisplays[i]=p.style.display;
+        if(mode==="all")p.style.display="block";
+        else if(mode==="ev"){const s=p.getAttribute("data-wb-section");p.style.display=EV_SECTIONS.includes(s)?"block":"none";}
+      });
+      const hideFeedback=(mode!=="ev")&&!withFeedback;
+      if(hideFeedback)document.querySelectorAll("[data-wb-feedback]").forEach(el=>{el.setAttribute("data-wb-feedback-hidden","true");el.style.display="none";});
+      const evStrip=document.getElementById("ev-cover-strip");
+      if(evStrip)evStrip.style.display=mode==="ev"?"block":"none";
+      setTimeout(()=>{
+        window.print();
+        panels.forEach((p,i)=>{p.style.display=savedDisplays[i];});
+        if(hideFeedback)document.querySelectorAll("[data-wb-feedback-hidden]").forEach(el=>{el.removeAttribute("data-wb-feedback-hidden");el.style.display="";});
+        if(evStrip)evStrip.style.display="none";
+      },300);
+    },100);
+  };
+
+  return(
+    <div style={{fontFamily:"'Segoe UI',system-ui,sans-serif",paddingBottom:70,background:"#f7f7f5",minHeight:"100vh"}}>
+      <input type="file" accept=".json" ref={fileRef} onChange={importData} style={{display:"none"}}/>
+      {importMsg&&(<div style={{position:"fixed",top:120,left:"50%",transform:"translateX(-50%)",background:importMsg.ok?G:"#c0392b",color:"#fff",padding:"10px 20px",borderRadius:8,fontSize:13,fontWeight:600,zIndex:999}}>{importMsg.ok?"✓ ":"✕ "}{importMsg.text}</div>)}
+
+      {showPrintMenu&&(
+        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.55)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>setShowPrintMenu(false)}>
+          <div style={{background:"#fff",borderRadius:12,padding:"28px 32px",minWidth:360,maxWidth:440,boxShadow:"0 8px 40px rgba(0,0,0,0.22)"}} onClick={e=>e.stopPropagation()}>
+            <h2 style={{fontSize:18,fontWeight:700,color:"#1a3a2a",marginBottom:6}}>Print Workbook</h2>
+            <p style={{fontSize:13,color:"#6b7280",marginBottom:20}}>Choose what to print.</p>
+            <div style={{marginBottom:16}}>
+              {[["all","Complete workbook","All sections including Knowledge Hub and activities"],
+                ["current","Current section only","Prints only the section you are currently viewing"],
+                ["ev","EV Summary — External Verification","Assessment tasks, photo evidence and checklist only — includes all assessor feedback."]
+              ].map(([val,title,desc])=>(
+                <label key={val} style={{display:"flex",alignItems:"flex-start",gap:10,fontSize:13,marginBottom:10,cursor:"pointer",padding:"10px 12px",borderRadius:8,
+                  border:`${val==="ev"?"2":"1.5"}px solid ${printMode===val?(val==="ev"?"#1e40af":G):BD}`,background:printMode===val?(val==="ev"?"#eff6ff":"#f0fdf4"):"#fff"}}>
+                  <input type="radio" name="printMode" checked={printMode===val} onChange={()=>setPrintMode(val)} style={{accentColor:val==="ev"?"#1e40af":G,marginTop:2}}/>
+                  <div><div style={{fontWeight:val==="ev"?700:600,color:printMode===val&&val==="ev"?"#1e40af":"#374151"}}>{title}</div><div style={{fontSize:11,color:"#6b7280",marginTop:1}}>{desc}</div></div>
+                </label>
+              ))}
+            </div>
+            {printMode!=="ev"&&(<div style={{marginBottom:20,padding:"12px 14px",background:"#f0fdf4",borderRadius:8,border:"1px solid #bbf7d0"}}>
+              <label style={{display:"flex",alignItems:"center",gap:8,fontSize:13,cursor:"pointer",fontWeight:600}}>
+                <input type="checkbox" checked={printWithFeedback} onChange={e=>setPrintWithFeedback(e.target.checked)} style={{accentColor:G}}/>
+                <span>Include assessor feedback</span>
+              </label>
+            </div>)}
+            {printMode==="ev"&&(<div style={{marginBottom:20,padding:"10px 14px",background:"#eff6ff",borderRadius:8,border:"1px solid #bfdbfe",fontSize:12,color:"#1e40af"}}>Assessor feedback is always included in EV Summary prints.</div>)}
+            <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
+              <button onClick={()=>setShowPrintMenu(false)} style={{border:"1px solid #d1d5db",background:"#fff",color:"#6b7280",padding:"8px 18px",borderRadius:7,fontSize:13,cursor:"pointer"}}>Cancel</button>
+              <button onClick={()=>doPrint(printMode,printWithFeedback)} style={{background:printMode==="ev"?"#1e40af":G,color:"#fff",border:"none",padding:"8px 20px",borderRadius:7,fontSize:13,fontWeight:700,cursor:"pointer"}}>Print Now</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showPwModal&&<PasswordModal onSuccess={()=>{setShowPwModal(false);update({assessorMode:true});}} onCancel={()=>setShowPwModal(false)}/>}
+
+      <div className="no-print" style={{background:am?ASSESSOR_BG:G,color:"#fff",padding:"6px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,boxShadow:"0 2px 6px rgba(0,0,0,0.2)"}}>
+        <div>
+          <div style={{fontSize:14,fontWeight:700}}>Use a Map and Compass for a Route</div>
+          <div style={{fontSize:11,opacity:0.75}}>MH12CY010 &middot; CDP286 &middot; Level 2 &middot; Agored Cymru</div>
+        </div>
+        <img src={LOGO_SRC} alt="School Logo" style={{height:52,width:"auto",objectFit:"contain",margin:"0 8px",filter:"drop-shadow(0 1px 2px rgba(0,0,0,0.25))"}}/>
+        <img src={AGORED_LOGO_SRC} alt="Agored Cymru" style={{height:48,width:"auto",objectFit:"contain",margin:"0 8px"}}/>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          {saved&&<span style={{fontSize:11,background:"rgba(255,255,255,0.2)",padding:"3px 10px",borderRadius:20}}>✓ Saved</span>}
+          {am&&<span style={{fontSize:11,background:"rgba(255,255,255,0.25)",padding:"3px 10px",borderRadius:20,fontWeight:700}}>ASSESSOR MODE</span>}
+          <span style={{fontSize:12,opacity:0.8}}>{p}% complete</span>
+          <button onClick={exportData} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer"}}>↓ Save File</button>
+          <button onClick={()=>fileRef.current&&fileRef.current.click()} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer"}}>↑ Load File</button>
+          <button onClick={()=>setShowPrintMenu(true)} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer"}}>🖨 Print</button>
+        </div>
+      </div>
+
+      <div className="no-print" style={{background:am?ASSESSOR_BG:"#fff",borderBottom:`2px solid ${am?ASSESSOR_BD:BD}`,padding:"8px 20px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{fontSize:12,color:am?"#93c5fd":MG,fontWeight:am?700:400}}>
+          {am?"ASSESSOR MODE — You are marking this workbook. Students cannot edit in this mode.":"Student mode — your answers are editable."}
+        </div>
+        <button onClick={am?()=>update({assessorMode:false}):()=>setShowPwModal(true)}
+          style={{padding:"6px 16px",borderRadius:6,border:`1.5px solid ${am?ASSESSOR_BD:G}`,background:am?"#fff":G,color:am?ASSESSOR_BG:"#fff",fontSize:11,fontWeight:700,cursor:"pointer"}}>
+          {am?"Exit Assessor Mode":"Enter Assessor Mode"}
+        </button>
+      </div>
+
+      <div className="no-print" style={{background:"#fff",borderBottom:`1px solid ${BD}`,overflowX:"auto",display:"flex",position:"sticky",top:108,zIndex:99}}>
+        {SECTIONS.map(s=>(
+          <button key={s} onClick={()=>setSec(s)}
+            style={{border:"none",background:sec===s?LG:"transparent",color:sec===s?G:MG,
+              borderBottom:sec===s?`2px solid ${G}`:"2px solid transparent",
+              padding:"9px 13px",fontSize:11,fontWeight:sec===s?700:400,cursor:"pointer",whiteSpace:"nowrap"}}>
+            {SLABELS[s]}
+          </button>
+        ))}
+      </div>
+
+      <div style={{padding:"28px 20px 0"}}>
+
+        <div id="ev-cover-strip" style={{display:"none",marginBottom:24,borderRadius:10,overflow:"hidden",border:"2px solid #1e40af"}}>
+          <div style={{background:"#1e40af",color:"#fff",padding:"14px 20px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div>
+              <div style={{fontSize:11,fontWeight:700,opacity:0.8,textTransform:"uppercase",letterSpacing:1}}>External Verification Summary</div>
+              <div style={{fontSize:17,fontWeight:700,marginTop:2}}>Use a Map and Compass for a Route</div>
+              <div style={{fontSize:12,opacity:0.8,marginTop:2}}>Unit MH12CY010 — CDP286 — Agored Cymru Level 2</div>
+            </div>
+            <img src={AGORED_LOGO_SRC} alt="Agored Cymru" style={{height:44,width:"auto",objectFit:"contain",opacity:0.92}}/>
+          </div>
+          <div style={{background:"#eff6ff",padding:"12px 20px",display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12}}>
+            {[["Student",data.studentName||"—"],["Assessor",data.assessorName||"—"],["Date marked",data.markedDate||"—"],["Overall result",data.overall_result||"Pending"]].map(([l,v])=>(
+              <div key={l}><div style={{fontSize:10,fontWeight:700,color:"#1e40af",textTransform:"uppercase",letterSpacing:0.5}}>{l}</div><div style={{fontSize:13,fontWeight:700,color:"#1e3a8a",marginTop:2}}>{v}</div></div>
+            ))}
+          </div>
+        </div>
+
+        <div data-wb-section="cover" style={{display:sec==="cover"?"block":"none"}}>
+          <div style={{background:G,color:"#fff",padding:"24px 20px",borderRadius:12,marginBottom:20}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+              <div style={{fontSize:11,opacity:0.7,fontWeight:700,letterSpacing:1,textTransform:"uppercase"}}>Agored Cymru &middot; Level 2 Student Workbook</div>
+              <img src={AGORED_LOGO_SRC} alt="Agored Cymru" style={{height:48,width:"auto",objectFit:"contain"}}/>
+            </div>
+            <h1 style={{fontSize:24,fontWeight:700,lineHeight:1.3,margin:"6px 0 4px"}}>Use a Map and Compass for a Route</h1>
+            <div style={{fontSize:13,opacity:0.8}}>Unit MH12CY010 &mdash; CDP286 &middot; 3 Credits</div>
+          </div>
+          {am&&(<div style={{background:ASSESSOR_LT,border:`2px solid ${ASSESSOR_BD}`,borderRadius:10,padding:18,marginBottom:14}}>
+            <div style={{fontSize:13,fontWeight:700,color:ASSESSOR_BG,marginBottom:12}}>Assessor Marking Summary</div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:16}}>
+              {[["Criteria marked",`${mc} / ${ACS.length}`],["Met",`${metCount}`],["Not yet met",`${mc-metCount}`]].map(([l,v])=>(
+                <div key={l} style={{background:"#fff",borderRadius:8,padding:"10px 12px",border:`1px solid ${ASSESSOR_BD}`}}>
+                  <div style={{fontSize:10,color:ASSESSOR_BG,fontWeight:700}}>{l}</div>
+                  <div style={{fontSize:22,fontWeight:700,color:ASSESSOR_BG,marginTop:2}}>{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>)}
+          <div style={{background:"#fff",borderRadius:10,border:`1px solid ${BD}`,padding:"20px 24px",marginBottom:16}}>
+            <div style={{fontSize:14,fontWeight:700,color:G,marginBottom:16}}>Student Details</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+              <Inp label="Student Name" value={data.studentName} onChange={upd("studentName")} ph="Full name" disabled={am}/>
+              <Inp label="Class / Group" value={data.className} onChange={upd("className")} ph="Class name" disabled={am}/>
+              <Inp label="Assessor Name" value={data.assessorName} onChange={upd("assessorName")} ph="Assessor name" disabled={am}/>
+              <Inp label="Start Date" value={data.startDate} onChange={upd("startDate")} ph="DD/MM/YYYY" disabled={am}/>
+            </div>
+          </div>
+          <KB title="Unit Overview" items={["Unit: MH12CY010 — Use a Map and Compass for a Route","Level: 2 | Credits: 3 | GLH: 27 | Unit ID: CDP286","LO1 — Understand the key features of maps and compasses.","LO2 — Be able to create a route card for an outdoor activity.","LO3 — Be able to complete the planned route.","AC 3.1 requires practical demonstration — your route completion must be evidenced by assessor observation or photo/video."]}/>
+          <div style={{background:"#fff3cd",border:"1px solid #ffc107",borderRadius:8,padding:"12px 16px",fontSize:13,color:"#856404",marginBottom:16}}>
+            <strong>Important:</strong> AC 2.1 requires a route card for a minimum four-hour activity including at least one compass bearing. AC 3.1 requires you to actually complete that route for a minimum of four hours.
+          </div>
+          {!am&&<ContinueBtn label="Continue to Contents →" onClick={()=>setSec("contents")}/>}
+        </div>
+
+        <div data-wb-section="contents" style={{display:sec==="contents"?"block":"none"}}>
+          <h2 style={{color:G,marginBottom:18,fontSize:22}}>Contents</h2>
+          {[["Introduction","intro","Unit aim, purpose, and learning outcomes"],
+            ["LO 1 — Maps & Compasses","lo1","Map types, features, and protractor compass (AC 1.1–1.2)"],
+            ["LO 2 — Route Card","lo2","Creating a full route card for a 4-hour activity (AC 2.1)"],
+            ["LO 3 — Complete the Route","lo3","Route completion evidence and review (AC 3.1–3.2)"],
+            ["Assessment Tasks","tasks","Formal written tasks for all criteria"],
+            ["Photo Evidence","evidence","Upload and link photo/video evidence to criteria"],
+            ["Criteria Checklist","checklist","Self-assessment and assessor sign-off"],
+            ["Glossary","glossary","Key navigation terms and definitions"],
+          ].map(([l,s,d])=>(
+            <div key={s} onClick={()=>setSec(s)} style={{display:"flex",alignItems:"center",gap:14,padding:"13px 14px",borderBottom:`1px solid ${BD}`,cursor:"pointer",borderRadius:8,background:"#fff",marginBottom:4}}>
+              <div style={{flex:1}}><div style={{fontWeight:700,fontSize:14,color:"#1a1a1a"}}>{l}</div><div style={{fontSize:12,color:MG,marginTop:2}}>{d}</div></div>
+              <div style={{color:G,fontSize:20}}>›</div>
+            </div>
+          ))}
+        </div>
+
+        <div data-wb-section="intro" style={{display:sec==="intro"?"block":"none"}}>
+          <h2 style={{color:G,marginBottom:16,fontSize:22}}>Introduction</h2>
+          <p style={{fontSize:14,color:"#2a2a2a",lineHeight:1.8,marginBottom:16}}>Welcome to your digital workbook for <strong>Unit MH12CY010 — Use a Map and Compass for a Route</strong>. This unit develops your practical navigation skills using OS maps and a protractor compass in the outdoors.</p>
+          <KB title="Learning Outcomes" items={["LO1 — Understand the key features of maps and compasses.","LO2 — Be able to create a route card for an outdoor activity.","LO3 — Be able to complete the planned route."]}/>
+          <KB title="How to use this workbook" items={["Use the navigation bar above to move between sections.","Read the Knowledge Hub in each section before answering questions.","Complete the LO activities first, then write up the formal Assessment Tasks.","Use the Photo Evidence tab to upload photos of your route card, map work, and route completion — AC 3.1 is a practical demonstration so evidence uploads are critical.","A plural statement requires a minimum of TWO examples."]}/>
+          {!am&&<ContinueBtn label="Continue to LO 1 →" onClick={()=>setSec("lo1")}/>}
+        </div>
+
+        <div data-wb-section="lo1" style={{display:sec==="lo1"?"block":"none"}}>
+          <LOHeader num={1} title="Understand the key features of maps and compasses"/>
+          <KB title="Types of Maps" items={[
+            "OS Explorer (1:25,000) — 4cm = 1km. Shows footpaths, field boundaries, walls. Best for walking and detailed navigation in the Welsh uplands.",
+            "OS Landranger (1:50,000) — 2cm = 1km. Covers a larger area with less detail. Good for planning longer cycling or walking routes.",
+            "Harvey Maps — lightweight and waterproof. Designed for mountain biking and mountain marathons such as routes at Afan Argoed and Coed y Brenin.",
+            "Topographic maps — show relief using contour lines. Essential for understanding terrain before a route.",
+            "Trail centre maps — simplified maps for specific networks. Good for on-trail navigation but not suitable for remote countryside.",
+          ]}/>
+          <KB title="Key Map Features" items={[
+            "Scale: the ratio between map distance and ground distance. OS Explorer 1:25,000 means 4cm on map = 1km on ground.",
+            "Contour lines: brown lines joining points of equal height. Close together = steep; far apart = gentle gradient.",
+            "Grid lines and references: blue grid lines allow precise location using 6-figure or 8-figure grid references.",
+            "Legend/Key: explains what symbols and colours represent — always check before using a new map.",
+          ]}/>
+          <KB title="The Protractor Compass — Key Parts" items={[
+            "Baseplate — transparent rectangular plate with scale edges for measuring map distances.",
+            "Bezel (rotating housing) — the circular ring marked 0–360°. Rotate this to set bearings.",
+            "Compass needle — red end always points to magnetic north.",
+            "Direction of travel arrow — on the baseplate, shows the direction you intend to walk.",
+            "Orienting lines — lines inside the bezel that you align to map grid lines.",
+            "Orienting arrow — inside the bezel; align the red compass needle to this when following a bearing ('red in shed').",
+            "Index line — at the top of the bezel where you read off your bearing.",
+          ]}/>
+          <Divider/>
+          <ACQ ac="1.1" label="Describe the purpose and features of at least TWO different types of maps used in outdoor activities.">
+            <TA rows={8} value={data.ac11_types} onChange={upd("ac11_types")} ph="Describe at least two types of map — their scale, purpose, and what features they show. Include examples relevant to outdoor activities in Wales..." disabled={am}/>
+          </ACQ>
+          <ACQ ac="1.2" label="Describe the features of a lightweight protractor compass. Include the name and purpose of each key part.">
+            <TA rows={8} value={data.ac12_parts} onChange={upd("ac12_parts")} ph="Name and describe each part of a protractor compass — baseplate, bezel, needle, direction of travel arrow, orienting lines, orienting arrow, and index line. Explain what each is used for..." disabled={am}/>
+          </ACQ>
+          <AssessorFeedback label="LO 1 — Maps & Compasses" value={loFb("lo1")} onChange={v=>setLOFeedback("lo1",v)} assessorMode={am}/>
+          {!am&&<ContinueBtn label="Continue to LO 2 →" onClick={()=>setSec("lo2")}/>}
+        </div>
+
+        <div data-wb-section="lo2" style={{display:sec==="lo2"?"block":"none"}}>
+          <LOHeader num={2} title="Be able to create a route card"/>
+          <KB title="What is a Route Card?" items={[
+            "A route card is a written plan for a journey created BEFORE the route, left with a responsible person.",
+            "Your route card must cover a minimum of FOUR HOURS of activity.",
+            "At least one compass bearing must be included.",
+            "Required elements: distance · height changes · route description · route direction · pace of group · stopping points · exit routes (min. 2) · points of interest · compass bearing.",
+          ]}/>
+          <KB title="How to Calculate a Bearing" items={[
+            "1. Place the baseplate edge along the line from your position to your destination on the map.",
+            "2. Rotate the bezel until the orienting lines are parallel to the north grid lines.",
+            "3. Read the GRID bearing at the index line.",
+            "4. Add the magnetic declination (~2° West in Wales) to get the MAGNETIC bearing.",
+            "5. Hold compass flat, turn body until red needle aligns with orienting arrow — walk in the direction of the travel arrow.",
+          ]}/>
+          <KB title="Estimating Time — Naismith's Rule" items={[
+            "Allow 1 hour per 5km of horizontal distance, plus 1 hour per 600m of ascent.",
+            "Example: A 10km route with 300m of ascent = 2 hours + 30 minutes = 2 hours 30 minutes.",
+            "Always add contingency time for group pace and rest stops.",
+          ]}/>
+          <Divider/>
+          <ACQ ac="2.1" label="Create a route card for an outdoor activity of a minimum of FOUR HOURS. Include all required elements and at least one compass bearing.">
+            <div style={{marginBottom:16}}>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginBottom:12}}>
+                <Inp label="Activity / Route Name" value={data.ac21_activity} onChange={upd("ac21_activity")} ph="e.g. Pen y Fan circular" disabled={am}/>
+                <Inp label="Total Duration (must be 4hrs+)" value={data.ac21_duration} onChange={upd("ac21_duration")} ph="e.g. 5 hours" disabled={am}/>
+                <Inp label="Total Distance" value={data.ac21_distance} onChange={upd("ac21_distance")} ph="e.g. 12km" disabled={am}/>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12}}>
+                <Inp label="Total Height Changes" value={data.ac21_heightChanges} onChange={upd("ac21_heightChanges")} ph="e.g. 450m ascent, 450m descent" disabled={am}/>
+                <Inp label="Overall Route Direction" value={data.ac21_direction} onChange={upd("ac21_direction")} ph="e.g. Circular from car park at GR SO012197" disabled={am}/>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12}}>
+                <Inp label="Pace of Group" value={data.ac21_pace} onChange={upd("ac21_pace")} ph="e.g. Mixed ability, 3km/h average" disabled={am}/>
+                <Inp label="Planned Stopping Points" value={data.ac21_stopping} onChange={upd("ac21_stopping")} ph="e.g. Summit at 2hrs, river crossing, café" disabled={am}/>
+              </div>
+            </div>
+            <div style={{marginBottom:6,fontSize:11,color:MG,fontWeight:600}}>Leg-by-Leg Route Card (include at least one compass bearing in the Bearing column)</div>
+            <RouteTable rows={data.ac21_routeRows} onChange={v=>update({ac21_routeRows:v})} disabled={am}/>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:12,marginTop:8}}>
+              <div>
+                <div style={{fontSize:11,color:MG,fontWeight:600,marginBottom:5}}>Exit Routes / Emergency Escape Routes (min. TWO)</div>
+                <TA rows={3} value={data.ac21_exitRoutes} onChange={upd("ac21_exitRoutes")} ph="Describe at least two exit routes..." disabled={am}/>
+              </div>
+              <div>
+                <div style={{fontSize:11,color:MG,fontWeight:600,marginBottom:5}}>Points of Interest</div>
+                <TA rows={3} value={data.ac21_pointsOfInterest} onChange={upd("ac21_pointsOfInterest")} ph="Notable features, landmarks, historical points on the route..." disabled={am}/>
+              </div>
+            </div>
+            <div style={{fontSize:11,color:MG,fontWeight:600,marginBottom:5}}>Route Description</div>
+            <TA rows={5} value={data.ac21_description} onChange={upd("ac21_description")} ph="Describe the route in full — terrain, navigation features, key decision points..." disabled={am}/>
+          </ACQ>
+          <AssessorFeedback label="LO 2 — Route Card" value={loFb("lo2")} onChange={v=>setLOFeedback("lo2",v)} assessorMode={am}/>
+          {!am&&<ContinueBtn label="Continue to LO 3 →" onClick={()=>setSec("lo3")}/>}
+        </div>
+
+        <div data-wb-section="lo3" style={{display:sec==="lo3"?"block":"none"}}>
+          <LOHeader num={3} title="Be able to complete the planned route"/>
+          <KB title="Completing the Route" items={[
+            "You must complete the route planned in your route card — minimum four hours.",
+            "Demonstrate: taking and following compass bearings, identifying map features on the ground, reading contour lines, using handrails and catching features.",
+            "Your assessor will observe your navigation. Photo and video evidence in the Evidence tab also supports AC 3.1.",
+            "The route can be walking, cycling, or canoeing.",
+          ]}/>
+          <KB title="Reviewing Planned vs Actual — AC 3.2" items={[
+            "After the route, compare your actual times and decisions against your route card.",
+            "Did each leg take the time expected? Were any bearings harder to follow on the ground?",
+            "Did weather or group conditions affect your pace?",
+            "What would you do differently when planning your next route?",
+          ]}/>
+          <Divider/>
+          <ACQ ac="3.1" label="Complete your planned route demonstrating map and compass skills. This must be a minimum of FOUR HOURS.">
+            <div style={{background:"#fff3cd",border:"1px solid #ffc107",borderRadius:8,padding:"10px 14px",fontSize:12,color:"#856404",marginBottom:12}}>
+              AC 3.1 is a practical demonstration — write a brief account below, and upload photo or video evidence in the Photo Evidence tab. Your assessor's observation is the primary evidence for this criterion.
+            </div>
+            <TA rows={6} value={data.ac31_route} onChange={upd("ac31_route")} ph="Write a brief account of completing the route — what navigation techniques you used, any challenges you encountered and how you resolved them..." disabled={am}/>
+          </ACQ>
+          <ACQ ac="3.2" label="Review the timings and any alterations you made on the ground compared to your route card plan.">
+            <TA rows={8} value={data.ac32_timings} onChange={upd("ac32_timings")} ph="Compare your planned timings with your actual timings leg by leg. Describe any alterations you made — why you made them, and what you learned. What would you plan differently next time?" disabled={am}/>
+          </ACQ>
+          <AssessorFeedback label="LO 3 — Complete the Route" value={loFb("lo3")} onChange={v=>setLOFeedback("lo3",v)} assessorMode={am}/>
+          {!am&&<ContinueBtn label="Continue to Assessment Tasks →" onClick={()=>setSec("tasks")}/>}
+        </div>
+
+        <div data-wb-section="tasks" style={{display:sec==="tasks"?"block":"none"}}>
+          <h2 style={{color:G,marginBottom:8,fontSize:22}}>Formal Assessment Tasks</h2>
+          <p style={{fontSize:13,color:MG,marginBottom:20}}>These tasks produce your formal assessment evidence. Use your LO work to inform detailed answers here.</p>
+
+          <div style={{border:`2px solid ${G}`,borderRadius:10,padding:18,marginBottom:22}}>
+            <div style={{background:G,color:"#fff",padding:"7px 12px",borderRadius:6,fontSize:12,fontWeight:700,marginBottom:16,display:"inline-block"}}>Task 1 — Maps and Compasses &middot; AC 1.1, 1.2</div>
+            <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",marginBottom:8}}>1.1 — Describe the purpose and features of different types of maps. Include at least TWO different map types.</div>
+            <TA rows={10} value={data.t1_mapTypes} onChange={upd("t1_mapTypes")} ph="Describe at least two different types of maps — include scale, purpose, key features, and examples of when each would be used in outdoor activities in Wales..." disabled={am}/>
+            <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",margin:"18px 0 8px"}}>1.2 — Describe the features of a lightweight protractor compass. Include the name and purpose of each key part.</div>
+            <TA rows={8} value={data.t1_compass} onChange={upd("t1_compass")} ph="Name and describe each feature of a protractor compass. Explain how each part is used when taking and following a bearing..." disabled={am}/>
+            <AssessorFeedback label="Task 1" value={taskFb("task1")} onChange={v=>setTaskFeedback("task1",v)} assessorMode={am}/>
+          </div>
+
+          <div style={{border:`2px solid ${G}`,borderRadius:10,padding:18,marginBottom:22}}>
+            <div style={{background:G,color:"#fff",padding:"7px 12px",borderRadius:6,fontSize:12,fontWeight:700,marginBottom:16,display:"inline-block"}}>Task 2 — Route Card &middot; AC 2.1</div>
+            <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",marginBottom:8}}>2.1 — Your completed route card from LO 2 is your primary evidence. Confirm the key details and explain how each required element is included.</div>
+            <div style={{background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:6,padding:"10px 14px",fontSize:12,color:"#166534",marginBottom:12}}>Required elements: distance · height changes · route description · route direction · pace of group · stopping points · exit routes · points of interest · compass bearing</div>
+            <TA rows={6} value={data.t2_routeCard} onChange={upd("t2_routeCard")} ph="Confirm your route details and explain how each required element is addressed in your route card..." disabled={am}/>
+            <AssessorFeedback label="Task 2" value={taskFb("task2")} onChange={v=>setTaskFeedback("task2",v)} assessorMode={am}/>
+          </div>
+
+          <div style={{border:`2px solid ${G}`,borderRadius:10,padding:18,marginBottom:22}}>
+            <div style={{background:G,color:"#fff",padding:"7px 12px",borderRadius:6,fontSize:12,fontWeight:700,marginBottom:16,display:"inline-block"}}>Task 3 — Route Completion &middot; AC 3.1, 3.2</div>
+            <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",marginBottom:8}}>3.1 — Describe your route completion. Demonstrate the map and compass skills you used during the route.</div>
+            <div style={{background:"#fff3cd",border:"1px solid #ffc107",borderRadius:8,padding:"8px 12px",fontSize:12,color:"#856404",marginBottom:12}}>AC 3.1 requires practical demonstration. Assessor observation and photo/video evidence in the Evidence tab are essential.</div>
+            <TA rows={8} value={data.t3_evidence} onChange={upd("t3_evidence")} ph="Describe in detail how you completed your planned route. Explain the map and compass skills you demonstrated..." disabled={am}/>
+            <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",margin:"18px 0 8px"}}>3.2 — Review the timings and any alterations you made on the ground compared to your route card plan.</div>
+            <TA rows={8} value={data.t3_review} onChange={upd("t3_review")} ph="Compare planned vs actual timings for each leg. Describe any alterations, why you made them, and what you would do differently next time..." disabled={am}/>
+            <AssessorFeedback label="Task 3" value={taskFb("task3")} onChange={v=>setTaskFeedback("task3",v)} assessorMode={am}/>
+          </div>
+          {!am&&<ContinueBtn label="Continue to Photo Evidence →" onClick={()=>setSec("evidence")}/>}
+        </div>
+
+        <div data-wb-section="evidence" style={{display:sec==="evidence"?"block":"none"}}>
+          <EvidenceSection items={data.evidence_items||[]} onUpdate={v=>update({evidence_items:v})} assessorMode={am}/>
+          {!am&&<ContinueBtn label="Continue to Checklist →" onClick={()=>setSec("checklist")}/>}
+        </div>
+
+        <div data-wb-section="checklist" style={{display:sec==="checklist"?"block":"none"}}>
+          <h2 style={{color:G,marginBottom:8,fontSize:22}}>Criteria Evidence Checklist</h2>
+          <p style={{fontSize:13,color:MG,marginBottom:20}}>{am?"Mark each criterion using the toggles.":"Tick each box when you believe you have evidence for that criterion. Your assessor will verify."}</p>
+          <div style={{border:`1px solid ${BD}`,borderRadius:10,overflow:"hidden",marginBottom:20}}>
+            <div style={{background:G,color:"#fff",padding:"9px 14px",display:"grid",gridTemplateColumns:"55px 1fr 80px 100px",gap:8,fontSize:11,fontWeight:700}}>
+              <div>AC</div><div>Criterion</div><div style={{textAlign:"center"}}>Self ✓</div><div style={{textAlign:"center"}}>Assessor</div>
+            </div>
+            {ACS.map((ac,i)=>{
+              const status=acStatus(ac.id);
+              return(
+                <div key={ac.id} style={{background:i%2===0?"#fff":LGR,padding:"11px 14px",display:"grid",gridTemplateColumns:"55px 1fr 80px 100px",gap:8,alignItems:"center",borderBottom:`1px solid ${BD}`}}>
+                  <div style={{fontWeight:700,color:G,fontSize:12}}>{ac.id}</div>
+                  <div style={{fontSize:12,color:"#1a1a1a"}}>{ac.text}</div>
+                  <div style={{display:"flex",justifyContent:"center"}} onClick={()=>{if(am)return;const c={...(data.checklist||{})};c[ac.id]=!c[ac.id];update({checklist:c});}}>
+                    <div style={{width:22,height:22,border:`2px solid ${(data.checklist||{})[ac.id]?G:BD}`,borderRadius:5,background:(data.checklist||{})[ac.id]?G:"#fff",display:"flex",alignItems:"center",justifyContent:"center",cursor:am?"default":"pointer"}}>
+                      {(data.checklist||{})[ac.id]&&<span style={{color:"#fff",fontSize:13,fontWeight:700}}>✓</span>}
+                    </div>
+                  </div>
+                  <div style={{display:"flex",justifyContent:"center",gap:4}}>
+                    {am?(
+                      <>
+                        <button onClick={()=>setACStatus(ac.id,status==="met"?"":"met")} style={{padding:"3px 8px",borderRadius:4,border:`1.5px solid ${status==="met"?G:BD}`,background:status==="met"?G:"#fff",color:status==="met"?"#fff":MG,fontSize:10,fontWeight:700,cursor:"pointer"}}>Met</button>
+                        <button onClick={()=>setACStatus(ac.id,status==="notyet"?"":"notyet")} style={{padding:"3px 8px",borderRadius:4,border:`1.5px solid ${status==="notyet"?RED:BD}`,background:status==="notyet"?RED:"#fff",color:status==="notyet"?"#fff":MG,fontSize:10,fontWeight:700,cursor:"pointer"}}>NYM</button>
+                      </>
+                    ):(status?(
+                      <span style={{fontSize:11,fontWeight:700,color:status==="met"?G:RED,padding:"3px 8px",borderRadius:4,background:status==="met"?LG:RED_LT,border:`1px solid ${status==="met"?G:RED}`}}>
+                        {status==="met"?"✓ Met":"✕ NYM"}
+                      </span>
+                    ):null)}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{background:am?ASSESSOR_LT:"#fff",border:`2px solid ${am?ASSESSOR_BD:BD}`,borderRadius:10,padding:18,marginBottom:20}}>
+            <div style={{fontSize:14,fontWeight:700,color:am?ASSESSOR_BG:G,marginBottom:14}}>{am?"Assessor Sign-Off":"Result"}</div>
+            {am&&(<>
+              <div style={{fontSize:11,color:ASSESSOR_BG,fontWeight:700,marginBottom:6}}>Overall Result</div>
+              <div style={{display:"flex",gap:10,marginBottom:16}}>
+                {[["Pass",G],["Refer",RED],["Pending",AMBER]].map(([r,c])=>(
+                  <button key={r} onClick={()=>update({overall_result:r})}
+                    style={{padding:"8px 20px",borderRadius:7,border:`2px solid ${data.overall_result===r?c:BD}`,background:data.overall_result===r?c:"#fff",color:data.overall_result===r?"#fff":MG,fontSize:13,fontWeight:700,cursor:"pointer"}}>{r}</button>
+                ))}
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+                <Inp label="Assessor Signature (type name)" value={data.assessorSig} onChange={upd("assessorSig")}/>
+                <Inp label="Date Marked" value={data.markedDate} onChange={upd("markedDate")} ph="DD/MM/YYYY"/>
+              </div>
+            </>)}
+            {!am&&data.overall_result&&(
+              <div style={{background:data.overall_result==="Pass"?LG:data.overall_result==="Refer"?RED_LT:AMBER_LT,border:`2px solid ${data.overall_result==="Pass"?G:data.overall_result==="Refer"?RED:AMBER}`,borderRadius:8,padding:"12px 16px",marginBottom:12}}>
+                <div style={{fontSize:13,fontWeight:700,color:data.overall_result==="Pass"?G:data.overall_result==="Refer"?RED:AMBER}}>
+                  {data.overall_result==="Pass"?"Result: PASS — Well done! All criteria have been met.":data.overall_result==="Refer"?"Result: REFER — Some criteria need more work. See assessor feedback below.":"Result: PENDING — Your assessor is still marking your work."}
+                </div>
+                {data.assessorSig&&<div style={{fontSize:12,color:MG,marginTop:4}}>Marked by: {data.assessorSig}{data.markedDate?` on ${data.markedDate}`:""}</div>}
+              </div>
+            )}
+          </div>
+          <div style={{background:"#fff",border:`1px solid ${BD}`,borderRadius:10,padding:18,marginBottom:20}}>
+            <div style={{fontSize:14,fontWeight:700,color:G,marginBottom:14}}>Student Declaration</div>
+            <p style={{fontSize:13,color:"#1a1a1a",marginBottom:16,lineHeight:1.7}}>I confirm that this work is my own and has not been copied from another person.</p>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <Inp label="Student Signature (type name)" value={data.studentSig} onChange={upd("studentSig")} disabled={am}/>
+              <Inp label="Date" value={data.declarationDate} onChange={upd("declarationDate")} ph="DD/MM/YYYY" disabled={am}/>
+            </div>
+          </div>
+          {!am&&<ContinueBtn label="Continue to Glossary →" onClick={()=>setSec("glossary")}/>}
+        </div>
+
+        <div data-wb-section="glossary" style={{display:sec==="glossary"?"block":"none"}}>
+          <h2 style={{color:G,marginBottom:18,fontSize:22}}>Glossary</h2>
+          <p style={{fontSize:13,color:MG,marginBottom:20}}>Key navigation terms for this unit.</p>
+          <div style={{border:`1px solid ${BD}`,borderRadius:10,overflow:"hidden"}}>
+            <div style={{background:G,color:"#fff",padding:"9px 14px",display:"grid",gridTemplateColumns:"200px 1fr",gap:16,fontSize:11,fontWeight:700}}>
+              <div>Term</div><div>Definition</div>
+            </div>
+            {GLOSSARY.map(([term,def],i)=>(
+              <div key={term} style={{background:i%2===0?"#fff":LGR,padding:"11px 14px",display:"grid",gridTemplateColumns:"200px 1fr",gap:16,borderBottom:`1px solid ${BD}`}}>
+                <div style={{fontWeight:700,fontSize:13,color:G}}>{term}</div>
+                <div style={{fontSize:13,color:"#1a1a1a",lineHeight:1.6}}>{def}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+
+      <div style={{marginTop:40,padding:"16px 20px",borderTop:`1px solid ${BD}`,display:"flex",justifyContent:"space-between",alignItems:"center",fontSize:11,color:MG}}>
+        <span>MH12CY010 — Use a Map and Compass for a Route | Agored Cymru Level 2 | Jonathan Jones</span>
+        {saved?<span style={{color:am?"#6ee7b7":G,fontWeight:700}}>✓ Changes saved</span>:<span>Auto-saving...</span>}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
