@@ -26,143 +26,156 @@ jobs:
       - name: Scan repo and update files.json
         run: |
           python3 << 'EOF'
-          import os
           import json
           from pathlib import Path
 
-          # ── Configuration ──────────────────────────────────────────────────────
-          # Map unit IDs to their display metadata.
-          # Add new units here as you create them.
+          # ── Unit metadata ──────────────────────────────────────────────────────
+          # All Level 2 Learning in the Outdoors units (Agored Cymru).
+          # mandatory=True  → always shown even if no files yet.
+          # mandatory=False → only shown when at least one file is uploaded.
+          # To add a file: just upload it named with the unit code prefix,
+          # e.g. GB72CY041_Workbook.pdf — no other changes needed.
+
           UNIT_META = {
+              # ── MANDATORY ──────────────────────────────────────────────────────
               "HB92CY002": {
                   "credits": 2,
                   "title": "Personal Safety when Learning in the Outdoors",
                   "mandatory": True,
-                  "coming_soon": ["Printable Workbook", "Teacher Answer Key", "Accessibility Workbook"]
               },
               "HB92CY003": {
                   "credits": 1,
                   "title": "Sustainable Use of Natural Resources",
                   "mandatory": True,
-                  "coming_soon": ["Teaching Slides", "Printable Workbook", "Teacher Answer Key", "Accessibility Workbook"]
               },
-              "coming-soon-1": {
-                  "credits": None,
-                  "title": "Practical Skills in the Outdoors",
-                  "mandatory": False,
-                  "coming_soon": ["Resources will appear here when ready"]
-              },
-              "coming-soon-2": {
-                  "credits": None,
-                  "title": "Assisting in an Outdoor Learning Activity",
-                  "mandatory": False,
-                  "coming_soon": ["Resources will appear here when ready"]
-              },
-              "coming-soon-3": {
-                  "credits": None,
-                  "title": "Physical Geography and Climate of Wales",
-                  "mandatory": False,
-                  "coming_soon": ["Resources will appear here when ready"]
-              },
-              "coming-soon-4": {
-                  "credits": None,
-                  "title": "Exploring Land-based Activities",
-                  "mandatory": False,
-                  "coming_soon": ["Resources will appear here when ready"]
-              },
-              "coming-soon-5": {
-                  "credits": None,
-                  "title": "Participate in an Expedition",
-                  "mandatory": False,
-                  "coming_soon": ["Resources will appear here when ready"]
-              },
-              "coming-soon-6": {
-                  "credits": None,
-                  "title": "Participate in a Water-based Activity",
-                  "mandatory": False,
-                  "coming_soon": ["Resources will appear here when ready"]
-              },
+
+              # ── OPTIONAL — Level 2 units ───────────────────────────────────────
+              "QA12CY004": {"credits": 3, "title": "Flora and Fauna of Wales",                                      "mandatory": False},
+              "RF42CY026": {"credits": 3, "title": "Physical Geography and Climate of Wales",                       "mandatory": False},
+              "AF42CY008": {"credits": 3, "title": "Team Working",                                                  "mandatory": False},
+              "HB92CY005": {"credits": 2, "title": "Delivering an Outdoor Learning Activity",                       "mandatory": False},
+              "JA22CY025": {"credits": 2, "title": "Creating Heritage and Traditional Craft",                       "mandatory": False},
+              "HB92CY006": {"credits": 3, "title": "Exploring Craft Resources and Techniques for Outdoor Learning", "mandatory": False},
+              "RF42CY029": {"credits": 2, "title": "Extractable Natural Resources in Wales",                        "mandatory": False},
+              "AM22CY029": {"credits": 3, "title": "Carrying out a Habitat Survey",                                 "mandatory": False},
+              "RF42CY030": {"credits": 3, "title": "Land Use in Wales",                                             "mandatory": False},
+              "QA12CY007": {"credits": 2, "title": "Observing Fauna and Flora",                                     "mandatory": False},
+              "GB72CY041": {"credits": 2, "title": "Practical Skills in the Outdoors",                              "mandatory": False},
+              "MH12CY005": {"credits": 2, "title": "Use a Map and Compass",                                         "mandatory": False},
+              "QA12CY008": {"credits": 2, "title": "Using Recycled Materials in Outdoor Learning",                  "mandatory": False},
+              "SG42CY002": {"credits": 3, "title": "Sustainable Woodland Management",                               "mandatory": False},
+              "TG72CY008": {"credits": 8, "title": "Practical Traditional Timber Frame Construction",               "mandatory": False},
+              "SG52CY001": {"credits": 3, "title": "Woodland Carpentry",                                            "mandatory": False},
+              "SG22CY001": {"credits": 3, "title": "Woodland Tree Planting",                                        "mandatory": False},
+              "MH32CY009": {"credits": 1, "title": "Exploring Land-based Activities",                               "mandatory": False},
+              "MH32CY010": {"credits": 1, "title": "Exploring Water-based Activities",                              "mandatory": False},
+              "MH12CY009": {"credits": 1, "title": "Introduction to Expedition Skills",                             "mandatory": False},
+              "MH32CY006": {"credits": 3, "title": "Camp Craft Skills",                                             "mandatory": False},
+              "MH12CY006": {"credits": 4, "title": "Participate in an Expedition (4 credits)",                      "mandatory": False},
+              "MH12CY007": {"credits": 6, "title": "Participate in an Expedition (6 credits)",                      "mandatory": False},
+              "NL12CY004": {"credits": 3, "title": "Outdoor Activities for Tourism",                                "mandatory": False},
+              "MH32CY007": {"credits": 3, "title": "Participate in a Land-based Activity",                          "mandatory": False},
+              "MH32CY008": {"credits": 3, "title": "Participate in a Water-based Activity",                         "mandatory": False},
+              "HB92CY009": {"credits": 3, "title": "Community Engagement in the Outdoors",                          "mandatory": False},
+              "HB92CY010": {"credits": 3, "title": "Skills Development through Outdoor Learning",                   "mandatory": False},
+              "HB12CY080": {"credits": 2, "title": "The Health Benefits of Being Outdoors",                         "mandatory": False},
+              "MH12CY010": {"credits": 3, "title": "Use a Map and Compass for a Route",                             "mandatory": False},
+              "SE32CY006": {"credits": 2, "title": "Site Assessment and Soil Management",                           "mandatory": False},
+              "SD72CY006": {"credits": 2, "title": "Propagation and Planting for Food Growing",                     "mandatory": False},
+              "SE22CY030": {"credits": 2, "title": "Plant Care and Maintenance",                                     "mandatory": False},
+              "SC12CY002": {"credits": 2, "title": "Harvesting and Site Management",                                "mandatory": False},
+              "QA12CY010": {"credits": 3, "title": "Flora and Fauna in the UK",                                     "mandatory": False},
+              "RF42CY031": {"credits": 3, "title": "Physical Geography and Climate of the UK",                      "mandatory": False},
+              "RF42CY032": {"credits": 2, "title": "Extractable Natural Resources",                                 "mandatory": False},
+              "RF42CY033": {"credits": 3, "title": "Land Use in England",                                           "mandatory": False},
+
+              # ── OPTIONAL — Level 1 units (also count toward qualification) ─────
+              "HB91CY005": {"credits": 1, "title": "Assisting in an Outdoor Learning Activity",                     "mandatory": False},
+              "QA11CY010": {"credits": 3, "title": "Flora and Fauna of Wales (Level 1)",                            "mandatory": False},
+              "RF41CY003": {"credits": 3, "title": "Physical Geography and Climate of Wales (Level 1)",             "mandatory": False},
+              "AF41CY002": {"credits": 2, "title": "Team Working (Level 1)",                                        "mandatory": False},
+              "GB71CY014": {"credits": 2, "title": "Practical Skills in the Outdoors (Level 1)",                    "mandatory": False},
+              "SG41CY009": {"credits": 3, "title": "Practical Woodland Skills",                                     "mandatory": False},
+              "JA21CY023": {"credits": 3, "title": "Exploring Craft Resources and Techniques (Level 1)",            "mandatory": False},
+              "JA21CY021": {"credits": 2, "title": "Creating Heritage and Traditional Craft (Level 1)",             "mandatory": False},
+              "HB91CY007": {"credits": 3, "title": "Community Engagement in the Outdoors (Level 1)",               "mandatory": False},
+              "RF41CY007": {"credits": 2, "title": "Extractable Natural Resources (Level 1)",                       "mandatory": False},
+              "RF41CY006": {"credits": 3, "title": "Land Use in Wales (Level 1)",                                   "mandatory": False},
+              "NL11CY003": {"credits": 3, "title": "Outdoor Activities for Tourism (Level 1)",                      "mandatory": False},
+              "HB91CY006": {"credits": 3, "title": "Skills Development through Outdoor Learning (Level 1)",         "mandatory": False},
+              "QA11CY013": {"credits": 2, "title": "Observing Fauna and Flora (Level 1)",                           "mandatory": False},
+              "SG21CY001": {"credits": 3, "title": "Woodland Tree Planting (Level 1)",                              "mandatory": False},
+              "TG71CY009": {"credits": 8, "title": "Practical Traditional Timber Frame Construction (Level 1)",     "mandatory": False},
+              "SG41CY010": {"credits": 3, "title": "Sustainable Woodland Management (Level 1)",                     "mandatory": False},
+              "HB11CY090": {"credits": 2, "title": "The Health Benefits of Being Outdoors (Level 1)",               "mandatory": False},
           }
 
-          # ── Icon + friendly-name rules (by file extension or keyword) ──────────
-          ICON_MAP = {
-              ".html": ("🖥️", "Digital Interactive Workbook"),
-              ".pptx": ("📊", "Teaching Slides"),
-              ".ppt":  ("📊", "Teaching Slides"),
-              ".pdf":  ("📄", "PDF Document"),
-              ".docx": ("📝", "Word Document"),
-              ".doc":  ("📝", "Word Document"),
-              ".xlsx": ("📊", "Spreadsheet"),
-              ".xls":  ("📊", "Spreadsheet"),
-              ".csv":  ("📊", "Data File"),
+          # ── File-type display names ────────────────────────────────────────────
+          EXT_NAMES = {
+              ".html": "Digital Workbook",
+              ".pptx": "Teaching Slides",
+              ".ppt":  "Teaching Slides",
+              ".pdf":  "PDF Document",
+              ".docx": "Word Document",
+              ".doc":  "Word Document",
+              ".xlsx": "Spreadsheet",
+              ".xls":  "Spreadsheet",
+              ".csv":  "Data File",
           }
 
-          def icon_for(filename):
+          def friendly_name(filename, uid):
+              """Strip the unit-code prefix to produce a clean display label."""
+              stem = Path(filename).stem
+              label = stem[len(uid):].lstrip("_- ").replace("_", " ").replace("-", " ").strip()
+              if label:
+                  return label
               ext = Path(filename).suffix.lower()
-              return ICON_MAP.get(ext, ("📎", "Resource"))
+              return EXT_NAMES.get(ext, stem.replace("_", " "))
 
-          def friendly_type(filename):
+          def file_type(filename):
               ext = Path(filename).suffix.lower().lstrip(".")
               return ext.upper() if ext else "FILE"
 
-          # ── Scan every unit folder in the repo root ────────────────────────────
-          root = Path(".")
-          # Files to ignore at the root level / in every folder
-          IGNORE = {
-              "index.html", "files.json", ".gitignore",
-              "README.md", "LICENSE", ".nojekyll"
-          }
+          # ── Scan repo root ─────────────────────────────────────────────────────
+          IGNORE = {"index.html", "files.json", ".gitignore", "README.md", "LICENSE", ".nojekyll"}
+          root   = Path(".")
 
-          # Build a lookup: unit_id → list of discovered files
-          discovered: dict[str, list] = {uid: [] for uid in UNIT_META}
+          discovered = {uid: [] for uid in UNIT_META}
 
-          # Walk top-level files (flat repo layout — files named HB92CY002_...)
           for f in sorted(root.iterdir()):
               if not f.is_file():
                   continue
               if f.name.startswith(".") or f.name in IGNORE:
                   continue
-              # Try to match the filename to a known unit prefix
-              matched = False
               for uid in UNIT_META:
-                  if uid.startswith("coming-soon"):
-                      continue
                   if f.name.upper().startswith(uid.upper()):
-                      icon, friendly = icon_for(f.name)
-                      # Use a nicer display name derived from the filename
-                      stem = f.stem
-                      # Strip the unit-code prefix for a cleaner label
-                      label = stem[len(uid):].lstrip("_- ").replace("_", " ").replace("-", " ").strip()
-                      if not label:
-                          label = friendly
                       discovered[uid].append({
-                          "name": label if label else friendly,
+                          "name":     friendly_name(f.name, uid),
                           "filename": f.name,
-                          "type": friendly_type(f.name),
-                          "icon": icon
+                          "type":     file_type(f.name),
                       })
-                      matched = True
                       break
-                  # Fallback: check for PPTX teaching slides with loose naming
-              # If nothing matched, skip silently
 
-          # ── Assemble output ────────────────────────────────────────────────────
+          # ── Build manifest ─────────────────────────────────────────────────────
+          # Mandatory units always appear.
+          # Optional units only appear when they have at least one file.
           units_out = []
           for uid, meta in UNIT_META.items():
-              unit = {
-                  "id": uid,
-                  "credits": meta["credits"],
-                  "title": meta["title"],
+              files = discovered.get(uid, [])
+              if not meta["mandatory"] and not files:
+                  continue
+              units_out.append({
+                  "id":        uid,
+                  "credits":   meta["credits"],
+                  "title":     meta["title"],
                   "mandatory": meta["mandatory"],
-                  "files": discovered.get(uid, []),
-                  "coming_soon": meta.get("coming_soon", [])
-              }
-              units_out.append(unit)
+                  "files":     files,
+              })
 
           manifest = {"units": units_out}
           with open("files.json", "w", encoding="utf-8") as fh:
               json.dump(manifest, fh, indent=2, ensure_ascii=False)
-          print("files.json updated successfully.")
+          print(f"files.json updated — {len(units_out)} units written.")
           EOF
 
       - name: Commit updated manifest
