@@ -29,6 +29,19 @@
       "title": "Sustainable Use of Natural Resources",
       "mandatory": true,
       "files": []
+    },
+    {
+      "id": "MH12CY010",
+      "credits": 3,
+      "title": "Use a Map and Compass for a Route",
+      "mandatory": false,
+      "files": [
+        {
+          "name": "NavigationDigital",
+          "filename": "MH12CY010NavigationDigital.html",
+          "type": "HTML"
+        }
+      ]
     }
   ]
 }
