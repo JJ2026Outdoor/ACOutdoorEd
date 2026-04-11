@@ -1,0 +1,171 @@
+name: Update Resource Manifest
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Scan repo and update files.json
+        run: |
+          python3 << 'EOF'
+          import os
+          import json
+          from pathlib import Path
+
+          # ── Configuration ──────────────────────────────────────────────────────
+          # Map unit IDs to their display metadata.
+          # Add new units here as you create them.
+          UNIT_META = {
+              "HB92CY002": {
+                  "credits": 2,
+                  "title": "Personal Safety when Learning in the Outdoors",
+                  "mandatory": True,
+                  "coming_soon": ["Printable Workbook", "Teacher Answer Key", "Accessibility Workbook"]
+              },
+              "HB92CY003": {
+                  "credits": 1,
+                  "title": "Sustainable Use of Natural Resources",
+                  "mandatory": True,
+                  "coming_soon": ["Teaching Slides", "Printable Workbook", "Teacher Answer Key", "Accessibility Workbook"]
+              },
+              "coming-soon-1": {
+                  "credits": None,
+                  "title": "Practical Skills in the Outdoors",
+                  "mandatory": False,
+                  "coming_soon": ["Resources will appear here when ready"]
+              },
+              "coming-soon-2": {
+                  "credits": None,
+                  "title": "Assisting in an Outdoor Learning Activity",
+                  "mandatory": False,
+                  "coming_soon": ["Resources will appear here when ready"]
+              },
+              "coming-soon-3": {
+                  "credits": None,
+                  "title": "Physical Geography and Climate of Wales",
+                  "mandatory": False,
+                  "coming_soon": ["Resources will appear here when ready"]
+              },
+              "coming-soon-4": {
+                  "credits": None,
+                  "title": "Exploring Land-based Activities",
+                  "mandatory": False,
+                  "coming_soon": ["Resources will appear here when ready"]
+              },
+              "coming-soon-5": {
+                  "credits": None,
+                  "title": "Participate in an Expedition",
+                  "mandatory": False,
+                  "coming_soon": ["Resources will appear here when ready"]
+              },
+              "coming-soon-6": {
+                  "credits": None,
+                  "title": "Participate in a Water-based Activity",
+                  "mandatory": False,
+                  "coming_soon": ["Resources will appear here when ready"]
+              },
+          }
+
+          # ── Icon + friendly-name rules (by file extension or keyword) ──────────
+          ICON_MAP = {
+              ".html": ("🖥️", "Digital Interactive Workbook"),
+              ".pptx": ("📊", "Teaching Slides"),
+              ".ppt":  ("📊", "Teaching Slides"),
+              ".pdf":  ("📄", "PDF Document"),
+              ".docx": ("📝", "Word Document"),
+              ".doc":  ("📝", "Word Document"),
+              ".xlsx": ("📊", "Spreadsheet"),
+              ".xls":  ("📊", "Spreadsheet"),
+              ".csv":  ("📊", "Data File"),
+          }
+
+          def icon_for(filename):
+              ext = Path(filename).suffix.lower()
+              return ICON_MAP.get(ext, ("📎", "Resource"))
+
+          def friendly_type(filename):
+              ext = Path(filename).suffix.lower().lstrip(".")
+              return ext.upper() if ext else "FILE"
+
+          # ── Scan every unit folder in the repo root ────────────────────────────
+          root = Path(".")
+          # Files to ignore at the root level / in every folder
+          IGNORE = {
+              "index.html", "files.json", ".gitignore",
+              "README.md", "LICENSE", ".nojekyll"
+          }
+
+          # Build a lookup: unit_id → list of discovered files
+          discovered: dict[str, list] = {uid: [] for uid in UNIT_META}
+
+          # Walk top-level files (flat repo layout — files named HB92CY002_...)
+          for f in sorted(root.iterdir()):
+              if not f.is_file():
+                  continue
+              if f.name.startswith(".") or f.name in IGNORE:
+                  continue
+              # Try to match the filename to a known unit prefix
+              matched = False
+              for uid in UNIT_META:
+                  if uid.startswith("coming-soon"):
+                      continue
+                  if f.name.upper().startswith(uid.upper()):
+                      icon, friendly = icon_for(f.name)
+                      # Use a nicer display name derived from the filename
+                      stem = f.stem
+                      # Strip the unit-code prefix for a cleaner label
+                      label = stem[len(uid):].lstrip("_- ").replace("_", " ").replace("-", " ").strip()
+                      if not label:
+                          label = friendly
+                      discovered[uid].append({
+                          "name": label if label else friendly,
+                          "filename": f.name,
+                          "type": friendly_type(f.name),
+                          "icon": icon
+                      })
+                      matched = True
+                      break
+                  # Fallback: check for PPTX teaching slides with loose naming
+              # If nothing matched, skip silently
+
+          # ── Assemble output ────────────────────────────────────────────────────
+          units_out = []
+          for uid, meta in UNIT_META.items():
+              unit = {
+                  "id": uid,
+                  "credits": meta["credits"],
+                  "title": meta["title"],
+                  "mandatory": meta["mandatory"],
+                  "files": discovered.get(uid, []),
+                  "coming_soon": meta.get("coming_soon", [])
+              }
+              units_out.append(unit)
+
+          manifest = {"units": units_out}
+          with open("files.json", "w", encoding="utf-8") as fh:
+              json.dump(manifest, fh, indent=2, ensure_ascii=False)
+          print("files.json updated successfully.")
+          EOF
+
+      - name: Commit updated manifest
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add files.json
+          git diff --cached --quiet || git commit -m "chore: auto-update resource manifest [skip ci]"
+          git push
