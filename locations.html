@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Activity Locations | Outdoor Education</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root {
+  --green:       #1A6B3C;
+  --green-dark:  #0F4525;
+  --green-light: #E8F5EE;
+  --green-xlight:#F2FAF5;
+  --brown:       #6B4226;
+  --brown-light: #F5EFE8;
+  --blue:        #1a3a6b;
+  --blue-dark:   #0f2547;
+  --blue-light:  #e8eeff;
+  --slate:       #2C3E50;
+  --text:        #1A1A1A;
+  --muted:       #6B7B8C;
+  --border:      #D4D4CC;
+  --white:       #FFFFFF;
+
+  /* activity colours */
+  --mtb:         #C0392B;
+  --walking:     #27AE60;
+  --mtn-walk:    #16A085;
+  --watercraft:  #2980B9;
+  --climbing:    #8E44AD;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #F5F7F5;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--green-dark);
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.header-inner {
+  max-width: 1100px; margin: 0 auto;
+  padding: 14px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.header-title { font-family: 'DM Serif Display', serif; color: #fff; font-size: 17px; }
+.header-sub { color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.header-back {
+  color: rgba(255,255,255,0.65); text-decoration: none; font-size: 12px;
+  font-weight: 600; padding: 5px 12px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.2); transition: background 0.12s;
+  white-space: nowrap;
+}
+.header-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+  padding: 52px 24px 48px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:-60px; right:-60px;
+  width:320px; height:320px; border-radius:50%;
+  background:rgba(255,255,255,0.04);
+}
+.hero::after {
+  content:''; position:absolute; bottom:-80px; left:-40px;
+  width:240px; height:240px; border-radius:50%;
+  background:rgba(255,255,255,0.03);
+}
+.hero-inner { max-width:1100px; margin:0 auto; position:relative; z-index:1; }
+.qual-badge {
+  display:inline-block; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.85);
+  font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;
+  padding:4px 12px; border-radius:20px; margin-bottom:16px;
+}
+.hero h1 {
+  font-family:'DM Serif Display',serif; color:#fff;
+  font-size:clamp(26px,5vw,38px); line-height:1.2; margin-bottom:10px;
+}
+.hero-desc { color:rgba(255,255,255,0.75); font-size:15px; line-height:1.7; max-width:580px; margin-bottom:28px; }
+
+/* ── ACTIVITY NAV ── */
+.activity-nav {
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  position: sticky; top: 53px; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.activity-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 24px;
+  display: flex; gap: 0; overflow-x: auto;
+}
+.act-tab {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 20px;
+  font-size: 13px; font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+.act-tab:hover { color: var(--text); }
+.act-tab.mtb:hover, .act-tab.mtb.active     { color: var(--mtb);       border-color: var(--mtb); }
+.act-tab.walking:hover, .act-tab.walking.active   { color: var(--walking);   border-color: var(--walking); }
+.act-tab.mtn:hover, .act-tab.mtn.active       { color: var(--mtn-walk); border-color: var(--mtn-walk); }
+.act-tab.watercraft:hover, .act-tab.watercraft.active{ color: var(--watercraft);border-color: var(--watercraft); }
+.act-tab.climbing:hover, .act-tab.climbing.active  { color: var(--climbing);  border-color: var(--climbing); }
+.act-dot {
+  width:10px; height:10px; border-radius:50%; flex-shrink:0;
+}
+.mtb      .act-dot { background: var(--mtb); }
+.walking  .act-dot { background: var(--walking); }
+.mtn      .act-dot { background: var(--mtn-walk); }
+.watercraft .act-dot { background: var(--watercraft); }
+.climbing .act-dot { background: var(--climbing); }
+
+/* ── MAIN ── */
+.main { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* ── ACTIVITY SECTION ── */
+.activity-section { margin-bottom: 64px; scroll-margin-top: 110px; }
+
+.activity-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px; padding-bottom: 14px;
+}
+.activity-header-bar {
+  width: 5px; border-radius: 3px; align-self: stretch; flex-shrink: 0;
+}
+.mtb-section  .activity-header-bar { background: var(--mtb); }
+.walk-section .activity-header-bar { background: var(--walking); }
+.mtnw-section .activity-header-bar { background: var(--mtn-walk); }
+.wc-section   .activity-header-bar { background: var(--watercraft); }
+.clmb-section .activity-header-bar { background: var(--climbing); }
+
+.activity-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px; color: var(--green-dark);
+}
+.activity-header .location-count {
+  margin-left: auto; font-size: 12px; font-weight: 600;
+  color: var(--muted); background: var(--green-light);
+  padding: 4px 12px; border-radius: 20px; white-space: nowrap;
+}
+
+/* ── MAP + SIDEBAR LAYOUT ── */
+.map-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+  align-items: start;
+}
+.map-container {
+  border-radius: 14px; overflow: hidden;
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  position: relative;
+}
+.map-el { width: 100%; height: 420px; }
+
+/* ── LOCATION CARDS ── */
+.location-list {
+  display: flex; flex-direction: column; gap: 10px;
+  max-height: 420px; overflow-y: auto;
+  padding-right: 4px;
+}
+.location-list::-webkit-scrollbar { width: 5px; }
+.location-list::-webkit-scrollbar-track { background: var(--green-light); border-radius: 3px; }
+.location-list::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
+
+.loc-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+.loc-card:hover {
+  border-color: var(--green);
+  box-shadow: 0 4px 12px rgba(26,107,60,0.12);
+  transform: translateX(-2px);
+}
+.loc-card.active {
+  border-color: var(--green);
+  background: var(--green-xlight);
+  box-shadow: 0 4px 16px rgba(26,107,60,0.15);
+}
+.loc-card-top {
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;
+}
+.loc-colour-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 4px;
+}
+.loc-name { font-size: 13px; font-weight: 700; color: var(--green-dark); line-height: 1.3; }
+.loc-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.loc-details {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  margin-top: 8px;
+}
+.loc-detail {
+  background: var(--green-light);
+  border-radius: 6px; padding: 5px 8px;
+  font-size: 11px; color: var(--green-dark);
+}
+.loc-detail strong { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 1px; }
+.loc-links { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+.loc-link {
+  font-size: 11px; font-weight: 600; padding: 4px 10px;
+  border-radius: 5px; text-decoration: none;
+  background: var(--green-light); color: var(--green-dark);
+  transition: background 0.12s;
+}
+.loc-link:hover { background: #c5e8d4; }
+.loc-link.tbd { color: var(--muted); background: #f0f0ee; cursor: default; }
+
+/* ── COMING SOON SECTION ── */
+.coming-soon-section {
+  background: var(--white);
+  border: 2px dashed var(--border);
+  border-radius: 14px; padding: 32px 24px;
+  text-align: center;
+}
+.coming-soon-section h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px; color: var(--muted); margin-bottom: 8px;
+}
+.coming-soon-section p { font-size: 13px; color: var(--muted); }
+
+/* ── FOOTER ── */
+.site-footer {
+  background: var(--green-dark); color: rgba(255,255,255,0.55);
+  text-align: center; padding: 20px; font-size: 12px;
+}
+.site-footer a { color: rgba(255,255,255,0.7); }
+
+@media (max-width: 800px) {
+  .map-layout { grid-template-columns: 1fr; }
+  .location-list { max-height: 320px; }
+  .hero { padding: 36px 16px 32px; }
+  .main { padding: 24px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="header-sub">Outdoor Education</div>
+      <div class="header-title">Activity Locations</div>
+    </div>
+    <a class="header-back" href="index.html">&#8592; Back to Hub</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="qual-badge">Staff Resource</div>
+    <h1>Activity Locations</h1>
+    <p class="hero-desc">Interactive maps and site information for all outdoor education venues. Click any location to view details, parking, travel times from Kerry and risk assessments and itineraries.</p>
+  </div>
+</section>
+
+<!-- ACTIVITY NAV -->
+<nav class="activity-nav">
+  <div class="activity-nav-inner">
+    <a class="act-tab mtb active" onclick="scrollTo('mtb')">
+      <span class="act-dot"></span> Mountain Biking
+    </a>
+    <a class="act-tab walking" onclick="scrollTo('walking')">
+      <span class="act-dot"></span> Walking
+    </a>
+    <a class="act-tab mtn" onclick="scrollTo('mtnwalk')">
+      <span class="act-dot"></span> Mountain Walking
+    </a>
+    <a class="act-tab watercraft" onclick="scrollTo('watercraft')">
+      <span class="act-dot"></span> Watercraft
+    </a>
+    <a class="act-tab climbing" onclick="scrollTo('climbing')">
+      <span class="act-dot"></span> Climbing
+    </a>
+  </div>
+</nav>
+
+<main class="main">
+
+  <!-- ═══ MOUNTAIN BIKING ═══ -->
+  <section class="activity-section mtb-section" id="mtb">
+    <div class="activity-header">
+      <div class="activity-header-bar"></div>
+      <div>
+        <h2>Mountain Biking</h2>
+      </div>
+      <span class="location-count">8 locations</span>
+    </div>
+
+    <div class="map-layout">
+      <div class="map-container">
+        <div id="map-mtb" class="map-el"></div>
+      </div>
+      <div class="location-list" id="list-mtb">
+
+        <div class="loc-card" id="card-afan" onclick="focusLocation('mtb', 0)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtb)"></div>
+            <div>
+              <div class="loc-name">Afan Forest Park</div>
+              <div class="loc-meta">Port Talbot, SA13 3HG</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Paid (council)</div>
+            <div class="loc-detail"><strong>Distance</strong>~75 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 45 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Blue / Red / Black</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment — coming soon</span>
+            <span class="loc-link tbd">Itinerary — coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-coed" onclick="focusLocation('mtb', 1)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtb)"></div>
+            <div>
+              <div class="loc-name">Coed Y Brenin</div>
+              <div class="loc-meta">Ganllwyd, Dolgellau LL40 2HZ</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Paid — max £7/day</div>
+            <div class="loc-detail"><strong>Distance</strong>~55 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 20 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Blue / Red / Black</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment — coming soon</span>
+            <span class="loc-link tbd">Itinerary — coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-bwlch" onclick="focusLocation('mtb', 2)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtb)"></div>
+            <div>
+              <div class="loc-name">Bwlch Nant Yr Arian</div>
+              <div class="loc-meta">Ponterwyd, Aberystwyth SY23 3AB</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (currently)</div>
+            <div class="loc-detail"><strong>Distance</strong>~40 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~55 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Blue / Red</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment — coming soon</span>
+            <span class="loc-link tbd">Itinerary — coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-llandegla" onclick="focusLocation('mtb', 3)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtb)"></div>
+            <div>
+              <div class="loc-name">Llandegla (OnePlanet Adventure)</div>
+              <div class="loc-meta">Coed Llandegla Forest, Wrexham LL11 3AA</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (on-site)</div>
+            <div class="loc-detail"><strong>Distance</strong>~60 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 20 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Blue / Red / Black</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment — coming soon</span>
+            <span class="loc-link tbd">Itinerary — coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-nantgwyllt" onclick="focusLocation('mtb', 4)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtb)"></div>
+            <div>
+              <div class="loc-name">Nantgwyllt Trails</div>
+              <div class="loc-meta">Rhayader LD6 5HE</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (on-site)</div>
+            <div class="loc-detail"><strong>Distance</strong>~18 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~30 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Blue / Red</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment — coming soon</span>
+            <span class="loc-link tbd">Itinerary — coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-fod" onclick="focusLocation('mtb', 5)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtb)"></div>
+            <div>
+              <div class="loc-name">Forest of Dean Cycle Centre</div>
+              <div class="loc-meta">Cannop, Coleford GL16 7EH</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Paid — up to &pound;9/day</div>
+            <div class="loc-detail"><strong>Distance</strong>~65 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 25 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Green / Blue / Red</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment — coming soon</span>
+            <span class="loc-link tbd">Itinerary — coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-rhayader" onclick="focusLocation('mtb', 6)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtb)"></div>
+            <div>
+              <div class="loc-name">Rhayader Pump Track</div>
+              <div class="loc-meta">Rhayader LD6 5BP</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (nearby)</div>
+            <div class="loc-detail"><strong>Distance</strong>~17 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~28 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Pump Track</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment — coming soon</span>
+            <span class="loc-link tbd">Itinerary — coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-trehafren" onclick="focusLocation('mtb', 7)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtb)"></div>
+            <div>
+              <div class="loc-name">Trehafren Trail</div>
+              <div class="loc-meta">Trehafren Park, Newtown SY16 1QL</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (on-site)</div>
+            <div class="loc-detail"><strong>Distance</strong>~5 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~10 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Skills Area</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment — coming soon</span>
+            <span class="loc-link tbd">Itinerary — coming soon</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ WALKING ═══ -->
+  <section class="activity-section walk-section" id="walking">
+    <div class="activity-header">
+      <div class="activity-header-bar"></div>
+      <div><h2>Walking</h2></div>
+      <span class="location-count">Coming soon</span>
+    </div>
+    <div class="coming-soon-section">
+      <h3>Locations to be added</h3>
+      <p>Walking locations, maps and site documents will be added here.</p>
+    </div>
+  </section>
+
+  <!-- ═══ MOUNTAIN WALKING ═══ -->
+  <section class="activity-section mtnw-section" id="mtnwalk">
+    <div class="activity-header">
+      <div class="activity-header-bar"></div>
+      <div><h2>Mountain Walking</h2></div>
+      <span class="location-count">Coming soon</span>
+    </div>
+    <div class="coming-soon-section">
+      <h3>Locations to be added</h3>
+      <p>Mountain walking locations, maps and site documents will be added here.</p>
+    </div>
+  </section>
+
+  <!-- ═══ WATERCRAFT ═══ -->
+  <section class="activity-section wc-section" id="watercraft">
+    <div class="activity-header">
+      <div class="activity-header-bar"></div>
+      <div><h2>Watercraft</h2></div>
+      <span class="location-count">Coming soon</span>
+    </div>
+    <div class="coming-soon-section">
+      <h3>Locations to be added</h3>
+      <p>Watercraft locations, maps and site documents will be added here.</p>
+    </div>
+  </section>
+
+  <!-- ═══ CLIMBING ═══ -->
+  <section class="activity-section clmb-section" id="climbing">
+    <div class="activity-header">
+      <div class="activity-header-bar"></div>
+      <div><h2>Climbing</h2></div>
+      <span class="location-count">Coming soon</span>
+    </div>
+    <div class="coming-soon-section">
+      <h3>Locations to be added</h3>
+      <p>Climbing locations, maps and site documents will be added here.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  Outdoor Education Resources &mdash; Activity Locations &mdash; <a href="index.html">Back to Hub</a>
+</footer>
+
+<script>
+// ── MTB LOCATION DATA ──
+const mtbLocations = [
+  { name: "Afan Forest Park",             lat: 51.6425, lng: -3.7046, cardId: "card-afan" },
+  { name: "Coed Y Brenin",                lat: 52.8243, lng: -3.8964, cardId: "card-coed" },
+  { name: "Bwlch Nant Yr Arian",          lat: 52.4153, lng: -3.8858, cardId: "card-bwlch" },
+  { name: "Llandegla (OnePlanet)",         lat: 53.0627, lng: -3.1358, cardId: "card-llandegla" },
+  { name: "Nantgwyllt Trails",            lat: 52.2623, lng: -3.5995, cardId: "card-nantgwyllt" },
+  { name: "Forest of Dean Cycle Centre",  lat: 51.8093, lng: -2.5696, cardId: "card-fod" },
+  { name: "Rhayader Pump Track",          lat: 52.2985, lng: -3.5128, cardId: "card-rhayader" },
+  { name: "Trehafren Trail",              lat: 52.5132, lng: -3.3241, cardId: "card-trehafren" },
+];
+
+// Custom pin colour
+function makeIcon(colour) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      width:14px; height:14px; border-radius:50%;
+      background:${colour}; border:3px solid #fff;
+      box-shadow:0 2px 6px rgba(0,0,0,0.35);
+    "></div>`,
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
+    popupAnchor: [0, -10],
+  });
+}
+
+// Build MTB map
+const mtbMap = L.map('map-mtb', { zoomControl: true, scrollWheelZoom: false });
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  maxZoom: 18,
+}).addTo(mtbMap);
+
+const mtbMarkers = [];
+
+mtbLocations.forEach((loc, i) => {
+  const marker = L.marker([loc.lat, loc.lng], { icon: makeIcon('var(--mtb)') })
+    .addTo(mtbMap)
+    .bindPopup(`<strong style="font-family:'DM Sans',sans-serif;font-size:13px;">${loc.name}</strong>`);
+
+  marker.on('click', () => {
+    highlightCard(loc.cardId);
+    setActiveTab('mtb');
+  });
+
+  mtbMarkers.push(marker);
+});
+
+// Fit map to all MTB markers
+const mtbGroup = L.featureGroup(mtbMarkers);
+mtbMap.fitBounds(mtbGroup.getBounds().pad(0.15));
+
+// Focus a location from card click
+function focusLocation(activity, index) {
+  if (activity === 'mtb') {
+    const loc = mtbLocations[index];
+    mtbMap.setView([loc.lat, loc.lng], 13, { animate: true });
+    mtbMarkers[index].openPopup();
+    highlightCard(loc.cardId);
+  }
+}
+
+function highlightCard(cardId) {
+  document.querySelectorAll('#list-mtb .loc-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(cardId);
+  if (card) {
+    card.classList.add('active');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+// Nav tab scroll
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  setActiveTab(id === 'mtb' ? 'mtb' :
+               id === 'walking' ? 'walking' :
+               id === 'mtnwalk' ? 'mtn' :
+               id === 'watercraft' ? 'watercraft' : 'climbing');
+}
+
+function setActiveTab(cls) {
+  document.querySelectorAll('.act-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.querySelector(`.act-tab.${cls}`);
+  if (tab) tab.classList.add('active');
+}
+
+// Highlight active nav tab on scroll
+const sections = [
+  { id: 'mtb',        cls: 'mtb' },
+  { id: 'walking',    cls: 'walking' },
+  { id: 'mtnwalk',    cls: 'mtn' },
+  { id: 'watercraft', cls: 'watercraft' },
+  { id: 'climbing',   cls: 'climbing' },
+];
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const match = sections.find(s => s.id === e.target.id);
+      if (match) setActiveTab(match.cls);
+    }
+  });
+}, { rootMargin: '-40% 0px -50% 0px' });
+
+sections.forEach(s => {
+  const el = document.getElementById(s.id);
+  if (el) observer.observe(el);
+});
+
+// Fix Leaflet map render after page layout settles
+setTimeout(() => { mtbMap.invalidateSize(); }, 300);
+</script>
+</body>
+</html>
