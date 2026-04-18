@@ -4,16 +4,16 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>BTEC Level 1 Public Services | Resources</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --blue: #1a3a6b;
+  --blue-dark: #0f2547;
   --blue-mid: #2a5cb8;
   --blue-light: #e8eeff;
   --blue-xlight: #f2f5ff;
   --gold: #C8A951;
   --gold-light: #FDF8EC;
-  --red: #b8212a;
   --text: #1A1A1A;
   --muted: #6B7B8C;
   --border: #D4D4CC;
@@ -30,7 +30,8 @@ body {
 
 /* ── HEADER ── */
 .site-header {
-  background: var(--blue);
+  background: var(--blue-dark);
+  padding: 0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -44,37 +45,37 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-.header-left { display: flex; align-items: center; gap: 12px; }
+.header-title {
+  font-family: 'DM Serif Display', serif;
+  color: #fff;
+  font-size: 17px;
+  line-height: 1.3;
+}
+.header-sub {
+  color: rgba(255,255,255,0.6);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
 .header-back {
   color: rgba(255,255,255,0.65);
   text-decoration: none;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
   border-radius: 6px;
   border: 1px solid rgba(255,255,255,0.2);
-  transition: background 0.12s;
+  transition: background 0.12s, color 0.12s;
+  white-space: nowrap;
 }
 .header-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
-.header-title {
-  font-family: 'DM Serif Display', serif;
-  color: #fff;
-  font-size: 16px;
-}
-.header-sub {
-  color: rgba(255,255,255,0.55);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
 
 /* ── HERO ── */
 .hero {
-  background: linear-gradient(150deg, var(--blue) 0%, #1e4fa0 55%, var(--blue-mid) 100%);
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
   padding: 52px 24px 48px;
   position: relative;
   overflow: hidden;
@@ -83,7 +84,7 @@ body {
   content: '';
   position: absolute;
   top: -60px; right: -60px;
-  width: 340px; height: 340px;
+  width: 320px; height: 320px;
   border-radius: 50%;
   background: rgba(255,255,255,0.04);
 }
@@ -102,9 +103,7 @@ body {
   z-index: 1;
 }
 .qual-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: inline-block;
   background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.2);
   color: rgba(255,255,255,0.85);
@@ -119,12 +118,12 @@ body {
 .hero h1 {
   font-family: 'DM Serif Display', serif;
   color: #fff;
-  font-size: clamp(24px, 5vw, 36px);
+  font-size: clamp(26px, 5vw, 38px);
   line-height: 1.2;
   margin-bottom: 10px;
 }
 .hero-desc {
-  color: rgba(255,255,255,0.72);
+  color: rgba(255,255,255,0.75);
   font-size: 15px;
   line-height: 1.7;
   max-width: 580px;
@@ -133,7 +132,7 @@ body {
 .hero-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 .stat-pill {
   background: rgba(255,255,255,0.1);
@@ -158,7 +157,7 @@ body {
   padding: 36px 24px 80px;
 }
 
-/* ── INFO GRID ── */
+/* ── QUAL INFO CARDS ── */
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -195,26 +194,26 @@ body {
 .info-card ul { padding-left: 16px; }
 .info-card li { margin-bottom: 2px; }
 
-/* ── STRUCTURE TABLE ── */
-.struct-table {
+/* ── CREDIT TABLE ── */
+.credit-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
   margin-top: 8px;
 }
-.struct-table th {
+.credit-table th {
   background: var(--blue);
   color: #fff;
   padding: 8px 12px;
   text-align: left;
   font-weight: 600;
 }
-.struct-table td {
+.credit-table td {
   padding: 8px 12px;
   border-bottom: 1px solid var(--border);
 }
-.struct-table tr:nth-child(even) td { background: var(--blue-xlight); }
-.struct-table .highlight td {
+.credit-table tr:nth-child(even) td { background: var(--blue-xlight); }
+.credit-table .highlight td {
   background: #FFF8E1;
   font-weight: 700;
   color: var(--blue);
@@ -224,7 +223,7 @@ body {
 .section-title {
   font-family: 'DM Serif Display', serif;
   font-size: 22px;
-  color: var(--blue);
+  color: var(--blue-dark);
   margin-bottom: 16px;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--blue-light);
@@ -245,12 +244,12 @@ body {
   gap: 12px;
   padding: 15px 18px;
   cursor: pointer;
-  background: var(--blue);
+  background: var(--blue-dark);
   color: #fff;
   user-select: none;
   transition: background 0.15s;
 }
-.folder-group-header:hover { background: #12297a; }
+.folder-group-header:hover { background: #081830; }
 .folder-group-header .chevron {
   margin-left: auto;
   font-size: 14px;
@@ -274,13 +273,13 @@ body {
   background: var(--blue-xlight);
   transition: background 0.12s;
 }
-.unit-folder-header:hover { background: #dde4ff; }
+.unit-folder-header:hover { background: #dde5ff; }
 .unit-folder-header .uf-icon { font-size: 16px; }
 .unit-folder-header .uf-info { flex: 1; }
 .unit-folder-header .uf-code {
   font-size: 10px;
   font-weight: 700;
-  color: var(--blue-mid);
+  color: var(--blue);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -289,11 +288,6 @@ body {
   font-weight: 600;
   color: var(--text);
   margin-top: 1px;
-}
-.unit-folder-header .uf-meta {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 2px;
 }
 .unit-folder-header .uf-chevron {
   color: var(--muted);
@@ -308,10 +302,9 @@ body {
 }
 .unit-folder-files.open { display: block; }
 
-/* unit description panel */
 .unit-desc {
-  margin: 10px 18px 10px 0;
-  padding: 12px 14px;
+  margin: 10px 18px 4px 0;
+  padding: 11px 13px;
   background: var(--blue-xlight);
   border-left: 3px solid var(--blue-mid);
   border-radius: 0 8px 8px 0;
@@ -319,7 +312,14 @@ body {
   color: #333;
   line-height: 1.65;
 }
-.unit-desc strong { color: var(--blue); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.unit-desc strong {
+  display: block;
+  color: var(--blue);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
 
 .file-link {
   display: flex;
@@ -333,20 +333,12 @@ body {
 }
 .file-link:hover { background: var(--blue-light); }
 .file-link .fl-icon { font-size: 14px; min-width: 20px; text-align: center; }
-.file-link .fl-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--blue);
-}
+.file-link .fl-name { font-size: 13px; font-weight: 500; color: var(--blue-dark); }
 .file-link .fl-type {
-  font-size: 10px;
-  color: var(--muted);
-  margin-left: auto;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding-right: 16px;
+  font-size: 10px; color: var(--muted); margin-left: auto;
+  text-transform: uppercase; letter-spacing: 0.05em; padding-right: 16px;
 }
-.file-link:hover .fl-name { color: var(--blue-mid); text-decoration: underline; }
+.file-link:hover .fl-name { color: var(--blue); text-decoration: underline; }
 
 .coming-soon {
   display: flex;
@@ -358,32 +350,31 @@ body {
   font-style: italic;
 }
 
-/* ── GRADE BANDS ── */
-.grade-strip {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 6px;
+/* ── PATHWAY SECTION ── */
+.pathway-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
 }
-.grade-band {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 4px;
-  letter-spacing: 0.04em;
+.pathway-card {
+  background: var(--gold-light);
+  border: 1.5px solid #e8d48a;
+  border-radius: 10px;
+  padding: 14px 16px;
 }
-.grade-pass { background: #e8f5e9; color: #2e7d32; }
-.grade-merit { background: #fff8e1; color: #f57f17; }
-.grade-distinction { background: #fce4ec; color: #b71c1c; }
+.pathway-card .pc-title { font-size: 13px; font-weight: 700; color: #7a5c00; margin-bottom: 4px; }
+.pathway-card .pc-body { font-size: 12px; color: #5a4800; line-height: 1.6; }
 
 /* ── FOOTER ── */
 .site-footer {
-  background: var(--blue);
-  color: rgba(255,255,255,0.45);
+  background: var(--blue-dark);
+  color: rgba(255,255,255,0.55);
   text-align: center;
   padding: 20px;
   font-size: 12px;
 }
+.site-footer a { color: rgba(255,255,255,0.7); }
 
 @media (max-width: 600px) {
   .hero { padding: 36px 16px 32px; }
@@ -396,26 +387,24 @@ body {
 
 <header class="site-header">
   <div class="header-inner">
-    <div class="header-left">
-      <a class="header-back" href="index.html">← Hub</a>
-      <div>
-        <div class="header-sub">Pearson · Level 1 Introductory</div>
-        <div class="header-title">BTEC Public Services — Resources</div>
-      </div>
+    <div>
+      <div class="header-sub">Pearson BTEC &middot; Level 1 Introductory</div>
+      <div class="header-title">Public Services &mdash; Resources</div>
     </div>
+    <a class="header-back" href="index.html">&#8592; Back to Hub</a>
   </div>
 </header>
 
 <section class="hero">
   <div class="hero-inner">
-    <div class="qual-badge">🎖️ Pearson BTEC · Level 1</div>
-    <h1>BTEC Level 1 Introductory<br>Public Services</h1>
-    <p class="hero-desc">Teaching resources, workbooks and assessment materials for the Award and Certificate qualifications. Units A1, A2, PS6, PS9 and PS12.</p>
+    <div class="qual-badge">Pearson BTEC Level 1 Introductory Qualification</div>
+    <h1>Public Services<br/>Award &amp; Certificate</h1>
+    <p class="hero-desc">A nationally recognised vocational qualification developing practical, transferable and sector-specific skills for learners interested in the public services. Assessed entirely through coursework — no exams.</p>
     <div class="hero-stats">
-      <div class="stat-pill"><div class="val">5</div><div class="lbl">Units Covered</div></div>
+      <div class="stat-pill"><div class="val">180</div><div class="lbl">GLH (Certificate)</div></div>
+      <div class="stat-pill"><div class="val">70</div><div class="lbl">GLH (Award)</div></div>
       <div class="stat-pill"><div class="val">2</div><div class="lbl">Core Units</div></div>
       <div class="stat-pill"><div class="val">3</div><div class="lbl">Sector Units</div></div>
-      <div class="stat-pill"><div class="val">190</div><div class="lbl">Total GLH</div></div>
     </div>
   </div>
 </section>
@@ -426,48 +415,104 @@ body {
   <div class="info-grid" style="margin-bottom:32px;">
 
     <div class="info-card">
-      <div class="info-card-icon">🎯</div>
       <h3>About this Qualification</h3>
-      <p>The Pearson BTEC Level 1 Introductory in Public Services develops transferable and sector-specific skills. It is suitable for learners who want an introduction to the public services sector, and provides clear progression to Level 2 BTECs, apprenticeships and further training.</p>
+      <p>The Pearson BTEC Level 1 Introductory in Public Services is a practical, skills-focused qualification. It emphasises demonstrating what learners can do rather than theoretical knowledge, giving them the confidence and skills to progress to further study or training in the public services sector.</p>
     </div>
 
     <div class="info-card">
-      <div class="info-card-icon">📋</div>
-      <h3>Award vs Certificate</h3>
-      <table class="struct-table">
+      <h3>Award &amp; Certificate Structure</h3>
+      <table class="credit-table">
         <thead><tr><th>Size</th><th>Units Required</th><th>GLH</th></tr></thead>
         <tbody>
-          <tr><td><strong>Award</strong></td><td>A2 + 1 sector unit</td><td>70</td></tr>
-          <tr><td><strong>Certificate</strong></td><td>A1 + A2 + 3 sector units</td><td>180</td></tr>
+          <tr><td><strong>Award</strong></td><td>A2 + any 1 sector unit</td><td>70</td></tr>
+          <tr><td><strong>Certificate</strong></td><td>A1 + A2 + any 3 sector units</td><td>180</td></tr>
           <tr class="highlight"><td colspan="3"><strong>We are delivering up to Certificate level</strong></td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="info-card">
-      <div class="info-card-icon">📚</div>
       <h3>Units We Are Delivering</h3>
       <ul>
-        <li><strong>A1</strong> — Being Organised (30 GLH · Core)</li>
-        <li><strong>A2</strong> — Developing a Personal Progression Plan (30 GLH · Core)</li>
-        <li><strong>PS6</strong> — Taking Part in Fitness Testing (40 GLH)</li>
-        <li><strong>PS9</strong> — Planning and Navigating a Route (40 GLH)</li>
-        <li><strong>PS12</strong> — Taking Part in Sport and Adventurous Activities (40 GLH)</li>
+        <li><strong>A1</strong> &mdash; Being Organised (30 GLH &middot; Core)</li>
+        <li><strong>A2</strong> &mdash; Developing a Personal Progression Plan (30 GLH &middot; Core)</li>
+        <li><strong>PS6</strong> &mdash; Taking Part in Fitness Testing (40 GLH)</li>
+        <li><strong>PS9</strong> &mdash; Planning and Navigating a Route (40 GLH)</li>
+        <li><strong>PS12</strong> &mdash; Sport and Adventurous Activities (40 GLH)</li>
       </ul>
     </div>
 
     <div class="info-card">
-      <div class="info-card-icon">✅</div>
       <h3>Assessment</h3>
-      <p>All units are internally assessed and internally verified. There are no exams. Each unit is graded:</p>
-      <div class="grade-strip" style="margin-top:10px;">
-        <span class="grade-band grade-pass">Pass</span>
-        <span class="grade-band grade-merit">Merit</span>
-        <span class="grade-band grade-distinction">Distinction</span>
-      </div>
-      <p style="margin-top:10px;">Learners must complete summative assessment only after all teaching content has been covered.</p>
+      <p>All units are internally assessed by your teacher and internally verified by the centre. There are no exams. Each unit is graded at Pass, Merit or Distinction. Summative assessment takes place only after all teaching content has been covered.</p>
     </div>
 
+    <div class="info-card">
+      <h3>Links to Public Services</h3>
+      <p>This qualification supports learners exploring careers across the public services sector. Sector units cover fitness testing, navigation and adventurous activities &mdash; skills directly relevant to emergency services, armed forces, and outdoor public service roles.</p>
+    </div>
+
+    <div class="info-card">
+      <h3>Transferable Skills</h3>
+      <ul>
+        <li>Time management and organisation</li>
+        <li>Planning and research</li>
+        <li>Communication and teamwork</li>
+        <li>Problem solving in practical contexts</li>
+        <li>Self-review and reflection</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- PROGRESSION SECTION -->
+  <h2 class="section-title">Where Could This Lead?</h2>
+
+  <div class="info-grid" style="margin-bottom:16px;">
+    <div class="info-card">
+      <h3>Progression Routes</h3>
+      <p>These qualifications prepare learners for further learning at a higher level in public services. Successful completion can lead to:</p>
+      <ul style="margin-top:8px;">
+        <li>Pearson BTEC Level 2 in Protective Services or Security</li>
+        <li>Level 2 qualifications in Sport or other sectors</li>
+        <li>Apprenticeships and vocational training programmes</li>
+        <li>Other Level 2 study programmes</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Public Services Careers</h3>
+      <p>This qualification provides a foundation for learners considering careers across a wide range of public services, including:</p>
+      <ul style="margin-top:8px;">
+        <li>Police, fire and ambulance services</li>
+        <li>Armed forces and military roles</li>
+        <li>Border force and customs</li>
+        <li>Youth work and community services</li>
+        <li>Outdoor education and expedition leadership</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-bottom:40px;">
+    <h3 style="font-size:13px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Progression Pathways</h3>
+    <div class="pathway-grid">
+      <div class="pathway-card">
+        <div class="pc-title">Further Education</div>
+        <div class="pc-body">Progress to BTEC Level 2 in Public Services, Protective Services, or Sport at college or sixth form.</div>
+      </div>
+      <div class="pathway-card">
+        <div class="pc-title">Apprenticeships</div>
+        <div class="pc-body">Move into a sector apprenticeship in emergency services, the armed forces, or community roles.</div>
+      </div>
+      <div class="pathway-card">
+        <div class="pc-title">Outdoor Education</div>
+        <div class="pc-body">Continue into outdoor education, expedition leadership, or Duke of Edinburgh programmes and qualifications.</div>
+      </div>
+      <div class="pathway-card">
+        <div class="pc-title">Other Study Programmes</div>
+        <div class="pc-body">Transferable skills gained open doors to Level 2 programmes across a range of vocational sectors.</div>
+      </div>
+    </div>
   </div>
 
   <!-- RESOURCES SECTION -->
@@ -477,58 +522,63 @@ body {
   <div class="folder-section">
     <div class="folder-group">
       <div class="folder-group-header" onclick="toggleGroup(this)">
-        <span style="font-size:20px;">📁</span>
         <div>
           <div class="folder-group-title">Core Units (Group A)</div>
-          <div class="folder-group-sub">Both units required for Certificate · A2 required for Award</div>
+          <div class="folder-group-sub">Certificate: both units required &nbsp;|&nbsp; Award: A2 only required</div>
         </div>
-        <span class="chevron">▶</span>
+        <span class="chevron">&#9654;</span>
       </div>
-      <div class="folder-group-body">
+      <div class="folder-group-body open">
 
         <!-- A1 -->
         <div class="unit-folder">
           <div class="unit-folder-header" onclick="toggleUnit(this)">
-            <span class="uf-icon">📂</span>
+            
             <div class="uf-info">
-              <div class="uf-code">Unit A1 · 30 GLH · Core</div>
+              <div class="uf-code">Unit A1 &middot; 30 GLH &middot; Core &middot; Certificate only</div>
               <div class="uf-title">Being Organised</div>
-              <div class="uf-meta">Certificate only · Techniques for time management and organisation</div>
             </div>
-            <span class="uf-chevron">▶</span>
+            <span class="uf-chevron">&#9654;</span>
           </div>
           <div class="unit-folder-files">
             <div class="unit-desc">
-              <strong>Unit in brief:</strong> Learners develop key techniques to organise their work, manage priorities and use time effectively. They practise these over a period before final assessment.<br><br>
-              <strong>Learning Aims:</strong> A — Explore techniques to improve own organisational skills &nbsp;|&nbsp; B — Review the use of techniques to improve own organisational skills.
+              <strong>Unit in brief</strong>
+              Learners develop key techniques to organise their work, manage priorities and use time effectively &mdash; practising these techniques over a period before final assessment.
             </div>
-            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
-            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
-            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
-            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+            <div class="unit-desc" style="margin-top:0;">
+              <strong>Learning Aims</strong>
+              A &mdash; Explore techniques to improve own organisational skills &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Review the use of techniques to improve own organisational skills.
+            </div>
+            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
+            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
+            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
+            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
           </div>
         </div>
 
         <!-- A2 -->
         <div class="unit-folder">
           <div class="unit-folder-header" onclick="toggleUnit(this)">
-            <span class="uf-icon">📂</span>
+            
             <div class="uf-info">
-              <div class="uf-code">Unit A2 · 30 GLH · Core</div>
+              <div class="uf-code">Unit A2 &middot; 30 GLH &middot; Core &middot; Award &amp; Certificate</div>
               <div class="uf-title">Developing a Personal Progression Plan</div>
-              <div class="uf-meta">Award &amp; Certificate · Self-audit, goal-setting, progression planning</div>
             </div>
-            <span class="uf-chevron">▶</span>
+            <span class="uf-chevron">&#9654;</span>
           </div>
           <div class="unit-folder-files">
             <div class="unit-desc">
-              <strong>Unit in brief:</strong> Learners develop skills and behaviours needed to progress to the next stage of learning, identifying progression opportunities and creating a personal plan.<br><br>
-              <strong>Learning Aims:</strong> A — Explore the skills and behaviours needed to meet personal progression goal &nbsp;|&nbsp; B — Produce a progression plan to meet intended progression goal.
+              <strong>Unit in brief</strong>
+              Learners develop the skills and behaviours needed to progress to the next stage of their learning &mdash; carrying out a self-audit, identifying strengths, setting goals, and producing a personal progression plan.
             </div>
-            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
-            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
-            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
-            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+            <div class="unit-desc" style="margin-top:0;">
+              <strong>Learning Aims</strong>
+              A &mdash; Explore the skills and behaviours needed to meet personal progression goal &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Produce a progression plan to meet intended progression goal.
+            </div>
+            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
+            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
+            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
+            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
           </div>
         </div>
 
@@ -540,85 +590,93 @@ body {
   <div class="folder-section">
     <div class="folder-group">
       <div class="folder-group-header" onclick="toggleGroup(this)">
-        <span style="font-size:20px;">📁</span>
         <div>
           <div class="folder-group-title">Sector Units (Group B)</div>
-          <div class="folder-group-sub">Award: 1 unit required · Certificate: 3 units required</div>
+          <div class="folder-group-sub">Certificate: 3 units required &nbsp;|&nbsp; Award: 1 unit required &nbsp;|&nbsp; resources added as completed</div>
         </div>
-        <span class="chevron">▶</span>
+        <span class="chevron">&#9654;</span>
       </div>
       <div class="folder-group-body">
 
         <!-- PS6 -->
         <div class="unit-folder">
           <div class="unit-folder-header" onclick="toggleUnit(this)">
-            <span class="uf-icon">📂</span>
+            
             <div class="uf-info">
-              <div class="uf-code">Unit PS6 · 40 GLH · Sector</div>
+              <div class="uf-code">Unit PS6 &middot; 40 GLH &middot; Sector</div>
               <div class="uf-title">Taking Part in Fitness Testing</div>
-              <div class="uf-meta">Plan, participate in, record and review fitness testing for public services entry</div>
             </div>
-            <span class="uf-chevron">▶</span>
+            <span class="uf-chevron">&#9654;</span>
           </div>
           <div class="unit-folder-files">
             <div class="unit-desc">
-              <strong>Unit in brief:</strong> Learners develop skills in planning, taking part in, recording and reviewing fitness testing activities required for the public services. Covers basic fitness tests used in public services selection and reviewing performance against those standards.<br><br>
-              <strong>Learning Aims:</strong> A — Plan and take part in fitness testing activities required for different public services &nbsp;|&nbsp; B — Record and review participation in fitness testing activities.
+              <strong>Unit in brief</strong>
+              Learners develop skills in planning, taking part in, recording and reviewing fitness testing activities required for the public services. Covers the basic fitness tests used during public services selection and reviewing personal performance against those standards.
             </div>
-            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
-            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
-            <div class="coming-soon">⏳ Fitness Testing Record Sheet — coming soon</div>
-            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
-            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+            <div class="unit-desc" style="margin-top:0;">
+              <strong>Learning Aims</strong>
+              A &mdash; Plan and take part in fitness testing activities required for different public services &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Record and review participation in fitness testing activities.
+            </div>
+            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
+            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
+            <div class="coming-soon">– Fitness Testing Record Sheet &mdash; coming soon</div>
+            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
+            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
           </div>
         </div>
 
         <!-- PS9 -->
         <div class="unit-folder">
           <div class="unit-folder-header" onclick="toggleUnit(this)">
-            <span class="uf-icon">📂</span>
+            
             <div class="uf-info">
-              <div class="uf-code">Unit PS9 · 40 GLH · Sector</div>
+              <div class="uf-code">Unit PS9 &middot; 40 GLH &middot; Sector</div>
               <div class="uf-title">Planning and Navigating a Route</div>
-              <div class="uf-meta">OS map skills, route planning, navigation — practical field unit</div>
             </div>
-            <span class="uf-chevron">▶</span>
+            <span class="uf-chevron">&#9654;</span>
           </div>
           <div class="unit-folder-files">
             <div class="unit-desc">
-              <strong>Unit in brief:</strong> Learners develop skills in planning and navigating a route using Ordnance Survey (OS) maps. They produce a route-planning card, consider risks and equipment, then navigate their planned route within an agreed timeframe.<br><br>
-              <strong>Learning Aims:</strong> A — Plan a route using Ordnance Survey maps &nbsp;|&nbsp; B — Navigate an agreed route within an agreed timeframe.
+              <strong>Unit in brief</strong>
+              Learners develop skills in planning and navigating a route using Ordnance Survey (OS) maps. They produce a route-planning card, consider equipment and risks, then navigate their planned route within an agreed timeframe &mdash; a practical field-based unit.
             </div>
-            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
-            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
-            <div class="coming-soon">⏳ Route Planning Card Template — coming soon</div>
-            <div class="coming-soon">⏳ Map Skills Reference Sheet — coming soon</div>
-            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
-            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+            <div class="unit-desc" style="margin-top:0;">
+              <strong>Learning Aims</strong>
+              A &mdash; Plan a route using Ordnance Survey maps &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Navigate an agreed route within an agreed timeframe.
+            </div>
+            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
+            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
+            <div class="coming-soon">– Route Planning Card Template &mdash; coming soon</div>
+            <div class="coming-soon">– Map Skills Reference Sheet &mdash; coming soon</div>
+            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
+            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
           </div>
         </div>
 
         <!-- PS12 -->
         <div class="unit-folder">
           <div class="unit-folder-header" onclick="toggleUnit(this)">
-            <span class="uf-icon">📂</span>
+            
             <div class="uf-info">
-              <div class="uf-code">Unit PS12 · 40 GLH · Sector</div>
+              <div class="uf-code">Unit PS12 &middot; 40 GLH &middot; Sector</div>
               <div class="uf-title">Taking Part in Sport and Adventurous Activities</div>
-              <div class="uf-meta">Sport, teamwork and adventurous activities in a public services context</div>
             </div>
-            <span class="uf-chevron">▶</span>
+            <span class="uf-chevron">&#9654;</span>
           </div>
           <div class="unit-folder-files">
             <div class="unit-desc">
-              <strong>Unit in brief:</strong> Learners develop participation skills in sport and adventurous activities, focusing on how these relate to working in a public service. Covers planning, health &amp; fitness, communication and teamwork in individual sports, team sports and adventurous activities.<br><br>
-              <strong>Learning Aims:</strong> A — Plan and take part in sport and adventurous activities &nbsp;|&nbsp; B — Demonstrate effective communication and teamwork skills when taking part in sport and adventurous activities.
+              <strong>Unit in brief</strong>
+              Learners develop participation skills in sport and adventurous activities, with a focus on how these relate to working in a public service. Covers planning, health and fitness, communication and teamwork across individual sports, team sports and adventurous activities.
             </div>
-            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
-            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
-            <div class="coming-soon">⏳ Activity Planning Template — coming soon</div>
-            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
-            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+            <div class="unit-desc" style="margin-top:0;">
+              <strong>Learning Aims</strong>
+              A &mdash; Plan and take part in sport and adventurous activities &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Demonstrate effective communication and teamwork skills when taking part in sport and adventurous activities.
+            </div>
+            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
+            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
+            <div class="coming-soon">– Activity Planning Template &mdash; coming soon</div>
+            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
+            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
           </div>
         </div>
 
@@ -629,8 +687,8 @@ body {
 </main>
 
 <footer class="site-footer">
-  Pearson BTEC Level 1 Introductory in Public Services &mdash; Resources prepared for Outdoor Education &mdash;
-  <a href="https://qualifications.pearson.com" target="_blank" style="color:rgba(255,255,255,0.6);">qualifications.pearson.com</a>
+  Pearson BTEC Level 1 Introductory in Public Services &mdash; Resources prepared by Outdoor Education &mdash;
+  <a href="https://qualifications.pearson.com" target="_blank">qualifications.pearson.com</a>
 </footer>
 
 <script>
@@ -644,13 +702,6 @@ function toggleUnit(header) {
   const files = header.nextElementSibling;
   files.classList.toggle('open');
 }
-// Open both folder groups by default
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.folder-group-header').forEach(h => {
-    h.classList.add('open');
-    h.nextElementSibling.classList.add('open');
-  });
-});
 </script>
 </body>
 </html>
