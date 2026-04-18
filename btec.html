@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BTEC Level 1 Public Services | Resources</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --blue: #1a3a6b;
+  --blue-mid: #2a5cb8;
+  --blue-light: #e8eeff;
+  --blue-xlight: #f2f5ff;
+  --gold: #C8A951;
+  --gold-light: #FDF8EC;
+  --red: #b8212a;
+  --text: #1A1A1A;
+  --muted: #6B7B8C;
+  --border: #D4D4CC;
+  --white: #FFFFFF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #F5F6FA;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--blue);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-back {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: background 0.12s;
+}
+.header-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.header-title {
+  font-family: 'DM Serif Display', serif;
+  color: #fff;
+  font-size: 16px;
+}
+.header-sub {
+  color: rgba(255,255,255,0.55);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(150deg, var(--blue) 0%, #1e4fa0 55%, var(--blue-mid) 100%);
+  padding: 52px 24px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 340px; height: 340px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -40px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.qual-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.85);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  color: #fff;
+  font-size: clamp(24px, 5vw, 36px);
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.hero-desc {
+  color: rgba(255,255,255,0.72);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 580px;
+  margin-bottom: 28px;
+}
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.stat-pill {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #fff;
+}
+.stat-pill .val { font-size: 20px; font-weight: 700; line-height: 1; }
+.stat-pill .lbl {
+  font-size: 10px;
+  opacity: 0.65;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+/* ── MAIN ── */
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 36px 24px 80px;
+}
+
+/* ── INFO GRID ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.info-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.info-card-icon {
+  width: 36px; height: 36px;
+  background: var(--blue-light);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.info-card h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.info-card p, .info-card li {
+  font-size: 13px;
+  color: #2a2a2a;
+  line-height: 1.7;
+}
+.info-card ul { padding-left: 16px; }
+.info-card li { margin-bottom: 2px; }
+
+/* ── STRUCTURE TABLE ── */
+.struct-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.struct-table th {
+  background: var(--blue);
+  color: #fff;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+}
+.struct-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.struct-table tr:nth-child(even) td { background: var(--blue-xlight); }
+.struct-table .highlight td {
+  background: #FFF8E1;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--blue);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--blue-light);
+}
+
+/* ── FOLDER TREE ── */
+.folder-section { margin-bottom: 14px; }
+.folder-group {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.folder-group-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 18px;
+  cursor: pointer;
+  background: var(--blue);
+  color: #fff;
+  user-select: none;
+  transition: background 0.15s;
+}
+.folder-group-header:hover { background: #12297a; }
+.folder-group-header .chevron {
+  margin-left: auto;
+  font-size: 14px;
+  transition: transform 0.25s;
+}
+.folder-group-header.open .chevron { transform: rotate(90deg); }
+.folder-group-title { font-weight: 700; font-size: 14px; }
+.folder-group-sub { font-size: 11px; opacity: 0.65; margin-top: 1px; }
+.folder-group-body { display: none; padding: 8px 0; }
+.folder-group-body.open { display: block; }
+
+.unit-folder { border-bottom: 1px solid var(--blue-light); }
+.unit-folder:last-child { border-bottom: none; }
+.unit-folder-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  cursor: pointer;
+  user-select: none;
+  background: var(--blue-xlight);
+  transition: background 0.12s;
+}
+.unit-folder-header:hover { background: #dde4ff; }
+.unit-folder-header .uf-icon { font-size: 16px; }
+.unit-folder-header .uf-info { flex: 1; }
+.unit-folder-header .uf-code {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--blue-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.unit-folder-header .uf-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 1px;
+}
+.unit-folder-header .uf-meta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.unit-folder-header .uf-chevron {
+  color: var(--muted);
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+.unit-folder-header.open .uf-chevron { transform: rotate(90deg); }
+.unit-folder-files {
+  display: none;
+  padding: 6px 0 6px 44px;
+  background: #fff;
+}
+.unit-folder-files.open { display: block; }
+
+/* unit description panel */
+.unit-desc {
+  margin: 10px 18px 10px 0;
+  padding: 12px 14px;
+  background: var(--blue-xlight);
+  border-left: 3px solid var(--blue-mid);
+  border-radius: 0 8px 8px 0;
+  font-size: 12.5px;
+  color: #333;
+  line-height: 1.65;
+}
+.unit-desc strong { color: var(--blue); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.file-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px 9px 0;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.12s;
+  color: var(--text);
+}
+.file-link:hover { background: var(--blue-light); }
+.file-link .fl-icon { font-size: 14px; min-width: 20px; text-align: center; }
+.file-link .fl-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue);
+}
+.file-link .fl-type {
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-right: 16px;
+}
+.file-link:hover .fl-name { color: var(--blue-mid); text-decoration: underline; }
+
+.coming-soon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px 9px 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* ── GRADE BANDS ── */
+.grade-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.grade-band {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+.grade-pass { background: #e8f5e9; color: #2e7d32; }
+.grade-merit { background: #fff8e1; color: #f57f17; }
+.grade-distinction { background: #fce4ec; color: #b71c1c; }
+
+/* ── FOOTER ── */
+.site-footer {
+  background: var(--blue);
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .hero { padding: 36px 16px 32px; }
+  .main { padding: 24px 16px 60px; }
+  .stat-pill .val { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <a class="header-back" href="index.html">← Hub</a>
+      <div>
+        <div class="header-sub">Pearson · Level 1 Introductory</div>
+        <div class="header-title">BTEC Public Services — Resources</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="qual-badge">🎖️ Pearson BTEC · Level 1</div>
+    <h1>BTEC Level 1 Introductory<br>Public Services</h1>
+    <p class="hero-desc">Teaching resources, workbooks and assessment materials for the Award and Certificate qualifications. Units A1, A2, PS6, PS9 and PS12.</p>
+    <div class="hero-stats">
+      <div class="stat-pill"><div class="val">5</div><div class="lbl">Units Covered</div></div>
+      <div class="stat-pill"><div class="val">2</div><div class="lbl">Core Units</div></div>
+      <div class="stat-pill"><div class="val">3</div><div class="lbl">Sector Units</div></div>
+      <div class="stat-pill"><div class="val">190</div><div class="lbl">Total GLH</div></div>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- QUAL INFO -->
+  <div class="info-grid" style="margin-bottom:32px;">
+
+    <div class="info-card">
+      <div class="info-card-icon">🎯</div>
+      <h3>About this Qualification</h3>
+      <p>The Pearson BTEC Level 1 Introductory in Public Services develops transferable and sector-specific skills. It is suitable for learners who want an introduction to the public services sector, and provides clear progression to Level 2 BTECs, apprenticeships and further training.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon">📋</div>
+      <h3>Award vs Certificate</h3>
+      <table class="struct-table">
+        <thead><tr><th>Size</th><th>Units Required</th><th>GLH</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Award</strong></td><td>A2 + 1 sector unit</td><td>70</td></tr>
+          <tr><td><strong>Certificate</strong></td><td>A1 + A2 + 3 sector units</td><td>180</td></tr>
+          <tr class="highlight"><td colspan="3"><strong>We are delivering up to Certificate level</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon">📚</div>
+      <h3>Units We Are Delivering</h3>
+      <ul>
+        <li><strong>A1</strong> — Being Organised (30 GLH · Core)</li>
+        <li><strong>A2</strong> — Developing a Personal Progression Plan (30 GLH · Core)</li>
+        <li><strong>PS6</strong> — Taking Part in Fitness Testing (40 GLH)</li>
+        <li><strong>PS9</strong> — Planning and Navigating a Route (40 GLH)</li>
+        <li><strong>PS12</strong> — Taking Part in Sport and Adventurous Activities (40 GLH)</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon">✅</div>
+      <h3>Assessment</h3>
+      <p>All units are internally assessed and internally verified. There are no exams. Each unit is graded:</p>
+      <div class="grade-strip" style="margin-top:10px;">
+        <span class="grade-band grade-pass">Pass</span>
+        <span class="grade-band grade-merit">Merit</span>
+        <span class="grade-band grade-distinction">Distinction</span>
+      </div>
+      <p style="margin-top:10px;">Learners must complete summative assessment only after all teaching content has been covered.</p>
+    </div>
+
+  </div>
+
+  <!-- RESOURCES SECTION -->
+  <h2 class="section-title">Unit Resources</h2>
+
+  <!-- CORE UNITS -->
+  <div class="folder-section">
+    <div class="folder-group">
+      <div class="folder-group-header" onclick="toggleGroup(this)">
+        <span style="font-size:20px;">📁</span>
+        <div>
+          <div class="folder-group-title">Core Units (Group A)</div>
+          <div class="folder-group-sub">Both units required for Certificate · A2 required for Award</div>
+        </div>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="folder-group-body">
+
+        <!-- A1 -->
+        <div class="unit-folder">
+          <div class="unit-folder-header" onclick="toggleUnit(this)">
+            <span class="uf-icon">📂</span>
+            <div class="uf-info">
+              <div class="uf-code">Unit A1 · 30 GLH · Core</div>
+              <div class="uf-title">Being Organised</div>
+              <div class="uf-meta">Certificate only · Techniques for time management and organisation</div>
+            </div>
+            <span class="uf-chevron">▶</span>
+          </div>
+          <div class="unit-folder-files">
+            <div class="unit-desc">
+              <strong>Unit in brief:</strong> Learners develop key techniques to organise their work, manage priorities and use time effectively. They practise these over a period before final assessment.<br><br>
+              <strong>Learning Aims:</strong> A — Explore techniques to improve own organisational skills &nbsp;|&nbsp; B — Review the use of techniques to improve own organisational skills.
+            </div>
+            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
+            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
+            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
+            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+          </div>
+        </div>
+
+        <!-- A2 -->
+        <div class="unit-folder">
+          <div class="unit-folder-header" onclick="toggleUnit(this)">
+            <span class="uf-icon">📂</span>
+            <div class="uf-info">
+              <div class="uf-code">Unit A2 · 30 GLH · Core</div>
+              <div class="uf-title">Developing a Personal Progression Plan</div>
+              <div class="uf-meta">Award &amp; Certificate · Self-audit, goal-setting, progression planning</div>
+            </div>
+            <span class="uf-chevron">▶</span>
+          </div>
+          <div class="unit-folder-files">
+            <div class="unit-desc">
+              <strong>Unit in brief:</strong> Learners develop skills and behaviours needed to progress to the next stage of learning, identifying progression opportunities and creating a personal plan.<br><br>
+              <strong>Learning Aims:</strong> A — Explore the skills and behaviours needed to meet personal progression goal &nbsp;|&nbsp; B — Produce a progression plan to meet intended progression goal.
+            </div>
+            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
+            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
+            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
+            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTOR UNITS -->
+  <div class="folder-section">
+    <div class="folder-group">
+      <div class="folder-group-header" onclick="toggleGroup(this)">
+        <span style="font-size:20px;">📁</span>
+        <div>
+          <div class="folder-group-title">Sector Units (Group B)</div>
+          <div class="folder-group-sub">Award: 1 unit required · Certificate: 3 units required</div>
+        </div>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="folder-group-body">
+
+        <!-- PS6 -->
+        <div class="unit-folder">
+          <div class="unit-folder-header" onclick="toggleUnit(this)">
+            <span class="uf-icon">📂</span>
+            <div class="uf-info">
+              <div class="uf-code">Unit PS6 · 40 GLH · Sector</div>
+              <div class="uf-title">Taking Part in Fitness Testing</div>
+              <div class="uf-meta">Plan, participate in, record and review fitness testing for public services entry</div>
+            </div>
+            <span class="uf-chevron">▶</span>
+          </div>
+          <div class="unit-folder-files">
+            <div class="unit-desc">
+              <strong>Unit in brief:</strong> Learners develop skills in planning, taking part in, recording and reviewing fitness testing activities required for the public services. Covers basic fitness tests used in public services selection and reviewing performance against those standards.<br><br>
+              <strong>Learning Aims:</strong> A — Plan and take part in fitness testing activities required for different public services &nbsp;|&nbsp; B — Record and review participation in fitness testing activities.
+            </div>
+            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
+            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
+            <div class="coming-soon">⏳ Fitness Testing Record Sheet — coming soon</div>
+            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
+            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+          </div>
+        </div>
+
+        <!-- PS9 -->
+        <div class="unit-folder">
+          <div class="unit-folder-header" onclick="toggleUnit(this)">
+            <span class="uf-icon">📂</span>
+            <div class="uf-info">
+              <div class="uf-code">Unit PS9 · 40 GLH · Sector</div>
+              <div class="uf-title">Planning and Navigating a Route</div>
+              <div class="uf-meta">OS map skills, route planning, navigation — practical field unit</div>
+            </div>
+            <span class="uf-chevron">▶</span>
+          </div>
+          <div class="unit-folder-files">
+            <div class="unit-desc">
+              <strong>Unit in brief:</strong> Learners develop skills in planning and navigating a route using Ordnance Survey (OS) maps. They produce a route-planning card, consider risks and equipment, then navigate their planned route within an agreed timeframe.<br><br>
+              <strong>Learning Aims:</strong> A — Plan a route using Ordnance Survey maps &nbsp;|&nbsp; B — Navigate an agreed route within an agreed timeframe.
+            </div>
+            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
+            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
+            <div class="coming-soon">⏳ Route Planning Card Template — coming soon</div>
+            <div class="coming-soon">⏳ Map Skills Reference Sheet — coming soon</div>
+            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
+            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+          </div>
+        </div>
+
+        <!-- PS12 -->
+        <div class="unit-folder">
+          <div class="unit-folder-header" onclick="toggleUnit(this)">
+            <span class="uf-icon">📂</span>
+            <div class="uf-info">
+              <div class="uf-code">Unit PS12 · 40 GLH · Sector</div>
+              <div class="uf-title">Taking Part in Sport and Adventurous Activities</div>
+              <div class="uf-meta">Sport, teamwork and adventurous activities in a public services context</div>
+            </div>
+            <span class="uf-chevron">▶</span>
+          </div>
+          <div class="unit-folder-files">
+            <div class="unit-desc">
+              <strong>Unit in brief:</strong> Learners develop participation skills in sport and adventurous activities, focusing on how these relate to working in a public service. Covers planning, health &amp; fitness, communication and teamwork in individual sports, team sports and adventurous activities.<br><br>
+              <strong>Learning Aims:</strong> A — Plan and take part in sport and adventurous activities &nbsp;|&nbsp; B — Demonstrate effective communication and teamwork skills when taking part in sport and adventurous activities.
+            </div>
+            <div class="coming-soon">⏳ Digital Interactive Workbook — coming soon</div>
+            <div class="coming-soon">⏳ Teaching Slides — coming soon</div>
+            <div class="coming-soon">⏳ Activity Planning Template — coming soon</div>
+            <div class="coming-soon">⏳ Assessment Brief — coming soon</div>
+            <div class="coming-soon">⏳ Teacher Answer Key — coming soon</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  Pearson BTEC Level 1 Introductory in Public Services &mdash; Resources prepared for Outdoor Education &mdash;
+  <a href="https://qualifications.pearson.com" target="_blank" style="color:rgba(255,255,255,0.6);">qualifications.pearson.com</a>
+</footer>
+
+<script>
+function toggleGroup(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+function toggleUnit(header) {
+  header.classList.toggle('open');
+  const files = header.nextElementSibling;
+  files.classList.toggle('open');
+}
+// Open both folder groups by default
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.folder-group-header').forEach(h => {
+    h.classList.add('open');
+    h.nextElementSibling.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
