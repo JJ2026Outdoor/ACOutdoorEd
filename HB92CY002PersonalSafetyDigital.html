@@ -24,6 +24,10 @@
     [data-wb-section] + [data-wb-section] { page-break-before: always; }
     @page { margin: 15mm 12mm; size: A4; }
   }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
 </style>
 </head>
 <body>
@@ -105,6 +109,7 @@ const init = () => ({
   t4_activity:"", t4_clothing:"", t4_use:"",
   checklist:{}, studentSig:"", declarationDate:"",
   evidence_items: [],
+  recordings: {},        // {fieldKey: [{id, b64, name}]}
   // Assessor fields
   assessorMode: false,
   ac_status: {},        // {id: "met"|"notyet"}
@@ -147,12 +152,33 @@ const pct = (data) => {
 const markedCount = (data) => Object.values(data.ac_status||{}).filter(v=>v==="met"||v==="notyet").length;
 
 // ── Shared UI atoms ──────────────────────────────────────────────────────
-const TA = ({value,onChange,rows=4,ph="Write your answer here...",disabled=false})=>(
-  <textarea style={{width:"100%",border:`1.5px solid ${disabled?"#e5e7eb":BD}`,borderRadius:8,padding:"10px 12px",
-    fontSize:13,lineHeight:1.7,fontFamily:"inherit",minHeight:rows*22+20,display:"block",
-    background:disabled?"#f9fafb":"#fff",color:"#1a1a1a",cursor:disabled?"not-allowed":"text"}}
-    value={value||""} onChange={e=>!disabled&&onChange(e.target.value)} placeholder={ph} readOnly={disabled}/>
-);
+const TA = ({value,onChange,rows=4,ph="Write your answer here...",disabled=false,recordings,onAddRecording})=>{
+  const hasRec = recordings&&recordings.length>0;
+  return (
+    <div>
+      <textarea style={{width:"100%",border:`1.5px solid ${disabled?"#e5e7eb":BD}`,borderRadius:8,padding:"10px 12px",
+        fontSize:13,lineHeight:1.7,fontFamily:"inherit",minHeight:rows*22+20,display:"block",
+        background:disabled?"#f9fafb":"#fff",color:"#1a1a1a",cursor:disabled?"not-allowed":"text"}}
+        value={value||""} onChange={e=>!disabled&&onChange(e.target.value)} placeholder={ph} readOnly={disabled}/>
+      {!disabled&&onAddRecording&&(
+        <div style={{marginTop:4}}>
+          <AudioRecorder disabled={disabled} onSave={(b64,name)=>onAddRecording({b64,name,id:Date.now()})}/>
+        </div>
+      )}
+      {hasRec&&(
+        <div style={{marginTop:6,display:"flex",flexDirection:"column",gap:4}}>
+          {recordings.map((r,i)=>(
+            <div key={r.id||i} style={{display:"flex",alignItems:"center",gap:8,background:"#f0f9ff",border:"1px solid #7dd3fc",borderRadius:6,padding:"4px 8px"}}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              <audio controls src={r.b64} style={{flex:1,height:28}}/>
+              {!disabled&&<button onClick={()=>onAddRecording(null,r.id)} style={{background:"none",border:"none",color:"#dc2626",cursor:"pointer",fontSize:14,lineHeight:1}}>&#215;</button>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Inp = ({label,value,onChange,ph="",disabled=false})=>(
   <div style={{display:"flex",flexDirection:"column",gap:4}}>
@@ -203,6 +229,76 @@ const ContinueBtn = ({label,onClick})=>(
   <button onClick={onClick} style={{background:G,color:"#fff",border:"none",borderRadius:8,padding:"11px 22px",fontSize:13,fontWeight:700,cursor:"pointer",marginTop:8}}>{label}</button>
 );
 
+// ── Audio Recorder ────────────────────────────────────────────────────────
+const AudioRecorder = ({onSave,disabled=false})=>{
+  const [state,setState] = useState("idle"); // idle | requesting | recording | saving
+  const [secs,setSecs] = useState(0);
+  const mrRef = useRef(null);
+  const chunksRef = useRef([]);
+  const timerRef = useRef(null);
+
+  const startRecording = async ()=>{
+    if(disabled)return;
+    setState("requesting");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      const mr = new MediaRecorder(stream);
+      mrRef.current = mr;
+      chunksRef.current = [];
+      mr.ondataavailable = e=>{ if(e.data.size>0) chunksRef.current.push(e.data); };
+      mr.onstop = ()=>{
+        stream.getTracks().forEach(t=>t.stop());
+        const blob = new Blob(chunksRef.current,{type:"audio/webm"});
+        const reader = new FileReader();
+        reader.onload = ev=>{ onSave(ev.target.result,"recording.webm"); setState("idle"); setSecs(0); };
+        reader.readAsDataURL(blob);
+        setState("saving");
+      };
+      mr.start();
+      setState("recording");
+      setSecs(0);
+      timerRef.current = setInterval(()=>setSecs(s=>s+1),1000);
+    } catch(e){
+      setState("idle");
+      alert("Microphone access denied. Please allow microphone access in your browser and try again.");
+    }
+  };
+
+  const stopRecording = ()=>{
+    if(mrRef.current&&mrRef.current.state==="recording"){ mrRef.current.stop(); }
+    clearInterval(timerRef.current);
+  };
+
+  const fmt = s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+
+  if(disabled) return null;
+  if(state==="idle") return (
+    <button onClick={startRecording} title="Record audio answer"
+      style={{display:"inline-flex",alignItems:"center",gap:5,padding:"4px 10px",borderRadius:6,
+        border:`1.5px solid #0284c7`,background:"#f0f9ff",color:"#0284c7",
+        fontSize:11,fontWeight:600,cursor:"pointer",marginTop:4,flexShrink:0}}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      Record audio
+    </button>
+  );
+  if(state==="requesting") return (
+    <span style={{fontSize:11,color:"#0284c7",marginTop:4,display:"inline-block"}}>Requesting microphone...</span>
+  );
+  if(state==="recording") return (
+    <button onClick={stopRecording}
+      style={{display:"inline-flex",alignItems:"center",gap:6,padding:"4px 12px",borderRadius:6,
+        border:"1.5px solid #dc2626",background:"#fef2f2",color:"#dc2626",
+        fontSize:11,fontWeight:700,cursor:"pointer",marginTop:4,animation:"pulse 1.2s infinite"}}>
+      <span style={{width:8,height:8,borderRadius:"50%",background:"#dc2626",display:"inline-block"}}/>
+      Stop — {fmt(secs)}
+    </button>
+  );
+  if(state==="saving") return (
+    <span style={{fontSize:11,color:"#6b7280",marginTop:4,display:"inline-block"}}>Saving recording...</span>
+  );
+  return null;
+};
+
 // ── Evidence Section ──────────────────────────────────────────────────────
 const EV_LOS = [
   {id:1,label:"LO 1 — Risks & Hazards",acs:[
@@ -245,17 +341,17 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
 
   const handleFile = (id,file)=>{
     if(!file)return;
-    const isVideo = file.type.startsWith("video");
-    if(isVideo){
-      const objUrl=URL.createObjectURL(file);
-      patchItem(id,{mediaType:"video",fileName:file.name,b64:null,objUrl});
-    } else {
-      const reader=new FileReader();
-      reader.onload=ev=>{
-        patchItem(id,{mediaType:"image",fileName:file.name,b64:ev.target.result,objUrl:null});
-      };
-      reader.readAsDataURL(file);
-    }
+    const isAudio = file.type.startsWith("audio");
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      patchItem(id,{
+        mediaType: isAudio?"audio":"image",
+        fileName: file.name,
+        b64: ev.target.result,
+        objUrl: null
+      });
+    };
+    reader.readAsDataURL(file);
   };
 
   const statusTag = (s)=>{
@@ -268,11 +364,11 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
   };
 
   const Thumb = ({it})=>{
-    if(it.b64) return <img src={it.b64} alt="evidence" style={{width:82,height:82,borderRadius:6,objectFit:"cover",border:`1px solid ${BD}`,flexShrink:0}}/>;
-    if(it.objUrl&&it.mediaType==="video") return (
-      <div style={{width:82,height:82,borderRadius:6,background:"#f3e8ff",border:"1px solid #c4b5fd",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:4,flexShrink:0}}>
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5"><polygon points="5,3 19,12 5,21"/></svg>
-        <span style={{fontSize:9,fontWeight:700,background:"#7c3aed",color:"#fff",padding:"1px 5px",borderRadius:3}}>VIDEO</span>
+    if(it.b64&&it.mediaType==="image") return <img src={it.b64} alt="evidence" style={{width:82,height:82,borderRadius:6,objectFit:"cover",border:`1px solid ${BD}`,flexShrink:0}}/>;
+    if(it.b64&&it.mediaType==="audio") return (
+      <div style={{width:82,height:82,borderRadius:6,background:"#f0f9ff",border:"1px solid #7dd3fc",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:4,flexShrink:0,padding:4}}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="1.5"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        <span style={{fontSize:8,fontWeight:700,background:"#0284c7",color:"#fff",padding:"1px 5px",borderRadius:3}}>AUDIO</span>
       </div>
     );
     return (
@@ -312,18 +408,15 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
 
   return (
     <div>
-      <h2 style={{color:G,marginBottom:6,fontSize:22}}>Photo &amp; Video Evidence</h2>
+      <h2 style={{color:G,marginBottom:6,fontSize:22}}>Photo &amp; Audio Evidence</h2>
       <p style={{fontSize:13,color:MG,marginBottom:14}}>
-        {am?"Reviewing student evidence submissions.":"Upload photos or short video clips that demonstrate your skills and knowledge outdoors. Link each item to the criteria it supports."}
+        {am?"Reviewing student evidence submissions.":"Upload photos or record/upload audio clips that demonstrate your skills and knowledge outdoors. Link each item to the criteria it supports."}
       </p>
 
       {!am&&(
         <>
-          <div style={{background:"#fffbeb",border:"1px solid #fcd34d",borderRadius:6,padding:"8px 12px",marginBottom:10,fontSize:12,color:"#92400e"}}>
-            <strong>Images</strong> are saved inside your workbook file and will be there when you reload. <strong>Videos</strong> are held in memory for this session only — keep your original video files safe.
-          </div>
           <div style={{background:LG,borderLeft:`4px solid ${G}`,borderRadius:"0 8px 8px 0",padding:"10px 14px",marginBottom:16,fontSize:12,color:"#0F4525"}}>
-            For each item: write a brief description of what it shows, then tick the criteria it provides evidence for. Screenshots from videos are accepted.
+            <strong>Images and audio recordings</strong> are both saved inside your workbook file and will be there when you reload. For each item: write a brief description of what it shows or says, then tick the criteria it provides evidence for. Written transcripts or notes alongside audio recordings are accepted.
           </div>
         </>
       )}
@@ -339,12 +432,16 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
                 {it.amStatus&&!am&&statusTag(it.amStatus)}
               </div>
 
+              {it.b64&&it.mediaType==="audio"&&(
+                <audio controls src={it.b64} style={{width:"100%",marginBottom:8,height:36}}/>
+              )}
+
               {am
                 ?<div style={{fontSize:13,color:"#374151",marginBottom:6}}>{it.desc||<em style={{color:MG}}>No description provided</em>}</div>
                 :<textarea style={{width:"100%",border:`1.5px solid ${BD}`,borderRadius:8,padding:"8px 10px",fontSize:12,
                     fontFamily:"inherit",resize:"vertical",minHeight:52,display:"block",color:"#1a1a1a"}}
                     value={it.desc||""} onChange={e=>patchItem(it.id,{desc:e.target.value})}
-                    placeholder="Describe what this photo/video shows and how it demonstrates your skills..."/>
+                    placeholder="Describe what this photo/audio shows and how it demonstrates your skills..."/>
               }
 
               {!am&&<ACSelector it={it}/>}
@@ -387,8 +484,8 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
             <div style={{display:"flex",gap:8,justifyContent:"flex-end",alignItems:"center",marginTop:10,flexWrap:"wrap"}}>
               {it.fileName&&<span style={{fontSize:11,color:MG,flex:1,minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{it.fileName}</span>}
               <label style={{padding:"4px 10px",borderRadius:6,border:`1.5px solid ${G}`,background:"#fff",color:G,fontSize:11,fontWeight:600,cursor:"pointer"}}>
-                {it.fileName?"Replace file":"Upload photo/video"}
-                <input type="file" accept="image/*,video/*" style={{display:"none"}} onChange={e=>handleFile(it.id,e.target.files[0])}/>
+              {it.fileName?"Replace file":"Upload photo/audio"}
+                <input type="file" accept="image/*,audio/*" style={{display:"none"}} onChange={e=>handleFile(it.id,e.target.files[0])}/>
               </label>
               <button onClick={()=>removeItem(it.id)}
                 style={{padding:"4px 10px",borderRadius:6,border:"1.5px solid #dc2626",background:"#dc2626",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer"}}>Remove</button>
@@ -400,7 +497,7 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
       {!am&&(
         <button onClick={addItem}
           style={{width:"100%",padding:10,borderRadius:8,border:`1.5px solid ${G}`,background:"#fff",color:G,fontSize:13,fontWeight:600,cursor:"pointer",marginTop:2}}>
-          + Add photo / video evidence
+          + Add photo / audio evidence
         </button>
       )}
     </div>
@@ -533,6 +630,16 @@ function App() {
 
   const upd = k=>v=>update({[k]:v});
   const updA = (k,i,f)=>v=>{const a=[...(data[k]||[])];a[i]={...a[i],[f]:v};update({[k]:a});};
+  // Add or remove a recording for a named field
+  const updRec = (fieldKey)=>(recOrNull, removeId)=>{
+    const recs = {...(data.recordings||{})};
+    if(removeId !== undefined){
+      recs[fieldKey] = (recs[fieldKey]||[]).filter(r=>r.id!==removeId);
+    } else if(recOrNull){
+      recs[fieldKey] = [...(recs[fieldKey]||[]), recOrNull];
+    }
+    update({recordings: recs});
+  };
 
   const setACStatus = (id,val)=>{
     const s={...(data.ac_status||{})};s[id]=val;update({ac_status:s});
@@ -858,7 +965,7 @@ function App() {
             ["LO 3 — Emergencies","lo3","Accident and emergency processes (AC 3.1)"],
             ["LO 4 — Equipment","lo4","Safety clothing and equipment use (AC 4.1–4.2)"],
             ["Assessment Tasks","tasks","Formal written tasks for all criteria"],
-            ["Photo Evidence","evidence","Upload and link photo/video evidence to criteria"],
+            ["Photo Evidence","evidence","Upload and link photo/audio evidence to criteria"],
             ["Criteria Checklist","checklist","Self-assessment and assessor sign-off"],
             ["Glossary","glossary","Key terms and definitions"]
           ].map(([l,s,d])=>(
@@ -879,7 +986,7 @@ function App() {
             Welcome to your digital workbook for <strong>Unit HB92CY002 &mdash; Personal Safety when Learning in the Outdoors</strong>. This unit develops safe practices for outdoor work and gives you the knowledge to deal with incidents. Your work is saved automatically as you type.
           </p>
           <KB title="Learning Outcomes" items={["LO1 — Know about managing risks and hazards when learning in the outdoors.","LO2 — Understand health and safety arrangements for learning in the outdoors.","LO3 — Understand processes relating to accidents and emergencies when learning in the outdoors.","LO4 — Be able to use safety clothing and equipment for a specific outdoor learning activity."]}/>
-          <KB title="How to use this workbook" items={["Use the navigation bar above to move between sections.","Read the Knowledge Hub in each section before answering questions.","Complete the Activities first, then complete the formal Assessment Tasks section.","Use the Photo Evidence tab to upload photos or videos and link them to assessment criteria — images are saved in your workbook file.","A plural statement requires a minimum of TWO examples.","AC 1.2 specifically requires a minimum of THREE hazards and THREE risks.","Use the Checklist page to review your progress before submitting."]}/>
+          <KB title="How to use this workbook" items={["Use the navigation bar above to move between sections.","Read the Knowledge Hub in each section before answering questions.","Complete the Activities first, then complete the formal Assessment Tasks section.","Use the Photo Evidence tab to upload photos or audio recordings and link them to assessment criteria — all files are saved in your workbook file.","A plural statement requires a minimum of TWO examples.","AC 1.2 specifically requires a minimum of THREE hazards and THREE risks.","Use the Checklist page to review your progress before submitting."]}/>
         </div>
 
         {/* ═══ LO 1 ═══ */}
@@ -892,8 +999,8 @@ function App() {
           <Divider/>
 
           <ACQ ac="1.1" label="In your own words, write a definition for each term.">
-            <div style={{marginBottom:10}}><Hint text="Define 'Hazard':"/><TA rows={3} value={data.ac11_hazard} onChange={upd("ac11_hazard")} ph="A hazard is..." disabled={am}/></div>
-            <Hint text="Define 'Risk':"/><TA rows={3} value={data.ac11_risk} onChange={upd("ac11_risk")} ph="A risk is..." disabled={am}/>
+            <div style={{marginBottom:10}}><Hint text="Define 'Hazard':"/><TA rows={3} value={data.ac11_hazard} onChange={upd("ac11_hazard")} ph="A hazard is..." disabled={am} recordings={(data.recordings||{})["ac11_hazard"]||[]} onAddRecording={am?null:updRec("ac11_hazard")}/></div>
+            <Hint text="Define 'Risk':"/><TA rows={3} value={data.ac11_risk} onChange={upd("ac11_risk")} ph="A risk is..." disabled={am} recordings={(data.recordings||{})["ac11_risk"]||[]} onAddRecording={am?null:updRec("ac11_risk")}/>
             {am&&<ACStatus id="1.1" status={acStatus("1.1")} onChange={v=>setACStatus("1.1",v)}/>}
           </ACQ>
 
@@ -910,11 +1017,11 @@ function App() {
 
           <ACQ ac="1.4" label="Provide your own personal judgements about managing risks in the outdoors.">
             <Hint text="Describe an outdoor situation and a risk you personally noticed:"/>
-            <TA rows={3} value={data.ac14_activity} onChange={upd("ac14_activity")} disabled={am}/>
+            <TA rows={3} value={data.ac14_activity} onChange={upd("ac14_activity")} disabled={am} recordings={(data.recordings||{})["ac14_activity"]||[]} onAddRecording={am?null:updRec("ac14_activity")}/>
             <div style={{marginTop:10}}><Hint text="What did you decide to do about that risk, and why?"/></div>
-            <TA rows={3} value={data.ac14_decision} onChange={upd("ac14_decision")} disabled={am}/>
+            <TA rows={3} value={data.ac14_decision} onChange={upd("ac14_decision")} disabled={am} recordings={(data.recordings||{})["ac14_decision"]||[]} onAddRecording={am?null:updRec("ac14_decision")}/>
             <div style={{marginTop:10}}><Hint text="Looking back, would you do anything differently?"/></div>
-            <TA rows={3} value={data.ac14_different} onChange={upd("ac14_different")} disabled={am}/>
+            <TA rows={3} value={data.ac14_different} onChange={upd("ac14_different")} disabled={am} recordings={(data.recordings||{})["ac14_different"]||[]} onAddRecording={am?null:updRec("ac14_different")}/>
             {am&&<ACStatus id="1.4" status={acStatus("1.4")} onChange={v=>setACStatus("1.4",v)}/>}
           </ACQ>
 
@@ -931,10 +1038,10 @@ function App() {
           <Divider/>
 
           <ACQ ac="2.1" label="Describe why it is important to follow health and safety instructions outdoors. Give at least TWO reasons.">
-            <Hint text="Reason 1:"/><TA rows={3} value={data.ac21_reason1} onChange={upd("ac21_reason1")} disabled={am}/>
-            <div style={{marginTop:10}}><Hint text="Reason 2:"/></div><TA rows={3} value={data.ac21_reason2} onChange={upd("ac21_reason2")} disabled={am}/>
+            <Hint text="Reason 1:"/><TA rows={3} value={data.ac21_reason1} onChange={upd("ac21_reason1")} disabled={am} recordings={(data.recordings||{})["ac21_reason1"]||[]} onAddRecording={am?null:updRec("ac21_reason1")}/>
+            <div style={{marginTop:10}}><Hint text="Reason 2:"/></div><TA rows={3} value={data.ac21_reason2} onChange={upd("ac21_reason2")} disabled={am} recordings={(data.recordings||{})["ac21_reason2"]||[]} onAddRecording={am?null:updRec("ac21_reason2")}/>
             <div style={{marginTop:10}}><Hint text="What could happen if someone does NOT follow H&S instructions?"/></div>
-            <TA rows={3} value={data.ac21_consequence} onChange={upd("ac21_consequence")} disabled={am}/>
+            <TA rows={3} value={data.ac21_consequence} onChange={upd("ac21_consequence")} disabled={am} recordings={(data.recordings||{})["ac21_consequence"]||[]} onAddRecording={am?null:updRec("ac21_consequence")}/>
             {am&&<ACStatus id="2.1" status={acStatus("2.1")} onChange={v=>setACStatus("2.1",v)}/>}
           </ACQ>
 
@@ -957,9 +1064,9 @@ function App() {
 
           <ACQ ac="2.3" label="Choose ONE outdoor learning activity. Describe its health and safety instructions.">
             <div style={{marginBottom:10}}><Inp label="Name of the outdoor activity" value={data.ac23_activity} onChange={upd("ac23_activity")} ph="e.g., Hill walking, Rock climbing, Kayaking..." disabled={am}/></div>
-            <Hint text="H&S instructions BEFORE the activity:"/><TA rows={4} value={data.ac23_before} onChange={upd("ac23_before")} disabled={am}/>
-            <div style={{marginTop:10}}><Hint text="H&S instructions DURING the activity:"/></div><TA rows={4} value={data.ac23_during} onChange={upd("ac23_during")} disabled={am}/>
-            <div style={{marginTop:10}}><Hint text="H&S instructions AFTER the activity:"/></div><TA rows={4} value={data.ac23_after} onChange={upd("ac23_after")} disabled={am}/>
+            <Hint text="H&S instructions BEFORE the activity:"/><TA rows={4} value={data.ac23_before} onChange={upd("ac23_before")} disabled={am} recordings={(data.recordings||{})["ac23_before"]||[]} onAddRecording={am?null:updRec("ac23_before")}/>
+            <div style={{marginTop:10}}><Hint text="H&S instructions DURING the activity:"/></div><TA rows={4} value={data.ac23_during} onChange={upd("ac23_during")} disabled={am} recordings={(data.recordings||{})["ac23_during"]||[]} onAddRecording={am?null:updRec("ac23_during")}/>
+            <div style={{marginTop:10}}><Hint text="H&S instructions AFTER the activity:"/></div><TA rows={4} value={data.ac23_after} onChange={upd("ac23_after")} disabled={am} recordings={(data.recordings||{})["ac23_after"]||[]} onAddRecording={am?null:updRec("ac23_after")}/>
             {am&&<ACStatus id="2.3" status={acStatus("2.3")} onChange={v=>setACStatus("2.3",v)}/>}
           </ACQ>
 
@@ -976,9 +1083,9 @@ function App() {
           <Divider/>
 
           <ACQ ac="3.1" label="Describe the processes that should be followed when an accident or emergency occurs during outdoor learning.">
-            <Hint text="What should you do IMMEDIATELY? (First steps):"/><TA rows={4} value={data.ac31_immediate} onChange={upd("ac31_immediate")} disabled={am}/>
-            <div style={{marginTop:10}}><Hint text="How do you get help? (Who to contact, what to say, what information to give):"/></div><TA rows={4} value={data.ac31_help} onChange={upd("ac31_help")} disabled={am}/>
-            <div style={{marginTop:10}}><Hint text="What happens AFTER the emergency? (Reporting, debrief, support):"/></div><TA rows={4} value={data.ac31_after2} onChange={upd("ac31_after2")} disabled={am}/>
+            <Hint text="What should you do IMMEDIATELY? (First steps):"/><TA rows={4} value={data.ac31_immediate} onChange={upd("ac31_immediate")} disabled={am} recordings={(data.recordings||{})["ac31_immediate"]||[]} onAddRecording={am?null:updRec("ac31_immediate")}/>
+            <div style={{marginTop:10}}><Hint text="How do you get help? (Who to contact, what to say, what information to give):"/></div><TA rows={4} value={data.ac31_help} onChange={upd("ac31_help")} disabled={am} recordings={(data.recordings||{})["ac31_help"]||[]} onAddRecording={am?null:updRec("ac31_help")}/>
+            <div style={{marginTop:10}}><Hint text="What happens AFTER the emergency? (Reporting, debrief, support):"/></div><TA rows={4} value={data.ac31_after2} onChange={upd("ac31_after2")} disabled={am} recordings={(data.recordings||{})["ac31_after2"]||[]} onAddRecording={am?null:updRec("ac31_after2")}/>
             {am&&<ACStatus id="3.1" status={acStatus("3.1")} onChange={v=>setACStatus("3.1",v)}/>}
           </ACQ>
 
@@ -986,7 +1093,7 @@ function App() {
             <div style={{fontSize:12,fontWeight:700,color:G,marginBottom:6}}>&#128161; Extension Question</div>
             <div style={{fontSize:13,color:"#2a2a2a"}}>Imagine you are on a walk and a group member slips on a wet rock but is not injured. What would you do, and why is it still important to report this near miss?</div>
           </div>
-          <TA rows={4} value={data.ac31_nearmiss} onChange={upd("ac31_nearmiss")} ph="Describe what you would do and why reporting matters..." disabled={am}/>
+          <TA rows={4} value={data.ac31_nearmiss} onChange={upd("ac31_nearmiss")} ph="Describe what you would do and why reporting matters..." disabled={am} recordings={(data.recordings||{})["ac31_nearmiss"]||[]} onAddRecording={am?null:updRec("ac31_nearmiss")}/>
 
           <AssessorFeedback label="LO 3 — Accidents & Emergencies" value={loFb("lo3")} onChange={v=>setLOFeedback("lo3",v)} assessorMode={am}/>
           {!am&&<ContinueBtn label="Continue to LO 4 →" onClick={()=>setSec("lo4")}/>}
@@ -1011,8 +1118,8 @@ function App() {
 
           <ACQ ac="4.2" label="Describe how you used ONE piece of safety equipment according to the instructions you were given.">
             <div style={{marginBottom:10}}><Inp label="Name of the equipment" value={data.ac42_equipment} onChange={upd("ac42_equipment")} ph="e.g., Buoyancy aid, Helmet, Harness..." disabled={am}/></div>
-            <Hint text="Describe the instructions you were given for using it:"/><TA rows={4} value={data.ac42_instructions} onChange={upd("ac42_instructions")} disabled={am}/>
-            <div style={{marginTop:10}}><Hint text="Explain why following these instructions correctly is important:"/></div><TA rows={4} value={data.ac42_why} onChange={upd("ac42_why")} disabled={am}/>
+            <Hint text="Describe the instructions you were given for using it:"/><TA rows={4} value={data.ac42_instructions} onChange={upd("ac42_instructions")} disabled={am} recordings={(data.recordings||{})["ac42_instructions"]||[]} onAddRecording={am?null:updRec("ac42_instructions")}/>
+            <div style={{marginTop:10}}><Hint text="Explain why following these instructions correctly is important:"/></div><TA rows={4} value={data.ac42_why} onChange={upd("ac42_why")} disabled={am} recordings={(data.recordings||{})["ac42_why"]||[]} onAddRecording={am?null:updRec("ac42_why")}/>
             {am&&<ACStatus id="4.2" status={acStatus("4.2")} onChange={v=>setACStatus("4.2",v)}/>}
           </ACQ>
 
@@ -1031,12 +1138,12 @@ function App() {
           <div style={{border:`2px solid ${G}`,borderRadius:10,padding:18,marginBottom:22}}>
             <div style={{background:G,color:"#fff",padding:"7px 12px",borderRadius:6,fontSize:12,fontWeight:700,marginBottom:16,display:"inline-block"}}>Task 1 &mdash; Hazard and Risk Management &middot; AC 1.1, 1.2, 1.3, 1.4</div>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",marginBottom:8}}>1.1 &mdash; Define 'hazard' and 'risk' in your own words.</div>
-            <Hint text="Hazard:"/><TA rows={3} value={data.t1_hazard} onChange={upd("t1_hazard")} disabled={am}/>
-            <div style={{marginTop:10}}><Hint text="Risk:"/></div><TA rows={3} value={data.t1_risk} onChange={upd("t1_risk")} disabled={am}/>
+            <Hint text="Hazard:"/><TA rows={3} value={data.t1_hazard} onChange={upd("t1_hazard")} disabled={am} recordings={(data.recordings||{})["t1_hazard"]||[]} onAddRecording={am?null:updRec("t1_hazard")}/>
+            <div style={{marginTop:10}}><Hint text="Risk:"/></div><TA rows={3} value={data.t1_risk} onChange={upd("t1_risk")} disabled={am} recordings={(data.recordings||{})["t1_risk"]||[]} onAddRecording={am?null:updRec("t1_risk")}/>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",margin:"20px 0 8px"}}>1.2 &amp; 1.3 &mdash; Complete a full risk assessment with control measures. Minimum THREE hazards and THREE risks.</div>
             <Tbl headers={["Hazard","Risk","Control Measure","Who responsible?"]} rows={data.t1_raRows} onChange={r=>update({t1_raRows:r})} widths={["25%","25%","30%","20%"]} disabled={am}/>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",margin:"16px 0 8px"}}>1.4 &mdash; Provide your own personal judgements on managing risks in the outdoors.</div>
-            <TA rows={6} value={data.t1_judgement} onChange={upd("t1_judgement")} ph="Write your personal views and judgements here..." disabled={am}/>
+            <TA rows={6} value={data.t1_judgement} onChange={upd("t1_judgement")} ph="Write your personal views and judgements here..." disabled={am} recordings={(data.recordings||{})["t1_judgement"]||[]} onAddRecording={am?null:updRec("t1_judgement")}/>
             <AssessorFeedback label="Task 1" value={taskFb("task1")} onChange={v=>setTaskFeedback("task1",v)} assessorMode={am}/>
           </div>
 
@@ -1044,12 +1151,12 @@ function App() {
           <div style={{border:`2px solid ${G}`,borderRadius:10,padding:18,marginBottom:22}}>
             <div style={{background:G,color:"#fff",padding:"7px 12px",borderRadius:6,fontSize:12,fontWeight:700,marginBottom:16,display:"inline-block"}}>Task 2 &mdash; Health and Safety &middot; AC 2.1, 2.2, 2.3</div>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",marginBottom:8}}>2.1 &mdash; Describe why it is important to follow health and safety instructions outdoors. Include at least TWO reasons.</div>
-            <TA rows={6} value={data.t2_hs} onChange={upd("t2_hs")} disabled={am}/>
+            <TA rows={6} value={data.t2_hs} onChange={upd("t2_hs")} disabled={am} recordings={(data.recordings||{})["t2_hs"]||[]} onAddRecording={am?null:updRec("t2_hs")}/>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",margin:"18px 0 8px"}}>2.2 &mdash; Identify at least FOUR safety signs or symbols seen when learning in the outdoors.</div>
             <Tbl headers={["Sign / Symbol (describe it)","Name","Meaning / What to do"]} rows={data.t2_signs} onChange={r=>update({t2_signs:r})} widths={["30%","30%","40%"]} disabled={am}/>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",margin:"16px 0 8px"}}>2.3 &mdash; Describe the H&amp;S instructions for ONE outdoor learning activity (before, during, and after).</div>
             <div style={{marginBottom:10}}><Inp label="Activity name" value={data.t2_activity} onChange={upd("t2_activity")} ph="Activity name..." disabled={am}/></div>
-            <TA rows={8} value={data.t2_instructions} onChange={upd("t2_instructions")} ph="Describe all H&S instructions — before, during, and after the activity..." disabled={am}/>
+            <TA rows={8} value={data.t2_instructions} onChange={upd("t2_instructions")} ph="Describe all H&S instructions — before, during, and after the activity..." disabled={am} recordings={(data.recordings||{})["t2_instructions"]||[]} onAddRecording={am?null:updRec("t2_instructions")}/>
             <AssessorFeedback label="Task 2" value={taskFb("task2")} onChange={v=>setTaskFeedback("task2",v)} assessorMode={am}/>
           </div>
 
@@ -1057,7 +1164,7 @@ function App() {
           <div style={{border:`2px solid ${G}`,borderRadius:10,padding:18,marginBottom:22}}>
             <div style={{background:G,color:"#fff",padding:"7px 12px",borderRadius:6,fontSize:12,fontWeight:700,marginBottom:16,display:"inline-block"}}>Task 3 &mdash; Accidents and Emergencies &middot; AC 3.1</div>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",marginBottom:8}}>3.1 &mdash; Describe the full processes relating to accidents and emergencies in outdoor learning.</div>
-            <TA rows={10} value={data.t3_process} onChange={upd("t3_process")} ph="Describe the full process — immediate actions, how to get help, what information to give, what happens after..." disabled={am}/>
+            <TA rows={10} value={data.t3_process} onChange={upd("t3_process")} ph="Describe the full process — immediate actions, how to get help, what information to give, what happens after..." disabled={am} recordings={(data.recordings||{})["t3_process"]||[]} onAddRecording={am?null:updRec("t3_process")}/>
             <AssessorFeedback label="Task 3" value={taskFb("task3")} onChange={v=>setTaskFeedback("task3",v)} assessorMode={am}/>
           </div>
 
@@ -1066,9 +1173,9 @@ function App() {
             <div style={{background:G,color:"#fff",padding:"7px 12px",borderRadius:6,fontSize:12,fontWeight:700,marginBottom:16,display:"inline-block"}}>Task 4 &mdash; Safety Clothing and Equipment &middot; AC 4.1, 4.2</div>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",marginBottom:8}}>4.1 &mdash; Identify the safety clothing and equipment for ONE outdoor activity. Include at least TWO clothing items and TWO equipment items.</div>
             <div style={{marginBottom:10}}><Inp label="Outdoor activity" value={data.t4_activity} onChange={upd("t4_activity")} ph="Activity name..." disabled={am}/></div>
-            <TA rows={8} value={data.t4_clothing} onChange={upd("t4_clothing")} ph="List and describe the safety clothing and equipment needed, and why each item is required..." disabled={am}/>
+            <TA rows={8} value={data.t4_clothing} onChange={upd("t4_clothing")} ph="List and describe the safety clothing and equipment needed, and why each item is required..." disabled={am} recordings={(data.recordings||{})["t4_clothing"]||[]} onAddRecording={am?null:updRec("t4_clothing")}/>
             <div style={{fontWeight:600,fontSize:14,color:"#1a1a1a",margin:"18px 0 8px"}}>4.2 &mdash; Describe how you used equipment and clothing according to the instructions given.</div>
-            <TA rows={8} value={data.t4_use} onChange={upd("t4_use")} ph="Describe how you used specific equipment or clothing correctly, following the instructions you were given..." disabled={am}/>
+            <TA rows={8} value={data.t4_use} onChange={upd("t4_use")} ph="Describe how you used specific equipment or clothing correctly, following the instructions you were given..." disabled={am} recordings={(data.recordings||{})["t4_use"]||[]} onAddRecording={am?null:updRec("t4_use")}/>
             <AssessorFeedback label="Task 4" value={taskFb("task4")} onChange={v=>setTaskFeedback("task4",v)} assessorMode={am}/>
           </div>
 
