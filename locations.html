@@ -289,10 +289,22 @@ body {
       <span class="act-dot"></span> Mountain Walking
     </a>
     <a class="act-tab watercraft" onclick="scrollTo('watercraft')">
-      <span class="act-dot"></span> Watercraft
+      <span class="act-dot"></span> Paddling
     </a>
     <a class="act-tab climbing" onclick="scrollTo('climbing')">
       <span class="act-dot"></span> Climbing
+    </a>
+    <a class="act-tab" style="color:var(--muted)" onclick="scrollTo('walks')" onmouseover="this.style.color='#27AE60'" onmouseout="this.style.color='var(--muted)'">
+      <span class="act-dot" style="background:#27AE60"></span> Local Walks
+    </a>
+    <a class="act-tab" style="color:var(--muted)" onclick="scrollTo('scrambling')" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='var(--muted)'">
+      <span class="act-dot" style="background:#E67E22"></span> Scrambling
+    </a>
+    <a class="act-tab" style="color:var(--muted)" onclick="scrollTo('jumping')" onmouseover="this.style.color='#D35400'" onmouseout="this.style.color='var(--muted)'">
+      <span class="act-dot" style="background:#D35400"></span> Adventurous Jumping
+    </a>
+    <a class="act-tab" style="color:var(--muted)" onclick="scrollTo('mines')" onmouseover="this.style.color='#7F8C8D'" onmouseout="this.style.color='var(--muted)'">
+      <span class="act-dot" style="background:#7F8C8D"></span> Mine Exploration
     </a>
   </div>
 </nav>
@@ -509,12 +521,96 @@ body {
   <section class="activity-section wc-section" id="watercraft">
     <div class="activity-header">
       <div class="activity-header-bar"></div>
-      <div><h2>Watercraft</h2></div>
-      <span class="location-count">Coming soon</span>
+      <div><h2>Paddling</h2></div>
+      <span class="location-count">4 locations</span>
     </div>
-    <div class="coming-soon-section">
-      <h3>Locations to be added</h3>
-      <p>Watercraft locations, maps and site documents will be added here.</p>
+    <div class="map-layout">
+      <div class="map-container">
+        <div id="map-watercraft" class="map-el"></div>
+      </div>
+      <div class="location-list" id="list-watercraft">
+
+        <div class="loc-card" id="card-vyrnwy-bh" onclick="focusLocationWC(0)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--watercraft)"></div>
+            <div>
+              <div class="loc-name">Boathouse — Lake Vyrnwy</div>
+              <div class="loc-meta">Llanwddyn, Powys, SY10 0LY</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (on-site)</div>
+            <div class="loc-detail"><strong>Distance</strong>~18 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~35 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Very sheltered</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-clywedog-sc" onclick="focusLocationWC(1)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--watercraft)"></div>
+            <div>
+              <div class="loc-name">Sailing Club — Llyn Clywedog</div>
+              <div class="loc-meta">Near Llanidloes, Powys</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (on-site)</div>
+            <div class="loc-detail"><strong>Distance</strong>~12 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~25 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Sheltered</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-bala-lc" onclick="focusLocationWC(2)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--watercraft)"></div>
+            <div>
+              <div class="loc-name">Leisure Centre — Llyn Bala (Llyn Tegid)</div>
+              <div class="loc-meta">Tegid Street, Bala, Gwynedd</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Paid (town car park)</div>
+            <div class="loc-detail"><strong>Distance</strong>~40 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~55 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Sheltered</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-berriew-aq" onclick="focusLocationWC(3)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--watercraft)"></div>
+            <div>
+              <div class="loc-name">Football Pitch Car Park &mdash; Berriew Aqueduct</div>
+              <div class="loc-meta">Berriew, Powys, SY21 8AP</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (football pitch CP)</div>
+            <div class="loc-detail"><strong>Distance</strong>~8 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~15 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Very sheltered</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -528,6 +624,270 @@ body {
     <div class="coming-soon-section">
       <h3>Locations to be added</h3>
       <p>Climbing locations, maps and site documents will be added here.</p>
+    </div>
+  </section>
+
+  <!-- ═══ SCRAMBLING ═══ -->
+  <section class="activity-section scrbl-section" id="scrambling">
+    <div class="activity-header">
+      <div class="activity-header-bar" style="background:#E67E22"></div>
+      <div><h2>Scrambling</h2></div>
+      <span class="location-count">Coming soon</span>
+    </div>
+    <div class="coming-soon-section">
+      <h3>Locations to be added</h3>
+      <p>Scrambling locations, maps and site documents will be added here.</p>
+    </div>
+  </section>
+
+  <!-- ═══ ADVENTUROUS JUMPING ═══ -->
+  <section class="activity-section jump-section" id="jumping">
+    <div class="activity-header">
+      <div class="activity-header-bar" style="background:#D35400"></div>
+      <div><h2>Adventurous Jumping</h2></div>
+      <span class="location-count">4 locations</span>
+    </div>
+    <div class="map-layout">
+      <div class="map-container">
+        <div id="map-jumping" class="map-el"></div>
+      </div>
+      <div class="location-list" id="list-jumping">
+
+        <div class="loc-card" id="card-wolfs-leap" onclick="focusLocationJump(0)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#D35400"></div>
+            <div>
+              <div class="loc-name">Wolf&#39;s Leap</div>
+              <div class="loc-meta">Abergwesyn, Powys</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Roadside (limited)</div>
+            <div class="loc-detail"><strong>Distance</strong>~20 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~35 min</div>
+            <div class="loc-detail"><strong>Jump Height</strong>TBC</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-meifod-br" onclick="focusLocationJump(1)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#D35400"></div>
+            <div>
+              <div class="loc-name">Meifod Bridge</div>
+              <div class="loc-meta">Meifod, Powys, SY22 6BY</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (village)</div>
+            <div class="loc-detail"><strong>Distance</strong>~13 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~22 min</div>
+            <div class="loc-detail"><strong>Jump Height</strong>TBC</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-prysor" onclick="focusLocationJump(2)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#D35400"></div>
+            <div>
+              <div class="loc-name">Prysor Jumps</div>
+              <div class="loc-meta">Trawsfynydd, Gwynedd</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Roadside (nearby)</div>
+            <div class="loc-detail"><strong>Distance</strong>~50 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 10 min</div>
+            <div class="loc-detail"><strong>Jump Height</strong>TBC</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-traws-br" onclick="focusLocationJump(3)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#D35400"></div>
+            <div>
+              <div class="loc-name">Traws Bridge</div>
+              <div class="loc-meta">Trawsfynydd, Gwynedd</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Roadside (nearby)</div>
+            <div class="loc-detail"><strong>Distance</strong>~48 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 5 min</div>
+            <div class="loc-detail"><strong>Jump Height</strong>TBC</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ LOCAL WALKS ═══ -->
+  <section class="activity-section" id="walks">
+    <div class="activity-header">
+      <div class="activity-header-bar" style="background:#27AE60"></div>
+      <div><h2>Local Walks</h2></div>
+      <span class="location-count">2 locations</span>
+    </div>
+    <div class="map-layout">
+      <div class="map-container">
+        <div id="map-walks" class="map-el"></div>
+      </div>
+      <div class="location-list" id="list-walks">
+
+        <div class="loc-card" id="card-newtown-canal" onclick="focusLocationWalks(0)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#27AE60"></div>
+            <div>
+              <div class="loc-name">Newtown Canal Walk</div>
+              <div class="loc-meta">Dolerw Park, Newtown, SY16 1DZ</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (Dolerw Park CP)</div>
+            <div class="loc-detail"><strong>Distance</strong>~5 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~10 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Easy &mdash; flat towpath</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-kerry-ridgeway" onclick="focusLocationWalks(1)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#27AE60"></div>
+            <div>
+              <div class="loc-name">Kerry Ridgeway</div>
+              <div class="loc-meta">Kerry, Powys, SY16 4NR</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (roadside, Kerry village)</div>
+            <div class="loc-detail"><strong>Distance</strong>~2 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~5 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Moderate &mdash; exposed ridgeline</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MINE EXPLORATION ═══ -->
+  <section class="activity-section mine-section" id="mines">
+    <div class="activity-header">
+      <div class="activity-header-bar" style="background:#7F8C8D"></div>
+      <div><h2>Mine Exploration</h2></div>
+      <span class="location-count">4 locations</span>
+    </div>
+    <div class="map-layout">
+      <div class="map-container">
+        <div id="map-mines" class="map-el"></div>
+      </div>
+      <div class="location-list" id="list-mines">
+
+        <div class="loc-card" id="card-wrysgan" onclick="focusLocationMines(0)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#7F8C8D"></div>
+            <div>
+              <div class="loc-name">Wrysgan Slate Mine</div>
+              <div class="loc-meta">Tanygrisiau, Blaenau Ffestiniog, LL41 3SU</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (roadside, Tanygrisiau)</div>
+            <div class="loc-detail"><strong>Distance</strong>~55 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 20 min</div>
+            <div class="loc-detail"><strong>Mine Type</strong>Slate &mdash; underground chambers</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-bwlch-plwm" onclick="focusLocationMines(1)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#7F8C8D"></div>
+            <div>
+              <div class="loc-name">Bwlch y Plwm Lead Mine</div>
+              <div class="loc-meta">Llanfrothen, Gwynedd, LL48 6DB</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Roadside (limited)</div>
+            <div class="loc-detail"><strong>Distance</strong>~60 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 25 min</div>
+            <div class="loc-detail"><strong>Mine Type</strong>Lead &mdash; adit level</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-llanymynech" onclick="focusLocationMines(2)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#7F8C8D"></div>
+            <div>
+              <div class="loc-name">Llanymynech Ogof (Caves &amp; Mines)</div>
+              <div class="loc-meta">Llanymynech Hill, Powys, SY22 6EJ</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (heritage area car park)</div>
+            <div class="loc-detail"><strong>Distance</strong>~20 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~30 min</div>
+            <div class="loc-detail"><strong>Mine Type</strong>Copper / lead &mdash; Roman cave system</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-rhiwbach" onclick="focusLocationMines(3)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:#7F8C8D"></div>
+            <div>
+              <div class="loc-name">Rhiwbach Slate Quarry</div>
+              <div class="loc-meta">Cwm Penmachno, Gwynedd, LL24 0PR</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free (end of road, Cwm Penmachno)</div>
+            <div class="loc-detail"><strong>Distance</strong>~55 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 15 min</div>
+            <div class="loc-detail"><strong>Mine Type</strong>Slate &mdash; eight underground floors</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -617,7 +977,8 @@ function scrollTo(id) {
   setActiveTab(id === 'mtb' ? 'mtb' :
                id === 'walking' ? 'walking' :
                id === 'mtnwalk' ? 'mtn' :
-               id === 'watercraft' ? 'watercraft' : 'climbing');
+               id === 'watercraft' ? 'watercraft' :
+               id === 'climbing' ? 'climbing' : null);
 }
 
 function setActiveTab(cls) {
@@ -651,6 +1012,166 @@ sections.forEach(s => {
 
 // Fix Leaflet map render after page layout settles
 setTimeout(() => { mtbMap.invalidateSize(); }, 300);
+
+// ── PADDLING LOCATION DATA ──
+const wcLocations = [
+  { name: "Boathouse — Lake Vyrnwy",                lat: 52.7731, lng: -3.5042, cardId: "card-vyrnwy-bh" },
+  { name: "Sailing Club — Llyn Clywedog",           lat: 52.4440, lng: -3.6590, cardId: "card-clywedog-sc" },
+  { name: "Leisure Centre — Llyn Bala (Llyn Tegid)",lat: 52.9110, lng: -3.6780, cardId: "card-bala-lc" },
+  { name: "Football Pitch CP — Berriew Aqueduct",   lat: 52.5830, lng: -3.2030, cardId: "card-berriew-aq" },
+];
+
+const wcMap = L.map('map-watercraft', { zoomControl: true }).setView([52.65, -3.55], 9);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+}).addTo(wcMap);
+
+const wcIcon = L.divIcon({
+  className: '',
+  html: '<div style="background:#2980B9;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+  iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -10]
+});
+
+const wcMarkers = wcLocations.map((loc) => {
+  const m = L.marker([loc.lat, loc.lng], { icon: wcIcon }).addTo(wcMap);
+  m.bindPopup('<strong>' + loc.name + '</strong>');
+  m.on('click', () => { highlightCardWC(loc.cardId); });
+  return m;
+});
+
+function focusLocationWC(index) {
+  const loc = wcLocations[index];
+  wcMap.setView([loc.lat, loc.lng], 13, { animate: true });
+  wcMarkers[index].openPopup();
+  highlightCardWC(loc.cardId);
+}
+
+function highlightCardWC(cardId) {
+  document.querySelectorAll('#list-watercraft .loc-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(cardId);
+  if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+
+// ── JUMPING LOCATION DATA ──
+const jumpLocations = [
+  { name: "Wolf's Leap — Abergwesyn",  lat: 52.1810, lng: -3.6960, cardId: "card-wolfs-leap" },
+  { name: "Meifod Bridge",             lat: 52.7130, lng: -3.2570, cardId: "card-meifod-br" },
+  { name: "Prysor Jumps",              lat: 52.934349, lng: -3.988710, cardId: "card-prysor" },
+  { name: "Traws Bridge",              lat: 52.862678, lng: -3.882278, cardId: "card-traws-br" },
+];
+
+const jumpMap = L.map('map-jumping', { zoomControl: true }).setView([52.65, -3.75], 9);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+}).addTo(jumpMap);
+
+const jumpIcon = L.divIcon({
+  className: '',
+  html: '<div style="background:#D35400;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+  iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -10]
+});
+
+const jumpMarkers = jumpLocations.map((loc) => {
+  const m = L.marker([loc.lat, loc.lng], { icon: jumpIcon }).addTo(jumpMap);
+  m.bindPopup('<strong>' + loc.name + '</strong>');
+  m.on('click', () => { highlightCardJump(loc.cardId); });
+  return m;
+});
+
+function focusLocationJump(index) {
+  const loc = jumpLocations[index];
+  jumpMap.setView([loc.lat, loc.lng], 14, { animate: true });
+  jumpMarkers[index].openPopup();
+  highlightCardJump(loc.cardId);
+}
+
+function highlightCardJump(cardId) {
+  document.querySelectorAll('#list-jumping .loc-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(cardId);
+  if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+
+setTimeout(() => { wcMap.invalidateSize(); jumpMap.invalidateSize(); }, 400);
+
+// ── LOCAL WALKS LOCATION DATA ──
+const walksLocations = [
+  { name: "Newtown Canal Walk",  lat: 52.5133, lng: -3.3130, cardId: "card-newtown-canal" },
+  { name: "Kerry Ridgeway",      lat: 52.4720, lng: -3.2180, cardId: "card-kerry-ridgeway" },
+];
+
+const walksMap = L.map('map-walks', { zoomControl: true }).setView([52.495, -3.265], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+}).addTo(walksMap);
+
+const walksIcon = L.divIcon({
+  className: '',
+  html: '<div style="background:#27AE60;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+  iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -10]
+});
+
+const walksMarkers = walksLocations.map((loc) => {
+  const m = L.marker([loc.lat, loc.lng], { icon: walksIcon }).addTo(walksMap);
+  m.bindPopup('<strong>' + loc.name + '</strong>');
+  m.on('click', () => { highlightCardWalks(loc.cardId); });
+  return m;
+});
+
+function focusLocationWalks(index) {
+  const loc = walksLocations[index];
+  walksMap.setView([loc.lat, loc.lng], 14, { animate: true });
+  walksMarkers[index].openPopup();
+  highlightCardWalks(loc.cardId);
+}
+
+function highlightCardWalks(cardId) {
+  document.querySelectorAll('#list-walks .loc-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(cardId);
+  if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+
+setTimeout(() => { walksMap.invalidateSize(); }, 400);
+
+// ── MINE EXPLORATION LOCATION DATA ──
+const minesLocations = [
+  { name: "Wrysgan Slate Mine",              lat: 52.9720, lng: -3.9680, cardId: "card-wrysgan" },
+  { name: "Bwlch y Plwm Lead Mine",          lat: 52.9460, lng: -4.0100, cardId: "card-bwlch-plwm" },
+  { name: "Llanymynech Ogof",                lat: 52.7908, lng: -3.0917, cardId: "card-llanymynech" },
+  { name: "Rhiwbach Slate Quarry",           lat: 53.0010, lng: -3.8820, cardId: "card-rhiwbach" },
+];
+
+const minesMap = L.map('map-mines', { zoomControl: true }).setView([52.95, -3.7], 8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+}).addTo(minesMap);
+
+const minesIcon = L.divIcon({
+  className: '',
+  html: '<div style="background:#7F8C8D;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+  iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -10]
+});
+
+const minesMarkers = minesLocations.map((loc) => {
+  const m = L.marker([loc.lat, loc.lng], { icon: minesIcon }).addTo(minesMap);
+  m.bindPopup('<strong>' + loc.name + '</strong>');
+  m.on('click', () => { highlightCardMines(loc.cardId); });
+  return m;
+});
+
+function focusLocationMines(index) {
+  const loc = minesLocations[index];
+  minesMap.setView([loc.lat, loc.lng], 14, { animate: true });
+  minesMarkers[index].openPopup();
+  highlightCardMines(loc.cardId);
+}
+
+function highlightCardMines(cardId) {
+  document.querySelectorAll('#list-mines .loc-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(cardId);
+  if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+
+setTimeout(() => { minesMap.invalidateSize(); }, 400);
 </script>
 </body>
 </html>
