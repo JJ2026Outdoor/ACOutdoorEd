@@ -1,0 +1,222 @@
+name: Update Resource Manifest
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.11'
+
+      - name: Scan repo and update files.json and files3.json
+        run: |
+          python3 << 'PYEOF'
+          import json
+          from pathlib import Path
+
+          # ── Shared helpers ─────────────────────────────────────────────────────
+
+          EXT_NAMES = {
+              ".html": "Digital Workbook",
+              ".pptx": "Teaching Slides",
+              ".ppt":  "Teaching Slides",
+              ".pdf":  "PDF Document",
+              ".docx": "Word Document",
+              ".doc":  "Word Document",
+              ".xlsx": "Spreadsheet",
+              ".xls":  "Spreadsheet",
+              ".csv":  "Data File",
+          }
+
+          def friendly_name(filename, uid):
+              stem = Path(filename).stem
+              label = stem[len(uid):].lstrip("_- ").replace("_", " ").replace("-", " ").strip()
+              if label:
+                  return label
+              ext = Path(filename).suffix.lower()
+              return EXT_NAMES.get(ext, stem.replace("_", " "))
+
+          def file_type(filename):
+              ext = Path(filename).suffix.lower().lstrip(".")
+              return ext.upper() if ext else "FILE"
+
+          def build_manifest(unit_meta, output_file, ignore_files):
+              root = Path(".")
+              discovered = {uid: [] for uid in unit_meta}
+
+              for f in sorted(root.iterdir()):
+                  if not f.is_file():
+                      continue
+                  if f.name.startswith(".") or f.name in ignore_files:
+                      continue
+                  for uid in unit_meta:
+                      if f.name.upper().startswith(uid.upper()):
+                          discovered[uid].append({
+                              "name":     friendly_name(f.name, uid),
+                              "filename": f.name,
+                              "type":     file_type(f.name),
+                          })
+                          break
+
+              units_out = []
+              for uid, meta in unit_meta.items():
+                  files = discovered.get(uid, [])
+                  if not meta["mandatory"] and not files:
+                      continue
+                  units_out.append({
+                      "id":        uid,
+                      "credits":   meta["credits"],
+                      "title":     meta["title"],
+                      "mandatory": meta["mandatory"],
+                      "files":     files,
+                  })
+
+              with open(output_file, "w", encoding="utf-8") as fh:
+                  json.dump({"units": units_out}, fh, indent=2, ensure_ascii=False)
+              print(f"{output_file} updated — {len(units_out)} units written.")
+
+          # ── IGNORE list (files never treated as unit resources) ────────────────
+          IGNORE = {
+              "index.html", "agored.html", "agored3.html", "agored_level.html",
+              "btec.html", "locations.html",
+              "files.json", "files3.json",
+              ".gitignore", "README.md", "LICENSE", ".nojekyll",
+              "update-manifest.yml",
+          }
+
+          # ══════════════════════════════════════════════════════════════════════
+          # LEVEL 2 — files.json
+          # mandatory=True  → always shown even with no files
+          # mandatory=False → only shown when at least one file is uploaded
+          # To add a resource: upload a file prefixed with the unit code,
+          # e.g. MH12CY006_Workbook.docx — no other changes needed.
+          # ══════════════════════════════════════════════════════════════════════
+          UNIT_META_L2 = {
+              # ── MANDATORY ──────────────────────────────────────────────────────
+              "HB92CY002": {"credits": 2, "title": "Personal Safety when Learning in the Outdoors",                  "mandatory": True},
+              "HB92CY003": {"credits": 1, "title": "Sustainable Use of Natural Resources",                          "mandatory": True},
+
+              # ── OPTIONAL — Level 2 ────────────────────────────────────────────
+              "QA12CY004": {"credits": 3, "title": "Flora and Fauna of Wales",                                      "mandatory": False},
+              "RF42CY026": {"credits": 3, "title": "Physical Geography and Climate of Wales",                       "mandatory": False},
+              "AF42CY008": {"credits": 3, "title": "Team Working",                                                  "mandatory": False},
+              "HB92CY005": {"credits": 2, "title": "Delivering an Outdoor Learning Activity",                       "mandatory": False},
+              "JA22CY025": {"credits": 2, "title": "Creating Heritage and Traditional Craft",                       "mandatory": False},
+              "HB92CY006": {"credits": 3, "title": "Exploring Craft Resources and Techniques for Outdoor Learning", "mandatory": False},
+              "RF42CY029": {"credits": 2, "title": "Extractable Natural Resources in Wales",                        "mandatory": False},
+              "AM22CY029": {"credits": 3, "title": "Carrying out a Habitat Survey",                                 "mandatory": False},
+              "RF42CY030": {"credits": 3, "title": "Land Use in Wales",                                             "mandatory": False},
+              "QA12CY007": {"credits": 2, "title": "Observing Fauna and Flora",                                     "mandatory": False},
+              "GB72CY041": {"credits": 2, "title": "Practical Skills in the Outdoors",                              "mandatory": False},
+              "MH12CY005": {"credits": 2, "title": "Use a Map and Compass",                                         "mandatory": False},
+              "QA12CY008": {"credits": 2, "title": "Using Recycled Materials in Outdoor Learning",                  "mandatory": False},
+              "SG42CY002": {"credits": 3, "title": "Sustainable Woodland Management",                               "mandatory": False},
+              "TG72CY008": {"credits": 8, "title": "Practical Traditional Timber Frame Construction",               "mandatory": False},
+              "SG52CY001": {"credits": 3, "title": "Woodland Carpentry",                                            "mandatory": False},
+              "SG22CY001": {"credits": 3, "title": "Woodland Tree Planting",                                        "mandatory": False},
+              "MH32CY009": {"credits": 1, "title": "Exploring Land-based Activities",                               "mandatory": False},
+              "MH32CY010": {"credits": 1, "title": "Exploring Water-based Activities",                              "mandatory": False},
+              "MH12CY009": {"credits": 1, "title": "Introduction to Expedition Skills",                             "mandatory": False},
+              "MH32CY006": {"credits": 3, "title": "Camp Craft Skills",                                             "mandatory": False},
+              "MH12CY006": {"credits": 4, "title": "Participate in an Expedition (4 credits)",                      "mandatory": False},
+              "MH12CY007": {"credits": 6, "title": "Participate in an Expedition (6 credits)",                      "mandatory": False},
+              "NL12CY004": {"credits": 3, "title": "Outdoor Activities for Tourism",                                "mandatory": False},
+              "MH32CY007": {"credits": 3, "title": "Participate in a Land-based Activity",                          "mandatory": False},
+              "MH32CY008": {"credits": 3, "title": "Participate in a Water-based Activity",                         "mandatory": False},
+              "HB92CY009": {"credits": 3, "title": "Community Engagement in the Outdoors",                          "mandatory": False},
+              "HB92CY010": {"credits": 3, "title": "Skills Development through Outdoor Learning",                   "mandatory": False},
+              "HB12CY080": {"credits": 2, "title": "The Health Benefits of Being Outdoors",                         "mandatory": False},
+              "MH12CY010": {"credits": 3, "title": "Use a Map and Compass for a Route",                             "mandatory": False},
+              "SE32CY006": {"credits": 2, "title": "Site Assessment and Soil Management",                           "mandatory": False},
+              "SD72CY006": {"credits": 2, "title": "Propagation and Planting for Food Growing",                     "mandatory": False},
+              "SE22CY030": {"credits": 2, "title": "Plant Care and Maintenance",                                    "mandatory": False},
+              "SC12CY002": {"credits": 2, "title": "Harvesting and Site Management",                                "mandatory": False},
+              "QA12CY010": {"credits": 3, "title": "Flora and Fauna in the UK",                                     "mandatory": False},
+              "RF42CY031": {"credits": 3, "title": "Physical Geography and Climate of the UK",                      "mandatory": False},
+              "RF42CY032": {"credits": 2, "title": "Extractable Natural Resources",                                 "mandatory": False},
+              "RF42CY033": {"credits": 3, "title": "Land Use in England",                                           "mandatory": False},
+
+              # ── OPTIONAL — Level 1 units (also count toward L2 qualification) ──
+              "HB91CY005": {"credits": 1, "title": "Assisting in an Outdoor Learning Activity",                     "mandatory": False},
+              "QA11CY010": {"credits": 3, "title": "Flora and Fauna of Wales (Level 1)",                            "mandatory": False},
+              "RF41CY003": {"credits": 3, "title": "Physical Geography and Climate of Wales (Level 1)",             "mandatory": False},
+              "AF41CY002": {"credits": 2, "title": "Team Working (Level 1)",                                        "mandatory": False},
+              "GB71CY014": {"credits": 2, "title": "Practical Skills in the Outdoors (Level 1)",                    "mandatory": False},
+              "SG41CY009": {"credits": 3, "title": "Practical Woodland Skills",                                     "mandatory": False},
+              "JA21CY023": {"credits": 3, "title": "Exploring Craft Resources and Techniques (Level 1)",            "mandatory": False},
+              "JA21CY021": {"credits": 2, "title": "Creating Heritage and Traditional Craft (Level 1)",             "mandatory": False},
+              "HB91CY007": {"credits": 3, "title": "Community Engagement in the Outdoors (Level 1)",               "mandatory": False},
+              "RF41CY007": {"credits": 2, "title": "Extractable Natural Resources (Level 1)",                       "mandatory": False},
+              "RF41CY006": {"credits": 3, "title": "Land Use in Wales (Level 1)",                                   "mandatory": False},
+              "NL11CY003": {"credits": 3, "title": "Outdoor Activities for Tourism (Level 1)",                      "mandatory": False},
+              "HB91CY006": {"credits": 3, "title": "Skills Development through Outdoor Learning (Level 1)",         "mandatory": False},
+              "QA11CY013": {"credits": 2, "title": "Observing Fauna and Flora (Level 1)",                           "mandatory": False},
+              "SG21CY001": {"credits": 3, "title": "Woodland Tree Planting (Level 1)",                              "mandatory": False},
+              "TG71CY009": {"credits": 8, "title": "Practical Traditional Timber Frame Construction (Level 1)",     "mandatory": False},
+              "SG41CY010": {"credits": 3, "title": "Sustainable Woodland Management (Level 1)",                     "mandatory": False},
+              "HB11CY090": {"credits": 2, "title": "The Health Benefits of Being Outdoors (Level 1)",               "mandatory": False},
+          }
+
+          # ══════════════════════════════════════════════════════════════════════
+          # LEVEL 3 — files3.json
+          # Same rules: mandatory units always shown, optional only when files exist.
+          # To add a resource: upload a file prefixed with the unit code,
+          # e.g. MH13CY001_Workbook.docx — no other changes needed.
+          # ══════════════════════════════════════════════════════════════════════
+          UNIT_META_L3 = {
+              # ── MANDATORY ──────────────────────────────────────────────────────
+              "HB93CY003": {"credits": 3, "title": "Risk Management when Learning in the Outdoors",         "mandatory": True},
+              "HB93CY004": {"credits": 4, "title": "Skills Development through Outdoor Learning",           "mandatory": True},
+              "HB93CY002": {"credits": 3, "title": "Sustainable Participation in Outdoor Activities",       "mandatory": True},
+
+              # ── OPTIONAL — Level 3 ────────────────────────────────────────────
+              "QA93CY003": {"credits": 3, "title": "Global Natural and Extractable Resources",              "mandatory": False},
+              "MA63CY002": {"credits": 4, "title": "Leadership Skills",                                     "mandatory": False},
+              "NK13CY017": {"credits": 3, "title": "Outdoor Activities for Tourism",                        "mandatory": False},
+              "HB93CY007": {"credits": 2, "title": "Adventure Sector Careers",                              "mandatory": False},
+              "HB93CY006": {"credits": 3, "title": "Bushcraft Skills",                                      "mandatory": False},
+              "HB93CY008": {"credits": 2, "title": "Equipment for Adventures",                              "mandatory": False},
+              "MH13CY001": {"credits": 6, "title": "Expedition Skills",                                     "mandatory": False},
+              "QA93CY004": {"credits": 4, "title": "Sustainable Land Management",                           "mandatory": False},
+              "HB93CY005": {"credits": 3, "title": "Team Working in the Outdoors",                          "mandatory": False},
+              "HC43CY018": {"credits": 6, "title": "Work Experience",                                       "mandatory": False},
+              "SG43CY004": {"credits": 9, "title": "Sustainable Woodland Management",                       "mandatory": False},
+              "MH33CY004": {"credits": 4, "title": "Advanced Campcraft Skills",                             "mandatory": False},
+              "HB93CY012": {"credits": 3, "title": "Adventure Sports Coaching",                             "mandatory": False},
+              "QA33CY010": {"credits": 3, "title": "Climate Change and Outdoor Learning",                   "mandatory": False},
+              "HB93CY013": {"credits": 2, "title": "Elite Performance in Outdoor and Adventure Sports",     "mandatory": False},
+              "MH33CY005": {"credits": 4, "title": "Land-based Activities for Learning in the Outdoors",   "mandatory": False},
+              "MH33CY006": {"credits": 4, "title": "Water-based Activities for Learning in the Outdoors",  "mandatory": False},
+              "HB93CY014": {"credits": 4, "title": "Outdoor Activity Taster Sessions",                     "mandatory": False},
+              "KA13CY008": {"credits": 2, "title": "Media in the Outdoors",                                 "mandatory": False},
+              "PV23CY006": {"credits": 3, "title": "First Aid in the Outdoors",                             "mandatory": False},
+              "MH13CY003": {"credits": 3, "title": "Using a Map and Compass",                               "mandatory": False},
+              "MA73CY002": {"credits": 3, "title": "Inclusive Outdoor Practice",                            "mandatory": False},
+          }
+
+          build_manifest(UNIT_META_L2, "files.json",  IGNORE)
+          build_manifest(UNIT_META_L3, "files3.json", IGNORE)
+          PYEOF
+
+      - name: Commit updated manifests
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add files.json files3.json
+          git diff --cached --quiet || git commit -m "chore: auto-update resource manifests [skip ci]"
+          git push

@@ -80,7 +80,6 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
 .file-link .fl-name { font-size: 13px; font-weight: 500; color: var(--green-dark); }
 .file-link .fl-type { font-size: 10px; color: var(--muted); margin-left: auto; text-transform: uppercase; letter-spacing: 0.05em; padding-right: 16px; }
 .file-link:hover .fl-name { color: var(--green); text-decoration: underline; }
-.coming-soon-notice { padding: 14px 20px; font-size: 13px; color: var(--muted); font-style: italic; }
 .pathway-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
 .pathway-card { background: var(--gold-light); border: 1.5px solid #e8d48a; border-radius: 10px; padding: 14px 16px; }
 .pathway-card .pc-title { font-size: 13px; font-weight: 700; color: #7a5c00; margin-bottom: 4px; }
@@ -96,7 +95,7 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
   <div class="header-inner">
     <div>
       <div class="header-sub">Agored Cymru &middot; Level 3</div>
-      <div class="header-title">Learning in the Outdoors — Resources</div>
+      <div class="header-title">Learning in the Outdoors &mdash; Resources</div>
     </div>
     <div class="header-nav">
       <a class="header-back" href="agored_level.html">&#8592; Choose Level</a>
@@ -108,20 +107,19 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
 <section class="hero">
   <div class="hero-inner">
     <div class="qual-badge">Agored Cymru Qualification</div>
-    <h1>Learning in the Outdoors<br/>Diploma — Level 3</h1>
+    <h1>Learning in the Outdoors<br/>Diploma &mdash; Level 3</h1>
     <p class="hero-desc">A nationally recognised Welsh qualification developing advanced outdoor knowledge, leadership skills, risk management, and environmental understanding. Aligns with the Curriculum for Wales.</p>
     <div class="hero-stats">
       <div class="stat-pill"><div class="val">42</div><div class="lbl">Credits Required</div></div>
       <div class="stat-pill"><div class="val">42</div><div class="lbl">Min. at Level 3</div></div>
       <div class="stat-pill"><div class="val">3</div><div class="lbl">Mandatory Units</div></div>
-      <div class="stat-pill"><div class="val">22+</div><div class="lbl">Optional Units</div></div>
+      <div class="stat-pill"><div class="val" id="stat-optional-count">&mdash;</div><div class="lbl">Optional Units</div></div>
     </div>
   </div>
 </section>
 
 <main class="main">
 
-  <!-- QUAL INFO -->
   <div class="info-grid" style="margin-bottom:32px;">
 
     <div class="info-card">
@@ -140,7 +138,7 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
           <tr><td>Min. credits at Level 3</td><td>42</td></tr>
           <tr><td>Guided learning hours</td><td>360</td></tr>
           <tr><td>Total qualification time</td><td>420 hours</td></tr>
-          <tr class="highlight"><td><strong>Qualification</strong></td><td><strong>Diploma</strong></td></tr>
+          <tr class="highlight"><td><strong>Qualification size</strong></td><td><strong>Diploma (only size)</strong></td></tr>
         </tbody>
       </table>
     </div>
@@ -149,9 +147,9 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
       <div class="info-card-icon">U</div>
       <h3>Mandatory Units</h3>
       <ul>
-        <li><strong>HB93CY003</strong> — Risk Management when Learning in the Outdoors (3 credits)</li>
-        <li><strong>HB93CY004</strong> — Skills Development through Outdoor Learning (4 credits)</li>
-        <li><strong>HB93CY002</strong> — Sustainable Participation in Outdoor Activities (3 credits)</li>
+        <li><strong>HB93CY003</strong> &mdash; Risk Management when Learning in the Outdoors (3 credits)</li>
+        <li><strong>HB93CY004</strong> &mdash; Skills Development through Outdoor Learning (4 credits)</li>
+        <li><strong>HB93CY002</strong> &mdash; Sustainable Participation in Outdoor Activities (3 credits)</li>
       </ul>
       <p style="margin-top:8px;">All three units must be completed and passed. They account for 10 of the 42 required credits.</p>
     </div>
@@ -169,14 +167,14 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
         <li>First Aid in the Outdoors</li>
         <li>Sustainable Land Management</li>
         <li>Land-based / Water-based Activities</li>
-        <li>And many more — 22 optional units total</li>
+        <li>And more &mdash; 22 optional units total</li>
       </ul>
     </div>
 
     <div class="info-card">
       <div class="info-card-icon">W</div>
       <h3>Links to Curriculum for Wales</h3>
-      <p>This qualification supports all four purposes of learning — developing learners as:</p>
+      <p>This qualification supports all four purposes of learning &mdash; developing learners as:</p>
       <ul style="margin-top:6px;">
         <li>Ambitious, capable learners</li>
         <li>Enterprising, creative contributors</li>
@@ -194,7 +192,6 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
 
   </div>
 
-  <!-- CAREER PATHWAYS -->
   <h2 class="section-title">Future Pathways &amp; Career Opportunities</h2>
   <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Level 3 opens direct routes into higher education, outdoor leadership careers, and professional adventure sector roles.</p>
   <div class="pathway-grid" style="margin-bottom:40px;">
@@ -208,7 +205,7 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
     </div>
     <div class="pathway-card">
       <div class="pc-title">Higher Education</div>
-      <div class="pc-body">Outdoor education degree, sport science BSc, environmental science, geography — Level 3 meets university entry requirements</div>
+      <div class="pc-body">Outdoor education degree, sport science BSc, environmental science, geography &mdash; Level 3 meets university entry requirements</div>
     </div>
     <div class="pathway-card">
       <div class="pc-title">Environment &amp; Ecology</div>
@@ -224,83 +221,11 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
     </div>
   </div>
 
-  <!-- RESOURCES -->
   <h2 class="section-title">Unit Resources</h2>
-  <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Resources for Level 3 units will appear here as they are produced. Click a unit folder to see what is available.</p>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Click a unit folder to see available resources. New files appear automatically when added to the repository.</p>
 
-  <!-- MANDATORY GROUP -->
-  <div class="folder-section">
-    <div class="folder-group">
-      <div class="folder-group-header open" onclick="toggleGroup(this)">
-        <div>
-          <div class="folder-group-title">Mandatory Units</div>
-          <div class="folder-group-sub">All three required &middot; 10 credits total</div>
-        </div>
-        <span class="chevron">&#9654;</span>
-      </div>
-      <div class="folder-group-body open">
-
-        <!-- HB93CY003 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            <div class="uf-info">
-              <div class="uf-code">HB93CY003 &middot; 3 Credits</div>
-              <div class="uf-title">Risk Management when Learning in the Outdoors</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="coming-soon-notice">Resources coming soon — check back shortly.</div>
-          </div>
-        </div>
-
-        <!-- HB93CY004 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            <div class="uf-info">
-              <div class="uf-code">HB93CY004 &middot; 4 Credits</div>
-              <div class="uf-title">Skills Development through Outdoor Learning</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="coming-soon-notice">Resources coming soon — check back shortly.</div>
-          </div>
-        </div>
-
-        <!-- HB93CY002 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            <div class="uf-info">
-              <div class="uf-code">HB93CY002 &middot; 3 Credits</div>
-              <div class="uf-title">Sustainable Participation in Outdoor Activities</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="coming-soon-notice">Resources coming soon — check back shortly.</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- OPTIONAL GROUP -->
-  <div class="folder-section">
-    <div class="folder-group">
-      <div class="folder-group-header" onclick="toggleGroup(this)">
-        <div>
-          <div class="folder-group-title">Optional Units</div>
-          <div class="folder-group-sub">Choose units to reach 42 credits total &middot; resources added as completed</div>
-        </div>
-        <span class="chevron">&#9654;</span>
-      </div>
-      <div class="folder-group-body">
-        <div class="coming-soon-notice">Optional unit resources will appear here as they are produced. 22 optional units are available in this qualification.</div>
-      </div>
-    </div>
-  </div>
+  <div id="resources-mandatory" class="folder-section"></div>
+  <div id="resources-optional" class="folder-section"></div>
 
 </main>
 
@@ -318,6 +243,78 @@ function toggleUnit(header) {
   header.classList.toggle('open');
   header.nextElementSibling.classList.toggle('open');
 }
+
+function buildUnit(unit) {
+  var codeLabel = unit.credits
+    ? unit.id + ' · ' + unit.credits + ' Credit' + (unit.credits !== 1 ? 's' : '')
+    : unit.id;
+
+  var filesHtml = unit.files && unit.files.length
+    ? unit.files.map(function(f) {
+        return '<a class="file-link" href="' + encodeURI(f.filename) + '" target="_blank">' +
+          '<span class="fl-name">' + f.name + '</span>' +
+          '<span class="fl-type">' + f.type + '</span>' +
+        '</a>';
+      }).join('')
+    : '<div style="padding:10px 0;font-size:12px;color:var(--muted);font-style:italic;">Resources coming soon &mdash; check back shortly.</div>';
+
+  return '<div class="unit-folder">' +
+    '<div class="unit-folder-header" onclick="toggleUnit(this)">' +
+      '<div class="uf-info">' +
+        '<div class="uf-code">' + codeLabel + '</div>' +
+        '<div class="uf-title">' + unit.title + '</div>' +
+      '</div>' +
+      '<span class="uf-chevron">&#9654;</span>' +
+    '</div>' +
+    '<div class="unit-folder-files">' + filesHtml + '</div>' +
+  '</div>';
+}
+
+function buildGroup(title, subtitle, units, openByDefault) {
+  var unitsHtml = units.map(buildUnit).join('');
+  var openClass = openByDefault ? ' open' : '';
+  return '<div class="folder-group">' +
+    '<div class="folder-group-header' + openClass + '" onclick="toggleGroup(this)">' +
+      '<div>' +
+        '<div class="folder-group-title">' + title + '</div>' +
+        '<div class="folder-group-sub">' + subtitle + '</div>' +
+      '</div>' +
+      '<span class="chevron">&#9654;</span>' +
+    '</div>' +
+    '<div class="folder-group-body' + openClass + '">' + unitsHtml + '</div>' +
+  '</div>';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('files3.json?_=' + Date.now())
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var mandatory = data.units.filter(function(u) { return u.mandatory; });
+      var optional  = data.units.filter(function(u) { return !u.mandatory; });
+      var mandCredits = mandatory.reduce(function(s, u) { return s + (u.credits || 0); }, 0);
+
+      var statEl = document.getElementById('stat-optional-count');
+      if (statEl) statEl.textContent = optional.length;
+
+      document.getElementById('resources-mandatory').innerHTML =
+        buildGroup(
+          'Mandatory Units',
+          'All three required · ' + mandCredits + ' credits total',
+          mandatory, true
+        );
+
+      document.getElementById('resources-optional').innerHTML =
+        buildGroup(
+          'Optional Units',
+          'Choose units to reach 42 credits total · resources added as completed',
+          optional, false
+        );
+    })
+    .catch(function() {
+      document.getElementById('resources-mandatory').innerHTML =
+        '<p style="color:var(--muted);font-size:13px;padding:16px;">Could not load resource list. Please refresh or check back shortly.</p>';
+    });
+});
 </script>
 </body>
 </html>

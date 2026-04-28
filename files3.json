@@ -1,0 +1,179 @@
+{
+  "units": [
+    {
+      "id": "HB93CY003",
+      "credits": 3,
+      "title": "Risk Management when Learning in the Outdoors",
+      "mandatory": true,
+      "files": []
+    },
+    {
+      "id": "HB93CY004",
+      "credits": 4,
+      "title": "Skills Development through Outdoor Learning",
+      "mandatory": true,
+      "files": []
+    },
+    {
+      "id": "HB93CY002",
+      "credits": 3,
+      "title": "Sustainable Participation in Outdoor Activities",
+      "mandatory": true,
+      "files": []
+    },
+    {
+      "id": "QA93CY003",
+      "credits": 3,
+      "title": "Global Natural and Extractable Resources",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "MA63CY002",
+      "credits": 4,
+      "title": "Leadership Skills",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "NK13CY017",
+      "credits": 3,
+      "title": "Outdoor Activities for Tourism",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "HB93CY007",
+      "credits": 2,
+      "title": "Adventure Sector Careers",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "HB93CY006",
+      "credits": 3,
+      "title": "Bushcraft Skills",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "HB93CY008",
+      "credits": 2,
+      "title": "Equipment for Adventures",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "MH13CY001",
+      "credits": 6,
+      "title": "Expedition Skills",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "QA93CY004",
+      "credits": 4,
+      "title": "Sustainable Land Management",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "HB93CY005",
+      "credits": 3,
+      "title": "Team Working in the Outdoors",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "HC43CY018",
+      "credits": 6,
+      "title": "Work Experience",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "SG43CY004",
+      "credits": 9,
+      "title": "Sustainable Woodland Management",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "MH33CY004",
+      "credits": 4,
+      "title": "Advanced Campcraft Skills",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "HB93CY012",
+      "credits": 3,
+      "title": "Adventure Sports Coaching",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "QA33CY010",
+      "credits": 3,
+      "title": "Climate Change and Outdoor Learning",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "HB93CY013",
+      "credits": 2,
+      "title": "Elite Performance in Outdoor and Adventure Sports",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "MH33CY005",
+      "credits": 4,
+      "title": "Land-based Activities for Learning in the Outdoors",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "MH33CY006",
+      "credits": 4,
+      "title": "Water-based Activities for Learning in the Outdoors",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "HB93CY014",
+      "credits": 4,
+      "title": "Outdoor Activity Taster Sessions",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "KA13CY008",
+      "credits": 2,
+      "title": "Media in the Outdoors",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "PV23CY006",
+      "credits": 3,
+      "title": "First Aid in the Outdoors",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "MH13CY003",
+      "credits": 3,
+      "title": "Using a Map and Compass",
+      "mandatory": false,
+      "files": []
+    },
+    {
+      "id": "MA73CY002",
+      "credits": 3,
+      "title": "Inclusive Outdoor Practice",
+      "mandatory": false,
+      "files": []
+    }
+  ]
+}
