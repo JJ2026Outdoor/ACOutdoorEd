@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agored Cymru — Learning in the Outdoors | Choose Level</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --green: #1A6B3C;
+  --green-dark: #0F4525;
+  --green-mid: #145530;
+  --green-light: #E8F5EE;
+  --green-xlight: #F2FAF5;
+  --gold: #C8A951;
+  --text: #1A1A1A;
+  --muted: #6B7B8C;
+  --border: #D4D4CC;
+  --white: #FFFFFF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #F5F7F5;
+  color: var(--text);
+  min-height: 100vh;
+}
+.site-header {
+  background: var(--green-dark);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-title { font-family: 'DM Serif Display', serif; color: #fff; font-size: 17px; line-height: 1.3; }
+.header-sub { color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.header-back { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); transition: background 0.12s, color 0.12s; white-space: nowrap; }
+.header-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.hero {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+  padding: 52px 24px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 320px; height: 320px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.hero::after { content: ''; position: absolute; bottom: -80px; left: -40px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,0.03); }
+.hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.qual-badge { display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.85); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+.hero h1 { font-family: 'DM Serif Display', serif; color: #fff; font-size: clamp(24px, 5vw, 36px); line-height: 1.2; margin-bottom: 10px; }
+.hero-desc { color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.7; max-width: 580px; }
+.main { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+.pick-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+.level-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 48px; }
+.level-card { background: var(--white); border: 2px solid var(--border); border-radius: 16px; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; cursor: pointer; }
+.level-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,69,37,0.15); border-color: var(--green); }
+.level-card-header { padding: 32px 28px 24px; background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%); }
+.level-num { font-family: 'DM Serif Display', serif; font-size: 64px; color: rgba(255,255,255,0.15); line-height: 1; margin-bottom: 4px; }
+.level-title { font-family: 'DM Serif Display', serif; color: #fff; font-size: 22px; line-height: 1.2; margin-bottom: 4px; }
+.level-sub { color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 500; letter-spacing: 0.05em; }
+.level-card-body { padding: 22px 28px 28px; flex: 1; display: flex; flex-direction: column; }
+.level-card-body p { font-size: 13.5px; color: #444; line-height: 1.7; flex: 1; margin-bottom: 18px; }
+.level-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+.level-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.04em; background: var(--green-light); color: var(--green-dark); }
+.level-cta { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; background: var(--green-light); color: var(--green-dark); }
+.cta-arrow { font-size: 16px; }
+.compare-strip { background: var(--green-xlight); border: 1.5px solid var(--green-light); border-radius: 12px; padding: 20px 24px; }
+.compare-strip h3 { font-size: 13px; font-weight: 700; color: var(--green-dark); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; }
+.compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.compare-table th { background: var(--green); color: #fff; padding: 8px 12px; text-align: left; font-weight: 600; }
+.compare-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.compare-table tr:nth-child(even) td { background: var(--white); }
+.site-footer { background: var(--green-dark); color: rgba(255,255,255,0.55); text-align: center; padding: 20px; font-size: 12px; }
+.site-footer a { color: rgba(255,255,255,0.7); }
+@media (max-width: 600px) { .hero { padding: 36px 16px 32px; } .main { padding: 28px 16px 60px; } .level-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="header-sub">Agored Cymru</div>
+      <div class="header-title">Learning in the Outdoors</div>
+    </div>
+    <a class="header-back" href="index.html">&#8592; Back to Hub</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="qual-badge">Agored Cymru Qualification</div>
+    <h1>Learning in the Outdoors</h1>
+    <p class="hero-desc">Choose your qualification level to access unit resources, digital workbooks, and teaching materials.</p>
+  </div>
+</section>
+
+<main class="main">
+  <p class="pick-label">Choose Your Qualification Level</p>
+
+  <div class="level-grid">
+
+    <a class="level-card" href="agored.html">
+      <div class="level-card-header">
+        <div class="level-num">2</div>
+        <div class="level-title">Level 2</div>
+        <div class="level-sub">Extended Certificate &middot; 21 Credits</div>
+      </div>
+      <div class="level-card-body">
+        <p>Apply knowledge and skills in outdoor contexts, develop safety awareness, environmental understanding, and participate in expeditions. Suitable for most learners building outdoor education foundations.</p>
+        <div class="level-tags">
+          <span class="level-tag">21 Credits</span>
+          <span class="level-tag">2 Mandatory Units</span>
+          <span class="level-tag">Award to Ext. Certificate</span>
+        </div>
+        <div class="level-cta">
+          <span>Open Level 2 Resources</span>
+          <span class="cta-arrow">&#8594;</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="level-card" href="agored3.html">
+      <div class="level-card-header">
+        <div class="level-num">3</div>
+        <div class="level-title">Level 3</div>
+        <div class="level-sub">Diploma &middot; 42 Credits</div>
+      </div>
+      <div class="level-card-body">
+        <p>Apply knowledge and skills in complex outdoor activities, demonstrate leadership, analyse risk, and take responsibility. Designed for learners progressing toward outdoor leadership, adventure sector careers, or higher study.</p>
+        <div class="level-tags">
+          <span class="level-tag">42 Credits</span>
+          <span class="level-tag">3 Mandatory Units</span>
+          <span class="level-tag">Diploma</span>
+        </div>
+        <div class="level-cta">
+          <span>Open Level 3 Resources</span>
+          <span class="cta-arrow">&#8594;</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="compare-strip">
+    <h3>At a Glance — Level 2 vs Level 3</h3>
+    <table class="compare-table">
+      <thead>
+        <tr><th>Feature</th><th>Level 2</th><th>Level 3</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Qualification name</td><td>Extended Certificate</td><td>Diploma</td></tr>
+        <tr><td>Credits required</td><td>21</td><td>42</td></tr>
+        <tr><td>Min. credits at level</td><td>11</td><td>42</td></tr>
+        <tr><td>Mandatory units</td><td>2</td><td>3</td></tr>
+        <tr><td>Typical learner</td><td>Years 10–11 / post-16</td><td>Post-16 / sixth form</td></tr>
+        <tr><td>Level descriptor</td><td>Apply knowledge with comprehension; directed activities with some autonomy</td><td>Apply knowledge in complex activities; analyse independently; direct own work</td></tr>
+        <tr><td>Progression to</td><td>Level 3 Outdoor Ed, BTEC, A Levels</td><td>HE sport science, outdoor leadership, adventure sector careers</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  Agored Cymru Learning in the Outdoors &mdash; Resources prepared by Jonathan Jones &mdash;
+  <a href="https://www.agored.cymru" target="_blank">agored.cymru</a>
+</footer>
+
+</body>
+</html>
