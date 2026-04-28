@@ -7,22 +7,20 @@
       "mandatory": true,
       "files": [
         {
-          "name": "Digital Interactive Workbook",
-          "filename": "HB92CY002PersonalSafetyDigital-1.html",
-          "type": "HTML",
-          "icon": "🖥️"
+          "name": "PersonalSafetyDigital",
+          "filename": "HB92CY002PersonalSafetyDigital.html",
+          "type": "HTML"
         },
         {
-          "name": "Teaching Slides",
-          "filename": "HB92CY002_Teaching_Slides (1).pptx",
-          "type": "PPTX",
-          "icon": "📊"
+          "name": "PersonalSafetySlides",
+          "filename": "HB92CY002PersonalSafetySlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "PersonalSafetyWorkbook",
+          "filename": "HB92CY002PersonalSafetyWorkbook.docx",
+          "type": "DOCX"
         }
-      ],
-      "coming_soon": [
-        "Printable Workbook",
-        "Teacher Answer Key",
-        "Accessibility Workbook"
       ]
     },
     {
@@ -32,66 +30,90 @@
       "mandatory": true,
       "files": [
         {
-          "name": "Digital Interactive Workbook",
+          "name": "SustainableResourcesDigital",
           "filename": "HB92CY003SustainableResourcesDigital.html",
-          "type": "HTML",
-          "icon": "🖥️"
+          "type": "HTML"
         }
-      ],
-      "coming_soon": [
-        "Teaching Slides",
-        "Printable Workbook",
-        "Teacher Answer Key",
-        "Accessibility Workbook"
       ]
     },
     {
-      "id": "coming-soon-1",
-      "credits": null,
-      "title": "Practical Skills in the Outdoors",
+      "id": "MH12CY006",
+      "credits": 4,
+      "title": "Participate in an Expedition (4 credits)",
       "mandatory": false,
-      "files": [],
-      "coming_soon": ["Resources will appear here when ready"]
+      "files": [
+        {
+          "name": "ExpeditionAccessible",
+          "filename": "MH12CY006ExpeditionAccessible.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "ExpeditionAnswerKey",
+          "filename": "MH12CY006ExpeditionAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "ExpeditionDigital",
+          "filename": "MH12CY006ExpeditionDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "ExpeditionSlides",
+          "filename": "MH12CY006ExpeditionSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "ExpeditionWorkbook",
+          "filename": "MH12CY006ExpeditionWorkbook.docx",
+          "type": "DOCX"
+        }
+      ]
     },
     {
-      "id": "coming-soon-2",
-      "credits": null,
-      "title": "Assisting in an Outdoor Learning Activity",
+      "id": "MH12CY007",
+      "credits": 6,
+      "title": "Participate in an Expedition (6 credits)",
       "mandatory": false,
-      "files": [],
-      "coming_soon": ["Resources will appear here when ready"]
+      "files": [
+        {
+          "name": "ExpeditionAccessible",
+          "filename": "MH12CY007ExpeditionAccessible.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "ExpeditionAnswerKey",
+          "filename": "MH12CY007ExpeditionAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "ExpeditionDigital",
+          "filename": "MH12CY007ExpeditionDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "ExpeditionSlides",
+          "filename": "MH12CY007ExpeditionSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "ExpeditionWorkbook",
+          "filename": "MH12CY007ExpeditionWorkbook.docx",
+          "type": "DOCX"
+        }
+      ]
     },
     {
-      "id": "coming-soon-3",
-      "credits": null,
-      "title": "Physical Geography and Climate of Wales",
+      "id": "MH12CY010",
+      "credits": 3,
+      "title": "Use a Map and Compass for a Route",
       "mandatory": false,
-      "files": [],
-      "coming_soon": ["Resources will appear here when ready"]
-    },
-    {
-      "id": "coming-soon-4",
-      "credits": null,
-      "title": "Exploring Land-based Activities",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": ["Resources will appear here when ready"]
-    },
-    {
-      "id": "coming-soon-5",
-      "credits": null,
-      "title": "Participate in an Expedition",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": ["Resources will appear here when ready"]
-    },
-    {
-      "id": "coming-soon-6",
-      "credits": null,
-      "title": "Participate in a Water-based Activity",
-      "mandatory": false,
-      "files": [],
-      "coming_soon": ["Resources will appear here when ready"]
+      "files": [
+        {
+          "name": "NavigationDigital",
+          "filename": "MH12CY010NavigationDigital.html",
+          "type": "HTML"
+        }
+      ]
     }
   ]
 }
