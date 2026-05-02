@@ -934,6 +934,7 @@ function App(){
           <span style={{background:"rgba(255,255,255,0.12)",color:"white",fontSize:11,padding:"2px 8px",borderRadius:4}}>{pct}% complete</span>
           <button onClick={exportJSON} style={{background:"rgba(255,255,255,0.12)",color:"white",border:"1px solid rgba(255,255,255,0.3)",borderRadius:5,padding:"4px 9px",fontSize:12,cursor:"pointer"}}>&#8595; Save File</button>
           <button onClick={()=>impRef.current.click()} style={{background:"rgba(255,255,255,0.12)",color:"white",border:"1px solid rgba(255,255,255,0.3)",borderRadius:5,padding:"4px 9px",fontSize:12,cursor:"pointer"}}>&#8593; Load File</button>
+          <button onClick={()=>document.getElementById('podcast-panel').scrollIntoView({behavior:'smooth'})} style={{background:"rgba(200,169,81,0.25)",color:"#f5e09a",border:"1px solid rgba(200,169,81,0.5)",borderRadius:5,padding:"4px 9px",fontSize:12,cursor:"pointer"}}>🎙️ Podcast</button>
           <button onClick={()=>setPrintModal(true)} style={{background:"rgba(255,255,255,0.12)",color:"white",border:"1px solid rgba(255,255,255,0.3)",borderRadius:5,padding:"4px 9px",fontSize:12,cursor:"pointer"}}>&#128424; Print</button>
           <input ref={impRef} type="file" accept=".json" style={{display:"none"}} onChange={importJSON}/>
         </div>
@@ -1048,6 +1049,17 @@ function App(){
   const IntroSection=wrap(<div>
     <SectionHeader title="Introduction to the Unit" subtitle="Pearson BTEC Level 1 Introductory in Public Services — PS9"/>
     {wpanel(<div>
+      <div id="podcast-panel" style={{background:"#1B3A6B",borderRadius:10,padding:"16px 20px",marginBottom:18,display:"flex",alignItems:"center",gap:16,flexWrap:"wrap"}}>
+        <span style={{fontSize:28}}>🎙️</span>
+        <div style={{flex:1,minWidth:200}}>
+          <div style={{color:"#C8A951",fontWeight:700,fontSize:13,letterSpacing:"0.05em",textTransform:"uppercase",marginBottom:4}}>Unit Podcast — Listen Before You Start</div>
+          <div style={{color:"rgba(255,255,255,0.75)",fontSize:12,marginBottom:10}}>A short introduction to PS9: Planning and Navigating a Route. Listen to get an overview of what you will learn and how you will be assessed.</div>
+          <audio controls style={{width:"100%",height:36,borderRadius:4}}>
+            <source src="PS9NavigationPodcast.mp3" type="audio/mpeg"/>
+            Your browser does not support audio playback.
+          </audio>
+        </div>
+      </div>
       <InfoBox title="Unit Overview">
         <p>This unit develops your skills in planning and navigating routes using Ordnance Survey maps. You will learn to read map symbols, use grid references, calculate distances and timings using Naismith's Rule, and complete a real navigation task outdoors.</p>
         <p style={{marginTop:8}}>There are <strong>two learning aims:</strong></p>
