@@ -103,6 +103,49 @@
       ]
     },
     {
+      "id": "MH32CY007",
+      "credits": 3,
+      "title": "Participate in a Land-based Activity",
+      "mandatory": false,
+      "files": [
+        {
+          "name": "LandActivitySlides",
+          "filename": "MH32CY007LandActivitySlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "LandBikingAnswerKey",
+          "filename": "MH32CY007LandBikingAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "LandBikingDigital",
+          "filename": "MH32CY007LandBikingDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "LandBikingWorkbook",
+          "filename": "MH32CY007LandBikingWorkbook.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "LandWalkingAnswerKey",
+          "filename": "MH32CY007LandWalkingAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "LandWalkingDigital",
+          "filename": "MH32CY007LandWalkingDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "LandWalkingWorkbook",
+          "filename": "MH32CY007LandWalkingWorkbook.docx",
+          "type": "DOCX"
+        }
+      ]
+    },
+    {
       "id": "MH12CY010",
       "credits": 3,
       "title": "Use a Map and Compass for a Route",
