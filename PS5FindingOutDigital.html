@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PS5 Finding Out About Public Services – Digital Workbook</title>
+<style>
+:root{
+  --navy:#1B3A6B; --navy-dark:#122952; --gold:#C8A951;
+  --light:#E8EEF7; --white:#FFFFFF; --muted:#6B7B8C;
+  --pass:#2E7D32; --merit:#1565C0; --distinction:#6A1B9A;
+  --green-hub:#E8F5E9; --green-border:#388E3C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#F4F6FB;color:#222;font-size:15px}
+
+/* STICKY HEADER */
+#sticky-header{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--navy);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+#sticky-header .logo{height:38px}
+#header-centre{flex:1;text-align:center}
+#header-title{color:var(--white);font-size:15px;font-weight:bold}
+#header-subtitle{color:var(--gold);font-size:12px}
+#progress-bar-wrap{width:180px;background:rgba(255,255,255,0.2);border-radius:10px;height:10px;margin:4px auto 0}
+#progress-bar{height:10px;background:var(--gold);border-radius:10px;width:0%;transition:width 0.4s}
+#progress-text{color:var(--gold);font-size:11px;text-align:center}
+.header-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.header-btns button{padding:5px 11px;border-radius:4px;border:none;cursor:pointer;font-size:12px;font-weight:bold}
+.btn-save{background:var(--gold);color:var(--navy)}
+.btn-load{background:rgba(255,255,255,0.2);color:var(--white)}
+.btn-assessor{background:var(--navy-dark);color:var(--gold);border:1px solid var(--gold) !important}
+
+/* NAV BAR */
+#nav-bar{position:fixed;top:66px;left:0;right:0;z-index:999;background:var(--navy-dark);padding:0 12px;display:flex;gap:4px;overflow-x:auto;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,0.7);padding:10px 14px;cursor:pointer;font-size:13px;white-space:nowrap;border-bottom:3px solid transparent;transition:all 0.2s}
+.nav-btn:hover,.nav-btn.active{color:var(--white);border-bottom:3px solid var(--gold)}
+
+/* MAIN CONTENT */
+main{margin-top:115px;max-width:900px;margin-left:auto;margin-right:auto;padding:20px}
+.section{display:none}
+.section.active{display:block}
+
+/* CARDS */
+.card{background:var(--white);border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,0.1);padding:24px;margin-bottom:20px}
+.card h2{color:var(--navy);font-size:20px;margin-bottom:12px;padding-bottom:8px;border-bottom:3px solid var(--gold)}
+.card h3{color:var(--navy);font-size:16px;margin:16px 0 8px}
+
+/* KNOWLEDGE HUB */
+.knowledge-hub{background:var(--green-hub);border-left:5px solid var(--green-border);border-radius:0 6px 6px 0;padding:16px;margin-bottom:16px}
+.knowledge-hub .hub-title{color:var(--green-border);font-weight:bold;font-size:14px;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th{background:var(--navy);color:var(--white);padding:8px 10px;text-align:left}
+td{padding:7px 10px;border:1px solid #ddd}
+tr:nth-child(even) td{background:var(--light)}
+tr:nth-child(odd) td{background:var(--white)}
+
+/* INPUTS */
+textarea{width:100%;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Arial,sans-serif;font-size:14px;resize:vertical;min-height:90px;transition:border 0.2s}
+textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 2px rgba(27,58,107,0.15)}
+textarea.assessor-locked{background:#f5f5f5;color:#666;cursor:not-allowed}
+.input-label{font-weight:bold;color:var(--navy);font-size:13px;margin:10px 0 4px;display:block}
+input[type=text]{width:100%;border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:14px;font-family:Arial,sans-serif}
+input[type=text]:focus{outline:none;border-color:var(--navy)}
+input[type=text].assessor-locked{background:#f5f5f5;color:#666;cursor:not-allowed}
+
+/* AC BADGES */
+.ac-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:bold;color:white;margin-bottom:8px}
+.badge-pass{background:var(--pass)}
+.badge-merit{background:var(--merit)}
+.badge-distinction{background:var(--distinction)}
+
+/* INFO BOX */
+.info-box{background:var(--light);border-left:5px solid var(--navy);border-radius:0 6px 6px 0;padding:14px;margin:12px 0;font-size:14px}
+.info-box strong{color:var(--navy)}
+
+/* ASSESSMENT TASK */
+.task-section{border:2px solid var(--navy);border-radius:8px;padding:20px;margin-bottom:20px;background:var(--white)}
+.task-header{background:var(--navy);color:var(--white);padding:8px 14px;margin:-20px -20px 16px;border-radius:6px 6px 0 0;font-weight:bold}
+
+/* CHECKLIST */
+.checklist-item{display:flex;align-items:flex-start;gap:12px;padding:10px;border:1px solid #ddd;border-radius:6px;margin-bottom:8px;background:var(--white)}
+.checklist-item:nth-child(even){background:var(--light)}
+.ac-met-btn,.ac-notyet-btn{padding:4px 10px;border-radius:4px;border:none;cursor:pointer;font-size:12px;font-weight:bold;margin-right:4px}
+.ac-met-btn{background:#E8F5E9;color:var(--pass);border:1px solid var(--pass)}
+.ac-met-btn.active{background:var(--pass);color:white}
+.ac-notyet-btn{background:#FFF3E0;color:#E65100;border:1px solid #E65100}
+.ac-notyet-btn.active{background:#E65100;color:white}
+
+/* RESULT BANNER */
+#result-banner{display:none;padding:14px 20px;border-radius:8px;font-weight:bold;font-size:16px;text-align:center;margin-bottom:16px}
+.banner-pass{background:#E8F5E9;color:var(--pass);border:2px solid var(--pass)}
+.banner-refer{background:#FFF3E0;color:#E65100;border:2px solid #E65100}
+.banner-pending{background:var(--light);color:var(--navy);border:2px solid var(--navy)}
+
+/* ASSESSOR PANEL */
+#assessor-panel{display:none;background:#FFF9C4;border:2px solid var(--gold);border-radius:8px;padding:20px;margin-bottom:20px}
+#assessor-panel h3{color:var(--navy-dark);margin-bottom:12px}
+.assessor-section{background:white;border-radius:6px;padding:14px;margin-bottom:12px;border-left:4px solid var(--gold)}
+select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px}
+
+/* FEEDBACK BOXES (student view) */
+.feedback-box{display:none;background:#E3F2FD;border-left:4px solid #1565C0;border-radius:0 6px 6px 0;padding:12px;margin-top:8px;font-size:14px}
+.feedback-box.visible{display:block}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:8px;padding:32px;max-width:380px;width:90%;text-align:center}
+.modal h3{color:var(--navy);margin-bottom:16px}
+.modal input{width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font-size:15px;margin-bottom:12px}
+.modal-btns{display:flex;gap:10px;justify-content:center;margin-top:8px}
+.modal-btns button{padding:9px 22px;border-radius:4px;border:none;cursor:pointer;font-weight:bold}
+.btn-confirm{background:var(--navy);color:var(--white)}
+.btn-cancel{background:#eee;color:#444}
+
+/* COVER */
+.cover-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.cover-grid label{font-weight:bold;color:var(--navy);font-size:13px;display:block;margin-bottom:4px}
+.cover-full{grid-column:1/-1}
+
+/* UTILITIES */
+.gold-text{color:var(--gold)}
+.navy-text{color:var(--navy)}
+.muted{color:var(--muted);font-size:13px;font-style:italic}
+ul.styled{padding-left:20px;margin:8px 0}
+ul.styled li{margin-bottom:4px;font-size:14px}
+hr{border:none;border-top:1px solid #e0e0e0;margin:16px 0}
+.small{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- STICKY HEADER -->
+<header id="sticky-header">
+  <img src="BrynLogo.png" alt="Bryn Celynnog Logo" class="logo" onerror="this.style.display='none'">
+  <div id="header-centre">
+    <div id="header-title">PS5: Finding Out About Public Services</div>
+    <div id="header-subtitle">BTEC Level 1 Introductory | Public Services</div>
+    <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+    <div id="progress-text">0% Complete</div>
+  </div>
+  <div class="header-btns">
+    <button class="btn-save" onclick="saveFile()">💾 Save</button>
+    <button class="btn-load" onclick="document.getElementById('file-input').click()">📂 Load</button>
+    <input type="file" id="file-input" accept=".json" style="display:none" onchange="loadFile(event)">
+    <button class="btn-assessor" onclick="openAssessorModal()">🔐 Assessor</button>
+  </div>
+</header>
+
+<!-- NAV BAR -->
+<nav id="nav-bar">
+  <button class="nav-btn active" onclick="showSection('cover')">🏠 Cover</button>
+  <button class="nav-btn" onclick="showSection('intro')">📋 Introduction</button>
+  <button class="nav-btn" onclick="showSection('laA-hub')">📚 LA-A Knowledge</button>
+  <button class="nav-btn" onclick="showSection('laA-act')">✏️ LA-A Activities</button>
+  <button class="nav-btn" onclick="showSection('taskA')">📝 Task A</button>
+  <button class="nav-btn" onclick="showSection('laB-hub')">📚 LA-B Knowledge</button>
+  <button class="nav-btn" onclick="showSection('laB-act')">✏️ LA-B Activities</button>
+  <button class="nav-btn" onclick="showSection('taskB')">📝 Task B</button>
+  <button class="nav-btn" onclick="showSection('checklist')">✅ Checklist</button>
+  <button class="nav-btn" onclick="showSection('glossary')">📖 Glossary</button>
+</nav>
+
+<!-- ASSESSOR MODAL -->
+<div class="modal-overlay" id="assessor-modal">
+  <div class="modal">
+    <h3>🔐 Assessor Login</h3>
+    <p style="margin-bottom:14px;font-size:14px;color:#555">Enter the assessor password to unlock marking mode.</p>
+    <input type="password" id="assessor-password" placeholder="Enter password" onkeyup="if(event.key==='Enter')checkPassword()">
+    <div id="pw-error" style="color:red;font-size:13px;margin-bottom:8px;display:none">Incorrect password. Try again.</div>
+    <div class="modal-btns">
+      <button class="btn-confirm" onclick="checkPassword()">Login</button>
+      <button class="btn-cancel" onclick="closeAssessorModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════════ -->
+<!-- COVER -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-cover" class="section active">
+  <div class="card">
+    <div style="text-align:center;padding:10px 0 20px">
+      <div style="color:var(--muted);font-size:13px">BTEC Level 1 Introductory | Public Services</div>
+      <div style="color:var(--gold);font-size:18px;font-weight:bold;margin:4px 0">Unit PS5</div>
+      <div style="color:var(--navy);font-size:28px;font-weight:bold">Finding Out About Public Services</div>
+      <div style="color:var(--muted);font-size:13px;margin-top:4px">Guided Learning Hours: 40</div>
+    </div>
+    <div class="cover-grid">
+      <div>
+        <label>Student Name</label>
+        <input type="text" id="student-name" placeholder="Enter your full name" oninput="autoSave()">
+      </div>
+      <div>
+        <label>Class / Group</label>
+        <input type="text" id="student-class" placeholder="e.g. 10PS" oninput="autoSave()">
+      </div>
+      <div>
+        <label>Assessor Name</label>
+        <input type="text" id="assessor-name" value="Jonathan Jones" oninput="autoSave()">
+      </div>
+      <div>
+        <label>Start Date</label>
+        <input type="text" id="start-date" placeholder="dd/mm/yyyy" oninput="autoSave()">
+      </div>
+      <div class="cover-full">
+        <label>Submission Date</label>
+        <input type="text" id="submission-date" placeholder="dd/mm/yyyy" oninput="autoSave()">
+      </div>
+    </div>
+    <div id="result-banner" style="margin-top:16px"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- INTRODUCTION -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-intro" class="section">
+  <div class="card">
+    <h2>Introduction to the Unit</h2>
+    <div class="knowledge-hub">
+      <div class="hub-title">📌 What This Unit Is About</div>
+      <p>Every day people across the UK use public services. Whether you call 999 in an emergency, visit your GP, or simply put your recycling out – you are using a public service.</p>
+      <p style="margin-top:8px">In this unit you will find out about the many different public services available in the UK and in your local area. You will research what they do, who provides them, and how they meet the needs of the public.</p>
+    </div>
+    <h3>Learning Aims</h3>
+    <div class="info-box">
+      <strong>Learning Aim A</strong> – Find out information about different public services<br><br>
+      <strong>Learning Aim B</strong> – Produce information about public services in your area, showing how they meet the needs of the public
+    </div>
+    <h3>Assessment Criteria</h3>
+    <table>
+      <tr><th>Code</th><th>What You Need to Do</th><th>Level</th></tr>
+      <tr><td><strong>A.P1</strong></td><td>Search for information about different public services using given sources</td><td><span class="ac-badge badge-pass">Pass</span></td></tr>
+      <tr><td><strong>A.P2</strong></td><td>Select and list information about different public services</td><td><span class="ac-badge badge-pass">Pass</span></td></tr>
+      <tr><td><strong>A.M1</strong></td><td>Search for correct information using own AND given sources</td><td><span class="ac-badge badge-merit">Merit</span></td></tr>
+      <tr><td><strong>A.M2</strong></td><td>Select mostly relevant information about different public services</td><td><span class="ac-badge badge-merit">Merit</span></td></tr>
+      <tr><td><strong>A.D1</strong></td><td>Search for relevant and detailed information about different public services</td><td><span class="ac-badge badge-distinction">Distinction</span></td></tr>
+      <tr><td><strong>A.D2</strong></td><td>Select accurate and appropriate information about different public services</td><td><span class="ac-badge badge-distinction">Distinction</span></td></tr>
+      <tr><td><strong>B.P3</strong></td><td>Produce information about different public services in your area</td><td><span class="ac-badge badge-pass">Pass</span></td></tr>
+      <tr><td><strong>B.M3</strong></td><td>Produce correct and logical information showing how services meet some needs of the public</td><td><span class="ac-badge badge-merit">Merit</span></td></tr>
+      <tr><td><strong>B.D3</strong></td><td>Produce detailed and well-organised information showing how public services meet the needs of the public in your area</td><td><span class="ac-badge badge-distinction">Distinction</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LA-A KNOWLEDGE HUBS -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-laA-hub" class="section">
+  <div class="card">
+    <h2>Learning Aim A – Knowledge Hubs</h2>
+
+    <div class="knowledge-hub">
+      <div class="hub-title">📚 Knowledge Hub A1: Types and Purposes of Public Services</div>
+      <p>Public services are organisations that provide support and help to people. They are funded by the government or by charities.</p>
+    </div>
+    <h3>Categories of Public Services</h3>
+    <table>
+      <tr><th>Category</th><th>Examples</th><th>What They Do</th></tr>
+      <tr><td>Armed Services</td><td>British Army, Royal Navy, RAF</td><td>Defend the UK and support in emergencies</td></tr>
+      <tr><td>Emergency Services</td><td>Police, Fire Service, Ambulance</td><td>Respond to 999 calls and keep people safe</td></tr>
+      <tr><td>Health Services</td><td>NHS hospitals, GPs, Paramedics</td><td>Provide medical care and treatment</td></tr>
+      <tr><td>Law and Order</td><td>Courts, Prison Service, Probation</td><td>Maintain justice and the rule of law</td></tr>
+      <tr><td>Social Services</td><td>Children's services, care homes</td><td>Support vulnerable people in society</td></tr>
+      <tr><td>Environmental</td><td>Refuse collection, parks, recycling</td><td>Maintain a clean and safe environment</td></tr>
+      <tr><td>Leisure Services</td><td>Libraries, sports centres, museums</td><td>Improve quality of life for communities</td></tr>
+    </table>
+
+    <h3>Who Provides Public Services?</h3>
+    <table>
+      <tr><th>Provider</th><th>Explanation</th></tr>
+      <tr><td><strong>Central Government</strong></td><td>The UK government funds national services like the NHS and Armed Forces from Westminster.</td></tr>
+      <tr><td><strong>Local Government</strong></td><td>Your local council runs services like refuse collection, parks, and libraries in your area.</td></tr>
+      <tr><td><strong>Regional Government</strong></td><td>In Wales, the Senedd is responsible for services like health and education across Wales.</td></tr>
+      <tr><td><strong>Third Sector</strong></td><td>Charities and voluntary organisations provide services such as food banks and housing support.</td></tr>
+    </table>
+
+    <h3>Six Functions of Public Services</h3>
+    <table>
+      <tr><th>Function</th><th>What This Means</th></tr>
+      <tr><td>Defence</td><td>Protecting the UK from threats (e.g. the Armed Forces)</td></tr>
+      <tr><td>Protection</td><td>Keeping individuals safe from harm (e.g. Police, Fire Service)</td></tr>
+      <tr><td>Justice</td><td>Investigating crime and ensuring consequences (e.g. Courts, Prison)</td></tr>
+      <tr><td>Transportation</td><td>Maintaining roads and public transport (e.g. Local Councils)</td></tr>
+      <tr><td>Health & Wellbeing</td><td>Providing medical care and promoting healthy lifestyles (e.g. NHS)</td></tr>
+      <tr><td>Maintaining Security</td><td>Monitoring and responding to threats to public safety (e.g. Border Force)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="knowledge-hub">
+      <div class="hub-title">📚 Knowledge Hub A2: Ways of Working in Public Services</div>
+      <p>Some public services are uniformed. Some are not. Both types carry out essential work.</p>
+    </div>
+    <table>
+      <tr><th></th><th>Uniformed</th><th>Non-Uniformed</th></tr>
+      <tr><td><strong>Examples</strong></td><td>Police, Fire, Army, Ambulance, Prison Officers</td><td>Social workers, council staff, NHS managers, charity workers</td></tr>
+      <tr><td><strong>Why / Why Not?</strong></td><td>Helps identify them quickly, shows authority</td><td>Not required – their role does not need it in the same way</td></tr>
+    </table>
+    <h3>Types of Uniform</h3>
+    <table>
+      <tr><th>Type</th><th>Examples</th></tr>
+      <tr><td>Basic / Standard</td><td>Police officer's tunic, paramedic's uniform – worn daily for identification</td></tr>
+      <tr><td>Specialist / Protective</td><td>Fire kit, HAZCHEM suits, public order suits for riots</td></tr>
+      <tr><td>Ceremonial</td><td>Queen's Guard bearskin hats, police dress uniform for remembrance parades</td></tr>
+    </table>
+    <h3>Drill and Common Practices</h3>
+    <ul class="styled">
+      <li><strong>Discipline</strong> – Following orders precisely is essential in dangerous situations</li>
+      <li><strong>Teamwork</strong> – Everyone moves together as one unit</li>
+      <li><strong>Confidence</strong> – Practising routines builds self-assurance</li>
+      <li><strong>Standards</strong> – Smart appearance and posture reflect pride in the service</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="knowledge-hub">
+      <div class="hub-title">📚 Knowledge Hub A3: Research Skills and Sources</div>
+      <p>To find information about public services, you need to use different sources. A good researcher uses more than one source and checks that information is accurate and up to date.</p>
+    </div>
+    <table>
+      <tr><th>Source Type</th><th>Examples</th><th>Things to Check</th></tr>
+      <tr><td>Websites</td><td>police.uk, gov.wales, nhs.uk</td><td>Is it official? When was it last updated?</td></tr>
+      <tr><td>Leaflets</td><td>From police stations, council offices</td><td>Is it still current? When produced?</td></tr>
+      <tr><td>Books / Journals</td><td>BTEC textbooks, professional magazines</td><td>Is the author qualified? Is it recent?</td></tr>
+      <tr><td>Interviews</td><td>Speaking to a police officer, firefighter</td><td>Prepare questions; record answers carefully</td></tr>
+      <tr><td>Visits</td><td>Fire station, police station, council offices</td><td>Take notes on what you see and find out</td></tr>
+    </table>
+    <div class="info-box">
+      <strong>Checking Validity:</strong> Is it recent? Is the author official? Does another source agree? Is the source trying to promote a particular point of view?
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LA-A ACTIVITIES -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-laA-act" class="section">
+  <div class="card">
+    <h2>Learning Aim A – Activities</h2>
+
+    <h3>Activity A1: Sorting Public Services</h3>
+    <p style="margin-bottom:10px">Sort the public services below into the correct column.</p>
+    <p class="muted">Police Service | Social Workers | British Army | NHS Nurses | Council Refuse Team | Fire Service | Probation Service | Charity Food Bank</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+      <div>
+        <label class="input-label">Uniformed Services</label>
+        <textarea id="act-a1-uniform" placeholder="List the uniformed services here..." oninput="autoSave()"></textarea>
+      </div>
+      <div>
+        <label class="input-label">Non-Uniformed Services</label>
+        <textarea id="act-a1-nonuniform" placeholder="List the non-uniformed services here..." oninput="autoSave()"></textarea>
+      </div>
+    </div>
+
+    <hr>
+    <h3>Activity A2: What Function Is It?</h3>
+    <p style="margin-bottom:10px">Match each scenario to the correct function: Defence | Protection | Justice | Transportation | Health &amp; Wellbeing | Maintaining Security</p>
+    <table>
+      <tr><th>Scenario</th><th>Your Answer</th></tr>
+      <tr><td>A firefighter rescues a family from a burning building.</td><td><input type="text" id="act-a2-1" placeholder="Function..." oninput="autoSave()"></td></tr>
+      <tr><td>A soldier is deployed to protect a UK base overseas.</td><td><input type="text" id="act-a2-2" placeholder="Function..." oninput="autoSave()"></td></tr>
+      <tr><td>A judge sentences a burglar in a crown court.</td><td><input type="text" id="act-a2-3" placeholder="Function..." oninput="autoSave()"></td></tr>
+      <tr><td>A GP carries out a health check on a patient.</td><td><input type="text" id="act-a2-4" placeholder="Function..." oninput="autoSave()"></td></tr>
+      <tr><td>The council repairs potholes in a road.</td><td><input type="text" id="act-a2-5" placeholder="Function..." oninput="autoSave()"></td></tr>
+      <tr><td>Border Force officers check passports at an airport.</td><td><input type="text" id="act-a2-6" placeholder="Function..." oninput="autoSave()"></td></tr>
+    </table>
+
+    <hr>
+    <h3>Activity A3: Research Planning Sheet</h3>
+    <p style="margin-bottom:10px">Plan how you will carry out your research for Assessment Task A.</p>
+    <label class="input-label">Which public services will you research?</label>
+    <textarea id="act-a3-services" placeholder="Name at least two services you plan to research..." oninput="autoSave()"></textarea>
+    <label class="input-label">What sources will you use?</label>
+    <textarea id="act-a3-sources" placeholder="List your planned sources..." oninput="autoSave()"></textarea>
+    <label class="input-label">How will you record your notes?</label>
+    <textarea id="act-a3-notes" placeholder="Describe how you will organise your notes..." rows="3" oninput="autoSave()"></textarea>
+    <label class="input-label">How will you check your sources are reliable?</label>
+    <textarea id="act-a3-valid" placeholder="Describe how you will check validity..." rows="3" oninput="autoSave()"></textarea>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- TASK A -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-taskA" class="section">
+  <div class="card">
+    <h2>Assessment Task A</h2>
+    <div class="info-box">
+      <strong>Scenario:</strong> Your local council is creating a new information pack for young people about the different public services available in your area. They have asked your class to carry out research and present findings. Your task is to research at least <strong>TWO</strong> different public services.
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-pass">A.P1 – Pass</span> Search for information using given sources</div>
+    <label class="input-label">Research Log – Source 1 (Name the source and summarise what you found)</label>
+    <textarea id="ta-p1-src1" placeholder="Source 1 details and findings..." oninput="autoSave()"></textarea>
+    <label class="input-label">Research Log – Source 2</label>
+    <textarea id="ta-p1-src2" placeholder="Source 2 details and findings..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-ap1"></div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-pass">A.P2 – Pass</span> Select and list information</div>
+    <label class="input-label">Key facts about Public Service 1 (state which service)</label>
+    <textarea id="ta-p2-s1" placeholder="Name the service and list key facts..." oninput="autoSave()"></textarea>
+    <label class="input-label">Key facts about Public Service 2 (state which service)</label>
+    <textarea id="ta-p2-s2" placeholder="Name the service and list key facts..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-ap2"></div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-merit">A.M1 – Merit</span> Use own AND given sources</div>
+    <label class="input-label">Own Source 1 (where you found it and what you found)</label>
+    <textarea id="ta-m1-s1" placeholder="Your own source – describe it and what you found..." oninput="autoSave()"></textarea>
+    <label class="input-label">Own Source 2</label>
+    <textarea id="ta-m1-s2" placeholder="Your own source – describe it and what you found..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-am1"></div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-merit">A.M2 – Merit</span> Select mostly relevant information</div>
+    <label class="input-label">How did you decide what information was relevant? Explain your choices.</label>
+    <textarea id="ta-m2" placeholder="Explain how you selected the most relevant information..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-am2"></div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-distinction">A.D1 – Distinction</span> Search for relevant and detailed information</div>
+    <label class="input-label">Explain the different methods you used to find detailed information (e.g. website, interview, visit).</label>
+    <textarea id="ta-d1" placeholder="Describe your research methods in detail..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-ad1"></div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-distinction">A.D2 – Distinction</span> Select accurate and appropriate information</div>
+    <label class="input-label">Explain how the information you selected is accurate and appropriate for the council information pack.</label>
+    <textarea id="ta-d2" placeholder="Explain why your chosen information is accurate and appropriate..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-ad2"></div>
+  </div>
+
+  <div class="card" id="assessor-task-a-feedback" style="display:none">
+    <h3>📋 Assessor Feedback – Task A</h3>
+    <div class="assessor-section">
+      <label class="input-label">Assessor feedback on Task A:</label>
+      <textarea id="assessor-fb-a" placeholder="Enter feedback for the student on Task A..." oninput="autoSave()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LA-B KNOWLEDGE HUBS -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-laB-hub" class="section">
+  <div class="card">
+    <h2>Learning Aim B – Knowledge Hubs</h2>
+
+    <div class="knowledge-hub">
+      <div class="hub-title">📚 Knowledge Hub B1: Requirements and Expectations of the Public</div>
+      <p>Public services exist to serve the public. Different people in the community need different things from public services.</p>
+    </div>
+
+    <h3>Who Uses Public Services?</h3>
+    <table>
+      <tr><th>Type of User</th><th>Example</th><th>Service They Might Need</th></tr>
+      <tr><td>Individual Citizens</td><td>A family needing housing support</td><td>Social housing / local council</td></tr>
+      <tr><td>Sections of Community</td><td>Older people needing care</td><td>Care homes / social services / NHS</td></tr>
+      <tr><td>Whole Communities</td><td>A town needing refuse collected</td><td>Local council environmental services</td></tr>
+    </table>
+
+    <h3>What the Public Expects</h3>
+    <ul class="styled">
+      <li><strong>Value for money</strong> – services should be efficient and not wasteful</li>
+      <li><strong>Convenience</strong> – services should be accessible and easy to use</li>
+      <li><strong>Quality</strong> – services must be professional and effective</li>
+      <li><strong>Timely response</strong> – especially in emergencies</li>
+      <li><strong>Recognition of diversity</strong> – staff must treat everyone fairly</li>
+      <li><strong>Entitlement</strong> – people expect to receive services they have a right to</li>
+    </ul>
+    <div class="info-box" style="margin-top:12px">
+      <strong>Remember:</strong> The public may not always think about the availability of resources. During a major incident, response times may be longer because all units are deployed elsewhere.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="knowledge-hub">
+      <div class="hub-title">📚 Knowledge Hub B2: Presenting Your Information</div>
+      <p>When you produce your document for Learning Aim B, you must think about your audience and choose the right format.</p>
+    </div>
+    <table>
+      <tr><th>Format</th><th>Good For</th><th>Tips</th></tr>
+      <tr><td>Leaflet</td><td>Short, clear info for the public</td><td>Headings, bullet points, images; simple language</td></tr>
+      <tr><td>Poster</td><td>Key facts and eye-catching info</td><td>Large text, clear layout, limited words</td></tr>
+      <tr><td>Report</td><td>Detailed written information</td><td>Use sections, paragraphs, and a clear structure</td></tr>
+      <tr><td>Slides</td><td>Talking to an audience</td><td>Use images, keep text short, practise</td></tr>
+    </table>
+    <h3>Key Communication Skills</h3>
+    <ul class="styled">
+      <li><strong>Audience awareness</strong> – write for the person who will read your document</li>
+      <li><strong>Accuracy</strong> – make sure all facts are correct</li>
+      <li><strong>Relevance</strong> – only include information related to the topic</li>
+      <li><strong>Legibility</strong> – make your document easy to read</li>
+      <li><strong>Organisation</strong> – use headings, sections, and a logical order</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- LA-B ACTIVITIES -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-laB-act" class="section">
+  <div class="card">
+    <h2>Learning Aim B – Activities</h2>
+
+    <h3>Activity B1: Public Services in My Area</h3>
+    <p style="margin-bottom:10px">Research the public services available in YOUR local area and complete the table.</p>
+    <label class="input-label">Service 1 – Name and details</label>
+    <textarea id="act-b1-s1" placeholder="Service name, uniformed/non-uniformed, what they do, how they help the public..." oninput="autoSave()"></textarea>
+    <label class="input-label">Service 2 – Name and details</label>
+    <textarea id="act-b1-s2" placeholder="Service name, uniformed/non-uniformed, what they do, how they help the public..." oninput="autoSave()"></textarea>
+    <label class="input-label">Service 3 – Name and details</label>
+    <textarea id="act-b1-s3" placeholder="Service name, uniformed/non-uniformed, what they do, how they help the public..." oninput="autoSave()"></textarea>
+
+    <hr>
+    <h3>Activity B2: Meeting the Needs of the Public</h3>
+    <p style="margin-bottom:10px">For each service, explain how it meets the needs of individuals, sections of the community, and whole communities.</p>
+    <label class="input-label">Service 1 – How does it meet public needs?</label>
+    <textarea id="act-b2-s1" placeholder="Explain for individuals, sections of community, and whole community..." oninput="autoSave()"></textarea>
+    <label class="input-label">Service 2 – How does it meet public needs?</label>
+    <textarea id="act-b2-s2" placeholder="Explain for individuals, sections of community, and whole community..." oninput="autoSave()"></textarea>
+    <label class="input-label">Service 3 – How does it meet public needs?</label>
+    <textarea id="act-b2-s3" placeholder="Explain for individuals, sections of community, and whole community..." oninput="autoSave()"></textarea>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- TASK B -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-taskB" class="section">
+  <div class="card">
+    <h2>Assessment Task B</h2>
+    <div class="info-box">
+      <strong>Scenario (continued):</strong> Using your research from Task A, produce a document about public services in <strong>YOUR local area</strong>. Your document must cover at least <strong>THREE</strong> local public services and include at least <strong>ONE uniformed</strong> and <strong>ONE non-uniformed</strong> service.
+    </div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-pass">B.P3 – Pass</span> Produce information about public services in your area</div>
+    <label class="input-label">Document planning notes (what you will include, format you will use)</label>
+    <textarea id="tb-p3-plan" placeholder="Plan your document here..." oninput="autoSave()"></textarea>
+    <label class="input-label">Summary of your produced document (title, format, services covered)</label>
+    <textarea id="tb-p3-summary" placeholder="Describe your completed document..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-bp3"></div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-merit">B.M3 – Merit</span> Show how services meet some needs of the public</div>
+    <label class="input-label">Explain the links between your chosen services and the public needs they meet.</label>
+    <textarea id="tb-m3" placeholder="Explain the links between services and public needs for at least two services..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-bm3"></div>
+  </div>
+
+  <div class="task-section">
+    <div class="task-header"><span class="ac-badge badge-distinction">B.D3 – Distinction</span> Detailed, well-organised information covering at least THREE services</div>
+    <label class="input-label">Self-assessment: how have you shown detailed links between THREE services and the needs of the public in your local area?</label>
+    <textarea id="tb-d3" placeholder="Describe how your document is detailed, well-organised, and shows clear links for three services..." oninput="autoSave()"></textarea>
+    <div class="feedback-box" id="fb-bd3"></div>
+  </div>
+
+  <div class="card" id="assessor-task-b-feedback" style="display:none">
+    <h3>📋 Assessor Feedback – Task B</h3>
+    <div class="assessor-section">
+      <label class="input-label">Assessor feedback on Task B:</label>
+      <textarea id="assessor-fb-b" placeholder="Enter feedback for the student on Task B..." oninput="autoSave()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- CHECKLIST -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-checklist" class="section">
+  <div class="card">
+    <h2>Assessment Criteria Evidence Checklist</h2>
+    <p style="margin-bottom:16px">Your assessor will mark each criterion as Met or Not Yet Met. You can see your results here once marked.</p>
+
+    <div id="assessor-panel">
+      <h3>🔐 Assessor Marking Panel</h3>
+      <div id="ac-marking"></div>
+      <div class="assessor-section" style="margin-top:16px">
+        <label class="input-label">Overall Result:</label>
+        <select id="overall-result" onchange="autoSave();updateResultBanner()">
+          <option value="Pending">Pending</option>
+          <option value="Pass">Pass</option>
+          <option value="Refer">Refer</option>
+        </select>
+        <label class="input-label" style="margin-top:12px">Assessor Signature:</label>
+        <input type="text" id="assessor-sig" placeholder="Assessor signature..." oninput="autoSave()">
+        <label class="input-label">Date Marked:</label>
+        <input type="text" id="date-marked" placeholder="dd/mm/yyyy" oninput="autoSave()">
+      </div>
+    </div>
+
+    <div id="checklist-display"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- GLOSSARY -->
+<!-- ══════════════════════════════════════ -->
+<div id="section-glossary" class="section">
+  <div class="card">
+    <h2>Glossary of Key Terms</h2>
+    <table>
+      <tr><th>Term</th><th>Definition</th></tr>
+      <tr><td><strong>Armed Services</strong></td><td>The military forces of the UK: the British Army, Royal Navy, and Royal Air Force.</td></tr>
+      <tr><td><strong>Central Government</strong></td><td>The UK national government based in Westminster, responsible for running the country.</td></tr>
+      <tr><td><strong>Chain of Command</strong></td><td>The line of authority from senior officers down to junior ranks.</td></tr>
+      <tr><td><strong>Discipline</strong></td><td>Following rules, orders, and standards of behaviour.</td></tr>
+      <tr><td><strong>Drill</strong></td><td>A set of precise movements and commands practised to build discipline and teamwork.</td></tr>
+      <tr><td><strong>Emergency Services</strong></td><td>The police, fire service, and ambulance service – the three main 999 response services.</td></tr>
+      <tr><td><strong>HAZCHEM</strong></td><td>Hazardous chemicals – specialist equipment and suits used when dealing with dangerous chemical incidents.</td></tr>
+      <tr><td><strong>Local Government</strong></td><td>The council that manages local services such as refuse collection, parks, and libraries.</td></tr>
+      <tr><td><strong>Non-uniformed Services</strong></td><td>Public services whose staff do not wear a uniform, such as social workers and council planners.</td></tr>
+      <tr><td><strong>Public Service</strong></td><td>An organisation that provides a service to the public, funded by the government or charities.</td></tr>
+      <tr><td><strong>Regional Government</strong></td><td>In Wales, this is the Senedd (Welsh Parliament), which makes decisions about services like health and education in Wales.</td></tr>
+      <tr><td><strong>Research Log</strong></td><td>A record of sources used and information found during research.</td></tr>
+      <tr><td><strong>Secondary Source</strong></td><td>Information gathered from a source not originally created for your specific research, such as a website or book.</td></tr>
+      <tr><td><strong>Social Services</strong></td><td>A public service that supports vulnerable people including children at risk, older people, and those with disabilities.</td></tr>
+      <tr><td><strong>Third Sector</strong></td><td>Organisations that are not part of the government and are not businesses, such as charities and voluntary groups.</td></tr>
+      <tr><td><strong>Uniformed Services</strong></td><td>Public services whose staff wear a recognisable uniform, such as the police, fire service, and armed forces.</td></tr>
+      <tr><td><strong>Valid Source</strong></td><td>A source that is reliable, accurate, and up to date.</td></tr>
+    </table>
+    <p class="small" style="margin-top:12px">Last Registration Date: December 2021 | Specification Issue 3 – December 2019 © Pearson Education Limited</p>
+  </div>
+</div>
+
+</main>
+
+<script>
+const ASSESSOR_PW = 'BTEC2025';
+let assessorMode = false;
+
+const ACS = [
+  { id:'ap1', code:'A.P1', level:'Pass', desc:'Searched for information about different public services using given sources', fbId:'fb-ap1' },
+  { id:'ap2', code:'A.P2', level:'Pass', desc:'Selected and listed information about different public services', fbId:'fb-ap2' },
+  { id:'am1', code:'A.M1', level:'Merit', desc:'Searched using own AND given sources', fbId:'fb-am1' },
+  { id:'am2', code:'A.M2', level:'Merit', desc:'Selected mostly relevant information', fbId:'fb-am2' },
+  { id:'ad1', code:'A.D1', level:'Distinction', desc:'Searched for relevant and detailed information', fbId:'fb-ad1' },
+  { id:'ad2', code:'A.D2', level:'Distinction', desc:'Selected accurate and appropriate information', fbId:'fb-ad2' },
+  { id:'bp3', code:'B.P3', level:'Pass', desc:'Produced information about public services in your area', fbId:'fb-bp3' },
+  { id:'bm3', code:'B.M3', level:'Merit', desc:'Produced correct and logical info showing how services meet some needs', fbId:'fb-bm3' },
+  { id:'bd3', code:'B.D3', level:'Distinction', desc:'Produced detailed, well-organised info showing links between services and public needs', fbId:'fb-bd3' },
+];
+
+const acStatus = {};
+const acFeedback = {};
+ACS.forEach(a => { acStatus[a.id] = 'pending'; acFeedback[a.id] = ''; });
+
+function buildChecklistDisplay() {
+  const wrap = document.getElementById('checklist-display');
+  wrap.innerHTML = '';
+  ACS.forEach(a => {
+    const item = document.createElement('div');
+    item.className = 'checklist-item';
+    item.id = 'cl-' + a.id;
+    const levelClass = a.level === 'Pass' ? 'badge-pass' : a.level === 'Merit' ? 'badge-merit' : 'badge-distinction';
+    const st = acStatus[a.id];
+    item.innerHTML = `
+      <div style="flex:1">
+        <span class="ac-badge ${levelClass}">${a.code} – ${a.level}</span>
+        <div style="font-size:14px;margin-top:4px">${a.desc}</div>
+        ${acFeedback[a.id] ? `<div class="feedback-box visible" style="margin-top:6px">${acFeedback[a.id]}</div>` : ''}
+      </div>
+      <div style="text-align:right;min-width:130px">
+        ${st === 'met' ? '<span style="color:var(--pass);font-weight:bold">✅ Met</span>' : st === 'notyet' ? '<span style="color:#E65100;font-weight:bold">🔁 Not Yet Met</span>' : '<span style="color:var(--muted)">⏳ Pending</span>'}
+      </div>
+    `;
+    wrap.appendChild(item);
+  });
+}
+
+function buildAssessorPanel() {
+  const wrap = document.getElementById('ac-marking');
+  wrap.innerHTML = '';
+  ACS.forEach(a => {
+    const levelClass = a.level === 'Pass' ? 'badge-pass' : a.level === 'Merit' ? 'badge-merit' : 'badge-distinction';
+    const div = document.createElement('div');
+    div.className = 'assessor-section';
+    div.innerHTML = `
+      <div style="margin-bottom:8px"><span class="ac-badge ${levelClass}">${a.code} – ${a.level}</span> <span style="font-size:13px">${a.desc}</span></div>
+      <div style="margin-bottom:6px">
+        <button class="ac-met-btn${acStatus[a.id]==='met'?' active':''}" onclick="setAC('${a.id}','met')">✅ Met</button>
+        <button class="ac-notyet-btn${acStatus[a.id]==='notyet'?' active':''}" onclick="setAC('${a.id}','notyet')">🔁 Not Yet Met</button>
+      </div>
+      <textarea id="acfb-${a.id}" placeholder="Feedback for ${a.code}..." rows="2" style="width:100%;font-size:13px;padding:7px;border:1px solid #ccc;border-radius:4px" oninput="acFeedback['${a.id}']=this.value;updateStudentFeedback('${a.id}');autoSave()">${acFeedback[a.id]}</textarea>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function setAC(id, status) {
+  acStatus[id] = status;
+  buildAssessorPanel();
+  buildChecklistDisplay();
+  updateStudentFeedback(id);
+  autoSave();
+}
+
+function updateStudentFeedback(id) {
+  const a = ACS.find(x => x.id === id);
+  if (!a) return;
+  const fb = document.getElementById(a.fbId);
+  if (!fb) return;
+  if (acFeedback[id]) {
+    fb.classList.add('visible');
+    fb.innerHTML = '<strong>Assessor feedback:</strong> ' + acFeedback[id];
+  } else {
+    fb.classList.remove('visible');
+  }
+  buildChecklistDisplay();
+}
+
+function updateResultBanner() {
+  const val = document.getElementById('overall-result')?.value || 'Pending';
+  const banner = document.getElementById('result-banner');
+  if (!banner) return;
+  if (val === 'Pending') { banner.style.display = 'none'; return; }
+  banner.style.display = 'block';
+  banner.className = 'banner-' + val.toLowerCase();
+  banner.innerHTML = val === 'Pass' ? '🎉 Result: <strong>PASS</strong> – Well done!' : '🔁 Result: <strong>REFER</strong> – Please see your assessor for guidance.';
+}
+
+// NAVIGATION
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.target.classList.add('active');
+  updateProgress();
+}
+
+// PROGRESS
+function updateProgress() {
+  const fields = document.querySelectorAll('textarea, input[type=text]');
+  let filled = 0;
+  fields.forEach(f => { if(f.value.trim()) filled++; });
+  const pct = fields.length ? Math.round((filled / fields.length) * 100) : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = pct + '% Complete';
+}
+
+// AUTOSAVE
+let saveTimer;
+function autoSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    const data = collectData();
+    try { localStorage.setItem('ps5_workbook', JSON.stringify(data)); } catch(e){}
+    updateProgress();
+  }, 500);
+}
+
+function collectData() {
+  const fields = {};
+  document.querySelectorAll('textarea[id], input[type=text][id], select[id]').forEach(el => {
+    fields[el.id] = el.value;
+  });
+  return { fields, acStatus, acFeedback, ts: Date.now() };
+}
+
+function restoreData(data) {
+  if (!data) return;
+  if (data.fields) {
+    Object.entries(data.fields).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+  }
+  if (data.acStatus) Object.assign(acStatus, data.acStatus);
+  if (data.acFeedback) Object.assign(acFeedback, data.acFeedback);
+  buildChecklistDisplay();
+  if (assessorMode) buildAssessorPanel();
+  ACS.forEach(a => updateStudentFeedback(a.id));
+  updateResultBanner();
+  updateProgress();
+}
+
+// SAVE FILE
+function saveFile() {
+  const name = (document.getElementById('student-name')?.value || 'student').replace(/\s+/g,'_');
+  const data = collectData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `PS5_${name}_workbook.json`;
+  a.click();
+}
+
+function loadFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      restoreData(data);
+    } catch(err) { alert('Could not load file. Please check it is a valid PS5 workbook file.'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ASSESSOR
+function openAssessorModal() {
+  document.getElementById('assessor-modal').classList.add('open');
+  document.getElementById('assessor-password').focus();
+}
+function closeAssessorModal() {
+  document.getElementById('assessor-modal').classList.remove('open');
+  document.getElementById('assessor-password').value = '';
+  document.getElementById('pw-error').style.display = 'none';
+}
+function checkPassword() {
+  const pw = document.getElementById('assessor-password').value;
+  if (pw === ASSESSOR_PW) {
+    assessorMode = true;
+    closeAssessorModal();
+    enableAssessorMode();
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+  }
+}
+function enableAssessorMode() {
+  // Lock student inputs
+  document.querySelectorAll('textarea, input[type=text]').forEach(el => {
+    if (!el.id.startsWith('assessor') && !el.id.startsWith('acfb') && !el.id.startsWith('overall') && !el.id.startsWith('date-marked')) {
+      el.classList.add('assessor-locked');
+      el.readOnly = true;
+    }
+  });
+  // Show assessor panels
+  document.getElementById('assessor-panel').style.display = 'block';
+  document.getElementById('assessor-task-a-feedback').style.display = 'block';
+  document.getElementById('assessor-task-b-feedback').style.display = 'block';
+  buildAssessorPanel();
+}
+
+// INIT
+window.addEventListener('load', () => {
+  buildChecklistDisplay();
+  try {
+    const saved = localStorage.getItem('ps5_workbook');
+    if (saved) restoreData(JSON.parse(saved));
+  } catch(e) {}
+  updateProgress();
+});
+</script>
+</body>
+</html>
