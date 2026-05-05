@@ -170,14 +170,6 @@ body {
   border-radius: 12px;
   padding: 20px;
 }
-.info-card-icon {
-  width: 36px; height: 36px;
-  background: var(--blue-light);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
 .info-card h3 {
   font-size: 13px;
   font-weight: 700;
@@ -274,7 +266,6 @@ body {
   transition: background 0.12s;
 }
 .unit-folder-header:hover { background: #dde5ff; }
-.unit-folder-header .uf-icon { font-size: 16px; }
 .unit-folder-header .uf-info { flex: 1; }
 .unit-folder-header .uf-code {
   font-size: 10px;
@@ -399,7 +390,7 @@ body {
   <div class="hero-inner">
     <div class="qual-badge">Pearson BTEC Level 1 Introductory Qualification</div>
     <h1>Public Services<br/>Award &amp; Certificate</h1>
-    <p class="hero-desc">A nationally recognised vocational qualification developing practical, transferable and sector-specific skills for learners interested in the public services. Assessed entirely through coursework — no exams.</p>
+    <p class="hero-desc">A nationally recognised vocational qualification developing practical, transferable and sector-specific skills for learners interested in the public services. Assessed entirely through coursework &mdash; no exams.</p>
     <div class="hero-stats">
       <div class="stat-pill"><div class="val">180</div><div class="lbl">GLH (Certificate)</div></div>
       <div class="stat-pill"><div class="val">70</div><div class="lbl">GLH (Award)</div></div>
@@ -517,285 +508,12 @@ body {
     </div>
   </div>
 
-  <!-- RESOURCES SECTION -->
+  <!-- RESOURCES SECTION — rendered dynamically from btec.json -->
   <h2 class="section-title">Unit Resources</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Click a unit folder to see available resources. New files appear automatically when added to the repository.</p>
 
-  <!-- CORE UNITS -->
-  <div class="folder-section">
-    <div class="folder-group">
-      <div class="folder-group-header" onclick="toggleGroup(this)">
-        <div>
-          <div class="folder-group-title">Core Units (Group A)</div>
-          <div class="folder-group-sub">Certificate: both units required &nbsp;|&nbsp; Award: A2 only required</div>
-        </div>
-        <span class="chevron">&#9654;</span>
-      </div>
-      <div class="folder-group-body open">
-
-        <!-- A1 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            
-            <div class="uf-info">
-              <div class="uf-code">Unit A1 &middot; 30 GLH &middot; Core &middot; Certificate only</div>
-              <div class="uf-title">Being Organised</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="unit-desc">
-              <strong>Unit in brief</strong>
-              Learners develop key techniques to organise their work, manage priorities and use time effectively &mdash; practising these techniques over a period before final assessment.
-            </div>
-            <div class="unit-desc" style="margin-top:0;">
-              <strong>Learning Aims</strong>
-              A &mdash; Explore techniques to improve own organisational skills &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Review the use of techniques to improve own organisational skills.
-            </div>
-            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
-            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
-            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
-            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
-          </div>
-        </div>
-
-        <!-- A2 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            
-            <div class="uf-info">
-              <div class="uf-code">Unit A2 &middot; 30 GLH &middot; Core &middot; Award &amp; Certificate</div>
-              <div class="uf-title">Developing a Personal Progression Plan</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="unit-desc">
-              <strong>Unit in brief</strong>
-              Learners develop the skills and behaviours needed to progress to the next stage of their learning &mdash; carrying out a self-audit, identifying strengths, setting goals, and producing a personal progression plan.
-            </div>
-            <div class="unit-desc" style="margin-top:0;">
-              <strong>Learning Aims</strong>
-              A &mdash; Explore the skills and behaviours needed to meet personal progression goal &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Produce a progression plan to meet intended progression goal.
-            </div>
-            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
-            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
-            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
-            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
-          </div>
-        </div>
-
-
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTOR UNITS -->
-  <div class="folder-section">
-    <div class="folder-group">
-      <div class="folder-group-header" onclick="toggleGroup(this)">
-        <div>
-          <div class="folder-group-title">Sector Units (Group B)</div>
-          <div class="folder-group-sub">Certificate: 3 units required &nbsp;|&nbsp; Award: 1 unit required &nbsp;|&nbsp; resources added as completed</div>
-        </div>
-        <span class="chevron">&#9654;</span>
-      </div>
-      <div class="folder-group-body">
-
-
-        <!-- PS5 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            
-            <div class="uf-info">
-              <div class="uf-code">Unit PS5 &middot; 40 GLH &middot; Sector</div>
-              <div class="uf-title">Finding Out about Public Services</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="unit-desc">
-              <strong>Unit in brief</strong>
-              Learners explore the different public services and the roles they perform. They research career pathways, entry requirements, and the day-to-day responsibilities of personnel in the emergency services and armed forces.
-            </div>
-            <div class="unit-desc" style="margin-top:0;">
-              <strong>Learning Aims</strong>
-              A &mdash; Know about the different public services and the work they do &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Know about the different jobs within the public services.
-            </div>
-            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
-            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
-            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
-            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
-          </div>
-        </div>
-
-        <!-- PS6 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            
-            <div class="uf-info">
-              <div class="uf-code">Unit PS6 &middot; 40 GLH &middot; Sector</div>
-              <div class="uf-title">Taking Part in Fitness Testing</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="unit-desc">
-              <strong>Unit in brief</strong>
-              Learners develop skills in planning, taking part in, recording and reviewing fitness testing activities required for the public services. Covers the basic fitness tests used during public services selection and reviewing personal performance against those standards.
-            </div>
-            <div class="unit-desc" style="margin-top:0;">
-              <strong>Learning Aims</strong>
-              A &mdash; Plan and take part in fitness testing activities required for different public services &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Record and review participation in fitness testing activities.
-            </div>
-            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
-            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
-            <div class="coming-soon">– Fitness Testing Record Sheet &mdash; coming soon</div>
-            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
-            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
-          </div>
-        </div>
-
-        <!-- PS9 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            
-            <div class="uf-info">
-              <div class="uf-code">Unit PS9 &middot; 40 GLH &middot; Sector</div>
-              <div class="uf-title">Planning and Navigating a Route</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="unit-desc">
-              <strong>Unit in brief</strong>
-              Learners develop skills in planning and navigating a route using Ordnance Survey (OS) maps. They produce a route-planning card, consider equipment and risks, then navigate their planned route within an agreed timeframe &mdash; a practical field-based unit.
-            </div>
-            <div class="unit-desc" style="margin-top:0;">
-              <strong>Learning Aims</strong>
-              A &mdash; Plan a route using Ordnance Survey maps &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Navigate an agreed route within an agreed timeframe.
-            </div>
-            <a class="file-link" href="PS9NavigationDigital.html" target="_blank">
-              <span class="uf-icon">&#128187;</span>
-              <span class="fl-name">Digital Interactive Workbook</span>
-              <span class="fl-type">HTML</span>
-            </a>
-            <a class="file-link" href="PS9NavigationSlides.pptx" download>
-              <span class="uf-icon">&#128196;</span>
-              <span class="fl-name">Teaching Slides</span>
-              <span class="fl-type">PPTX</span>
-            </a>
-            <a class="file-link" href="PS9NavigationWorkbook.docx" download>
-              <span class="uf-icon">&#128196;</span>
-              <span class="fl-name">Printable Student Workbook</span>
-              <span class="fl-type">DOCX</span>
-            </a>
-            <a class="file-link" href="PS9RouteCardTemplate.docx" download>
-              <span class="uf-icon">&#128196;</span>
-              <span class="fl-name">Route Planning Card Template</span>
-              <span class="fl-type">DOCX</span>
-            </a>
-            <a class="file-link" href="PS9MapSkillsReferenceSheet.docx" download>
-              <span class="uf-icon">&#128196;</span>
-              <span class="fl-name">Map Skills Reference Sheet</span>
-              <span class="fl-type">DOCX</span>
-            </a>
-            <a class="file-link" href="PS9AssessmentBrief.docx" download>
-              <span class="uf-icon">&#128196;</span>
-              <span class="fl-name">Assessment Brief</span>
-              <span class="fl-type">DOCX</span>
-            </a>
-            <a class="file-link" href="PS9AnswerKey.docx" download>
-              <span class="uf-icon">&#128196;</span>
-              <span class="fl-name">Teacher Answer Key</span>
-              <span class="fl-type">DOCX</span>
-            </a>
-            <a class="file-link" href="PS9NavigationPodcast.mp3" target="_blank">
-              <span class="uf-icon">🎙️</span>
-              <span class="fl-name">Unit Podcast</span>
-              <span class="fl-type">MP3</span>
-            </a>
-            <a class="file-link" href="PS9CyclingDigital.html" target="_blank">
-              <span class="uf-icon">&#128187;</span>
-              <span class="fl-name">Cycling &#8212; Digital Workbook</span>
-              <span class="fl-type">HTML</span>
-            </a>
-            <a class="file-link" href="PS9CyclingWorkbook.docx" download>
-              <span class="uf-icon">&#128196;</span>
-              <span class="fl-name">Cycling &#8212; Printable Workbook</span>
-              <span class="fl-type">DOCX</span>
-            </a>
-            <a class="file-link" href="PS9WatercraftDigital.html" target="_blank">
-              <span class="uf-icon">&#128187;</span>
-              <span class="fl-name">Watercraft &#8212; Digital Workbook</span>
-              <span class="fl-type">HTML</span>
-            </a>
-            <a class="file-link" href="PS9WatercraftWorkbook.docx" download>
-              <span class="uf-icon">&#128196;</span>
-              <span class="fl-name">Watercraft &#8212; Printable Workbook</span>
-              <span class="fl-type">DOCX</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- PS11 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            
-            <div class="uf-info">
-              <div class="uf-code">Unit PS11 &middot; 40 GLH &middot; Sector</div>
-              <div class="uf-title">Contributing to your Community</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="unit-desc">
-              <strong>Unit in brief</strong>
-              Learners explore how the public services contribute to and support their local communities. They research community projects and volunteering, plan and carry out their own community contribution, and reflect on the impact and skills developed.
-            </div>
-            <div class="unit-desc" style="margin-top:0;">
-              <strong>Learning Aims</strong>
-              A &mdash; Know about the contribution of public services to the community &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Contribute to the community.
-            </div>
-            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
-            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
-            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
-            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
-          </div>
-        </div>
-
-
-        <!-- PS12 -->
-        <div class="unit-folder">
-          <div class="unit-folder-header" onclick="toggleUnit(this)">
-            
-            <div class="uf-info">
-              <div class="uf-code">Unit PS12 &middot; 40 GLH &middot; Sector</div>
-              <div class="uf-title">Taking Part in Sport and Adventurous Activities</div>
-            </div>
-            <span class="uf-chevron">&#9654;</span>
-          </div>
-          <div class="unit-folder-files">
-            <div class="unit-desc">
-              <strong>Unit in brief</strong>
-              Learners develop participation skills in sport and adventurous activities, with a focus on how these relate to working in a public service. Covers planning, health and fitness, communication and teamwork across individual sports, team sports and adventurous activities.
-            </div>
-            <div class="unit-desc" style="margin-top:0;">
-              <strong>Learning Aims</strong>
-              A &mdash; Plan and take part in sport and adventurous activities &nbsp;&nbsp;|&nbsp;&nbsp; B &mdash; Demonstrate effective communication and teamwork skills when taking part in sport and adventurous activities.
-            </div>
-            <div class="coming-soon">– Digital Interactive Workbook &mdash; coming soon</div>
-            <div class="coming-soon">– Teaching Slides &mdash; coming soon</div>
-            <div class="coming-soon">– Activity Planning Template &mdash; coming soon</div>
-            <div class="coming-soon">– Assessment Brief &mdash; coming soon</div>
-            <div class="coming-soon">– Teacher Answer Key &mdash; coming soon</div>
-          </div>
-        </div>
-
-
-
-      </div>
-    </div>
-  </div>
+  <div id="resources-core" class="folder-section"></div>
+  <div id="resources-sector" class="folder-section"></div>
 
 </main>
 
@@ -805,16 +523,114 @@ body {
 </footer>
 
 <script>
+/* ── Toggle helpers ─────────────────────────────────────────── */
 function toggleGroup(header) {
   header.classList.toggle('open');
-  const body = header.nextElementSibling;
-  body.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
 }
 function toggleUnit(header) {
   header.classList.toggle('open');
-  const files = header.nextElementSibling;
-  files.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
 }
+
+/* ── Icon by file type ──────────────────────────────────────── */
+function iconFor(type) {
+  var icons = {
+    'HTML': '&#128187;',
+    'PPTX': '&#128202;',
+    'PPT':  '&#128202;',
+    'PDF':  '&#128196;',
+    'DOCX': '&#128196;',
+    'DOC':  '&#128196;',
+    'XLSX': '&#128200;',
+    'XLS':  '&#128200;',
+    'MP3':  '&#127911;',
+    'MP4':  '&#127916;',
+    'CSV':  '&#128196;'
+  };
+  return icons[type] || '&#128196;';
+}
+
+/* ── Build a single unit-folder block ───────────────────────── */
+function buildUnit(unit, openByDefault) {
+  var openClass = openByDefault ? ' open' : '';
+
+  var descHtml = '';
+  if (unit.brief) {
+    descHtml += '<div class="unit-desc"><strong>Unit in brief</strong>' + unit.brief + '</div>';
+  }
+  if (unit.aims) {
+    descHtml += '<div class="unit-desc" style="margin-top:0;"><strong>Learning Aims</strong>' + unit.aims + '</div>';
+  }
+
+  var filesHtml = '';
+  if (unit.files && unit.files.length > 0) {
+    filesHtml = unit.files.map(function(f) {
+      var isHtml = f.type === 'HTML';
+      var tag = isHtml ? 'target="_blank"' : 'download';
+      return '<a class="file-link" href="' + encodeURI(f.filename) + '" ' + tag + '>' +
+        '<span class="fl-icon">' + iconFor(f.type) + '</span>' +
+        '<span class="fl-name">' + f.name + '</span>' +
+        '<span class="fl-type">' + f.type + '</span>' +
+      '</a>';
+    }).join('');
+  } else {
+    filesHtml = '<div class="coming-soon">&ndash; Resources coming soon</div>';
+  }
+
+  return '<div class="unit-folder">' +
+    '<div class="unit-folder-header' + openClass + '" onclick="toggleUnit(this)">' +
+      '<div class="uf-info">' +
+        '<div class="uf-code">Unit ' + unit.id + ' &middot; ' + unit.subtitle + '</div>' +
+        '<div class="uf-title">' + unit.title + '</div>' +
+      '</div>' +
+      '<span class="uf-chevron">&#9654;</span>' +
+    '</div>' +
+    '<div class="unit-folder-files' + openClass + '">' + descHtml + filesHtml + '</div>' +
+  '</div>';
+}
+
+/* ── Build a group (core / sector) ─────────────────────────── */
+function buildGroup(label, sublabel, units, openByDefault) {
+  var openClass = openByDefault ? ' open' : '';
+  var unitsHtml = units.map(function(u) { return buildUnit(u, false); }).join('');
+  return '<div class="folder-group">' +
+    '<div class="folder-group-header' + openClass + '" onclick="toggleGroup(this)">' +
+      '<div>' +
+        '<div class="folder-group-title">' + label + '</div>' +
+        '<div class="folder-group-sub">' + sublabel + '</div>' +
+      '</div>' +
+      '<span class="chevron">&#9654;</span>' +
+    '</div>' +
+    '<div class="folder-group-body' + openClass + '">' + unitsHtml + '</div>' +
+  '</div>';
+}
+
+/* ── Fetch manifest and render ──────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('btec.json?_=' + Date.now())
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var core   = data.units.filter(function(u) { return u.group === 'core'; });
+      var sector = data.units.filter(function(u) { return u.group === 'sector'; });
+
+      document.getElementById('resources-core').innerHTML = buildGroup(
+        'Core Units (Group A)',
+        'Certificate: both units required &nbsp;|&nbsp; Award: A2 only required',
+        core, true
+      );
+
+      document.getElementById('resources-sector').innerHTML = buildGroup(
+        'Sector Units (Group B)',
+        'Certificate: 3 units required &nbsp;|&nbsp; Award: 1 unit required &nbsp;|&nbsp; resources added as completed',
+        sector, false
+      );
+    })
+    .catch(function() {
+      document.getElementById('resources-core').innerHTML =
+        '<p style="color:var(--muted);font-size:13px;padding:16px;">Could not load resource list. Please refresh or check back shortly.</p>';
+    });
+});
 </script>
 </body>
 </html>

@@ -1,0 +1,94 @@
+{
+  "units": [
+    {
+      "id": "A1",
+      "glh": 30,
+      "group": "core",
+      "groupLabel": "Core Units (Group A)",
+      "title": "Being Organised",
+      "subtitle": "30 GLH · Core · Certificate only",
+      "brief": "Learners develop key techniques to organise their work, manage priorities and use time effectively — practising these techniques over a period before final assessment.",
+      "aims": "A — Explore techniques to improve own organisational skills | B — Review the use of techniques to improve own organisational skills.",
+      "files": []
+    },
+    {
+      "id": "A2",
+      "glh": 30,
+      "group": "core",
+      "groupLabel": "Core Units (Group A)",
+      "title": "Developing a Personal Progression Plan",
+      "subtitle": "30 GLH · Core · Award & Certificate",
+      "brief": "Learners develop the skills and behaviours needed to progress to the next stage of their learning — carrying out a self-audit, identifying strengths, setting goals, and producing a personal progression plan.",
+      "aims": "A — Explore the skills and behaviours needed to meet personal progression goal | B — Produce a progression plan to meet intended progression goal.",
+      "files": []
+    },
+    {
+      "id": "PS5",
+      "glh": 40,
+      "group": "sector",
+      "groupLabel": "Sector Units (Group B)",
+      "title": "Finding Out about Public Services",
+      "subtitle": "40 GLH · Sector",
+      "brief": "Learners explore the different public services and the roles they perform. They research career pathways, entry requirements, and the day-to-day responsibilities of personnel in the emergency services and armed forces.",
+      "aims": "A — Know about the different public services and the work they do | B — Know about the different jobs within the public services.",
+      "files": []
+    },
+    {
+      "id": "PS6",
+      "glh": 40,
+      "group": "sector",
+      "groupLabel": "Sector Units (Group B)",
+      "title": "Taking Part in Fitness Testing",
+      "subtitle": "40 GLH · Sector",
+      "brief": "Learners develop skills in planning, taking part in, recording and reviewing fitness testing activities required for the public services. Covers the basic fitness tests used during public services selection and reviewing personal performance against those standards.",
+      "aims": "A — Plan and take part in fitness testing activities required for different public services | B — Record and review participation in fitness testing activities.",
+      "files": []
+    },
+    {
+      "id": "PS9",
+      "glh": 40,
+      "group": "sector",
+      "groupLabel": "Sector Units (Group B)",
+      "title": "Planning and Navigating a Route",
+      "subtitle": "40 GLH · Sector",
+      "brief": "Learners develop skills in planning and navigating a route using Ordnance Survey (OS) maps. They produce a route-planning card, consider equipment and risks, then navigate their planned route within an agreed timeframe — a practical field-based unit.",
+      "aims": "A — Plan a route using Ordnance Survey maps | B — Navigate an agreed route within an agreed timeframe.",
+      "files": [
+        { "name": "Digital Interactive Workbook", "filename": "PS9NavigationDigital.html", "type": "HTML" },
+        { "name": "Teaching Slides", "filename": "PS9NavigationSlides.pptx", "type": "PPTX" },
+        { "name": "Printable Student Workbook", "filename": "PS9NavigationWorkbook.docx", "type": "DOCX" },
+        { "name": "Route Planning Card Template", "filename": "PS9RouteCardTemplate.docx", "type": "DOCX" },
+        { "name": "Map Skills Reference Sheet", "filename": "PS9MapSkillsReferenceSheet.docx", "type": "DOCX" },
+        { "name": "Assessment Brief", "filename": "PS9AssessmentBrief.docx", "type": "DOCX" },
+        { "name": "Teacher Answer Key", "filename": "PS9AnswerKey.docx", "type": "DOCX" },
+        { "name": "Unit Podcast", "filename": "PS9NavigationPodcast.mp3", "type": "MP3" },
+        { "name": "Cycling — Digital Workbook", "filename": "PS9CyclingDigital.html", "type": "HTML" },
+        { "name": "Cycling — Printable Workbook", "filename": "PS9CyclingWorkbook.docx", "type": "DOCX" },
+        { "name": "Watercraft — Digital Workbook", "filename": "PS9WatercraftDigital.html", "type": "HTML" },
+        { "name": "Watercraft — Printable Workbook", "filename": "PS9WatercraftWorkbook.docx", "type": "DOCX" }
+      ]
+    },
+    {
+      "id": "PS11",
+      "glh": 40,
+      "group": "sector",
+      "groupLabel": "Sector Units (Group B)",
+      "title": "Contributing to your Community",
+      "subtitle": "40 GLH · Sector",
+      "brief": "Learners explore how the public services contribute to and support their local communities. They research community projects and volunteering, plan and carry out their own community contribution, and reflect on the impact and skills developed.",
+      "aims": "A — Know about the contribution of public services to the community | B — Contribute to the community.",
+      "files": []
+    },
+    {
+      "id": "PS12",
+      "glh": 40,
+      "group": "sector",
+      "groupLabel": "Sector Units (Group B)",
+      "title": "Taking Part in Sport and Adventurous Activities",
+      "subtitle": "40 GLH · Sector",
+      "brief": "Learners develop participation skills in sport and adventurous activities, with a focus on how these relate to working in a public service. Covers planning, health and fitness, communication and teamwork across individual sports, team sports and adventurous activities.",
+      "aims": "A — Plan and take part in sport and adventurous activities | B — Demonstrate effective communication and teamwork skills when taking part in sport and adventurous activities.",
+      "files": []
+    }
+  ]
+}
