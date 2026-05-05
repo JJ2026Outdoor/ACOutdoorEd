@@ -31,7 +31,11 @@
       "subtitle": "40 GLH · Sector",
       "brief": "Learners explore the different public services and the roles they perform. They research career pathways, entry requirements, and the day-to-day responsibilities of personnel in the emergency services and armed forces.",
       "aims": "A — Know about the different public services and the work they do | B — Know about the different jobs within the public services.",
-      "files": []
+      "files": [
+        { "name": "Digital Interactive Workbook", "filename": "PS5FindingOutDigital.html", "type": "HTML" },
+        { "name": "Teaching Slides", "filename": "PS5FindingOutSlides.pptx", "type": "PPTX" },
+        { "name": "Printable Student Workbook", "filename": "PS5FindingOutWorkbook.docx", "type": "DOCX" }
+      ]
     },
     {
       "id": "PS6",
