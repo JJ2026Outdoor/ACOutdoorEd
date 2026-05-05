@@ -315,7 +315,7 @@ body {
 }
 
 .planner-header {
-  background: linear-gradient(135deg, #2c1a6e 0%, #4a2fa0 100%);
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
   padding: 20px 24px;
   display: flex;
   align-items: center;
@@ -354,7 +354,7 @@ body {
   display: flex; align-items: center; gap: 10px;
   border-bottom: 1px solid var(--border);
 }
-.planner-status.loading { background: #f5f7ff; color: #4a2fa0; }
+.planner-status.loading { background: var(--green-xlight); color: var(--green-dark); }
 .planner-status.error   { background: #fff5f5; color: #9b2020; }
 .planner-status.ok      { display: none; }
 
@@ -431,7 +431,7 @@ body {
   gap: 12px; flex-wrap: wrap;
 }
 .planner-source-note { font-size: 11px; color: var(--muted); }
-.planner-source-note a { color: #4a2fa0; text-decoration: none; font-weight: 600; }
+.planner-source-note a { color: var(--green); text-decoration: none; font-weight: 600; }
 .planner-source-note a:hover { text-decoration: underline; }
 .planner-today-btn {
   background: var(--green-light); color: var(--green-dark);
@@ -631,12 +631,12 @@ const DAY_NAMES  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 function pillClass(activity) {
   const a = (activity||'').toLowerCase();
-  if (a.includes('mtb') || a.includes('mountain bik')) return 'pill-mtb';
+  if (a.includes('mtb') || a.includes('mountain bik') || a.includes('mountain bike') || a.includes('biking')) return 'pill-mtb';
   if (a.includes('walk'))    return 'pill-walking';
   if (a.includes('canoe'))   return 'pill-canoeing';
-  if (a.includes('sup'))     return 'pill-sup';
+  if (a.includes('sup') || a.includes('paddleboard')) return 'pill-sup';
   if (a.includes('climb'))   return 'pill-climbing';
-  if (a.includes('underground') || a.includes('cave')) return 'pill-underground';
+  if (a.includes('underground') || a.includes('cave') || a.includes('gorge')) return 'pill-underground';
   return 'pill-other';
 }
 
@@ -664,12 +664,14 @@ function buildScheduleMap(rows) {
     let key = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : '';
     if (!key) { const d = new Date(raw); if (!isNaN(d)) key = dateKey(d); }
     if (!key) continue;
+    // Sheet columns: date(0), day(1), status(2), class(3), length(4), activity(5), location(6), notes(7)
     map[key] = {
-      class:    (row[1]||'').trim(),
-      length:   (row[2]||'').trim(),
-      activity: (row[3]||'').trim(),
-      location: (row[4]||'').trim(),
-      notes:    (row[5]||'').trim(),
+      status:   (row[2]||'').trim(),
+      class:    (row[3]||'').trim(),
+      length:   (row[4]||'').trim(),
+      activity: (row[5]||'').trim(),
+      location: (row[6]||'').trim(),
+      notes:    (row[7]||'').trim(),
     };
   }
   return map;
@@ -677,10 +679,11 @@ function buildScheduleMap(rows) {
 
 function dayType(entry) {
   if (!entry) return 'normal';
+  const s = (entry.status||'').toLowerCase();
   const n = (entry.notes||'').toLowerCase();
   const c = (entry.class||'').toLowerCase();
-  if (n.includes('holiday')||n.includes('half term')||n.includes('bank holiday')) return 'holiday';
-  if (n.includes('inset')||c.includes('inset')||c.includes('non pupil')) return 'inset';
+  if (s.includes('holiday')||s.includes('bank')||n.includes('holiday')||n.includes('half term')) return 'holiday';
+  if (s.includes('inset')||c.includes('inset')||c.includes('non pupil')) return 'inset';
   return 'normal';
 }
 
