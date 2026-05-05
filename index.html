@@ -301,6 +301,153 @@ body {
   font-size: 12px;
 }
 
+/* ════════════════════════════════════════
+   WEEKLY PLANNER / CALENDAR
+   ════════════════════════════════════════ */
+
+.planner-section { margin-bottom: 56px; }
+
+.planner-card {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.planner-header {
+  background: linear-gradient(135deg, #2c1a6e 0%, #4a2fa0 100%);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.planner-title-block { flex: 1; }
+.planner-title {
+  font-family: 'DM Serif Display', serif;
+  color: #fff;
+  font-size: 20px;
+}
+.planner-subtitle { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 2px; }
+
+.planner-nav { display: flex; align-items: center; gap: 8px; }
+.planner-nav-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.planner-nav-btn:hover { background: rgba(255,255,255,0.28); }
+.planner-week-label {
+  color: #fff; font-size: 13px; font-weight: 600;
+  min-width: 160px; text-align: center;
+}
+
+.planner-status {
+  padding: 14px 24px; font-size: 13px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.planner-status.loading { background: #f5f7ff; color: #4a2fa0; }
+.planner-status.error   { background: #fff5f5; color: #9b2020; }
+.planner-status.ok      { display: none; }
+
+.planner-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.planner-day {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  min-height: 130px;
+  display: flex; flex-direction: column;
+}
+.planner-day:last-child { border-right: none; }
+
+.day-header {
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--border);
+  background: #fafafa;
+}
+.day-name  { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.day-date  { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.1; margin-top: 2px; }
+.day-month { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+.planner-day.today   .day-header { background: #f0f7f3; }
+.planner-day.today   .day-date   { color: var(--green); }
+.planner-day.today   .day-name   { color: var(--green); }
+.planner-day.holiday .day-header { background: #fef9f0; }
+.planner-day.holiday .day-date   { color: #a07020; }
+.planner-day.inset   .day-header { background: #f5f0ff; }
+.planner-day.inset   .day-date   { color: #6030a0; }
+
+.day-content {
+  padding: 10px 12px; flex: 1;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.day-empty { color: var(--muted); font-size: 11px; font-style: italic; margin-top: 4px; }
+
+.activity-pill {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 20px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.pill-mtb         { background: #e8f5ee; color: #0f4525; }
+.pill-walking     { background: #fff8e6; color: #7a5000; }
+.pill-canoeing,
+.pill-sup         { background: #e6f2ff; color: #0a3d7a; }
+.pill-climbing    { background: #fce8e8; color: #7a0a0a; }
+.pill-underground { background: #f0e8fc; color: #4a0a7a; }
+.pill-other       { background: #f0f0f0; color: #444; }
+
+.day-class    { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.2; }
+.day-length   { font-size: 11px; color: var(--muted); }
+.day-location { font-size: 11px; color: var(--green); font-weight: 500; }
+.day-notes    {
+  font-size: 10px; color: var(--muted); font-style: italic; line-height: 1.4;
+  border-top: 1px dashed var(--border); padding-top: 4px; margin-top: 2px;
+}
+.day-special-label { font-size: 11px; font-weight: 600; color: #a07020; margin-top: 4px; }
+.inset .day-special-label { color: #6030a0; }
+
+.planner-legend {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 12px 24px;
+  border-top: 1px solid var(--border);
+  background: #fafafa;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+
+.planner-footer {
+  padding: 12px 24px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.planner-source-note { font-size: 11px; color: var(--muted); }
+.planner-source-note a { color: #4a2fa0; text-decoration: none; font-weight: 600; }
+.planner-source-note a:hover { text-decoration: underline; }
+.planner-today-btn {
+  background: var(--green-light); color: var(--green-dark);
+  border: none; border-radius: 8px; padding: 6px 14px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: background 0.15s;
+}
+.planner-today-btn:hover { background: #d0ecda; }
+
+@media (max-width: 700px) {
+  .planner-grid { grid-template-columns: 1fr; }
+  .planner-day  { border-right: none; min-height: auto; }
+  .planner-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .planner-week-label { min-width: auto; }
+}
+
 @media (max-width: 600px) {
   .hero { padding: 48px 16px 44px; }
   .main { padding: 32px 16px 60px; }
@@ -332,6 +479,49 @@ body {
 </section>
 
 <main class="main">
+  <!-- ══ WEEKLY PLANNER ══ -->
+  <p class="section-label">Department Planner</p>
+
+  <div class="planner-section">
+    <div class="planner-card">
+
+      <div class="planner-header">
+        <div class="planner-title-block">
+          <div class="planner-title">Weekly Schedule</div>
+          <div class="planner-subtitle">Powys (Newtown Cluster) · Outdoor Education</div>
+        </div>
+        <div class="planner-nav">
+          <button class="planner-nav-btn" id="prevWeek" title="Previous week">&#8592;</button>
+          <span class="planner-week-label" id="weekLabel">Loading…</span>
+          <button class="planner-nav-btn" id="nextWeek" title="Next week">&#8594;</button>
+        </div>
+      </div>
+
+      <div class="planner-status loading" id="plannerStatus">
+        ⏳ Loading schedule from Google Sheets…
+      </div>
+
+      <div class="planner-grid" id="plannerGrid"></div>
+
+      <div class="planner-legend">
+        <span class="legend-item"><span class="activity-pill pill-mtb">MTB</span> Mountain Biking</span>
+        <span class="legend-item"><span class="activity-pill pill-walking">Walking</span> Walking</span>
+        <span class="legend-item"><span class="activity-pill pill-canoeing">Canoeing</span> Canoeing / SUP</span>
+        <span class="legend-item"><span class="activity-pill pill-climbing">Climbing</span> Climbing</span>
+        <span class="legend-item"><span class="activity-pill pill-underground">Underground</span> Underground</span>
+      </div>
+
+      <div class="planner-footer">
+        <span class="planner-source-note">
+          Data from <a href="PASTE_YOUR_GOOGLE_SHEET_URL_HERE" target="_blank" rel="noopener">Google Sheets planner</a> — edit there to update this calendar.
+        </span>
+        <button class="planner-today-btn" id="todayBtn">Jump to Today</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ RESOURCE CARDS ══ -->
   <p class="section-label">Qualifications &amp; Resources</p>
 
   <div class="qual-grid">
@@ -415,6 +605,172 @@ body {
 <footer class="site-footer">
   Outdoor Education Resources &mdash; Private Repository
 </footer>
+
+<script>
+// ── CONFIG: paste your Google Sheet published CSV URL here ──────────
+const SHEET_CSV_URL = 'PASTE_YOUR_PUBLISHED_CSV_URL_HERE';
+
+// ── Helpers ───────────────────────────────────────────────────────
+function parseDate(str) {
+  const [y,m,d] = str.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function weekStart(d) {
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  const mon = new Date(d);
+  mon.setDate(d.getDate() + diff);
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAY_NAMES  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function pillClass(activity) {
+  const a = (activity||'').toLowerCase();
+  if (a.includes('mtb') || a.includes('mountain bik')) return 'pill-mtb';
+  if (a.includes('walk'))    return 'pill-walking';
+  if (a.includes('canoe'))   return 'pill-canoeing';
+  if (a.includes('sup'))     return 'pill-sup';
+  if (a.includes('climb'))   return 'pill-climbing';
+  if (a.includes('underground') || a.includes('cave')) return 'pill-underground';
+  return 'pill-other';
+}
+
+function parseCSV(text) {
+  const rows = [];
+  for (const line of text.trim().split('\n')) {
+    const cols = []; let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else cur += c;
+    }
+    cols.push(cur.trim());
+    rows.push(cols);
+  }
+  return rows;
+}
+
+function buildScheduleMap(rows) {
+  const map = {};
+  for (const row of rows) {
+    const raw = (row[0]||'').trim();
+    if (!raw || raw.toLowerCase() === 'date') continue;
+    let key = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : '';
+    if (!key) { const d = new Date(raw); if (!isNaN(d)) key = dateKey(d); }
+    if (!key) continue;
+    map[key] = {
+      class:    (row[1]||'').trim(),
+      length:   (row[2]||'').trim(),
+      activity: (row[3]||'').trim(),
+      location: (row[4]||'').trim(),
+      notes:    (row[5]||'').trim(),
+    };
+  }
+  return map;
+}
+
+function dayType(entry) {
+  if (!entry) return 'normal';
+  const n = (entry.notes||'').toLowerCase();
+  const c = (entry.class||'').toLowerCase();
+  if (n.includes('holiday')||n.includes('half term')||n.includes('bank holiday')) return 'holiday';
+  if (n.includes('inset')||c.includes('inset')||c.includes('non pupil')) return 'inset';
+  return 'normal';
+}
+
+function renderDay(date, entry, isToday) {
+  const dow  = DAY_NAMES[date.getDay()];
+  const dom  = date.getDate();
+  const mon  = MONTH_ABBR[date.getMonth()];
+  const type = dayType(entry);
+  let cls = 'planner-day';
+  if (isToday)         cls += ' today';
+  if (type==='holiday') cls += ' holiday';
+  if (type==='inset')   cls += ' inset';
+
+  let content = '';
+  if (!entry || (!entry.class && !entry.activity && !entry.notes)) {
+    content = '<span class="day-empty">No session</span>';
+  } else if (type==='holiday') {
+    content = `<span class="day-special-label">${entry.notes||'School Holiday'}</span>`;
+  } else if (type==='inset') {
+    content = `<span class="day-special-label">${entry.notes||'INSET Day'}</span>`;
+  } else {
+    if (entry.activity && entry.activity!=='—Select—')
+      content += `<span class="activity-pill ${pillClass(entry.activity)}">${entry.activity}</span>`;
+    if (entry.class && entry.class!=='—Select—')
+      content += `<div class="day-class">${entry.class}</div>`;
+    if (entry.length && entry.length!=='—Select—')
+      content += `<div class="day-length">${entry.length}</div>`;
+    if (entry.location)
+      content += `<div class="day-location">📍 ${entry.location}</div>`;
+    if (!content) content = '<span class="day-empty">No session</span>';
+    if (entry.notes)
+      content += `<div class="day-notes">${entry.notes}</div>`;
+  }
+  return `<div class="${cls}">
+    <div class="day-header">
+      <div class="day-name">${dow}</div>
+      <div class="day-date">${dom}</div>
+      <div class="day-month">${mon}</div>
+    </div>
+    <div class="day-content">${content}</div>
+  </div>`;
+}
+
+function renderWeek(monday, map, today) {
+  const grid  = document.getElementById('plannerGrid');
+  const label = document.getElementById('weekLabel');
+  const fri   = new Date(monday); fri.setDate(monday.getDate()+4);
+  label.textContent = monday.getMonth()===fri.getMonth()
+    ? `${monday.getDate()}–${fri.getDate()} ${MONTH_ABBR[monday.getMonth()]} ${monday.getFullYear()}`
+    : `${monday.getDate()} ${MONTH_ABBR[monday.getMonth()]} – ${fri.getDate()} ${MONTH_ABBR[fri.getMonth()]} ${fri.getFullYear()}`;
+  let html = '';
+  for (let i=0; i<5; i++) {
+    const d = new Date(monday); d.setDate(monday.getDate()+i);
+    html += renderDay(d, map[dateKey(d)]||null, dateKey(d)===dateKey(today));
+  }
+  grid.innerHTML = html;
+}
+
+(async function init() {
+  const status = document.getElementById('plannerStatus');
+  const prev   = document.getElementById('prevWeek');
+  const next   = document.getElementById('nextWeek');
+  const todayB = document.getElementById('todayBtn');
+  const today  = new Date(); today.setHours(0,0,0,0);
+  let monday   = weekStart(today);
+  let map      = {};
+
+  if (SHEET_CSV_URL && SHEET_CSV_URL !== 'PASTE_YOUR_PUBLISHED_CSV_URL_HERE') {
+    try {
+      status.className = 'planner-status loading';
+      status.innerHTML = '⏳ Loading schedule from Google Sheets…';
+      const res = await fetch(SHEET_CSV_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      map = buildScheduleMap(parseCSV(await res.text()));
+      status.className = 'planner-status ok';
+    } catch(err) {
+      status.className = 'planner-status error';
+      status.innerHTML = `⚠️ Could not load schedule. Check the published CSV URL. <em>(${err.message})</em>`;
+    }
+  } else {
+    status.className = 'planner-status error';
+    status.innerHTML = '⚙️ <strong>Setup needed:</strong> paste your Google Sheet published CSV URL into the <code>SHEET_CSV_URL</code> variable in this file.';
+  }
+
+  renderWeek(monday, map, today);
+  prev.addEventListener('click', () => { monday.setDate(monday.getDate()-7); renderWeek(monday,map,today); });
+  next.addEventListener('click', () => { monday.setDate(monday.getDate()+7); renderWeek(monday,map,today); });
+  todayB.addEventListener('click', () => { monday = weekStart(today); renderWeek(monday,map,today); });
+})();
+</script>
 
 </body>
 </html>

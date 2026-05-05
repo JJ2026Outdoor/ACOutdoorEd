@@ -1,0 +1,33 @@
+{
+  "schedule": [
+    { "date": "2026-03-02", "class": "10AM", "length": "Full Day", "activity": "MTB", "location": "", "notes": "" },
+    { "date": "2026-03-03", "class": "", "length": "", "activity": "", "location": "", "notes": "" },
+    { "date": "2026-03-04", "class": "7TH", "length": "AM", "activity": "Walking", "location": "Dolforwyn", "notes": "Big bus or 2 buses" },
+    { "date": "2026-03-05", "class": "BB", "length": "Full Day", "activity": "MTB", "location": "", "notes": "" },
+    { "date": "2026-03-06", "class": "", "length": "", "activity": "", "location": "", "notes": "INSET Day" },
+    { "date": "2026-03-09", "class": "10AM", "length": "Full Day", "activity": "MTB", "location": "", "notes": "" },
+    { "date": "2026-03-10", "class": "9MP", "length": "", "activity": "", "location": "", "notes": "" },
+    { "date": "2026-03-11", "class": "KS4 KB / MJ", "length": "Full Day", "activity": "MTB", "location": "", "notes": "and Walking; 2 Buses" },
+    { "date": "2026-03-12", "class": "8LS", "length": "Full Day", "activity": "Walking", "location": "Coed Y Brenin", "notes": "2 buses" },
+    { "date": "2026-03-13", "class": "11DP", "length": "Full Day", "activity": "MTB", "location": "", "notes": "and Walking" },
+    { "date": "2026-03-16", "class": "10AM", "length": "Full Day", "activity": "MTB", "location": "", "notes": "" },
+    { "date": "2026-03-17", "class": "", "length": "", "activity": "", "location": "", "notes": "TBC" },
+    { "date": "2026-03-18", "class": "7TH", "length": "", "activity": "", "location": "", "notes": "TBC" },
+    { "date": "2026-03-19", "class": "BB", "length": "Full Day", "activity": "MTB", "location": "", "notes": "" },
+    { "date": "2026-03-20", "class": "6th form", "length": "Full Day", "activity": "Canoeing", "location": "", "notes": "L3 Outdoor" },
+    { "date": "2026-03-23", "class": "10AM", "length": "Full Day", "activity": "MTB", "location": "", "notes": "" },
+    { "date": "2026-03-24", "class": "9MP", "length": "", "activity": "MTB", "location": "", "notes": "" },
+    { "date": "2026-03-25", "class": "KS4 KB / MJ", "length": "Full Day", "activity": "MTB", "location": "", "notes": "and Walking; 2 Buses" },
+    { "date": "2026-03-26", "class": "ASC", "length": "Full Day", "activity": "Walking", "location": "Coed Y Brenin", "notes": "" },
+    { "date": "2026-03-27", "class": "11DP", "length": "Full Day", "activity": "MTB", "location": "", "notes": "and Walking" },
+    { "date": "2026-04-13", "class": "", "length": "", "activity": "", "location": "", "notes": "School Holiday" },
+    { "date": "2026-04-14", "class": "", "length": "", "activity": "", "location": "", "notes": "School Holiday" },
+    { "date": "2026-04-15", "class": "", "length": "", "activity": "", "location": "", "notes": "School Holiday" },
+    { "date": "2026-05-04", "class": "", "length": "", "activity": "", "location": "", "notes": "Bank Holiday" },
+    { "date": "2026-05-25", "class": "", "length": "", "activity": "", "location": "", "notes": "Half Term" },
+    { "date": "2026-05-26", "class": "", "length": "", "activity": "", "location": "", "notes": "Half Term" },
+    { "date": "2026-05-27", "class": "", "length": "", "activity": "", "location": "", "notes": "Half Term" },
+    { "date": "2026-05-28", "class": "", "length": "", "activity": "", "location": "", "notes": "Half Term" },
+    { "date": "2026-05-29", "class": "", "length": "", "activity": "", "location": "", "notes": "Half Term" }
+  ]
+}
