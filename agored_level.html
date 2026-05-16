@@ -82,6 +82,27 @@ body {
 .site-footer { background: var(--green-dark); color: rgba(255,255,255,0.55); text-align: center; padding: 20px; font-size: 12px; }
 .site-footer a { color: rgba(255,255,255,0.7); }
 @media (max-width: 600px) { .hero { padding: 36px 16px 32px; } .main { padding: 28px 16px 60px; } .level-grid { grid-template-columns: 1fr; } }
+.notice-bar {
+  background: #FFFBEB;
+  border-bottom: 2px solid #F59E0B;
+}
+.notice-bar-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.notice-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.notice-text { font-size: 13px; color: #78350F; line-height: 1.65; }
+.notice-text strong { color: #92400E; }
+.notice-text a { color: #92400E; font-weight: 600; }
+.notice-text a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -103,6 +124,19 @@ body {
     <p class="hero-desc">Choose your qualification level to access unit resources, digital workbooks, and teaching materials.</p>
   </div>
 </section>
+
+<div class="notice-bar">
+  <div class="notice-bar-inner">
+    <div class="notice-icon">⚠️</div>
+    <div class="notice-text">
+      <strong>Qualification review — August 2027.</strong>
+      All Learning in the Outdoors qualifications (Levels 1, 2 and 3) are currently scheduled for review by <strong>31 August 2027</strong>, in line with Qualifications Wales' broader review of existing pre-16 qualifications.
+      This review will determine how the current suite relates to Wales' new <strong>Wave 3 national 14–16 qualifications</strong> (VCSEs, Foundation Qualifications and the Skills Suite), which are due for first teaching from <strong>September 2027</strong>.
+      It is not yet confirmed which qualification sizes or age ranges will be affected. The Level 3 qualifications already carry a minimum age of 16.
+      Check <a href="https://www.agored.cymru" target="_blank">agored.cymru</a> and <a href="https://hubspot.agored.cymru/agored-cymru-14-16-qualifications-for-tomorrows-wales" target="_blank">Agored's Wave 3 hub</a> for updates.
+    </div>
+  </div>
+</div>
 
 <main class="main">
   <p class="pick-label">Choose Your Qualification Level</p>
