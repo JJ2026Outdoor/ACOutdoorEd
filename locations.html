@@ -169,6 +169,8 @@ body {
   border: 2px solid var(--border);
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
   position: relative;
+  z-index: 1;
+  isolation: isolate;
 }
 .map-el { width: 100%; height: 420px; }
 
@@ -279,31 +281,31 @@ body {
 <!-- ACTIVITY NAV -->
 <nav class="activity-nav">
   <div class="activity-nav-inner">
-    <a class="act-tab mtb active" onclick="scrollTo('mtb')">
+    <a class="act-tab mtb active" onclick="scrollToSection('mtb')">
       <span class="act-dot"></span> Mountain Biking
     </a>
-    <a class="act-tab walking" onclick="scrollTo('walking')">
+    <a class="act-tab walking" onclick="scrollToSection('walking')">
       <span class="act-dot"></span> Walking
     </a>
-    <a class="act-tab mtn" onclick="scrollTo('mtnwalk')">
+    <a class="act-tab mtn" onclick="scrollToSection('mtnwalk')">
       <span class="act-dot"></span> Mountain Walking
     </a>
-    <a class="act-tab watercraft" onclick="scrollTo('watercraft')">
+    <a class="act-tab watercraft" onclick="scrollToSection('watercraft')">
       <span class="act-dot"></span> Paddling
     </a>
-    <a class="act-tab climbing" onclick="scrollTo('climbing')">
+    <a class="act-tab climbing" onclick="scrollToSection('climbing')">
       <span class="act-dot"></span> Climbing
     </a>
-    <a class="act-tab" style="color:var(--muted)" onclick="scrollTo('walks')" onmouseover="this.style.color='#27AE60'" onmouseout="this.style.color='var(--muted)'">
+    <a class="act-tab" style="color:var(--muted)" onclick="scrollToSection('walks')" onmouseover="this.style.color='#27AE60'" onmouseout="this.style.color='var(--muted)'">
       <span class="act-dot" style="background:#27AE60"></span> Local Walks
     </a>
-    <a class="act-tab" style="color:var(--muted)" onclick="scrollTo('scrambling')" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='var(--muted)'">
+    <a class="act-tab" style="color:var(--muted)" onclick="scrollToSection('scrambling')" onmouseover="this.style.color='#E67E22'" onmouseout="this.style.color='var(--muted)'">
       <span class="act-dot" style="background:#E67E22"></span> Scrambling
     </a>
-    <a class="act-tab" style="color:var(--muted)" onclick="scrollTo('jumping')" onmouseover="this.style.color='#D35400'" onmouseout="this.style.color='var(--muted)'">
+    <a class="act-tab" style="color:var(--muted)" onclick="scrollToSection('jumping')" onmouseover="this.style.color='#D35400'" onmouseout="this.style.color='var(--muted)'">
       <span class="act-dot" style="background:#D35400"></span> Adventurous Jumping
     </a>
-    <a class="act-tab" style="color:var(--muted)" onclick="scrollTo('mines')" onmouseover="this.style.color='#7F8C8D'" onmouseout="this.style.color='var(--muted)'">
+    <a class="act-tab" style="color:var(--muted)" onclick="scrollToSection('mines')" onmouseover="this.style.color='#7F8C8D'" onmouseout="this.style.color='var(--muted)'">
       <span class="act-dot" style="background:#7F8C8D"></span> Mine Exploration
     </a>
   </div>
@@ -509,11 +511,82 @@ body {
     <div class="activity-header">
       <div class="activity-header-bar"></div>
       <div><h2>Mountain Walking</h2></div>
-      <span class="location-count">Coming soon</span>
+      <span class="location-count">3 mountains</span>
     </div>
-    <div class="coming-soon-section">
-      <h3>Locations to be added</h3>
-      <p>Mountain walking locations, maps and site documents will be added here.</p>
+
+    <div class="map-layout">
+      <div class="map-container">
+        <div id="map-mtnwalk" class="map-el"></div>
+      </div>
+      <div class="location-list" id="list-mtnwalk">
+
+        <!-- SNOWDON -->
+        <div class="loc-card" id="card-snowdon" onclick="focusLocationMtn(0)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtn-walk)"></div>
+            <div>
+              <div class="loc-name">Snowdon (Yr Wyddfa)</div>
+              <div class="loc-meta">Gwynedd &mdash; 1,085 m</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Distance</strong>~68 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr 25 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Moderate &ndash; Strenuous</div>
+            <div class="loc-detail"><strong>Pen y Pass</strong>&pound;25 / day (pre-book Apr&ndash;Oct)</div>
+            <div class="loc-detail"><strong>Rhyd Ddu</strong>&pound;8 / day &bull; &pound;5 up to 4 hrs</div>
+            <div class="loc-detail"><strong>Llanberis</strong>&pound;11 / day &bull; &pound;6 after 3pm</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <!-- CADER IDRIS -->
+        <div class="loc-card" id="card-cader" onclick="focusLocationMtn(1)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtn-walk)"></div>
+            <div>
+              <div class="loc-name">Cader Idris (Cadair Idris)</div>
+              <div class="loc-meta">Gwynedd &mdash; 893 m</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Distance</strong>~45 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~1 hr</div>
+            <div class="loc-detail"><strong>Grade</strong>Moderate &ndash; Strenuous</div>
+            <div class="loc-detail"><strong>Minffordd (D&ocirc;l Idris)</strong>&pound;6 / day &bull; &pound;3 up to 4 hrs</div>
+            <div class="loc-detail"><strong>Pony Path (Ty Nant)</strong>&pound;6 / day &bull; &pound;3 up to 4 hrs</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <!-- PEN Y FAN -->
+        <div class="loc-card" id="card-penyfan" onclick="focusLocationMtn(2)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--mtn-walk)"></div>
+            <div>
+              <div class="loc-name">Pen y Fan</div>
+              <div class="loc-meta">Brecon Beacons &mdash; 886 m</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Distance</strong>~35 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~50 min</div>
+            <div class="loc-detail"><strong>Grade</strong>Moderate</div>
+            <div class="loc-detail"><strong>Pont ar Daf (NT)</strong>&pound;7.50 / vehicle &bull; NT members free</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -619,15 +692,62 @@ body {
     <div class="activity-header">
       <div class="activity-header-bar"></div>
       <div><h2>Climbing</h2></div>
-      <span class="location-count">Coming soon</span>
+      <span class="location-count">2 locations</span>
     </div>
-    <div class="coming-soon-section">
-      <h3>Locations to be added</h3>
-      <p>Climbing locations, maps and site documents will be added here.</p>
+
+    <div class="map-layout">
+      <div class="map-container">
+        <div id="map-climbing" class="map-el"></div>
+      </div>
+      <div class="location-list" id="list-climbing">
+
+        <div class="loc-card" id="card-llanymynech-rocks" onclick="focusLocationClimb(0)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--climbing)"></div>
+            <div>
+              <div class="loc-name">Llanymynech Rocks</div>
+              <div class="loc-meta">Pant, Shropshire / Powys border</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free &mdash; Underhill Lane CP (SWT)</div>
+            <div class="loc-detail"><strong>Distance</strong>~13 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~22 min</div>
+            <div class="loc-detail"><strong>Rock Type</strong>Limestone</div>
+            <div class="loc-detail"><strong>Routes</strong>Diff &ndash; 7a+ (sport &amp; trad)</div>
+            <div class="loc-detail"><strong>Restriction</strong>Red &amp; Black Walls closed 1 Mar &ndash; 30 Jun (birds)</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+        <div class="loc-card" id="card-trevor-quarry" onclick="focusLocationClimb(1)">
+          <div class="loc-card-top">
+            <div class="loc-colour-dot" style="background:var(--climbing)"></div>
+            <div>
+              <div class="loc-name">Trevor Quarry</div>
+              <div class="loc-meta">Panorama Walk, Llangollen, LL20 8EG</div>
+            </div>
+          </div>
+          <div class="loc-details">
+            <div class="loc-detail"><strong>Parking</strong>Free &mdash; roadside layby (Panorama Walk)</div>
+            <div class="loc-detail"><strong>Distance</strong>~45 miles</div>
+            <div class="loc-detail"><strong>Travel Time</strong>~55 min</div>
+            <div class="loc-detail"><strong>Rock Type</strong>Limestone</div>
+            <div class="loc-detail"><strong>Routes</strong>4 &ndash; 6c+ (sport &amp; trad, single pitch to 17 m)</div>
+            <div class="loc-detail"><strong>Note</strong>SSSI/SAC &mdash; no new routing or drilling. Check BMC RAD for peregrine markers (15 Feb &ndash; 15 Jul)</div>
+          </div>
+          <div class="loc-links">
+            <span class="loc-link tbd">Risk Assessment &mdash; coming soon</span>
+            <span class="loc-link tbd">Itinerary &mdash; coming soon</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
-
-  <!-- ═══ SCRAMBLING ═══ -->
   <section class="activity-section scrbl-section" id="scrambling">
     <div class="activity-header">
       <div class="activity-header-bar" style="background:#E67E22"></div>
@@ -972,7 +1092,7 @@ function highlightCard(cardId) {
 }
 
 // Nav tab scroll
-function scrollTo(id) {
+function scrollToSection(id) {
   document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
   setActiveTab(id === 'mtb' ? 'mtb' :
                id === 'walking' ? 'walking' :
@@ -1012,6 +1132,71 @@ sections.forEach(s => {
 
 // Fix Leaflet map render after page layout settles
 setTimeout(() => { mtbMap.invalidateSize(); }, 300);
+
+// ── MOUNTAIN WALKING LOCATION DATA ──
+const mtnLocations = [
+  { name: "Snowdon (Yr Wyddfa)",        lat: 53.0685, lng: -4.0762, cardId: "card-snowdon",
+    parkingMarkers: [
+      { name: "Pen y Pass Car Park",         lat: 53.0731, lng: -4.0185 },
+      { name: "Rhyd Ddu Car Park (Welsh Highland Railway)", lat: 53.0155, lng: -4.1465 },
+      { name: "Llanberis Car Park",          lat: 53.1150, lng: -4.1280 },
+    ]
+  },
+  { name: "Cader Idris (Cadair Idris)", lat: 52.6984, lng: -3.9104, cardId: "card-cader",
+    parkingMarkers: [
+      { name: "Minffordd Car Park",                  lat: 52.6857, lng: -3.9018 },
+      { name: "Pony Path Car Park (Ty Nant)",        lat: 52.6990, lng: -3.9213 },
+    ]
+  },
+  { name: "Pen y Fan",                  lat: 51.8842, lng: -3.4366, cardId: "card-penyfan",
+    parkingMarkers: [
+      { name: "Pont ar Daf Car Park (NT)", lat: 51.8820, lng: -3.4363 },
+    ]
+  },
+];
+
+const mtnMap = L.map('map-mtnwalk', { zoomControl: true }).setView([52.55, -3.85], 8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+}).addTo(mtnMap);
+
+const mtnSummitIcon = L.divIcon({
+  className: '',
+  html: '<div style="background:#16A085;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+  iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -10]
+});
+
+const mtnParkingIcon = L.divIcon({
+  className: '',
+  html: '<div style="background:#fff;width:10px;height:10px;border-radius:50%;border:2px solid #16A085;box-shadow:0 1px 3px rgba(0,0,0,0.3)"></div>',
+  iconSize: [10, 10], iconAnchor: [5, 5], popupAnchor: [0, -8]
+});
+
+const mtnMarkers = mtnLocations.map((loc) => {
+  const m = L.marker([loc.lat, loc.lng], { icon: mtnSummitIcon }).addTo(mtnMap);
+  m.bindPopup('<strong>' + loc.name + '</strong><br><small>Summit</small>');
+  m.on('click', () => { highlightCardMtn(loc.cardId); });
+  loc.parkingMarkers.forEach(p => {
+    const pm = L.marker([p.lat, p.lng], { icon: mtnParkingIcon }).addTo(mtnMap);
+    pm.bindPopup('<small>Parking:</small><br><strong>' + p.name + '</strong>');
+  });
+  return m;
+});
+
+function focusLocationMtn(index) {
+  const loc = mtnLocations[index];
+  mtnMap.setView([loc.lat, loc.lng], 13, { animate: true });
+  mtnMarkers[index].openPopup();
+  highlightCardMtn(loc.cardId);
+}
+
+function highlightCardMtn(cardId) {
+  document.querySelectorAll('#list-mtnwalk .loc-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(cardId);
+  if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+
+setTimeout(() => { mtnMap.invalidateSize(); }, 350);
 
 // ── PADDLING LOCATION DATA ──
 const wcLocations = [
@@ -1172,6 +1357,63 @@ function highlightCardMines(cardId) {
 }
 
 setTimeout(() => { minesMap.invalidateSize(); }, 400);
+
+// ── CLIMBING LOCATION DATA ──
+const climbLocations = [
+  { name: "Llanymynech Rocks",  lat: 52.7955, lng: -3.0885, cardId: "card-llanymynech-rocks",
+    parkingMarkers: [
+      { name: "Underhill Lane Car Park (SWT)", lat: 52.7908, lng: -3.0917 },
+    ]
+  },
+  { name: "Trevor Quarry",      lat: 52.9847, lng: -3.1514, cardId: "card-trevor-quarry",
+    parkingMarkers: [
+      { name: "Layby — Panorama Walk (SJ229433)", lat: 52.9760, lng: -3.1590 },
+    ]
+  },
+];
+
+const climbMap = L.map('map-climbing', { zoomControl: true }).setView([52.880, -3.125], 10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+}).addTo(climbMap);
+
+const climbCragIcon = L.divIcon({
+  className: '',
+  html: '<div style="background:#8E44AD;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+  iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -10]
+});
+
+const climbParkingIcon = L.divIcon({
+  className: '',
+  html: '<div style="background:#fff;width:10px;height:10px;border-radius:50%;border:2px solid #8E44AD;box-shadow:0 1px 3px rgba(0,0,0,0.3)"></div>',
+  iconSize: [10, 10], iconAnchor: [5, 5], popupAnchor: [0, -8]
+});
+
+const climbMarkers = climbLocations.map((loc) => {
+  const m = L.marker([loc.lat, loc.lng], { icon: climbCragIcon }).addTo(climbMap);
+  m.bindPopup('<strong>' + loc.name + '</strong>');
+  m.on('click', () => { highlightCardClimb(loc.cardId); });
+  loc.parkingMarkers.forEach(p => {
+    const pm = L.marker([p.lat, p.lng], { icon: climbParkingIcon }).addTo(climbMap);
+    pm.bindPopup('<small>Parking:</small><br><strong>' + p.name + '</strong>');
+  });
+  return m;
+});
+
+function focusLocationClimb(index) {
+  const loc = climbLocations[index];
+  climbMap.setView([loc.lat, loc.lng], 15, { animate: true });
+  climbMarkers[index].openPopup();
+  highlightCardClimb(loc.cardId);
+}
+
+function highlightCardClimb(cardId) {
+  document.querySelectorAll('#list-climbing .loc-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(cardId);
+  if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+
+setTimeout(() => { climbMap.invalidateSize(); }, 400);
 </script>
 </body>
 </html>
