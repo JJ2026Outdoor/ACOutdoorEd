@@ -32,9 +32,21 @@
       "brief": "Learners explore the different public services and the roles they perform. They research career pathways, entry requirements, and the day-to-day responsibilities of personnel in the emergency services and armed forces.",
       "aims": "A — Know about the different public services and the work they do | B — Know about the different jobs within the public services.",
       "files": [
-        { "name": "Digital Interactive Workbook", "filename": "PS5FindingOutDigital.html", "type": "HTML" },
-        { "name": "Teaching Slides", "filename": "PS5FindingOutSlides.pptx", "type": "PPTX" },
-        { "name": "Printable Student Workbook", "filename": "PS5FindingOutWorkbook.docx", "type": "DOCX" }
+        {
+          "name": "FindingOutDigital",
+          "filename": "PS5FindingOutDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "FindingOutSlides",
+          "filename": "PS5FindingOutSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "FindingOutWorkbook",
+          "filename": "PS5FindingOutWorkbook.docx",
+          "type": "DOCX"
+        }
       ]
     },
     {
@@ -58,18 +70,66 @@
       "brief": "Learners develop skills in planning and navigating a route using Ordnance Survey (OS) maps. They produce a route-planning card, consider equipment and risks, then navigate their planned route within an agreed timeframe — a practical field-based unit.",
       "aims": "A — Plan a route using Ordnance Survey maps | B — Navigate an agreed route within an agreed timeframe.",
       "files": [
-        { "name": "Digital Interactive Workbook", "filename": "PS9NavigationDigital.html", "type": "HTML" },
-        { "name": "Teaching Slides", "filename": "PS9NavigationSlides.pptx", "type": "PPTX" },
-        { "name": "Printable Student Workbook", "filename": "PS9NavigationWorkbook.docx", "type": "DOCX" },
-        { "name": "Route Planning Card Template", "filename": "PS9RouteCardTemplate.docx", "type": "DOCX" },
-        { "name": "Map Skills Reference Sheet", "filename": "PS9MapSkillsReferenceSheet.docx", "type": "DOCX" },
-        { "name": "Assessment Brief", "filename": "PS9AssessmentBrief.docx", "type": "DOCX" },
-        { "name": "Teacher Answer Key", "filename": "PS9AnswerKey.docx", "type": "DOCX" },
-        { "name": "Unit Podcast", "filename": "PS9NavigationPodcast.mp3", "type": "MP3" },
-        { "name": "Cycling — Digital Workbook", "filename": "PS9CyclingDigital.html", "type": "HTML" },
-        { "name": "Cycling — Printable Workbook", "filename": "PS9CyclingWorkbook.docx", "type": "DOCX" },
-        { "name": "Watercraft — Digital Workbook", "filename": "PS9WatercraftDigital.html", "type": "HTML" },
-        { "name": "Watercraft — Printable Workbook", "filename": "PS9WatercraftWorkbook.docx", "type": "DOCX" }
+        {
+          "name": "AnswerKey",
+          "filename": "PS9AnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "AssessmentBrief",
+          "filename": "PS9AssessmentBrief.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "CyclingDigital",
+          "filename": "PS9CyclingDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "CyclingWorkbook",
+          "filename": "PS9CyclingWorkbook.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "MapSkillsReferenceSheet",
+          "filename": "PS9MapSkillsReferenceSheet.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "NavigationDigital",
+          "filename": "PS9NavigationDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "NavigationPodcast",
+          "filename": "PS9NavigationPodcast.mp3",
+          "type": "MP3"
+        },
+        {
+          "name": "NavigationSlides",
+          "filename": "PS9NavigationSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "NavigationWorkbook",
+          "filename": "PS9NavigationWorkbook.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "RouteCardTemplate",
+          "filename": "PS9RouteCardTemplate.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "WatercraftDigital",
+          "filename": "PS9WatercraftDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "WatercraftWorkbook",
+          "filename": "PS9WatercraftWorkbook.docx",
+          "type": "DOCX"
+        }
       ]
     },
     {
