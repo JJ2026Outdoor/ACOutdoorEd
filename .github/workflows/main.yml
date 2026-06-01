@@ -61,9 +61,6 @@ jobs:
               root = Path(".")
               discovered = {uid: [] for uid in unit_meta}
 
-              all_files = sorted([f.name for f in root.iterdir() if f.is_file() and not f.name.startswith(".")])
-              print(f"[DEBUG] {output_file} — files visible in root ({len(all_files)}): {all_files}")
-
               for f in sorted(root.iterdir()):
                   if not f.is_file():
                       continue
@@ -76,7 +73,6 @@ jobs:
                               "filename": f.name,
                               "type":     file_type(f.name),
                           })
-                          print(f"[DEBUG]   matched {f.name} → {uid}")
                           break
 
               units_out = []
