@@ -5,14 +5,36 @@
       "credits": 3,
       "title": "Risk Management when Learning in the Outdoors",
       "mandatory": true,
-      "files": []
+      "files": [
+        {
+          "name": "RiskManagementDigital",
+          "filename": "HB93CY003RiskManagementDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "RiskManagementSlides",
+          "filename": "HB93CY003RiskManagementSlides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HB93CY004",
       "credits": 4,
       "title": "Skills Development through Outdoor Learning",
       "mandatory": true,
-      "files": []
+      "files": [
+        {
+          "name": "SkillsDevelopmentDigital",
+          "filename": "HB93CY004SkillsDevelopmentDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "SkillsDevelopmentSlides",
+          "filename": "HB93CY004SkillsDevelopmentSlides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HB93CY002",
