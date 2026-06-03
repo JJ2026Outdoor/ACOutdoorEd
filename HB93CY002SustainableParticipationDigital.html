@@ -468,6 +468,7 @@ function App(){
   const [pwd,setPwd]=useState("");
   const [pwdErr,setPwdErr]=useState("");
   const [showPrint,setShowPrint]=useState(false);
+  const [printing,setPrinting]=useState(false);
   const [printMode,setPrintMode]=useState("full");
   const saveTimer=useRef(null);
 
@@ -481,6 +482,18 @@ function App(){
       try{localStorage.setItem(UNIT_KEY,JSON.stringify(data));}catch(e){}
     },600);
   },[data]);
+
+  // Print effect — fires after React has rendered all sections
+  useEffect(()=>{
+    if(!printing)return;
+    const t=setTimeout(()=>{
+      window.print();
+      setPrinting(false);
+      const strip=document.getElementById("ev-cover-strip");
+      if(strip)strip.style.display="none";
+    },200);
+    return()=>clearTimeout(t);
+  },[printing]);
 
   const am=data.assessorMode;
   const upd=f=>v=>update({[f]:v});
@@ -544,10 +557,9 @@ function App(){
   const doPrint=()=>{
     if(printMode==="ev"){
       document.getElementById("ev-cover-strip").style.display="block";
-      window.print();
-      setTimeout(()=>document.getElementById("ev-cover-strip").style.display="none",500);
-    }else{window.print();}
+    }
     setShowPrint(false);
+    setPrinting(true);
   };
 
   // Result colours
@@ -774,7 +786,7 @@ function App(){
       <div style={{maxWidth:860,margin:"0 auto",padding:"24px 16px"}}>
 
         {/* ── COVER ── */}
-        {sec==="cover"&&(
+        {(sec==="cover"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <div style={{background:DG,borderRadius:12,padding:"36px 32px",
               color:"#fff",marginBottom:20,textAlign:"center"}}>
@@ -832,7 +844,7 @@ function App(){
         )}
 
         {/* ── CONTENTS ── */}
-        {sec==="contents"&&(
+        {(sec==="contents"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <h2 style={{color:G,fontWeight:700,fontSize:20,marginBottom:18,
               borderBottom:`2px solid ${G}`,paddingBottom:8}}>Contents</h2>
@@ -864,7 +876,7 @@ function App(){
         )}
 
         {/* ── INTRO ── */}
-        {sec==="intro"&&(
+        {(sec==="intro"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <h2 style={{color:G,fontWeight:700,fontSize:20,marginBottom:16,
               borderBottom:`2px solid ${G}`,paddingBottom:8}}>Introduction</h2>
@@ -903,7 +915,7 @@ function App(){
         {/* ══════════════════════════════════════
             LO 1 — ECO-SYSTEMS
         ══════════════════════════════════════ */}
-        {sec==="lo1"&&(
+        {(sec==="lo1"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <LOHeader num={1} title="Understand Eco-systems"/>
             {/* KNOWLEDGE HUB */}
@@ -1061,7 +1073,7 @@ function App(){
         {/* ══════════════════════════════════════
             LO 2 — ENVIRONMENTAL RESPONSIBILITY
         ══════════════════════════════════════ */}
-        {sec==="lo2"&&(
+        {(sec==="lo2"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <LOHeader num={2} title="Understand the Importance of Environmental Responsibility"/>
             <KB title="What is Environmental Responsibility?" items={[
@@ -1133,7 +1145,7 @@ function App(){
         {/* ══════════════════════════════════════
             LO 3 — CARBON FOOTPRINTS
         ══════════════════════════════════════ */}
-        {sec==="lo3"&&(
+        {(sec==="lo3"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <LOHeader num={3} title="Understand Carbon Footprints"/>
             <GroupNote/>
@@ -1284,7 +1296,7 @@ function App(){
         {/* ══════════════════════════════════════
             LO 4 — RAISING AWARENESS
         ══════════════════════════════════════ */}
-        {sec==="lo4"&&(
+        {(sec==="lo4"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <LOHeader num={4} title="Raise Awareness of the Impact of Outdoor Activities on the Environment"/>
             <GroupNote/>
@@ -1403,7 +1415,7 @@ function App(){
         )}
 
         {/* ── EVIDENCE ── */}
-        {sec==="evidence"&&(
+        {(sec==="evidence"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <h2 style={{color:G,fontWeight:700,fontSize:20,marginBottom:6,
               borderBottom:`2px solid ${G}`,paddingBottom:8}}>Photo &amp; Audio Evidence</h2>
@@ -1417,7 +1429,7 @@ function App(){
         )}
 
         {/* ── CHECKLIST ── */}
-        {sec==="checklist"&&(
+        {(sec==="checklist"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <h2 style={{color:G,fontWeight:700,fontSize:20,marginBottom:16,
               borderBottom:`2px solid ${G}`,paddingBottom:8}}>Assessment Checklist &amp; Declaration</h2>
@@ -1458,7 +1470,7 @@ function App(){
         )}
 
         {/* ── GLOSSARY ── */}
-        {sec==="glossary"&&(
+        {(sec==="glossary"||(printing&&printMode!=="section"))&&(
           <div className="wb-section">
             <h2 style={{color:G,fontWeight:700,fontSize:20,marginBottom:16,
               borderBottom:`2px solid ${G}`,paddingBottom:8}}>Glossary</h2>
