@@ -563,7 +563,19 @@ function App(){
     setShowPrintMenu(false);
     setPrinting(true);
     setTimeout(()=>{
+      // Expand all textareas to full scroll height so no content is clipped in print.
+      // CSS height:auto cannot override React inline styles, so we do it in JS.
+      const textareas = Array.from(document.querySelectorAll('textarea'));
+      const saved = textareas.map(ta=>({h:ta.style.height,mh:ta.style.minHeight,ov:ta.style.overflow}));
+      textareas.forEach(ta=>{
+        ta.style.minHeight='unset';
+        ta.style.height='auto';
+        ta.style.height=ta.scrollHeight+'px';
+        ta.style.overflow='visible';
+      });
       window.print();
+      // Restore
+      textareas.forEach((ta,i)=>{ ta.style.height=saved[i].h; ta.style.minHeight=saved[i].mh; ta.style.overflow=saved[i].ov; });
       setTimeout(()=>setPrinting(false),100);
     },200);
   };
