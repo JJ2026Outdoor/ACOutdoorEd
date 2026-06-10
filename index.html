@@ -453,6 +453,60 @@ body {
   .main { padding: 32px 16px 60px; }
   .qual-grid { grid-template-columns: 1fr; }
 }
+
+/* ── WEATHER STRIP ── */
+.wx-location-label {
+  font-size: 11px; font-weight: 700; color: var(--green-dark);
+  letter-spacing: 0.05em; margin-bottom: 6px; padding-left: 2px;
+}
+.weather-strip {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  background: var(--white); border: 2px solid var(--border);
+  border-radius: 14px; overflow: hidden; margin-bottom: 16px; min-height: 90px;
+}
+.weather-strip.wx-msg-state { display: flex; align-items: center; padding: 16px 20px; }
+.wx-loading  { color: var(--muted); font-size: 13px; }
+.wx-error    { color: #9b2020; font-size: 13px; }
+.wx-unavail  { color: var(--muted); font-size: 12px; font-style: italic; }
+.wx-day {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 10px 6px; border-right: 1px solid var(--border); gap: 3px;
+}
+.wx-day:last-child { border-right: none; }
+.wx-past  { background: #fafafa; opacity: 0.72; }
+.wx-today {
+  background: linear-gradient(180deg, #f0f7f3 0%, var(--white) 100%);
+  border-top: 3px solid var(--green); padding-top: 7px;
+}
+.wx-today-band {
+  font-size: 8px; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--green); margin-bottom: 1px;
+}
+.wx-day-name { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.wx-today .wx-day-name { color: var(--green-dark); }
+.wx-day-date { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.wx-icon    { font-size: 26px; line-height: 1; margin: 2px 0; }
+.wx-icon-lg { font-size: 38px; line-height: 1; margin: 4px 0; }
+.wx-desc    { font-size: 10px; color: var(--muted); line-height: 1.3; max-width: 90px; }
+.wx-temps    { display: flex; gap: 5px; align-items: baseline; margin-top: 2px; }
+.wx-temps-lg { display: flex; gap: 6px; align-items: baseline; margin-top: 3px; }
+.wx-max { font-weight: 700; color: var(--text); font-size: 14px; }
+.wx-temps-lg .wx-max { font-size: 20px; }
+.wx-min { font-size: 11px; color: var(--muted); }
+.wx-temps-lg .wx-min { font-size: 14px; }
+.wx-detail    { font-size: 10px; color: var(--muted); margin-top: 1px; }
+.wx-rain-prob { font-size: 9px; color: #4a7ab5; margin-top: 2px; }
+@media (max-width: 700px) {
+  .wx-icon-lg { font-size: 26px; }
+  .wx-temps-lg .wx-max { font-size: 16px; }
+  .wx-detail, .wx-desc { display: none; }
+}
+@media (max-width: 500px) {
+  .weather-strip { border-radius: 10px; }
+  .wx-day { padding: 8px 3px; }
+  .wx-icon { font-size: 20px; }
+}
+
 </style>
 </head>
 <body>
@@ -481,6 +535,12 @@ body {
 <main class="main">
   <!-- ══ WEEKLY PLANNER ══ -->
   <p class="section-label">Department Planner</p>
+
+  <!-- Weather strip -->
+  <div class="wx-location-label" id="wxLocationLabel">&#128205; Loading location&hellip;</div>
+  <div class="weather-strip wx-msg-state" id="weatherStrip">
+    <span class="wx-loading">Loading weather&hellip;</span>
+  </div>
 
   <div class="planner-section">
     <div class="planner-card">
@@ -607,14 +667,10 @@ body {
 </footer>
 
 <script>
-// ── CONFIG: paste your Google Sheet published CSV URL here ──────────
+// ── CONFIG ──────────────────────────────────────────────────────────
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXUvXWJq-Ic1h9ayW3zbLEe3uSf7PhmthNGZ5-jdo7a77tUbsurZMoCdg3yfYV-A/pub?gid=1636461447&single=true&output=csv';
 
-// ── Helpers ───────────────────────────────────────────────────────
-function parseDate(str) {
-  const [y,m,d] = str.split('-').map(Number);
-  return new Date(y, m-1, d);
-}
+// ── Helpers ──────────────────────────────────────────────────────────
 function dateKey(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
@@ -664,7 +720,6 @@ function buildScheduleMap(rows) {
     let key = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : '';
     if (!key) { const d = new Date(raw); if (!isNaN(d)) key = dateKey(d); }
     if (!key) continue;
-    // Sheet columns: date(0), day(1), status(2), class(3), length(4), activity(5), location(6), notes(7)
     map[key] = {
       status:   (row[2]||'').trim(),
       class:    (row[3]||'').trim(),
@@ -693,7 +748,7 @@ function renderDay(date, entry, isToday) {
   const mon  = MONTH_ABBR[date.getMonth()];
   const type = dayType(entry);
   let cls = 'planner-day';
-  if (isToday)         cls += ' today';
+  if (isToday)          cls += ' today';
   if (type==='holiday') cls += ' holiday';
   if (type==='inset')   cls += ' inset';
 
@@ -712,7 +767,7 @@ function renderDay(date, entry, isToday) {
     if (entry.length && entry.length!=='—Select—')
       content += `<div class="day-length">${entry.length}</div>`;
     if (entry.location)
-      content += `<div class="day-location">📍 ${entry.location}</div>`;
+      content += `<div class="day-location">&#128205; ${entry.location}</div>`;
     if (!content) content = '<span class="day-empty">No session</span>';
     if (entry.notes)
       content += `<div class="day-notes">${entry.notes}</div>`;
@@ -732,8 +787,8 @@ function renderWeek(monday, map, today) {
   const label = document.getElementById('weekLabel');
   const fri   = new Date(monday); fri.setDate(monday.getDate()+4);
   label.textContent = monday.getMonth()===fri.getMonth()
-    ? `${monday.getDate()}–${fri.getDate()} ${MONTH_ABBR[monday.getMonth()]} ${monday.getFullYear()}`
-    : `${monday.getDate()} ${MONTH_ABBR[monday.getMonth()]} – ${fri.getDate()} ${MONTH_ABBR[fri.getMonth()]} ${fri.getFullYear()}`;
+    ? `${monday.getDate()}\u2013${fri.getDate()} ${MONTH_ABBR[monday.getMonth()]} ${monday.getFullYear()}`
+    : `${monday.getDate()} ${MONTH_ABBR[monday.getMonth()]} \u2013 ${fri.getDate()} ${MONTH_ABBR[fri.getMonth()]} ${fri.getFullYear()}`;
   let html = '';
   for (let i=0; i<5; i++) {
     const d = new Date(monday); d.setDate(monday.getDate()+i);
@@ -742,6 +797,141 @@ function renderWeek(monday, map, today) {
   grid.innerHTML = html;
 }
 
+// ── WEATHER ──────────────────────────────────────────────────────────
+const FALLBACK_LOCATION = 'Kerry, Powys';
+const FALLBACK_LAT = 52.526;
+const FALLBACK_LON = -3.187;
+
+// Resolved once on load; reused for all week navigation
+let wxLat = FALLBACK_LAT, wxLon = FALLBACK_LON, wxName = FALLBACK_LOCATION;
+
+const WMO = {
+  0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',
+  45:'Fog',48:'Icy fog',
+  51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',
+  61:'Light rain',63:'Rain',65:'Heavy rain',
+  71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',
+  80:'Light showers',81:'Showers',82:'Heavy showers',
+  85:'Snow showers',86:'Heavy snow showers',
+  95:'Thunderstorm',96:'Thunderstorm + hail',99:'Thunderstorm + heavy hail',
+};
+const WMO_ICON = {
+  0:'\u2600\uFE0F',1:'\uD83C\uDF24\uFE0F',2:'\u26C5',3:'\u2601\uFE0F',
+  45:'\uD83C\uDF2B\uFE0F',48:'\uD83C\uDF2B\uFE0F',
+  51:'\uD83C\uDF26\uFE0F',53:'\uD83C\uDF26\uFE0F',55:'\uD83C\uDF27\uFE0F',
+  61:'\uD83C\uDF27\uFE0F',63:'\uD83C\uDF27\uFE0F',65:'\uD83C\uDF27\uFE0F',
+  71:'\u2744\uFE0F',73:'\u2744\uFE0F',75:'\u2744\uFE0F',77:'\uD83C\uDDFF\uD83C\uDDE6',
+  80:'\uD83C\uDF26\uFE0F',81:'\uD83C\uDF27\uFE0F',82:'\u26C8\uFE0F',
+  85:'\uD83C\uDF28\uFE0F',86:'\u2744\uFE0F',
+  95:'\u26C8\uFE0F',96:'\u26C8\uFE0F',99:'\u26C8\uFE0F',
+};
+
+async function geocodeWeatherLocation(locationName) {
+  if (!locationName || locationName === FALLBACK_LOCATION) return;
+  try {
+    const res  = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locationName)}&count=1&language=en&format=json`);
+    const data = await res.json();
+    if (data.results && data.results.length > 0) {
+      wxLat  = data.results[0].latitude;
+      wxLon  = data.results[0].longitude;
+      wxName = data.results[0].name + (data.results[0].admin1 ? ', ' + data.results[0].admin1 : '');
+    }
+  } catch(_) { /* leave as Kerry fallback */ }
+}
+
+async function fetchWeekWeather(monday) {
+  const strip    = document.getElementById('weatherStrip');
+  const locLabel = document.getElementById('wxLocationLabel');
+  if (locLabel) locLabel.textContent = '\u{1F4CD} ' + wxName;
+
+  strip.className = 'weather-strip wx-msg-state';
+  strip.innerHTML = '<span class="wx-loading">Loading weather\u2026</span>';
+
+  const fri      = new Date(monday); fri.setDate(monday.getDate() + 4);
+  const startStr = dateKey(monday);
+  const endStr   = dateKey(fri);
+
+  const today       = new Date(); today.setHours(0,0,0,0);
+  const daysFromMon = Math.floor((monday - today) / 86400000);
+  const daysFromFri = Math.floor((fri    - today) / 86400000);
+
+  if (daysFromMon > 16) {
+    strip.innerHTML = '<span class="wx-unavail">No forecast available this far ahead \u2014 Open-Meteo covers up to 16 days.</span>';
+    return;
+  }
+  if (daysFromFri < -92) {
+    strip.innerHTML = '<span class="wx-unavail">Historical data not available this far back.</span>';
+    return;
+  }
+
+  try {
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + wxLat + '&longitude=' + wxLon
+      + '&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,precipitation_probability_max,precipitation_sum'
+      + '&start_date=' + startStr + '&end_date=' + endStr
+      + '&wind_speed_unit=mph&temperature_unit=celsius&timezone=Europe%2FLondon';
+
+    const res  = await fetch(url);
+    const data = await res.json();
+    if (!data.daily || !data.daily.time) throw new Error('No data returned');
+
+    const todayKey = dateKey(today);
+    let html = '';
+
+    for (let i = 0; i < data.daily.time.length; i++) {
+      const dk      = data.daily.time[i];
+      const d       = new Date(dk + 'T00:00:00');
+      const dayName = DAY_NAMES[d.getDay()];
+      const dayNum  = d.getDate();
+      const mon     = MONTH_ABBR[d.getMonth()];
+      const code      = data.daily.weather_code[i];
+      const tmax      = Math.round(data.daily.temperature_2m_max[i]);
+      const tmin      = Math.round(data.daily.temperature_2m_min[i]);
+      const wind      = Math.round(data.daily.wind_speed_10m_max[i]);
+      const precipRaw = data.daily.precipitation_sum[i];
+      const precip    = precipRaw != null ? Math.round(precipRaw * 10) / 10 : null;
+      const rainProb  = data.daily.precipitation_probability_max[i];
+      const icon      = WMO_ICON[code] || '\uD83C\uDF21\uFE0F';
+      const desc      = WMO[code] || '';
+      const isToday   = dk === todayKey;
+      const isPast    = dk < todayKey;
+
+      let cls = 'wx-day';
+      if (isToday) cls += ' wx-today';
+      if (isPast)  cls += ' wx-past';
+
+      if (isToday) {
+        html += '<div class="' + cls + '">'
+          + '<div class="wx-today-band">TODAY</div>'
+          + '<div class="wx-day-name">' + dayName + '</div>'
+          + '<div class="wx-day-date">' + dayNum + ' ' + mon + '</div>'
+          + '<div class="wx-icon-lg">' + icon + '</div>'
+          + '<div class="wx-desc">' + desc + '</div>'
+          + '<div class="wx-temps-lg"><span class="wx-max">' + tmax + '&deg;</span><span class="wx-min">' + tmin + '&deg;</span></div>'
+          + '<div class="wx-detail">\uD83D\uDCA8 ' + wind + ' mph</div>'
+          + (rainProb != null ? '<div class="wx-detail">\uD83C\uDF27 ' + rainProb + '% rain</div>' : '')
+          + (precip != null && precip > 0 ? '<div class="wx-detail">\uD83D\uDCA7 ' + precip + ' mm</div>' : '')
+          + '</div>';
+      } else {
+        html += '<div class="' + cls + '">'
+          + '<div class="wx-day-name">' + dayName + '</div>'
+          + '<div class="wx-day-date">' + dayNum + ' ' + mon + '</div>'
+          + '<div class="wx-icon">' + icon + '</div>'
+          + '<div class="wx-temps"><span class="wx-max">' + tmax + '&deg;</span><span class="wx-min">' + tmin + '&deg;</span></div>'
+          + (rainProb != null ? '<div class="wx-rain-prob">\uD83C\uDF27 ' + rainProb + '%</div>' : '')
+          + '</div>';
+      }
+    }
+
+    strip.className = 'weather-strip';
+    strip.innerHTML = html;
+
+  } catch(err) {
+    strip.className = 'weather-strip wx-msg-state';
+    strip.innerHTML = '<span class="wx-error">Weather unavailable (' + err.message + ')</span>';
+  }
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────
 (async function init() {
   const status = document.getElementById('plannerStatus');
   const prev   = document.getElementById('prevWeek');
@@ -754,26 +944,50 @@ function renderWeek(monday, map, today) {
   if (SHEET_CSV_URL && SHEET_CSV_URL !== 'PASTE_YOUR_PUBLISHED_CSV_URL_HERE') {
     try {
       status.className = 'planner-status loading';
-      status.innerHTML = '⏳ Loading schedule from Google Sheets…';
+      status.innerHTML = '\u23F3 Loading schedule from Google Sheets\u2026';
       const res = await fetch(SHEET_CSV_URL);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       map = buildScheduleMap(parseCSV(await res.text()));
       status.className = 'planner-status ok';
     } catch(err) {
       status.className = 'planner-status error';
-      status.innerHTML = `⚠️ Could not load schedule. Check the published CSV URL. <em>(${err.message})</em>`;
+      status.innerHTML = '\u26A0\uFE0F Could not load schedule. Check the published CSV URL. <em>(' + err.message + ')</em>';
     }
   } else {
     status.className = 'planner-status error';
-    status.innerHTML = '⚙️ <strong>Setup needed:</strong> paste your Google Sheet published CSV URL into the <code>SHEET_CSV_URL</code> variable in this file.';
+    status.innerHTML = '\u2699\uFE0F <strong>Setup needed:</strong> paste your Google Sheet published CSV URL into the <code>SHEET_CSV_URL</code> variable in this file.';
   }
 
+  // Geocode once using today's activity location (or fall back to Kerry, Powys)
+  const todayEntry   = map[dateKey(today)];
+  const locationName = (todayEntry && todayEntry.location && todayEntry.location.trim())
+    ? todayEntry.location.trim()
+    : FALLBACK_LOCATION;
+  await geocodeWeatherLocation(locationName);
+
+  // Initial render
+  fetchWeekWeather(new Date(monday));
   renderWeek(monday, map, today);
-  prev.addEventListener('click', () => { monday.setDate(monday.getDate()-7); renderWeek(monday,map,today); });
-  next.addEventListener('click', () => { monday.setDate(monday.getDate()+7); renderWeek(monday,map,today); });
-  todayB.addEventListener('click', () => { monday = weekStart(today); renderWeek(monday,map,today); });
+
+  // Week navigation — calendar and weather strip update together
+  prev.addEventListener('click', () => {
+    monday.setDate(monday.getDate()-7);
+    renderWeek(monday, map, today);
+    fetchWeekWeather(new Date(monday));
+  });
+  next.addEventListener('click', () => {
+    monday.setDate(monday.getDate()+7);
+    renderWeek(monday, map, today);
+    fetchWeekWeather(new Date(monday));
+  });
+  todayB.addEventListener('click', () => {
+    monday = weekStart(today);
+    renderWeek(monday, map, today);
+    fetchWeekWeather(new Date(monday));
+  });
 })();
 </script>
+
 
 </body>
 </html>
