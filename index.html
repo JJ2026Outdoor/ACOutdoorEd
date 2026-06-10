@@ -1263,13 +1263,156 @@ async function fetchWeekWeather(monday) {
 // Module-level schedule map so fetchDayDetail can look up per-day locations
 let scheduleMap = {};
 
-// Geocode cache — avoids re-hitting the API for the same location name
+// ── LOCATION LOOKUP TABLE ──────────────────────────────────────────────
+// Add new locations here — keys are lowercase, values have lat/lon/name.
+// Partial matching is used so "Afan" will find "afan forest park".
+// -----------------------------------------------------------------------
+const LOCATION_TABLE = {
+  // Department base
+  'kerry':                    { lat: 52.526,    lon: -3.187,  name: 'Kerry, Powys' },
+  // Mountain Biking
+  'afan forest park':         { lat: 51.6425,   lon: -3.7046, name: 'Afan Forest Park' },
+  'coed y brenin':            { lat: 52.8243,   lon: -3.8964, name: 'Coed Y Brenin' },
+  'bwlch nant yr arian':      { lat: 52.4153,   lon: -3.8858, name: 'Bwlch Nant Yr Arian' },
+  'llandegla':                { lat: 53.0627,   lon: -3.1358, name: 'Llandegla' },
+  'nantgwyllt':               { lat: 52.2623,   lon: -3.5995, name: 'Nantgwyllt Trails' },
+  'forest of dean':           { lat: 51.8093,   lon: -2.5696, name: 'Forest of Dean' },
+  'rhayader pump track':      { lat: 52.2985,   lon: -3.5128, name: 'Rhayader Pump Track' },
+  'trehafren':                { lat: 52.5115,   lon: -3.3238, name: 'Trehafren Trail' },
+  // Mountain Walking
+  'snowdon':                  { lat: 53.0685,   lon: -4.0762, name: 'Snowdon (Yr Wyddfa)' },
+  'yr wyddfa':                { lat: 53.0685,   lon: -4.0762, name: 'Snowdon (Yr Wyddfa)' },
+  'cader idris':              { lat: 52.6984,   lon: -3.9104, name: 'Cader Idris' },
+  'cadair idris':             { lat: 52.6984,   lon: -3.9104, name: 'Cadair Idris' },
+  'pen y fan':                { lat: 51.8842,   lon: -3.4366, name: 'Pen y Fan' },
+  // Watercraft
+  'lake vyrnwy':              { lat: 52.7731,   lon: -3.5042, name: 'Lake Vyrnwy' },
+  'llyn clywedog':            { lat: 52.4440,   lon: -3.6590, name: 'Llyn Clywedog' },
+  'llyn bala':                { lat: 52.9110,   lon: -3.6780, name: 'Llyn Bala (Llyn Tegid)' },
+  'bala':                     { lat: 52.9110,   lon: -3.6780, name: 'Llyn Bala (Llyn Tegid)' },
+  'berriew aqueduct':         { lat: 52.5830,   lon: -3.2030, name: 'Berriew Aqueduct' },
+  // Gorge / Jumps
+  "wolf's leap":              { lat: 52.1810,   lon: -3.6960, name: "Wolf's Leap, Abergwesyn" },
+  'wolfs leap':               { lat: 52.1810,   lon: -3.6960, name: "Wolf's Leap, Abergwesyn" },
+  'meifod bridge':            { lat: 52.7130,   lon: -3.2570, name: 'Meifod Bridge' },
+  'prysor':                   { lat: 52.9343,   lon: -3.9887, name: 'Prysor Jumps' },
+  'traws bridge':             { lat: 52.8627,   lon: -3.8823, name: 'Traws Bridge' },
+  // Walking
+  'newtown canal':            { lat: 52.5133,   lon: -3.3130, name: 'Newtown Canal Walk' },
+  'kerry ridgeway':           { lat: 52.4720,   lon: -3.2180, name: 'Kerry Ridgeway' },
+  // Climbing
+  'llanymynech rocks':        { lat: 52.7955,   lon: -3.0885, name: 'Llanymynech Rocks' },
+  'llanymynech':              { lat: 52.7955,   lon: -3.0885, name: 'Llanymynech Rocks' },
+  'trevor quarry':            { lat: 52.9730,   lon: -3.1570, name: 'Trevor Quarry' },
+  // Underground / Mines
+  'wrysgan':                  { lat: 52.9720,   lon: -3.9680, name: 'Wrysgan Slate Mine' },
+  'bwlch y plwm':             { lat: 52.9460,   lon: -4.0100, name: 'Bwlch y Plwm Lead Mine' },
+  'llanymynech ogof':         { lat: 52.7908,   lon: -3.0917, name: 'Llanymynech Ogof' },
+  'rhiwbach':                 { lat: 53.0010,   lon: -3.8820, name: 'Rhiwbach Slate Quarry' },
+  // Waterfalls
+  'pistyll rhaeadr':          { lat: 52.8564,   lon: -3.3678, name: 'Pistyll Rhaeadr' },
+  'pistyll rhayder':          { lat: 52.8564,   lon: -3.3678, name: 'Pistyll Rhaeadr' },
+  'aber falls':               { lat: 53.2100,   lon: -3.9530, name: 'Aber Falls (Rhaeadr Fawr)' },
+  'rhaeadr fawr':             { lat: 53.2100,   lon: -3.9530, name: 'Aber Falls (Rhaeadr Fawr)' },
+  'henrhyd falls':            { lat: 51.8360,   lon: -3.6630, name: 'Henrhyd Falls' },
+  "devil's bridge":           { lat: 52.3770,   lon: -3.8530, name: "Devil's Bridge Falls" },
+  'devils bridge':            { lat: 52.3770,   lon: -3.8530, name: "Devil's Bridge Falls" },
+
+  // Snowdonia peaks & cwms
+  'tryfan':                   { lat: 53.0854,   lon: -3.9928, name: 'Tryfan' },
+  'glyder fawr':              { lat: 53.1012,   lon: -3.9985, name: 'Glyder Fawr' },
+  'glyder fach':              { lat: 53.1021,   lon: -3.9811, name: 'Glyder Fach' },
+  'glyderau':                 { lat: 53.1012,   lon: -3.9985, name: 'Glyderau' },
+  'pen yr ole wen':           { lat: 53.1285,   lon: -3.9883, name: 'Pen yr Ole Wen' },
+  'carnedd llewelyn':         { lat: 53.1568,   lon: -3.9834, name: 'Carnedd Llewelyn' },
+  'carneddau':                { lat: 53.1568,   lon: -3.9834, name: 'Carneddau' },
+  'cwm idwal':                { lat: 53.1185,   lon: -4.0165, name: 'Cwm Idwal' },
+  'llyn idwal':               { lat: 53.1185,   lon: -4.0165, name: 'Llyn Idwal' },
+
+  // Brecon Beacons
+  'llyn y fan fach':          { lat: 51.8967,   lon: -3.7150, name: 'Llyn y Fan Fach' },
+  'waterfall country':        { lat: 51.8360,   lon: -3.6630, name: 'Waterfall Country, Brecon Beacons' },
+  'sugarloaf':                { lat: 51.8480,   lon: -3.1200, name: 'Sugarloaf Mountain' },
+
+  // Pembrokeshire & Gower
+  'st davids':                { lat: 51.8815,   lon: -5.2660, name: "St David's Peninsula" },
+  "st david's":               { lat: 51.8815,   lon: -5.2660, name: "St David's Peninsula" },
+  'three cliffs bay':         { lat: 51.5665,   lon: -4.1085, name: 'Three Cliffs Bay, Gower' },
+  'gower':                    { lat: 51.5700,   lon: -4.1000, name: 'Gower Peninsula' },
+  'rhossili':                 { lat: 51.5680,   lon: -4.2890, name: 'Rhossili Bay' },
+  'barafundle':               { lat: 51.6230,   lon: -4.9460, name: 'Barafundle Bay, Pembrokeshire' },
+  'tenby':                    { lat: 51.6740,   lon: -4.7020, name: 'Tenby' },
+
+  // Anglesey & Llyn Peninsula beaches
+  'llanddwyn':                { lat: 53.1430,   lon: -4.3870, name: 'Llanddwyn Beach, Newborough' },
+  'newborough':               { lat: 53.1430,   lon: -4.3870, name: 'Newborough, Anglesey' },
+  'porthor':                  { lat: 52.8670,   lon: -4.6550, name: 'Porthor (Whistling Sands)' },
+  'whistling sands':          { lat: 52.8670,   lon: -4.6550, name: 'Porthor (Whistling Sands)' },
+
+  // West coast beaches & towns
+  'harlech':                  { lat: 52.8440,   lon: -4.1220, name: 'Harlech' },
+  'barmouth':                 { lat: 52.7200,   lon: -4.0560, name: 'Barmouth' },
+  'aberdyfi':                 { lat: 52.5440,   lon: -4.0570, name: 'Aberdyfi' },
+  'new quay':                 { lat: 52.2210,   lon: -4.3580, name: 'New Quay, Ceredigion' },
+  'llangrannog':              { lat: 52.1530,   lon: -4.4740, name: 'Llangrannog' },
+  'ynyslas':                  { lat: 52.5280,   lon: -4.0370, name: 'Ynyslas Dunes' },
+
+  // Fishing lakes & rivers
+  'llyn dywarchen':           { lat: 53.0290,   lon: -4.1350, name: 'Llyn Dywarchen' },
+  'llyn trawsfynydd':         { lat: 52.8890,   lon: -3.9480, name: 'Llyn Trawsfynydd' },
+  'trawsfynydd':              { lat: 52.8890,   lon: -3.9480, name: 'Llyn Trawsfynydd' },
+  'llyn cwellyn':             { lat: 53.0590,   lon: -4.1540, name: 'Llyn Cwellyn' },
+  'river mawddach':           { lat: 52.7440,   lon: -3.8810, name: 'River Mawddach, Dolgellau' },
+  'mawddach':                 { lat: 52.7440,   lon: -3.8810, name: 'Mawddach Estuary' },
+  'llyn y gors':              { lat: 53.3240,   lon: -4.3760, name: 'Llyn Y Gors, Anglesey' },
+  'pant-y-llyn':              { lat: 51.9980,   lon: -3.7870, name: 'Pant-y-llyn' },
+  'pant y llyn':              { lat: 51.9980,   lon: -3.7870, name: 'Pant-y-llyn' },
+
+  // Mid Wales towns & tourist sites
+  'aberystwyth':              { lat: 52.4153,   lon: -4.0829, name: 'Aberystwyth' },
+  'elan valley':              { lat: 52.2800,   lon: -3.5500, name: 'Elan Valley' },
+  'gigrin farm':              { lat: 52.2985,   lon: -3.5128, name: 'Gigrin Farm, Rhayader' },
+  'powis castle':             { lat: 52.6550,   lon: -3.1540, name: 'Powis Castle, Welshpool' },
+  'welshpool':                { lat: 52.6590,   lon: -3.1470, name: 'Welshpool' },
+  'llandrindod wells':        { lat: 52.2420,   lon: -3.3780, name: 'Llandrindod Wells' },
+  'builth wells':             { lat: 52.1520,   lon: -3.4060, name: 'Builth Wells' },
+  'hay-on-wye':               { lat: 52.0760,   lon: -3.1270, name: 'Hay-on-Wye' },
+  'hay on wye':               { lat: 52.0760,   lon: -3.1270, name: 'Hay-on-Wye' },
+  'machynlleth':              { lat: 52.5900,   lon: -3.8580, name: 'Machynlleth' },
+  'dolgellau':                { lat: 52.7440,   lon: -3.8810, name: 'Dolgellau' },
+  'centre for alternative technology': { lat: 52.6430, lon: -3.8490, name: 'Centre for Alternative Technology' },
+  'cat machynlleth':          { lat: 52.6430,   lon: -3.8490, name: 'Centre for Alternative Technology' },
+  'abergavenny':              { lat: 51.8240,   lon: -3.0160, name: 'Abergavenny' },
+  'brecon':                   { lat: 51.9457,   lon: -3.3862, name: 'Brecon' },
+  'rhayader':                 { lat: 52.2985,   lon: -3.5128, name: 'Rhayader' },
+};
+
+function lookupLocation(name) {
+  if (!name) return null;
+  const n = name.toLowerCase().trim();
+  // 1. Exact key match
+  if (LOCATION_TABLE[n]) return LOCATION_TABLE[n];
+  // 2. Partial match — sheet value contains a known key, or vice versa
+  for (const [key, val] of Object.entries(LOCATION_TABLE)) {
+    if (n.includes(key) || key.includes(n)) return val;
+  }
+  return null;
+}
+
+// Geocode cache — for locations not in the table
 const geoCache = {};
 
 async function geocodeForDetail(locationName) {
-  if (!locationName) return { lat: wxLat, lon: wxLon, name: wxName };
-  const key = locationName.toLowerCase().trim();
-  if (geoCache[key]) return geoCache[key];
+  // No location in sheet → fall back to Kerry base
+  if (!locationName) return { lat: FALLBACK_LAT, lon: FALLBACK_LON, name: FALLBACK_LOCATION };
+
+  // 1. Check lookup table first (instant, reliable)
+  const tableMatch = lookupLocation(locationName);
+  if (tableMatch) return tableMatch;
+
+  // 2. Try geocoding API
+  const cacheKey = locationName.toLowerCase().trim();
+  if (geoCache[cacheKey]) return geoCache[cacheKey];
   try {
     const res  = await fetch('https://geocoding-api.open-meteo.com/v1/search?name='
       + encodeURIComponent(locationName) + '&count=1&language=en&format=json');
@@ -1278,12 +1421,14 @@ async function geocodeForDetail(locationName) {
       const r      = data.results[0];
       const result = { lat: r.latitude, lon: r.longitude,
         name: r.name + (r.admin1 ? ', ' + r.admin1 : '') };
-      geoCache[key] = result;
+      geoCache[cacheKey] = result;
       return result;
     }
   } catch(_) {}
-  // Geocode failed — fall back to the strip's location
-  return { lat: wxLat, lon: wxLon, name: wxName };
+
+  // 3. All else fails → Kerry with a visible note
+  return { lat: FALLBACK_LAT, lon: FALLBACK_LON,
+    name: FALLBACK_LOCATION + ' (' + locationName + ' not found)' };
 }
 
 (async function init() {
