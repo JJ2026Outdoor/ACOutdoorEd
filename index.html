@@ -1001,8 +1001,14 @@ async function fetchDayDetail(dk) {
   const dayFull = FULL_DAYS[d.getDay()];
   const dateStr = d.getDate() + ' ' + MONTH_ABBR[d.getMonth()] + ' ' + d.getFullYear();
 
+  // Resolve this day's location from the schedule (geocoded with cache)
+  const dayEntry    = scheduleMap[dk];
+  const dayLocName  = (dayEntry && dayEntry.location && dayEntry.location.trim())
+    ? dayEntry.location.trim() : null;
+  const loc = await geocodeForDetail(dayLocName);
+
   try {
-    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + wxLat + '&longitude=' + wxLon
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + loc.lat + '&longitude=' + loc.lon
       + '&hourly=temperature_2m,apparent_temperature,weather_code,precipitation_probability,wind_speed_10m,precipitation'
       + '&daily=sunrise,sunset'
       + '&start_date=' + dk + '&end_date=' + dk
@@ -1056,7 +1062,7 @@ async function fetchDayDetail(dk) {
     panel.innerHTML = '<div class="wx-dp-header">'
       + '<div>'
       + '<div class="wx-dp-title">' + dayFull + ', ' + dateStr + '</div>'
-      + '<div class="wx-dp-title-sub">&#128205; ' + wxName + histNote + '</div>'
+      + '<div class="wx-dp-title-sub">&#128205; ' + loc.name + histNote + '</div>'
       + sunHTML + '</div>'
       + '<button class="wx-dp-close" onclick="closeDayDetail()">&times;</button>'
       + '</div>' + rows;
@@ -1254,6 +1260,32 @@ async function fetchWeekWeather(monday) {
 }
 
 // ── INIT ─────────────────────────────────────────────────────────────
+// Module-level schedule map so fetchDayDetail can look up per-day locations
+let scheduleMap = {};
+
+// Geocode cache — avoids re-hitting the API for the same location name
+const geoCache = {};
+
+async function geocodeForDetail(locationName) {
+  if (!locationName) return { lat: wxLat, lon: wxLon, name: wxName };
+  const key = locationName.toLowerCase().trim();
+  if (geoCache[key]) return geoCache[key];
+  try {
+    const res  = await fetch('https://geocoding-api.open-meteo.com/v1/search?name='
+      + encodeURIComponent(locationName) + '&count=1&language=en&format=json');
+    const data = await res.json();
+    if (data.results && data.results.length > 0) {
+      const r      = data.results[0];
+      const result = { lat: r.latitude, lon: r.longitude,
+        name: r.name + (r.admin1 ? ', ' + r.admin1 : '') };
+      geoCache[key] = result;
+      return result;
+    }
+  } catch(_) {}
+  // Geocode failed — fall back to the strip's location
+  return { lat: wxLat, lon: wxLon, name: wxName };
+}
+
 (async function init() {
   const status = document.getElementById('plannerStatus');
   const prev   = document.getElementById('prevWeek');
@@ -1270,6 +1302,7 @@ async function fetchWeekWeather(monday) {
       const res = await fetch(SHEET_CSV_URL);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       map = buildScheduleMap(parseCSV(await res.text()));
+      scheduleMap = map;
       status.className = 'planner-status ok';
     } catch(err) {
       status.className = 'planner-status error';
