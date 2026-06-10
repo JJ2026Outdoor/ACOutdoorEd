@@ -454,36 +454,75 @@ body {
   .qual-grid { grid-template-columns: 1fr; }
 }
 
-/* ── WEATHER STRIP ── */
-.wx-location-label {
-  font-size: 11px; font-weight: 700; color: var(--green-dark);
-  letter-spacing: 0.05em; margin-bottom: 6px; padding-left: 2px;
+/* ── WEATHER HEADER ── */
+.wx-header { margin-bottom: 8px; }
+.wx-header-loc {
+  font-size: 15px; font-weight: 700; color: var(--green-dark);
+  letter-spacing: 0.02em;
 }
+.wx-header-summary {
+  font-size: 12px; color: var(--muted);
+  margin-top: 3px; line-height: 1.5; min-height: 18px;
+}
+
+/* ── WEATHER STRIP ── */
 .weather-strip {
   display: grid; grid-template-columns: repeat(5, 1fr);
-  background: var(--white); border: 2px solid var(--border);
-  border-radius: 14px; overflow: hidden; margin-bottom: 16px; min-height: 90px;
+  border: 2px solid var(--border); border-radius: 14px;
+  overflow: hidden; margin-bottom: 16px; min-height: 100px;
 }
-.weather-strip.wx-msg-state { display: flex; align-items: center; padding: 16px 20px; }
+.weather-strip.wx-msg-state {
+  display: flex; align-items: center; padding: 16px 20px;
+  background: var(--white);
+}
 .wx-loading  { color: var(--muted); font-size: 13px; }
 .wx-error    { color: #9b2020; font-size: 13px; }
 .wx-unavail  { color: var(--muted); font-size: 12px; font-style: italic; }
+
+/* day column */
 .wx-day {
   display: flex; flex-direction: column; align-items: center;
-  text-align: center; padding: 10px 6px; border-right: 1px solid var(--border); gap: 3px;
+  text-align: center; padding: 10px 6px; border-right: 1px solid rgba(0,0,0,0.08);
+  gap: 3px; position: relative; background: #f5f5f5;
 }
 .wx-day:last-child { border-right: none; }
-.wx-past  { background: #fafafa; opacity: 0.72; }
-.wx-today {
-  background: linear-gradient(180deg, #f0f7f3 0%, var(--white) 100%);
-  border-top: 3px solid var(--green); padding-top: 7px;
-}
+
+/* condition colours */
+.wx-c-sunny      { background: linear-gradient(180deg, #fffbe6 0%, #fff5cc 100%); }
+.wx-c-pcloudy    { background: linear-gradient(180deg, #f5f5f0 0%, #ededea 100%); }
+.wx-c-overcast   { background: linear-gradient(180deg, #e9e9e9 0%, #dfdfe0 100%); }
+.wx-c-fog        { background: linear-gradient(180deg, #efede6 0%, #e5e3d8 100%); }
+.wx-c-drizzle    { background: linear-gradient(180deg, #eef4fb 0%, #e2eef8 100%); }
+.wx-c-rain       { background: linear-gradient(180deg, #daeaf8 0%, #c8dff5 100%); }
+.wx-c-heavy-rain { background: linear-gradient(180deg, #c4d8f0 0%, #b0cce8 100%); }
+.wx-c-snow       { background: linear-gradient(180deg, #eaf5fc 0%, #d8eef8 100%); }
+.wx-c-heavy-snow { background: linear-gradient(180deg, #d2eaf8 0%, #bee0f5 100%); }
+.wx-c-storm      { background: linear-gradient(180deg, #2a2a3e 0%, #1e1e32 100%); }
+
+/* storm text overrides */
+.wx-c-storm .wx-day-name,
+.wx-c-storm .wx-day-date,
+.wx-c-storm .wx-max,
+.wx-c-storm .wx-min,
+.wx-c-storm .wx-desc,
+.wx-c-storm .wx-detail,
+.wx-c-storm .wx-today-band { color: rgba(255,255,255,0.88); }
+.wx-c-storm .wx-rain-prob  { color: #88bbff; }
+
+/* today — green top border only, colour from condition class */
+.wx-today { border-top: 3px solid var(--green); padding-top: 7px; }
+/* past days muted */
+.wx-past  { opacity: 0.65; }
+
 .wx-today-band {
   font-size: 8px; font-weight: 800; letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--green); margin-bottom: 1px;
 }
+.wx-c-storm .wx-today-band { color: #88ffaa; }
+
 .wx-day-name { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .wx-today .wx-day-name { color: var(--green-dark); }
+.wx-c-storm.wx-today .wx-day-name { color: #88ffaa; }
 .wx-day-date { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
 .wx-icon    { font-size: 26px; line-height: 1; margin: 2px 0; }
 .wx-icon-lg { font-size: 38px; line-height: 1; margin: 4px 0; }
@@ -496,6 +535,18 @@ body {
 .wx-temps-lg .wx-min { font-size: 14px; }
 .wx-detail    { font-size: 10px; color: var(--muted); margin-top: 1px; }
 .wx-rain-prob { font-size: 9px; color: #4a7ab5; margin-top: 2px; }
+
+/* alert badges */
+.wx-alert {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase; padding: 2px 6px; border-radius: 8px;
+  margin-bottom: 1px;
+}
+.wx-alert-red    { background: #fee2e2; color: #9b1c1c; }
+.wx-alert-amber  { background: #fef3c7; color: #92400e; }
+.wx-alert-yellow { background: #fefce8; color: #713f12; }
+.wx-c-storm .wx-alert-red   { background: rgba(255,100,100,0.25); color: #ffaaaa; }
+
 @media (max-width: 700px) {
   .wx-icon-lg { font-size: 26px; }
   .wx-temps-lg .wx-max { font-size: 16px; }
@@ -536,8 +587,11 @@ body {
   <!-- ══ WEEKLY PLANNER ══ -->
   <p class="section-label">Department Planner</p>
 
-  <!-- Weather strip -->
-  <div class="wx-location-label" id="wxLocationLabel">&#128205; Loading location&hellip;</div>
+  <!-- Weather header + strip -->
+  <div class="wx-header">
+    <div class="wx-header-loc" id="wxLocationLabel">&#128205; Loading location&hellip;</div>
+    <div class="wx-header-summary" id="wxSummary"></div>
+  </div>
   <div class="weather-strip wx-msg-state" id="weatherStrip">
     <span class="wx-loading">Loading weather&hellip;</span>
   </div>
@@ -835,14 +889,102 @@ async function geocodeWeatherLocation(locationName) {
       wxLat  = data.results[0].latitude;
       wxLon  = data.results[0].longitude;
       wxName = data.results[0].name + (data.results[0].admin1 ? ', ' + data.results[0].admin1 : '');
+    } else {
+      wxName = FALLBACK_LOCATION + ' ⚠️ “' + locationName + '” not found';
     }
-  } catch(_) { /* leave as Kerry fallback */ }
+  } catch(_) {
+    wxName = FALLBACK_LOCATION + ' ⚠️ geocode failed';
+  }
+}
+
+// ── Weather helpers ──────────────────────────────────────────────────
+function getWxClass(code) {
+  if ([95,96,99].includes(code))     return 'wx-c-storm';
+  if ([65,82].includes(code))        return 'wx-c-heavy-rain';
+  if ([61,63,80,81].includes(code))  return 'wx-c-rain';
+  if ([51,53,55].includes(code))     return 'wx-c-drizzle';
+  if ([75,86].includes(code))        return 'wx-c-heavy-snow';
+  if ([71,73,77,85].includes(code))  return 'wx-c-snow';
+  if ([45,48].includes(code))        return 'wx-c-fog';
+  if (code === 3)                    return 'wx-c-overcast';
+  if (code === 2)                    return 'wx-c-pcloudy';
+  if ([0,1].includes(code))          return 'wx-c-sunny';
+  return 'wx-c-pcloudy';
+}
+
+function getAlertLevel(code, wind, precip) {
+  if ([95,96,99].includes(code))            return { level:'red',    reason:'Thunderstorm' };
+  if (wind > 55)                            return { level:'red',    reason:'Extreme wind' };
+  if (precip > 30)                          return { level:'red',    reason:'Extreme rain' };
+  if ([65,82].includes(code))               return { level:'amber',  reason:'Heavy rain' };
+  if (code === 75)                          return { level:'amber',  reason:'Heavy snow' };
+  if (wind > 40)                            return { level:'amber',  reason:'Strong winds' };
+  if (precip > 18)                          return { level:'amber',  reason:'Heavy rain' };
+  if ([71,73].includes(code))               return { level:'yellow', reason:'Snow' };
+  if ([45,48].includes(code))               return { level:'yellow', reason:'Fog' };
+  if (wind > 30)                            return { level:'yellow', reason:'Gusty winds' };
+  if (precip != null && precip > 10)        return { level:'yellow', reason:'Rain' };
+  return null;
+}
+
+function listDayNames(indices) {
+  const N = ['Mon','Tue','Wed','Thu','Fri'];
+  if (indices.length === 5) return 'all week';
+  if (indices.length === 1) return N[indices[0]];
+  if (indices.length === 2) return N[indices[0]] + ' & ' + N[indices[1]];
+  return indices.slice(0,-1).map(i=>N[i]).join(', ') + ' & ' + N[indices[indices.length-1]];
+}
+
+function generateWeekSummary(days) {
+  if (!days || days.length === 0) return '';
+  const cat = days.map(d => {
+    const c = d.code;
+    if ([95,96,99].includes(c)) return 'storm';
+    if ([65,82].includes(c))    return 'heavy-rain';
+    if ([61,63,80,81].includes(c)) return 'rain';
+    if ([51,53,55].includes(c)) return 'drizzle';
+    if ([75,86].includes(c))    return 'heavy-snow';
+    if ([71,73,77,85].includes(c)) return 'snow';
+    if ([45,48].includes(c))    return 'fog';
+    if (c === 3)                return 'overcast';
+    if (c === 2)                return 'cloudy';
+    if ([0,1].includes(c))      return 'sunny';
+    return 'mixed';
+  });
+  const idx = (type) => cat.map((c,i) => c===type ? i : -1).filter(i=>i>=0);
+  const idxMulti = (...types) => cat.map((c,i) => types.includes(c) ? i : -1).filter(i=>i>=0);
+
+  const storms    = idx('storm');
+  const heavyRain = idx('heavy-rain');
+  const rain      = idxMulti('rain','heavy-rain');
+  const snow      = idxMulti('snow','heavy-snow');
+  const sunny     = idx('sunny');
+  const cloudy    = idxMulti('cloudy','overcast');
+  const maxWind   = Math.max(...days.map(d => d.wind));
+  const avgMax    = Math.round(days.reduce((s,d) => s + d.tmax, 0) / days.length);
+  const parts     = [];
+
+  if (storms.length)       parts.push('Thunderstorms expected ' + listDayNames(storms) + '.');
+  if (snow.length)         parts.push('Snow possible ' + listDayNames(snow) + '.');
+  if (rain.length >= 4)    parts.push('Rain likely most of the week.');
+  else if (rain.length > 0) parts.push('Rain expected ' + listDayNames(rain) + '.');
+  if (sunny.length >= 4)   parts.push('Mainly sunny, around ' + avgMax + '°C.');
+  else if (sunny.length > 0 && rain.length > 0) parts.push('Some sunny spells ' + listDayNames(sunny) + '.');
+  else if (sunny.length > 0) parts.push('Clear skies ' + listDayNames(sunny) + '.');
+  if (cloudy.length >= 4 && rain.length === 0 && sunny.length === 0)
+    parts.push('Mostly cloudy, around ' + avgMax + '°C.');
+  if (maxWind > 45)        parts.push('Very strong winds expected.');
+  else if (maxWind > 32)   parts.push('Blustery conditions likely.');
+  if (parts.length === 0)  parts.push('Mixed conditions throughout, around ' + avgMax + '°C.');
+  return parts.slice(0, 2).join(' ');
 }
 
 async function fetchWeekWeather(monday) {
-  const strip    = document.getElementById('weatherStrip');
-  const locLabel = document.getElementById('wxLocationLabel');
-  if (locLabel) locLabel.textContent = '\u{1F4CD} ' + wxName;
+  const strip   = document.getElementById('weatherStrip');
+  const locEl   = document.getElementById('wxLocationLabel');
+  const summEl  = document.getElementById('wxSummary');
+  if (locEl)  locEl.textContent = '\u{1F4CD} ' + wxName;
+  if (summEl) summEl.textContent = '';
 
   strip.className = 'weather-strip wx-msg-state';
   strip.innerHTML = '<span class="wx-loading">Loading weather\u2026</span>';
@@ -850,8 +992,7 @@ async function fetchWeekWeather(monday) {
   const fri      = new Date(monday); fri.setDate(monday.getDate() + 4);
   const startStr = dateKey(monday);
   const endStr   = dateKey(fri);
-
-  const today       = new Date(); today.setHours(0,0,0,0);
+  const today    = new Date(); today.setHours(0,0,0,0);
   const daysFromMon = Math.floor((monday - today) / 86400000);
   const daysFromFri = Math.floor((fri    - today) / 86400000);
 
@@ -875,49 +1016,61 @@ async function fetchWeekWeather(monday) {
     if (!data.daily || !data.daily.time) throw new Error('No data returned');
 
     const todayKey = dateKey(today);
-    let html = '';
 
-    for (let i = 0; i < data.daily.time.length; i++) {
-      const dk      = data.daily.time[i];
-      const d       = new Date(dk + 'T00:00:00');
+    // Build day objects for summary
+    const dayObjs = data.daily.time.map((dk, i) => ({
+      dk, code: data.daily.weather_code[i],
+      tmax: Math.round(data.daily.temperature_2m_max[i]),
+      tmin: Math.round(data.daily.temperature_2m_min[i]),
+      wind: Math.round(data.daily.wind_speed_10m_max[i]),
+      precip: data.daily.precipitation_sum[i] != null ? Math.round(data.daily.precipitation_sum[i]*10)/10 : null,
+      rainProb: data.daily.precipitation_probability_max[i],
+    }));
+
+    if (summEl) summEl.textContent = generateWeekSummary(dayObjs);
+
+    let html = '';
+    for (const day of dayObjs) {
+      const d       = new Date(day.dk + 'T00:00:00');
       const dayName = DAY_NAMES[d.getDay()];
       const dayNum  = d.getDate();
       const mon     = MONTH_ABBR[d.getMonth()];
-      const code      = data.daily.weather_code[i];
-      const tmax      = Math.round(data.daily.temperature_2m_max[i]);
-      const tmin      = Math.round(data.daily.temperature_2m_min[i]);
-      const wind      = Math.round(data.daily.wind_speed_10m_max[i]);
-      const precipRaw = data.daily.precipitation_sum[i];
-      const precip    = precipRaw != null ? Math.round(precipRaw * 10) / 10 : null;
-      const rainProb  = data.daily.precipitation_probability_max[i];
-      const icon      = WMO_ICON[code] || '\uD83C\uDF21\uFE0F';
-      const desc      = WMO[code] || '';
-      const isToday   = dk === todayKey;
-      const isPast    = dk < todayKey;
+      const icon    = WMO_ICON[day.code] || '\uD83C\uDF21\uFE0F';
+      const desc    = WMO[day.code] || '';
+      const isToday = day.dk === todayKey;
+      const isPast  = day.dk < todayKey;
+      const wxCls   = getWxClass(day.code);
+      const alert   = getAlertLevel(day.code, day.wind, day.precip);
 
-      let cls = 'wx-day';
+      let cls = 'wx-day ' + wxCls;
       if (isToday) cls += ' wx-today';
       if (isPast)  cls += ' wx-past';
+
+      const alertHTML = alert
+        ? '<div class="wx-alert wx-alert-' + alert.level + '">' + alert.reason + '</div>'
+        : '';
 
       if (isToday) {
         html += '<div class="' + cls + '">'
           + '<div class="wx-today-band">TODAY</div>'
+          + alertHTML
           + '<div class="wx-day-name">' + dayName + '</div>'
           + '<div class="wx-day-date">' + dayNum + ' ' + mon + '</div>'
           + '<div class="wx-icon-lg">' + icon + '</div>'
           + '<div class="wx-desc">' + desc + '</div>'
-          + '<div class="wx-temps-lg"><span class="wx-max">' + tmax + '&deg;</span><span class="wx-min">' + tmin + '&deg;</span></div>'
-          + '<div class="wx-detail">\uD83D\uDCA8 ' + wind + ' mph</div>'
-          + (rainProb != null ? '<div class="wx-detail">\uD83C\uDF27 ' + rainProb + '% rain</div>' : '')
-          + (precip != null && precip > 0 ? '<div class="wx-detail">\uD83D\uDCA7 ' + precip + ' mm</div>' : '')
+          + '<div class="wx-temps-lg"><span class="wx-max">' + day.tmax + '&deg;</span><span class="wx-min">' + day.tmin + '&deg;</span></div>'
+          + '<div class="wx-detail">\uD83D\uDCA8 ' + day.wind + ' mph</div>'
+          + (day.rainProb != null ? '<div class="wx-detail">\uD83C\uDF27 ' + day.rainProb + '% rain</div>' : '')
+          + (day.precip != null && day.precip > 0 ? '<div class="wx-detail">\uD83D\uDCA7 ' + day.precip + ' mm</div>' : '')
           + '</div>';
       } else {
         html += '<div class="' + cls + '">'
+          + alertHTML
           + '<div class="wx-day-name">' + dayName + '</div>'
           + '<div class="wx-day-date">' + dayNum + ' ' + mon + '</div>'
           + '<div class="wx-icon">' + icon + '</div>'
-          + '<div class="wx-temps"><span class="wx-max">' + tmax + '&deg;</span><span class="wx-min">' + tmin + '&deg;</span></div>'
-          + (rainProb != null ? '<div class="wx-rain-prob">\uD83C\uDF27 ' + rainProb + '%</div>' : '')
+          + '<div class="wx-temps"><span class="wx-max">' + day.tmax + '&deg;</span><span class="wx-min">' + day.tmin + '&deg;</span></div>'
+          + (day.rainProb != null ? '<div class="wx-rain-prob">\uD83C\uDF27 ' + day.rainProb + '%</div>' : '')
           + '</div>';
       }
     }
