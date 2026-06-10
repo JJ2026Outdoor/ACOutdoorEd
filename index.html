@@ -558,6 +558,80 @@ body {
   .wx-icon { font-size: 20px; }
 }
 
+/* ── DAY CLICK / ACTIVE ── */
+.wx-day { cursor: pointer; transition: filter 0.12s; }
+.wx-day:hover { filter: brightness(0.93); }
+.wx-day.wx-active { outline: 3px solid var(--green); outline-offset: -3px; position: relative; z-index: 1; }
+.wx-c-storm.wx-active { outline-color: #88ffaa; }
+/* ── HOURLY DETAIL PANEL ── */
+.wx-detail-panel {
+  background: var(--white); border: 2px solid var(--border);
+  border-radius: 14px; overflow: hidden; margin-bottom: 16px;
+  max-height: 0; opacity: 0; pointer-events: none;
+  transition: max-height 0.35s ease, opacity 0.2s ease;
+}
+.wx-detail-panel.open { max-height: 700px; opacity: 1; pointer-events: auto; }
+.wx-dp-header {
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+  padding: 14px 20px 12px; display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 12px;
+}
+.wx-dp-title { font-family: 'DM Serif Display', serif; color: #fff; font-size: 16px; line-height: 1.2; }
+.wx-dp-title-sub { color: rgba(255,255,255,0.65); font-size: 11px; margin-top: 3px; }
+.wx-dp-close {
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: #fff; width: 28px; height: 28px; border-radius: 7px; font-size: 16px;
+  cursor: pointer; flex-shrink: 0; display: flex; align-items: center;
+  justify-content: center; transition: background 0.15s;
+}
+.wx-dp-close:hover { background: rgba(255,255,255,0.28); }
+.wx-dp-sun { color: rgba(255,255,255,0.7); font-size: 11px; margin-top: 4px; }
+.wx-dp-loading { padding: 18px 20px; color: var(--muted); font-size: 13px; }
+.wx-dp-body { overflow-y: auto; max-height: 500px; }
+.wx-dp-col-heads {
+  display: grid;
+  grid-template-columns: 52px 28px 70px 80px 70px 65px 1fr;
+  padding: 6px 20px; gap: 8px; background: #fafafa;
+  border-bottom: 1px solid var(--border); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.wx-dp-row {
+  display: grid;
+  grid-template-columns: 52px 28px 70px 80px 70px 65px 1fr;
+  align-items: center; padding: 9px 20px; gap: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  border-left: 3px solid transparent; transition: background 0.1s;
+}
+.wx-dp-row:last-child { border-bottom: none; }
+.wx-dp-row:hover { background: var(--green-xlight); }
+.wx-dp-row.wx-c-sunny      { border-left-color: #e8c030; }
+.wx-dp-row.wx-c-pcloudy    { border-left-color: #b8b8c0; }
+.wx-dp-row.wx-c-overcast   { border-left-color: #909090; }
+.wx-dp-row.wx-c-fog        { border-left-color: #b0aa88; }
+.wx-dp-row.wx-c-drizzle    { border-left-color: #88aad8; }
+.wx-dp-row.wx-c-rain       { border-left-color: #4a88d0; }
+.wx-dp-row.wx-c-heavy-rain { border-left-color: #2060b0; }
+.wx-dp-row.wx-c-snow       { border-left-color: #88c8f0; }
+.wx-dp-row.wx-c-heavy-snow { border-left-color: #40a8e0; }
+.wx-dp-row.wx-c-storm      { border-left-color: #cc2020; background: #fff5f5; }
+.wx-dp-time  { font-size: 12px; font-weight: 700; color: var(--muted); }
+.wx-dp-icon  { font-size: 18px; line-height: 1; }
+.wx-dp-temp  { font-size: 14px; font-weight: 700; color: var(--text); }
+.wx-dp-feels { font-size: 12px; color: var(--muted); }
+.wx-dp-wind  { font-size: 12px; color: var(--muted); }
+.wx-dp-rain  { font-size: 12px; color: #4a7ab5; }
+@media (max-width: 700px) {
+  .wx-dp-col-heads, .wx-dp-row {
+    grid-template-columns: 44px 24px 60px 70px 60px 55px 1fr;
+    padding: 8px 12px; gap: 5px;
+  }
+}
+@media (max-width: 480px) {
+  .wx-dp-col-heads { display: none; }
+  .wx-dp-row { grid-template-columns: 40px 22px 55px 55px 55px; padding: 8px 10px; }
+  .wx-dp-row > div:last-child { display: none; }
+}
+
 </style>
 </head>
 <body>
@@ -595,6 +669,7 @@ body {
   <div class="weather-strip wx-msg-state" id="weatherStrip">
     <span class="wx-loading">Loading weather&hellip;</span>
   </div>
+  <div class="wx-detail-panel" id="wxDetailPanel"></div>
 
   <div class="planner-section">
     <div class="planner-card">
@@ -897,6 +972,100 @@ async function geocodeWeatherLocation(locationName) {
   }
 }
 
+// ── Day detail ────────────────────────────────────────────────────────
+let selectedDayKey = null;
+
+function closeDayDetail() {
+  selectedDayKey = null;
+  const panel = document.getElementById('wxDetailPanel');
+  if (panel) panel.classList.remove('open');
+  document.querySelectorAll('.wx-day').forEach(el => el.classList.remove('wx-active'));
+}
+
+async function fetchDayDetail(dk) {
+  const panel = document.getElementById('wxDetailPanel');
+  if (selectedDayKey === dk) { closeDayDetail(); return; }
+
+  selectedDayKey = dk;
+  document.querySelectorAll('.wx-day').forEach(el =>
+    el.classList.toggle('wx-active', el.dataset.dk === dk)
+  );
+
+  panel.innerHTML = '<div class="wx-dp-loading">Loading hourly forecast...</div>';
+  panel.classList.add('open');
+
+  const d       = new Date(dk + 'T00:00:00');
+  const today   = new Date(); today.setHours(0,0,0,0);
+  const isPast  = d < today;
+  const FULL_DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dayFull = FULL_DAYS[d.getDay()];
+  const dateStr = d.getDate() + ' ' + MONTH_ABBR[d.getMonth()] + ' ' + d.getFullYear();
+
+  try {
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + wxLat + '&longitude=' + wxLon
+      + '&hourly=temperature_2m,apparent_temperature,weather_code,precipitation_probability,wind_speed_10m,precipitation'
+      + '&daily=sunrise,sunset'
+      + '&start_date=' + dk + '&end_date=' + dk
+      + '&wind_speed_unit=mph&temperature_unit=celsius&timezone=Europe%2FLondon';
+
+    const res  = await fetch(url);
+    const data = await res.json();
+    const h    = data.hourly;
+
+    const sunrise = (data.daily && data.daily.sunrise) ? data.daily.sunrise[0].slice(-5) : null;
+    const sunset  = (data.daily && data.daily.sunset)  ? data.daily.sunset[0].slice(-5)  : null;
+
+    const sunHTML = (sunrise && sunset)
+      ? '<div class="wx-dp-sun">Sunrise ' + sunrise + '&emsp;Sunset ' + sunset + '</div>'
+      : '';
+
+    let rows = '<div class="wx-dp-col-heads">'
+      + '<div>Time</div><div></div><div>Temp</div><div>Feels like</div>'
+      + '<div>Wind</div><div>Rain %</div><div>Alert</div></div><div class="wx-dp-body">';
+
+    // Every 2 hours, 06:00-20:00
+    const slots = [6,8,10,12,14,16,18,20];
+    for (const hi of slots) {
+      if (!h.time || hi >= h.time.length) continue;
+      const timeStr = h.time[hi].slice(-5);
+      const code  = h.weather_code[hi];
+      const temp  = Math.round(h.temperature_2m[hi]);
+      const feels = Math.round(h.apparent_temperature[hi]);
+      const wind  = Math.round(h.wind_speed_10m[hi]);
+      const rp    = h.precipitation_probability ? h.precipitation_probability[hi] : null;
+      const pr    = h.precipitation ? Math.round(h.precipitation[hi] * 10) / 10 : null;
+      const icon  = WMO_ICON[code] || '?';
+      const wxCls = getWxClass(code);
+      const alert = getAlertLevel(code, wind, pr != null ? pr * 24 : null);
+      const badgeHTML = alert
+        ? '<span class="wx-alert wx-alert-' + alert.level + '" style="font-size:10px">' + alert.reason + '</span>'
+        : '';
+      rows += '<div class="wx-dp-row ' + wxCls + '">'
+        + '<div class="wx-dp-time">' + timeStr + '</div>'
+        + '<div class="wx-dp-icon">' + icon + '</div>'
+        + '<div class="wx-dp-temp">' + temp + '&deg;C</div>'
+        + '<div class="wx-dp-feels">' + feels + '&deg;C</div>'
+        + '<div class="wx-dp-wind">' + wind + ' mph</div>'
+        + '<div class="wx-dp-rain">' + (rp != null ? rp + '%' : '&mdash;') + '</div>'
+        + '<div>' + badgeHTML + '</div>'
+        + '</div>';
+    }
+    rows += '</div>';
+
+    const histNote = isPast ? ' &mdash; historical' : ' &mdash; forecast';
+    panel.innerHTML = '<div class="wx-dp-header">'
+      + '<div>'
+      + '<div class="wx-dp-title">' + dayFull + ', ' + dateStr + '</div>'
+      + '<div class="wx-dp-title-sub">&#128205; ' + wxName + histNote + '</div>'
+      + sunHTML + '</div>'
+      + '<button class="wx-dp-close" onclick="closeDayDetail()">&times;</button>'
+      + '</div>' + rows;
+
+  } catch(err) {
+    panel.innerHTML = '<div class="wx-dp-loading">Could not load hourly data (' + err.message + ')</div>';
+  }
+}
+
 // ── Weather helpers ──────────────────────────────────────────────────
 function getWxClass(code) {
   if ([95,96,99].includes(code))     return 'wx-c-storm';
@@ -1051,7 +1220,7 @@ async function fetchWeekWeather(monday) {
         : '';
 
       if (isToday) {
-        html += '<div class="' + cls + '">'
+        html += '<div class="' + cls + '" data-dk="' + day.dk + '" onclick="fetchDayDetail(\'' + day.dk + '\')">'
           + '<div class="wx-today-band">TODAY</div>'
           + alertHTML
           + '<div class="wx-day-name">' + dayName + '</div>'
@@ -1064,7 +1233,7 @@ async function fetchWeekWeather(monday) {
           + (day.precip != null && day.precip > 0 ? '<div class="wx-detail">\uD83D\uDCA7 ' + day.precip + ' mm</div>' : '')
           + '</div>';
       } else {
-        html += '<div class="' + cls + '">'
+        html += '<div class="' + cls + '" data-dk="' + day.dk + '" onclick="fetchDayDetail(\'' + day.dk + '\')">'
           + alertHTML
           + '<div class="wx-day-name">' + dayName + '</div>'
           + '<div class="wx-day-date">' + dayNum + ' ' + mon + '</div>'
@@ -1124,16 +1293,19 @@ async function fetchWeekWeather(monday) {
 
   // Week navigation — calendar and weather strip update together
   prev.addEventListener('click', () => {
+    closeDayDetail();
     monday.setDate(monday.getDate()-7);
     renderWeek(monday, map, today);
     fetchWeekWeather(new Date(monday));
   });
   next.addEventListener('click', () => {
+    closeDayDetail();
     monday.setDate(monday.getDate()+7);
     renderWeek(monday, map, today);
     fetchWeekWeather(new Date(monday));
   });
   todayB.addEventListener('click', () => {
+    closeDayDetail();
     monday = weekStart(today);
     renderWeek(monday, map, today);
     fetchWeekWeather(new Date(monday));
