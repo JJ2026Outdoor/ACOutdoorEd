@@ -17,12 +17,14 @@ textarea { resize: vertical; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+.ta-print { display: none; }
 @media print {
   .no-print { display: none !important; }
   body { background: white !important; margin: 0; padding: 0; }
-  textarea { border: 1px solid #ccc !important; background: white !important;
-             resize: none !important; height: auto !important;
-             overflow: visible !important; min-height: unset !important; }
+  .ta-screen { display: none !important; }
+  .ta-print { display: block !important; white-space: pre-wrap; word-break: break-word;
+              overflow-wrap: anywhere; font-family: 'Segoe UI', system-ui, sans-serif; color: #1a1a1a;
+              min-height: 16px; line-height: 1.5; }
   input[type="text"] { border: 1px solid #ccc !important; background: white !important; }
   [data-wb-section] + [data-wb-section] { page-break-before: always; }
   .ev-page-break { page-break-before: always; }
@@ -189,11 +191,14 @@ const AudioRecorder = ({onSave,disabled=false})=>{
 const TA = ({value,onChange,rows=4,ph="Write your answer here...",disabled=false,recordings,onAddRecording})=>{
   const hasRec = recordings && recordings.length>0;
   return <div>
-    <textarea style={{width:"100%",border:`1.5px solid ${BD}`,borderRadius:6,padding:"8px 10px",fontSize:13,
+    <textarea className="ta-screen" style={{width:"100%",border:`1.5px solid ${BD}`,borderRadius:6,padding:"8px 10px",fontSize:13,
       fontFamily:"inherit",minHeight:rows*22+16,display:"block",background:disabled?"#f9fafb":"#fff",
       color:"#1a1a1a",lineHeight:1.5}}
       value={value||""} onChange={e=>!disabled&&onChange(e.target.value)}
       placeholder={disabled?"":ph} readOnly={disabled}/>
+    <div className="ta-print" style={{fontSize:13,padding:"8px 10px",border:`1.5px solid ${BD}`,borderRadius:6,background:"#fff"}}>
+      {value||<span style={{color:"#9ca3af",fontStyle:"italic"}}>{ph}</span>}
+    </div>
     {!disabled && onAddRecording && <AudioRecorder disabled={disabled} onSave={(b64,name)=>onAddRecording({b64,name,id:Date.now()})}/>}
     {hasRec && <div style={{marginTop:6,display:"flex",flexDirection:"column",gap:4}}>
       {recordings.map((r,i)=>(
@@ -236,6 +241,28 @@ const LOHeader = ({num,title})=>(
   </div>
 );
 
+const ResearchLinks = ({items})=>(
+  <div style={{background:"#fff",border:`1.5px solid ${BD}`,borderRadius:8,padding:"12px 16px",marginBottom:14}}>
+    <div style={{fontWeight:700,fontSize:12,color:BLUE,textTransform:"uppercase",letterSpacing:".06em",marginBottom:8,display:"flex",alignItems:"center",gap:6}}>
+      <span style={{background:BLUE,color:"#fff",borderRadius:4,width:18,height:18,display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10}}>&#8599;</span>
+      Further Research
+    </div>
+    <ul style={{paddingLeft:0,listStyle:"none",display:"flex",flexDirection:"column",gap:6}}>
+      {items.map((it,i)=>(
+        <li key={i} style={{fontSize:13,display:"flex",gap:6,alignItems:"baseline"}}>
+          <span style={{color:BLUE,fontSize:11,flexShrink:0,fontWeight:700}}>&#8594;</span>
+          <span style={{lineHeight:1.4}}>
+            <strong style={{color:"#1a1a1a"}}>{it[0]}</strong>
+            {" — "}
+            <a href={it[1]} target="_blank" rel="noopener noreferrer" style={{color:BLUE,textDecoration:"none",wordBreak:"break-all"}}>{it[1]}</a>
+            {it[2]&&<span style={{color:MG}}> — {it[2]}</span>}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
 const Tbl = ({headers,rows,onChange,widths,disabled=false})=>{
   const keys = Object.keys(rows[0]||{});
   const addRow = ()=>onChange([...rows, Object.fromEntries(keys.map(k=>[k,""]))]);
@@ -252,8 +279,9 @@ const Tbl = ({headers,rows,onChange,widths,disabled=false})=>{
             <tr key={ri} style={{background:ri%2===0?"#fff":LGR}}>
               {keys.map((k,ci)=>(
                 <td key={ci} style={{padding:4,verticalAlign:"top"}}>
-                  <textarea style={{width:"100%",border:"none",background:"transparent",padding:"4px 6px",fontSize:12,fontFamily:"inherit",minHeight:38,resize:"vertical",color:"#1a1a1a"}}
+                  <textarea className="ta-screen" style={{width:"100%",border:"none",background:"transparent",padding:"4px 6px",fontSize:12,fontFamily:"inherit",minHeight:38,resize:"vertical",color:"#1a1a1a"}}
                     value={row[k]||""} onChange={e=>!disabled&&upd(ri,k,e.target.value)} readOnly={disabled}/>
+                  <div className="ta-print" style={{fontSize:12,padding:"4px 6px"}}>{row[k]||""}</div>
                 </td>
               ))}
             </tr>
@@ -293,8 +321,9 @@ const AssessorFeedback = ({label,value,onChange,assessorMode})=>{
   if(!assessorMode) return null;
   return <div style={{background:ASSESSOR_LT,border:`1.5px solid ${ASSESSOR_BD}`,borderRadius:8,padding:"12px 14px",marginTop:14}} data-wb-feedback="true">
     <div style={{fontSize:12,fontWeight:700,color:ASSESSOR_BG,marginBottom:6}}>&#9998; Assessor Feedback — {label}</div>
-    <textarea style={{width:"100%",border:`1px solid ${ASSESSOR_BD}`,borderRadius:6,padding:"7px 10px",fontSize:12,fontFamily:"inherit",minHeight:70,resize:"vertical",background:"#fff",color:"#1a1a1a"}}
+    <textarea className="ta-screen" style={{width:"100%",border:`1px solid ${ASSESSOR_BD}`,borderRadius:6,padding:"7px 10px",fontSize:12,fontFamily:"inherit",minHeight:70,resize:"vertical",background:"#fff",color:"#1a1a1a"}}
       value={value||""} onChange={e=>onChange(e.target.value)} placeholder="Enter feedback for this section..."/>
+    <div className="ta-print" style={{fontSize:12,padding:"7px 10px",border:`1px solid ${ASSESSOR_BD}`,borderRadius:6,background:"#fff"}}>{value||""}</div>
   </div>;
 };
 
@@ -337,9 +366,10 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
           <Thumb it={it}/>
           <div style={{flex:1}}>
             {it.b64&&it.mediaType==="audio"&&<audio controls src={it.b64} style={{width:"100%",marginBottom:8,height:36}}/>}
-            <textarea style={{width:"100%",border:`1.5px solid ${BD}`,borderRadius:6,padding:"7px 10px",fontSize:12,fontFamily:"inherit",minHeight:60,resize:"vertical",background:am?"#f9fafb":"#fff",color:"#1a1a1a"}}
+            <textarea className="ta-screen" style={{width:"100%",border:`1.5px solid ${BD}`,borderRadius:6,padding:"7px 10px",fontSize:12,fontFamily:"inherit",minHeight:60,resize:"vertical",background:am?"#f9fafb":"#fff",color:"#1a1a1a"}}
               value={it.desc||""} onChange={e=>!am&&patchItem(it.id,{desc:e.target.value})}
               placeholder="Describe what this photo or audio shows and how it demonstrates your skills..." readOnly={am}/>
+            <div className="ta-print" style={{fontSize:12,padding:"7px 10px",border:`1.5px solid ${BD}`,borderRadius:6,background:"#fff"}}>{it.desc||""}</div>
             {!am&&<div style={{marginTop:6}}>
               <label style={{display:"inline-block",background:LG,border:`1px solid ${G}`,color:G,padding:"4px 12px",borderRadius:5,fontSize:11,fontWeight:700,cursor:"pointer"}}>
                 {it.fileName?"Replace file":"Upload photo / audio"}
@@ -379,8 +409,9 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
               </button>
             ))}
           </div>
-          <textarea style={{width:"100%",border:`1px solid ${ASSESSOR_BD}`,borderRadius:5,padding:"6px 8px",fontSize:11,fontFamily:"inherit",minHeight:50,resize:"vertical",background:"#fff",color:"#1a1a1a"}}
+          <textarea className="ta-screen" style={{width:"100%",border:`1px solid ${ASSESSOR_BD}`,borderRadius:5,padding:"6px 8px",fontSize:11,fontFamily:"inherit",minHeight:50,resize:"vertical",background:"#fff",color:"#1a1a1a"}}
             value={it.amFeedback||""} onChange={e=>patchItem(it.id,{amFeedback:e.target.value})} placeholder="Assessor notes on this evidence item..."/>
+          <div className="ta-print" style={{fontSize:11,padding:"6px 8px",border:`1px solid ${ASSESSOR_BD}`,borderRadius:5,background:"#fff"}}>{it.amFeedback||""}</div>
         </div>}
       </div>
     ))}
@@ -392,13 +423,19 @@ const EvidenceSection = ({items,onUpdate,assessorMode:am})=>{
 const EVSummary = ({data,acStatus})=>{
   const fmtRows = (rows,keys,headers) => rows.filter(r=>Object.values(r).some(v=>v&&v.trim())).length===0
     ? <div style={{fontSize:12,color:MG,fontStyle:"italic"}}>No entries</div>
-    : <table style={{width:"100%",borderCollapse:"collapse",fontSize:11,marginTop:4}}>
-        <thead><tr>{headers.map((h,i)=><th key={i} style={{background:"#e5e7eb",padding:"4px 6px",textAlign:"left",fontWeight:700}}>{h}</th>)}</tr></thead>
+    : <table style={{width:"100%",borderCollapse:"collapse",fontSize:11,marginTop:4,tableLayout:"fixed"}}>
+        <thead><tr>{headers.map((h,i)=><th key={i} style={{background:"#e5e7eb",padding:"4px 6px",textAlign:"left",fontWeight:700,wordBreak:"break-word",overflowWrap:"anywhere"}}>{h}</th>)}</tr></thead>
         <tbody>{rows.filter(r=>Object.values(r).some(v=>v&&v.trim())).map((r,ri)=>(
-          <tr key={ri} style={{borderBottom:"1px solid #e5e7eb"}}>{keys.map((k,ci)=><td key={ci} style={{padding:"4px 6px",verticalAlign:"top"}}>{r[k]||""}</td>)}</tr>
+          <tr key={ri} style={{borderBottom:"1px solid #e5e7eb"}}>{keys.map((k,ci)=><td key={ci} style={{padding:"4px 6px",verticalAlign:"top",wordBreak:"break-word",overflowWrap:"anywhere",whiteSpace:"pre-wrap"}}>{r[k]||""}</td>)}</tr>
         ))}</tbody>
       </table>;
-  const ans = (v) => v ? <div style={{fontSize:12,background:"#f9fafb",border:"1px solid #e5e7eb",borderRadius:4,padding:"6px 10px",whiteSpace:"pre-wrap"}}>{v}</div> : <div style={{fontSize:12,color:MG,fontStyle:"italic"}}>No answer</div>;
+  const ans = (v) => v ? <div style={{fontSize:12,background:"#f9fafb",border:"1px solid #e5e7eb",borderRadius:4,padding:"6px 10px",whiteSpace:"pre-wrap",wordBreak:"break-word",overflowWrap:"anywhere"}}>{v}</div> : <div style={{fontSize:12,color:MG,fontStyle:"italic"}}>No answer</div>;
+  // hasRows: does a row-array have any non-empty cell?
+  const hasRows = rows => rows && rows.some(r=>Object.values(r).some(v=>v&&v.trim()));
+  // combine: join labelled parts that have content, skip empty ones
+  const combine = (...parts) => parts.filter(p=>p && p[1] && p[1].trim()).map(([label,val])=> label?`${label}\n${val}`:val).join("\n\n");
+  // pick: first non-empty plain value
+  const pick = (...vals) => vals.find(v=>v&&v.trim()) || "";
   const ACRow = ({id,label,children})=>{
     const st = acStatus(id);
     return <div style={{marginBottom:12,paddingBottom:12,borderBottom:"1px solid #e5e7eb"}}>
@@ -446,17 +483,29 @@ const EVSummary = ({data,acStatus})=>{
     <div style={{marginBottom:20}}>
       <div style={{background:DG,color:"#fff",padding:"7px 14px",borderRadius:6,fontWeight:700,fontSize:13,marginBottom:12}}>Task 1 — Hazard and Risk Management (AC 1.1, 1.2, 1.3, 1.4)</div>
       <ACRow id="1.1" label="Define hazard and risk in your own words.">
-        <div style={{marginBottom:4}}><strong style={{fontSize:11}}>Hazard:</strong>{ans(data.t1_hazard)}</div>
-        <div><strong style={{fontSize:11}}>Risk:</strong>{ans(data.t1_risk)}</div>
+        <div style={{marginBottom:4}}><strong style={{fontSize:11}}>Hazard:</strong>{ans(pick(data.t1_hazard,data.ac11_hazard))}</div>
+        <div><strong style={{fontSize:11}}>Risk:</strong>{ans(pick(data.t1_risk,data.ac11_risk))}</div>
       </ACRow>
       <ACRow id="1.2" label="Risk assessment — minimum THREE hazards and THREE risks with control measures.">
-        {fmtRows(data.t1_raRows,["hazard","risk","control","responsible"],["Hazard","Risk","Control Measure","Responsible"])}
+        {hasRows(data.t1_raRows)
+          ? fmtRows(data.t1_raRows,["hazard","risk","control","responsible"],["Hazard","Risk","Control Measure","Responsible"])
+          : hasRows(data.ac12_rows)
+            ? fmtRows(data.ac12_rows,["hazard","risk","who"],["Hazard","Risk","Who is at risk?"])
+            : <div style={{fontSize:12,color:MG,fontStyle:"italic"}}>No entries</div>}
       </ACRow>
-      <ACRow id="1.3" label="Control measures described in risk assessment above.">
-        <div style={{fontSize:11,color:MG,fontStyle:"italic"}}>See risk assessment table above (control measure column).</div>
+      <ACRow id="1.3" label="Control measures for each hazard and risk above.">
+        {hasRows(data.ac13_rows)
+          ? fmtRows(data.ac13_rows,["hazardRisk","control","effectiveness"],["Hazard / Risk","Control Measure","How effective?"])
+          : hasRows(data.t1_raRows)
+            ? <div style={{fontSize:11,color:MG,fontStyle:"italic"}}>See risk assessment table above (control measure column).</div>
+            : <div style={{fontSize:12,color:MG,fontStyle:"italic"}}>No entries</div>}
       </ACRow>
       <ACRow id="1.4" label="Personal judgements on managing risks in the outdoors.">
-        {ans(data.t1_judgement)}
+        {ans(pick(data.t1_judgement, combine(
+          ["Situation noticed:",data.ac14_activity],
+          ["Decision made:",data.ac14_decision],
+          ["Looking back:",data.ac14_different]
+        )))}
       </ACRow>
       <LO_FB lo="lo1"/>
       <TASK_FB task="task1"/>
@@ -466,14 +515,26 @@ const EVSummary = ({data,acStatus})=>{
     <div style={{marginBottom:20}}>
       <div style={{background:DG,color:"#fff",padding:"7px 14px",borderRadius:6,fontWeight:700,fontSize:13,marginBottom:12}}>Task 2 — Health and Safety (AC 2.1, 2.2, 2.3)</div>
       <ACRow id="2.1" label="Describe why it is important to follow H&S instructions outdoors (min TWO reasons).">
-        {ans(data.t2_hs)}
+        {ans(pick(data.t2_hs, combine(
+          ["Reason 1:",data.ac21_reason1],
+          ["Reason 2:",data.ac21_reason2],
+          ["What could happen if not followed:",data.ac21_consequence]
+        )))}
       </ACRow>
       <ACRow id="2.2" label="Identify at least FOUR safety signs or symbols seen in outdoor environments.">
-        {fmtRows(data.t2_signs,["sign","name","meaning"],["Sign / Symbol (describe it)","Name","Meaning / What to do"])}
+        {hasRows(data.t2_signs)
+          ? fmtRows(data.t2_signs,["sign","name","meaning"],["Sign / Symbol (describe it)","Name","Meaning / What to do"])
+          : (data.ac22_signs||[]).some(s=>s.name||s.meaning)
+            ? fmtRows(data.ac22_signs.map(s=>({sign:"",name:s.name,meaning:s.meaning})),["sign","name","meaning"],["Sign / Symbol (describe it)","Name","Meaning / What to do"])
+            : <div style={{fontSize:12,color:MG,fontStyle:"italic"}}>No entries</div>}
       </ACRow>
       <ACRow id="2.3" label="Describe the H&S instructions for ONE outdoor learning activity.">
-        <div style={{marginBottom:4}}><strong style={{fontSize:11}}>Activity:</strong> {data.t2_activity||<em style={{color:MG}}>Not specified</em>}</div>
-        {ans(data.t2_instructions)}
+        <div style={{marginBottom:4}}><strong style={{fontSize:11}}>Activity:</strong> {pick(data.t2_activity,data.ac23_activity)||<em style={{color:MG}}>Not specified</em>}</div>
+        {ans(pick(data.t2_instructions, combine(
+          ["Before:",data.ac23_before],
+          ["During:",data.ac23_during],
+          ["After:",data.ac23_after]
+        )))}
       </ACRow>
       <LO_FB lo="lo2"/>
       <TASK_FB task="task2"/>
@@ -483,7 +544,11 @@ const EVSummary = ({data,acStatus})=>{
     <div style={{marginBottom:20}}>
       <div style={{background:DG,color:"#fff",padding:"7px 14px",borderRadius:6,fontWeight:700,fontSize:13,marginBottom:12}}>Task 3 — Accidents and Emergencies (AC 3.1)</div>
       <ACRow id="3.1" label="Describe the full processes relating to accidents and emergencies in outdoor learning.">
-        {ans(data.t3_process)}
+        {ans(pick(data.t3_process, combine(
+          ["Immediate actions:",data.ac31_immediate],
+          ["Getting help:",data.ac31_help],
+          ["After the emergency:",data.ac31_after2]
+        )))}
       </ACRow>
       <LO_FB lo="lo3"/>
       <TASK_FB task="task3"/>
@@ -493,12 +558,18 @@ const EVSummary = ({data,acStatus})=>{
     <div style={{marginBottom:20}}>
       <div style={{background:DG,color:"#fff",padding:"7px 14px",borderRadius:6,fontWeight:700,fontSize:13,marginBottom:12}}>Task 4 — Safety Clothing and Equipment (AC 4.1, 4.2)</div>
       <ACRow id="4.1" label="Identify safety clothing and equipment for ONE outdoor activity (min 2 clothing + 2 equipment).">
-        <div style={{marginBottom:6}}><strong style={{fontSize:11}}>Activity:</strong> {data.t4_activity||<em style={{color:MG}}>Not specified</em>}</div>
-        {fmtRows(data.ac41_rows,["item","why","how"],["Item","Why needed?","How used correctly?"])}
+        <div style={{marginBottom:6}}><strong style={{fontSize:11}}>Activity:</strong> {pick(data.t4_activity,data.ac41_activity)||<em style={{color:MG}}>Not specified</em>}</div>
+        {hasRows(data.ac41_rows)
+          ? fmtRows(data.ac41_rows,["item","why","how"],["Item","Why needed?","How used correctly?"])
+          : <div style={{fontSize:12,color:MG,fontStyle:"italic"}}>No entries</div>}
+        {data.t4_clothing&&data.t4_clothing.trim()&&<div style={{marginTop:6}}>{ans(data.t4_clothing)}</div>}
       </ACRow>
       <ACRow id="4.2" label="Describe how you used ONE piece of safety equipment according to instructions given.">
         <div style={{marginBottom:4}}><strong style={{fontSize:11}}>Equipment:</strong> {data.ac42_equipment||<em style={{color:MG}}>Not specified</em>}</div>
-        <div style={{marginBottom:4}}><strong style={{fontSize:11}}>Instructions given:</strong>{ans(data.t4_use)}</div>
+        <div style={{marginBottom:4}}><strong style={{fontSize:11}}>Instructions given:</strong>{ans(pick(data.t4_use, combine(
+          ["Instructions given:",data.ac42_instructions],
+          ["Why this matters:",data.ac42_why]
+        )))}</div>
       </ACRow>
       <LO_FB lo="lo4"/>
       <TASK_FB task="task4"/>
@@ -515,7 +586,7 @@ const EVSummary = ({data,acStatus})=>{
 
 // ── AssessorBanner ───────────────────────────────────────────────────────
 const AssessorBanner = ({assessorMode,onEnter,onExit})=>(
-  <div style={{background:assessorMode?ASSESSOR_BG:"#fff",borderBottom:`2px solid ${assessorMode?ASSESSOR_BD:BD}`,padding:"8px 20px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+  <div style={{background:assessorMode?ASSESSOR_BG:"#fff",borderBottom:`2px solid ${assessorMode?ASSESSOR_BD:BD}`,padding:"8px 20px",height:41,boxSizing:"border-box",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
     <div style={{fontSize:12,color:assessorMode?"#93c5fd":MG,fontWeight:assessorMode?700:400}}>
       {assessorMode?"ASSESSOR MODE — You are marking this workbook.":"Student mode — your answers are editable."}
     </div>
@@ -562,27 +633,23 @@ function App(){
   const doPrint = (mode,withFeedback)=>{
     setShowPrintMenu(false);
     setPrinting(true);
+    const originalTitle = document.title;
+    const namePart = (data.studentName||"").trim().replace(/\s+/g,"");
+    const modeSuffix = mode==="ev" ? "EV"
+      : mode==="section" ? `Section${SEC_LABELS[sec].replace(/\s+/g,"")}`
+      : "Complete";
+    document.title = `HB92CY002PersonalSafety${modeSuffix}${namePart}`;
     setTimeout(()=>{
-      // Expand all textareas to full scroll height so no content is clipped in print.
-      // CSS height:auto cannot override React inline styles, so we do it in JS.
-      const textareas = Array.from(document.querySelectorAll('textarea'));
-      const saved = textareas.map(ta=>({h:ta.style.height,mh:ta.style.minHeight,ov:ta.style.overflow}));
-      textareas.forEach(ta=>{
-        ta.style.minHeight='unset';
-        ta.style.height='auto';
-        ta.style.height=ta.scrollHeight+'px';
-        ta.style.overflow='visible';
-      });
       window.print();
-      // Restore
-      textareas.forEach((ta,i)=>{ ta.style.height=saved[i].h; ta.style.minHeight=saved[i].mh; ta.style.overflow=saved[i].ov; });
+      document.title = originalTitle;
       setTimeout(()=>setPrinting(false),100);
     },200);
   };
 
   const exportData = ()=>{
     const d={...data,_unit:"HB92CY002",_exported:new Date().toISOString()};
-    const fn=`HB92CY002_${(data.studentName||"student").replace(/\s+/g,"_").toLowerCase()}_workbook.json`;
+    const namePart=(data.studentName||"Student").replace(/\s+/g,"");
+    const fn=`HB92CY002Workbook${namePart}.json`;
     const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
     const url=URL.createObjectURL(blob);
     const a=document.createElement("a"); a.href=url; a.download=fn; a.click(); URL.revokeObjectURL(url);
@@ -657,28 +724,30 @@ function App(){
       </div>}
 
       {/* ─── HEADER BAR 1 ─── */}
-      <div className="no-print" style={{background:am?ASSESSOR_BG:G,color:"#fff",padding:"6px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,boxShadow:"0 2px 6px rgba(0,0,0,0.2)"}}>
+      <div className="no-print" style={{background:am?ASSESSOR_BG:G,color:"#fff",padding:"6px 20px",height:64,boxSizing:"border-box",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,boxShadow:"0 2px 6px rgba(0,0,0,0.2)"}}>
         <div>
           <div style={{fontSize:14,fontWeight:700}}>Personal Safety when Learning in the Outdoors</div>
           <div style={{fontSize:11,opacity:0.75}}>HB92CY002 &middot; CDN082 &middot; Level 2 &middot; Agored Cymru</div>
         </div>
         <img src={LOGO_SRC} alt="Brynllywarch" style={{height:52,width:"auto",objectFit:"contain",margin:"0 8px",filter:"drop-shadow(0 1px 2px rgba(0,0,0,0.25))"}}/> 
         <img src={AGORED_REV_SRC} alt="Agored Cymru" style={{height:48,width:"auto",objectFit:"contain",margin:"0 8px"}}/>
-        <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-          {saved&&<span style={{fontSize:11,background:"rgba(255,255,255,0.2)",padding:"3px 10px",borderRadius:20}}>&#10003; Saved</span>}
-          {am&&<span style={{fontSize:11,background:"rgba(255,255,255,0.25)",padding:"3px 10px",borderRadius:20,fontWeight:700}}>ASSESSOR MODE</span>}
-          <span style={{fontSize:12,opacity:0.8}}>{p}% complete</span>
-          <button onClick={exportData} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer"}}>&#8681; Save File</button>
-          <button onClick={()=>fileRef.current&&fileRef.current.click()} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer"}}>&#8679; Load File</button>
-          <button onClick={()=>setShowPrintMenu(true)} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer"}}>&#128438; Print</button>
+        <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"nowrap",overflowX:"auto"}}>
+          {saved&&<span style={{fontSize:11,background:"rgba(255,255,255,0.2)",padding:"3px 10px",borderRadius:20,whiteSpace:"nowrap"}}>&#10003; Saved</span>}
+          {am&&<span style={{fontSize:11,background:"rgba(255,255,255,0.25)",padding:"3px 10px",borderRadius:20,fontWeight:700,whiteSpace:"nowrap"}}>ASSESSOR MODE</span>}
+          <span style={{fontSize:12,opacity:0.8,whiteSpace:"nowrap"}}>{p}% complete</span>
+          <button onClick={exportData} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>&#8681; Save File</button>
+          <button onClick={()=>fileRef.current&&fileRef.current.click()} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>&#8679; Load File</button>
+          <button onClick={()=>setShowPrintMenu(true)} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.4)",color:"#fff",padding:"5px 11px",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>&#128438; Print</button>
         </div>
       </div>
 
       {/* ─── HEADER BAR 2 — assessor sub-banner ─── */}
-      <AssessorBanner assessorMode={am} onEnter={()=>setShowPwModal(true)} onExit={()=>update({assessorMode:false})}/>
+      <div className="no-print" style={{position:"sticky",top:64,zIndex:98}}>
+        <AssessorBanner assessorMode={am} onEnter={()=>setShowPwModal(true)} onExit={()=>update({assessorMode:false})}/>
+      </div>
 
       {/* ─── NAV BAR ─── */}
-      <div className="no-print" style={{background:"#fff",borderBottom:`1px solid ${BD}`,overflowX:"auto",display:"flex",position:"sticky",top:108,zIndex:99}}>
+      <div className="no-print" style={{background:"#fff",borderBottom:`1px solid ${BD}`,overflowX:"auto",display:"flex",position:"sticky",top:105,zIndex:97}}>
         {SECTIONS.map(s=>(
           <button key={s} onClick={()=>setSec(s)} style={{border:"none",background:sec===s?LG:"transparent",color:sec===s?G:MG,borderBottom:sec===s?`2px solid ${G}`:"2px solid transparent",padding:"9px 13px",fontSize:11,fontWeight:sec===s?700:400,cursor:"pointer",whiteSpace:"nowrap"}}>
             {SEC_LABELS[s]}
@@ -807,6 +876,11 @@ function App(){
             <TA rows={3} value={data.ac14_different} onChange={upd("ac14_different")} disabled={am} recordings={data.recordings?.ac14_different||[]} onAddRecording={updRec("ac14_different")}/>
             {am&&<ACStatus id="1.4" status={acStatus("1.4")} onChange={v=>setACStatus("1.4",v)}/>}
           </ACQ>
+          <ResearchLinks items={[
+            ["HSE — Risk Assessment: The Basics","https://www.hse.gov.uk/simple-health-safety/risk/index.htm","Step-by-step guide to identifying hazards and assessing risk"],
+            ["Adventure Activities Licensing Authority","https://www.hse.gov.uk/aala/","How outdoor activity providers are licensed and inspected for safety"],
+            ["NRW — Be Safe Outdoors","https://naturalresourceswales.gov.uk/days-out/visitor-safety/","Welsh guidance on staying safe when visiting the outdoors"],
+          ]}/>
           <AssessorFeedback label="LO 1 — Risks & Hazards" value={loFb("lo1")} onChange={v=>setLOFeedback("lo1",v)} assessorMode={am}/>
           {!am&&<ContinueBtn label="Continue to LO 2 →" onClick={()=>setSec("lo2")}/>}
         </div>
@@ -835,8 +909,9 @@ function App(){
                   <Inp label="Name of sign" value={sign.name} onChange={updA("ac22_signs",i,"name")} ph="e.g., Warning sign" disabled={am}/>
                   <div style={{marginTop:8}}>
                     <label style={{fontSize:11,color:MG,fontWeight:600,display:"block",marginBottom:4}}>Meaning</label>
-                    <textarea style={{width:"100%",border:`1.5px solid ${BD}`,borderRadius:6,padding:"7px 10px",fontSize:12,fontFamily:"inherit",minHeight:55,resize:"vertical",display:"block",background:am?"#f9fafb":"#fff",color:"#1a1a1a"}}
+                    <textarea className="ta-screen" style={{width:"100%",border:`1.5px solid ${BD}`,borderRadius:6,padding:"7px 10px",fontSize:12,fontFamily:"inherit",minHeight:55,resize:"vertical",display:"block",background:am?"#f9fafb":"#fff",color:"#1a1a1a"}}
                       value={sign.meaning||""} onChange={e=>!am&&updA("ac22_signs",i,"meaning")(e.target.value)} placeholder="What does this sign mean?" readOnly={am}/>
+                    <div className="ta-print" style={{fontSize:12,padding:"7px 10px",border:`1.5px solid ${BD}`,borderRadius:6,background:"#fff"}}>{sign.meaning||""}</div>
                   </div>
                 </div>
               ))}
@@ -853,6 +928,11 @@ function App(){
             <TA rows={4} value={data.ac23_after} onChange={upd("ac23_after")} disabled={am} recordings={data.recordings?.ac23_after||[]} onAddRecording={updRec("ac23_after")}/>
             {am&&<ACStatus id="2.3" status={acStatus("2.3")} onChange={v=>setACStatus("2.3",v)}/>}
           </ACQ>
+          <ResearchLinks items={[
+            ["HSE — Health and Safety at Work Act 1974","https://www.hse.gov.uk/legislation/hswa.htm","Overview of the main UK law underpinning workplace and activity safety"],
+            ["HSE — Safety Signs and Signals","https://www.hse.gov.uk/pubns/books/l64.htm","Official guide to the meaning of safety signs you may see outdoors"],
+            ["Adventure Activities Licensing Authority","https://www.hse.gov.uk/aala/","How licensing protects participants on outdoor activities"],
+          ]}/>
           <AssessorFeedback label="LO 2 — Health & Safety" value={loFb("lo2")} onChange={v=>setLOFeedback("lo2",v)} assessorMode={am}/>
           {!am&&<ContinueBtn label="Continue to LO 3 →" onClick={()=>setSec("lo3")}/>}
         </div>
@@ -878,6 +958,11 @@ function App(){
             <div style={{fontSize:13,color:"#2a2a2a"}}>Imagine you are on a walk and a group member slips on a wet rock but is not injured. What would you do, and why is it still important to report this near miss?</div>
           </div>
           <TA rows={4} value={data.ac31_nearmiss} onChange={upd("ac31_nearmiss")} ph="Describe what you would do and why reporting matters..." disabled={am} recordings={data.recordings?.ac31_nearmiss||[]} onAddRecording={updRec("ac31_nearmiss")}/>
+          <ResearchLinks items={[
+            ["St John Ambulance — First Aid Advice","https://www.sja.org.uk/get-advice/","Free guides on what to do in common first aid emergencies"],
+            ["HSE — RIDDOR Reporting","https://www.hse.gov.uk/riddor/","When and how accidents and near misses must be reported"],
+            ["Mountain Rescue England and Wales","https://www.mountain.rescue.org.uk","What mountain rescue teams do and when they are called out"],
+          ]}/>
           <AssessorFeedback label="LO 3 — Accidents & Emergencies" value={loFb("lo3")} onChange={v=>setLOFeedback("lo3",v)} assessorMode={am}/>
           {!am&&<ContinueBtn label="Continue to LO 4 →" onClick={()=>setSec("lo4")}/>}
         </div>
@@ -902,6 +987,11 @@ function App(){
             <TA rows={4} value={data.ac42_why} onChange={upd("ac42_why")} disabled={am} recordings={data.recordings?.ac42_why||[]} onAddRecording={updRec("ac42_why")}/>
             {am&&<ACStatus id="4.2" status={acStatus("4.2")} onChange={v=>setACStatus("4.2",v)}/>}
           </ACQ>
+          <ResearchLinks items={[
+            ["British Mountaineering Council — Equipment Advice","https://www.thebmc.co.uk/category/knowledge/equipment","Guidance on choosing, checking, and caring for outdoor equipment"],
+            ["RNLI — Water Safety","https://rnli.org/safety","Advice on buoyancy aids, cold water shock, and water-based safety"],
+            ["HSE — Personal Protective Equipment at Work","https://www.hse.gov.uk/toolbox/ppe.htm","Why PPE matters and how to use it correctly"],
+          ]}/>
           <AssessorFeedback label="LO 4 — Safety Clothing & Equipment" value={loFb("lo4")} onChange={v=>setLOFeedback("lo4",v)} assessorMode={am}/>
           {!am&&<ContinueBtn label="Continue to Assessment Tasks →" onClick={()=>setSec("tasks")}/>}
         </div>
