@@ -25,12 +25,16 @@ table.data-tbl{width:100%;border-collapse:collapse;font-size:13px}
 table.data-tbl th{background:#1A6B3C;color:#fff;padding:8px 10px;text-align:left;font-weight:600}
 table.data-tbl td{padding:6px 8px;border-bottom:1px solid #E8F5EE;vertical-align:top}
 table.data-tbl tr:nth-child(even) td{background:#F7FAF8}
+.ta-print{display:none}
 @media print{
   .no-print{display:none!important}
   .wb-header{display:none!important}
   #ev-cover-strip{display:block!important}
   .wb-section{display:block!important}
   body{background:#fff}
+  .ta-screen{display:none!important}
+  .ta-print{display:block!important;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;font-family:'Segoe UI',system-ui,sans-serif;color:#1a1a1a;min-height:16px;line-height:1.5;border:1.5px solid #D4D4CC;border-radius:6px;padding:10px 12px;background:#fff}
+  input[type=text],input[type=date]{border:1px solid #ccc!important;background:#fff!important}
 }
 </style>
 </head>
@@ -46,7 +50,7 @@ const BLUE="#1e40af",BLUE_LT="#eff6ff";
 const GOLD="#C8A951";
 const ASSESSOR_BG="#1e3a8a",ASSESSOR_BD="#3b82f6",ASSESSOR_LT="#eff6ff";
 const ASSESSOR_PASS="Agored2025";
-const UNIT_KEY="hb93cy003v1";
+const UNIT_KEY="hb93cy003v2";
 const UNIT_CODE="HB93CY003";
 const UNIT_TITLE="Risk Management when Learning in the Outdoors";
 const UNIT_SUBTITLE="Level 3 — 3 Credits — 27 GLH";
@@ -81,7 +85,7 @@ const init=()=>({
   ac23_text:"",ac24_text:"",
   // LO3
   ac31_rows:[mkRA(),mkRA(),mkRA()],
-  ac31_conduct:"",
+  ac31_safety_requirements:"",ac31_codes_of_conduct:"",
   ac32_text:"",
   ac33_student_account:"",
   ac33_obs_date:"",ac33_obs_assessor:"",ac33_obs_notes:"",ac33_obs_pass:false,
@@ -136,7 +140,8 @@ const AudioRecorder=({onSave,disabled=false})=>{
 const TA=({value,onChange,rows=5,ph="Write your answer here…",disabled=false,recordings,onAddRecording})=>{
   const hasRec=recordings&&recordings.length>0;
   return(<div>
-    <textarea rows={rows} style={{background:disabled?"#F7F7F5":"#fff",color:disabled?"#6B6B6B":"#1A1A1A"}} value={value||""} onChange={e=>!disabled&&onChange(e.target.value)} placeholder={ph} readOnly={disabled}/>
+    <textarea className="ta-screen" rows={rows} style={{background:disabled?"#F7F7F5":"#fff",color:disabled?"#6B6B6B":"#1A1A1A"}} value={value||""} onChange={e=>!disabled&&onChange(e.target.value)} placeholder={ph} readOnly={disabled}/>
+    <div className="ta-print">{value||<span style={{color:"#9ca3af",fontStyle:"italic"}}>{ph}</span>}</div>
     {!disabled&&onAddRecording&&<AudioRecorder disabled={false} onSave={(b64,name)=>onAddRecording({b64,name,id:Date.now()})}/>}
     {hasRec&&<div style={{marginTop:6,display:"flex",flexDirection:"column",gap:4}}>{recordings.map((r,i)=>(<div key={r.id||i} style={{display:"flex",alignItems:"center",gap:6,background:BLUE_LT,border:`1px solid ${ASSESSOR_BD}`,borderRadius:5,padding:"4px 8px"}}><svg width="12" height="12" viewBox="0 0 24 24" fill={BLUE}><path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm-6 10a6 6 0 0 0 12 0h2a8 8 0 0 1-7 7.93V21h-2v-2.07A8 8 0 0 1 4 11h2z"/></svg><audio controls src={r.b64} style={{flex:1,height:28}}/>{!disabled&&<button onClick={()=>onAddRecording(null,r.id)} style={{background:"none",border:"none",color:RED,cursor:"pointer",fontSize:14,fontWeight:700}}>&#215;</button>}</div>))}</div>}
   </div>);
@@ -149,9 +154,10 @@ const KB=({title,items})=>(<div style={{background:LG,border:`1.5px solid ${G}`,
 const KBTable=({title,headers,rows})=>(<div style={{background:LG,border:`1.5px solid ${G}`,borderRadius:8,padding:"14px 18px",marginBottom:14}}><div style={{fontWeight:700,fontSize:13,color:DG,textTransform:"uppercase",letterSpacing:".06em",marginBottom:10,display:"flex",alignItems:"center",gap:6}}><span style={{background:G,color:"#fff",borderRadius:4,width:18,height:18,display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:11}}>K</span>{title}</div><table className="data-tbl" style={{fontSize:12}}><thead><tr>{headers.map((h,i)=><th key={i}>{h}</th>)}</tr></thead><tbody>{rows.map((r,i)=>(<tr key={i}>{r.map((c,j)=><td key={j} dangerouslySetInnerHTML={{__html:c}}/>)}</tr>))}</tbody></table></div>);
 const ACQ=({ac,label,children,am})=>(<div style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:"14px 16px",marginBottom:16,background:am?"#fafafa":"#fff"}}><div style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:10}}><span style={{background:G,color:"#fff",fontSize:11,fontWeight:700,padding:"3px 8px",borderRadius:10,whiteSpace:"nowrap",flexShrink:0}}>AC {ac}</span><span style={{fontWeight:600,fontSize:14,color:"#1a1a1a",lineHeight:1.4}}>{label}</span></div>{children}</div>);
 const ACStatus=({id,status,onChange})=>(<div style={{marginTop:10,display:"flex",alignItems:"center",gap:8,paddingTop:8,borderTop:`1px dashed ${ASSESSOR_BD}`}}><span style={{fontSize:12,fontWeight:600,color:ASSESSOR_BG,marginRight:4}}>AC {id}:</span>{["Met","NYM"].map(v=>(<button key={v} onClick={()=>onChange(v)} style={{padding:"3px 12px",border:`1.5px solid ${status===v?(v==="Met"?G:RED):BD}`,borderRadius:20,fontSize:12,fontWeight:700,cursor:"pointer",background:status===v?(v==="Met"?LG:RED_LT):"#fff",color:status===v?(v==="Met"?G:RED):MG}}>{v==="Met"?"✓ Met":"✗ NYM"}</button>))}{status&&<span style={{fontSize:12,color:status==="Met"?G:RED,fontWeight:700,marginLeft:4}}>{status==="Met"?"Criterion met":"Not yet met"}</span>}</div>);
-const AssessorFeedback=({label,value,onChange,assessorMode})=>{if(!assessorMode)return null;return(<div data-wb-feedback="true" style={{background:ASSESSOR_LT,border:`1.5px solid ${ASSESSOR_BD}`,borderRadius:6,padding:"10px 14px",marginTop:12}}><div style={{fontSize:12,fontWeight:700,color:ASSESSOR_BG,marginBottom:6,textTransform:"uppercase",letterSpacing:".05em"}}>Assessor Feedback — {label}</div><textarea rows={3} value={value||""} onChange={e=>onChange(e.target.value)} placeholder="Enter assessor feedback…" style={{background:"#fff",border:`1px solid ${ASSESSOR_BD}`}}/></div>);};
+const AssessorFeedback=({label,value,onChange,assessorMode})=>{if(!assessorMode)return null;return(<div data-wb-feedback="true" style={{background:ASSESSOR_LT,border:`1.5px solid ${ASSESSOR_BD}`,borderRadius:6,padding:"10px 14px",marginTop:12}}><div style={{fontSize:12,fontWeight:700,color:ASSESSOR_BG,marginBottom:6,textTransform:"uppercase",letterSpacing:".05em"}}>Assessor Feedback — {label}</div><textarea className="ta-screen" rows={3} value={value||""} onChange={e=>onChange(e.target.value)} placeholder="Enter assessor feedback…" style={{background:"#fff",border:`1px solid ${ASSESSOR_BD}`}}/><div className="ta-print">{value||""}</div></div>);};
 const LOHeader=({num,title})=>(<div style={{background:DG,color:"#fff",borderRadius:8,padding:"14px 20px",marginBottom:18}}><div style={{fontSize:11,fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",opacity:.75,marginBottom:3}}>Learning Outcome {num}</div><div style={{fontSize:18,fontWeight:700}}>{title}</div></div>);
 const ContinueBtn=({label,onClick})=>(<div style={{textAlign:"right",marginTop:20}}><button onClick={onClick} style={{background:G,color:"#fff",border:"none",borderRadius:6,padding:"10px 22px",fontSize:14,fontWeight:700,cursor:"pointer",boxShadow:"0 2px 6px rgba(26,107,60,.25)"}}>{label}</button></div>);
+const ResearchLinks=({items})=>(<div style={{background:"#fff",border:`1.5px solid ${BD}`,borderRadius:8,padding:"12px 16px",marginBottom:14}}><div style={{fontWeight:700,fontSize:12,color:BLUE,textTransform:"uppercase",letterSpacing:".06em",marginBottom:8,display:"flex",alignItems:"center",gap:6}}><span style={{background:BLUE,color:"#fff",borderRadius:4,width:18,height:18,display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10}}>&#8599;</span>Further Research</div><ul style={{paddingLeft:0,listStyle:"none",display:"flex",flexDirection:"column",gap:6}}>{items.map((it,i)=>(<li key={i} style={{fontSize:13,display:"flex",gap:6,alignItems:"baseline"}}><span style={{color:BLUE,fontSize:11,flexShrink:0,fontWeight:700}}>&#8594;</span><span style={{lineHeight:1.4}}><strong style={{color:"#1a1a1a"}}>{it[0]}</strong>{" — "}<a href={it[1]} target="_blank" rel="noopener noreferrer" style={{color:BLUE,textDecoration:"none",wordBreak:"break-all"}}>{it[1]}</a>{it[2]&&<span style={{color:MG}}> — {it[2]}</span>}</span></li>))}</ul></div>);
 
 /* ── Observation Record ────────────────────────────── */
 const ObsRecord=({ac,title,date,assessor,notes,pass,onDate,onAssessor,onNotes,onPass,am,studentField,studentValue,onStudent,studentPh})=>(
@@ -170,7 +176,7 @@ const ObsRecord=({ac,title,date,assessor,notes,pass,onDate,onAssessor,onNotes,on
         <div><label style={{display:"block",fontSize:11,fontWeight:600,color:MG,marginBottom:3}}>Date of observation</label><input type="date" value={date||""} onChange={e=>am&&onDate(e.target.value)} disabled={!am}/></div>
         <div><label style={{display:"block",fontSize:11,fontWeight:600,color:MG,marginBottom:3}}>Assessor name</label><input type="text" value={assessor||""} onChange={e=>am&&onAssessor(e.target.value)} placeholder="Assessor name" disabled={!am}/></div>
       </div>
-      <div style={{marginBottom:8}}><label style={{display:"block",fontSize:11,fontWeight:600,color:MG,marginBottom:3}}>Observation notes</label><textarea rows={3} value={notes||""} onChange={e=>am&&onNotes(e.target.value)} placeholder="Record what you observed…" readOnly={!am} style={{background:am?"#fff":"#F7F7F5"}}/></div>
+      <div style={{marginBottom:8}}><label style={{display:"block",fontSize:11,fontWeight:600,color:MG,marginBottom:3}}>Observation notes</label><textarea className="ta-screen" rows={3} value={notes||""} onChange={e=>am&&onNotes(e.target.value)} placeholder="Record what you observed…" readOnly={!am} style={{background:am?"#fff":"#F7F7F5"}}/><div className="ta-print">{notes||""}</div></div>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:12,fontWeight:600,color:am?ASSESSOR_BG:MG}}>Outcome:</span>
         {["PASS","NOT YET"].map(v=>(<button key={v} onClick={()=>am&&onPass(v==="PASS")} disabled={!am} style={{padding:"4px 14px",border:`2px solid ${pass===true&&v==="PASS"?G:pass===false&&v==="NOT YET"?RED:BD}`,borderRadius:20,fontSize:12,fontWeight:700,cursor:am?"pointer":"default",background:pass===true&&v==="PASS"?LG:pass===false&&v==="NOT YET"?RED_LT:"#fff",color:pass===true&&v==="PASS"?G:pass===false&&v==="NOT YET"?RED:MG}}>{v}</button>))}
@@ -202,7 +208,7 @@ const EvidenceSection=({data,update,am})=>{
   };
   return(<div>
     <div style={{background:LG,border:`1.5px solid ${G}`,borderRadius:7,padding:"10px 14px",marginBottom:16,fontSize:13,color:"#1a3a2a"}}>Images and audio recordings are saved inside your workbook file. Upload photos of your risk assessment, practical activity, equipment checks and any other evidence.</div>
-    {items.map(it=>(<div key={it.id} style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:14,marginBottom:12,background:"#fff"}}><div style={{display:"flex",gap:12,alignItems:"flex-start"}}><div style={{flexShrink:0}}><Thumb it={it}/>{!am&&<label style={{display:"block",marginTop:6,padding:"4px 8px",background:LG,border:`1px solid ${G}`,borderRadius:4,fontSize:11,fontWeight:600,color:G,cursor:"pointer",textAlign:"center"}}>Upload photo/audio<input type="file" accept="image/*,audio/*" style={{display:"none"}} onChange={e=>handleFile(it.id,e.target.files[0])}/></label>}</div><div style={{flex:1}}>{it.b64&&it.mediaType==="audio"&&<audio controls src={it.b64} style={{width:"100%",marginBottom:8,height:36}}/>}<textarea rows={3} value={it.desc||""} readOnly={am} onChange={e=>!am&&patchItem(it.id,{desc:e.target.value})} placeholder="Describe what this shows…" style={{background:am?"#F7F7F5":"#fff"}}/><div style={{marginTop:8}}><div style={{fontSize:11,fontWeight:600,color:MG,marginBottom:5,textTransform:"uppercase",letterSpacing:".04em"}}>Evidence for:</div><div style={{display:"flex",flexWrap:"wrap",gap:4}}>{allACs.map(ac=>(<label key={ac} style={{display:"flex",alignItems:"center",gap:3,padding:"2px 8px",border:`1px solid ${(it.acs||[]).includes(ac)?G:BD}`,borderRadius:12,fontSize:11,cursor:am?"default":"pointer",background:(it.acs||[]).includes(ac)?LG:"#fff",color:(it.acs||[]).includes(ac)?G:MG}}><input type="checkbox" checked={(it.acs||[]).includes(ac)} disabled={am} onChange={e=>{const next=e.target.checked?[...(it.acs||[]),ac]:(it.acs||[]).filter(a=>a!==ac);patchItem(it.id,{acs:next});}} style={{accentColor:G}}/>AC {ac}</label>))}</div></div></div>{!am&&<button onClick={()=>removeItem(it.id)} style={{background:"none",border:"none",color:RED,fontSize:18,cursor:"pointer",padding:"2px 6px",flexShrink:0}}>&#215;</button>}</div></div>))}
+    {items.map(it=>(<div key={it.id} style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:14,marginBottom:12,background:"#fff"}}><div style={{display:"flex",gap:12,alignItems:"flex-start"}}><div style={{flexShrink:0}}><Thumb it={it}/>{!am&&<label style={{display:"block",marginTop:6,padding:"4px 8px",background:LG,border:`1px solid ${G}`,borderRadius:4,fontSize:11,fontWeight:600,color:G,cursor:"pointer",textAlign:"center"}}>Upload photo/audio<input type="file" accept="image/*,audio/*" style={{display:"none"}} onChange={e=>handleFile(it.id,e.target.files[0])}/></label>}</div><div style={{flex:1}}>{it.b64&&it.mediaType==="audio"&&<audio controls src={it.b64} style={{width:"100%",marginBottom:8,height:36}}/>}<textarea className="ta-screen" rows={3} value={it.desc||""} readOnly={am} onChange={e=>!am&&patchItem(it.id,{desc:e.target.value})} placeholder="Describe what this shows…" style={{background:am?"#F7F7F5":"#fff"}}/><div className="ta-print">{it.desc||""}</div><div style={{marginTop:8}}><div style={{fontSize:11,fontWeight:600,color:MG,marginBottom:5,textTransform:"uppercase",letterSpacing:".04em"}}>Evidence for:</div><div style={{display:"flex",flexWrap:"wrap",gap:4}}>{allACs.map(ac=>(<label key={ac} style={{display:"flex",alignItems:"center",gap:3,padding:"2px 8px",border:`1px solid ${(it.acs||[]).includes(ac)?G:BD}`,borderRadius:12,fontSize:11,cursor:am?"default":"pointer",background:(it.acs||[]).includes(ac)?LG:"#fff",color:(it.acs||[]).includes(ac)?G:MG}}><input type="checkbox" checked={(it.acs||[]).includes(ac)} disabled={am} onChange={e=>{const next=e.target.checked?[...(it.acs||[]),ac]:(it.acs||[]).filter(a=>a!==ac);patchItem(it.id,{acs:next});}} style={{accentColor:G}}/>AC {ac}</label>))}</div></div></div>{!am&&<button onClick={()=>removeItem(it.id)} style={{background:"none",border:"none",color:RED,fontSize:18,cursor:"pointer",padding:"2px 6px",flexShrink:0}}>&#215;</button>}</div></div>))}
     {!am&&<button onClick={addItem} style={{width:"100%",padding:"10px",border:`2px dashed ${G}`,borderRadius:7,background:LG,color:G,fontWeight:700,fontSize:13,cursor:"pointer"}}>+ Add photo / audio evidence</button>}
   </div>);
 };
@@ -224,7 +230,7 @@ function App(){
 
   const update=useCallback(patch=>{setData(d=>({...d,...patch}));},[]);
   useEffect(()=>{clearTimeout(saveTimer.current);saveTimer.current=setTimeout(()=>{try{localStorage.setItem(UNIT_KEY,JSON.stringify(data));}catch(e){}},600);},[data]);
-  useEffect(()=>{if(!printing)return;const t=setTimeout(()=>{window.print();setPrinting(false);const s=document.getElementById("ev-cover-strip");if(s)s.style.display="none";},200);return()=>clearTimeout(t);},[printing]);
+  useEffect(()=>{if(!printing)return;const originalTitle=document.title;const namePart=(data.studentName||"").trim().replace(/\s+/g,"");const modeSuffix=printMode==="ev"?"EV":printMode==="section"?`Section${sec.charAt(0).toUpperCase()+sec.slice(1)}`:"Complete";document.title=`HB93CY003RiskManagement${modeSuffix}${namePart}`;const t=setTimeout(()=>{window.print();document.title=originalTitle;setPrinting(false);const s=document.getElementById("ev-cover-strip");if(s)s.style.display="none";},200);return()=>clearTimeout(t);},[printing]);
 
   const am=data.assessorMode;
   const upd=f=>v=>update({[f]:v});
@@ -235,11 +241,11 @@ function App(){
   const setLOFeedback=(id,v)=>update({lo_feedback:{...(data.lo_feedback||{}),[id]:v}});
 
   // progress
-  const fields=["ac11_text","ac12_text","ac21_rows","ac22_scenario","ac22_responses","ac23_text","ac24_text","ac31_rows","ac31_conduct","ac32_text","ac33_student_account","ac34_review","ac41_pre_check","ac41_post_check","ac42_text"];
+  const fields=["ac11_text","ac12_text","ac21_rows","ac22_scenario","ac22_responses","ac23_text","ac24_text","ac31_rows","ac31_safety_requirements","ac31_codes_of_conduct","ac32_text","ac33_student_account","ac34_review","ac41_pre_check","ac41_post_check","ac42_text"];
   const filled=fields.filter(f=>{const v=data[f];if(Array.isArray(v))return v.some(r=>Object.values(r).some(x=>String(x||"").trim().length>3));return String(v||"").trim().length>3;}).length;
   const pct=Math.round((filled/fields.length)*100);
 
-  const exportJSON=()=>{const exp={...data,_unit:UNIT_CODE,_exported:new Date().toISOString()};const blob=new Blob([JSON.stringify(exp,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`${UNIT_CODE}_${(data.studentName||"student").replace(/\s+/g,"_")}_workbook.json`;a.click();URL.revokeObjectURL(url);};
+  const exportJSON=()=>{const exp={...data,_unit:UNIT_CODE,_exported:new Date().toISOString()};const blob=new Blob([JSON.stringify(exp,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`HB93CY003Workbook${(data.studentName||"Student").replace(/\s+/g,"")}.json`;a.click();URL.revokeObjectURL(url);};
   const importJSON=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{try{const p=JSON.parse(ev.target.result);if(p._unit&&p._unit!==UNIT_CODE){alert(`Wrong workbook file. Expected ${UNIT_CODE}, got ${p._unit}.`);return;}setData({...init(),...p});alert("Workbook loaded successfully.");}catch(err){alert("Could not read file.");}};reader.readAsText(file);e.target.value="";};
 
   const enterAM=()=>{if(pwd===ASSESSOR_PASS){update({assessorMode:true});setShowPwd(false);setPwd("");setPwdErr("");}else{setPwdErr("Incorrect password.");}};
@@ -267,7 +273,7 @@ function App(){
       <div id="ev-cover-strip" style={{display:"none",background:DG,color:"#fff",padding:"16px 24px",marginBottom:12}}><div style={{fontWeight:700,fontSize:16,marginBottom:6}}>EV SUMMARY — {UNIT_CODE} {UNIT_TITLE}</div><div style={{fontSize:13,display:"flex",gap:24,flexWrap:"wrap"}}><span>Student: <strong>{data.studentName||"—"}</strong></span><span>Class: <strong>{data.className||"—"}</strong></span><span>Assessor: <strong>{data.assessorName||"—"}</strong></span><span>Activity: <strong>{data.chosen_activity||"—"}</strong></span><span>Result: <strong>{data.overall_result||"PENDING"}</strong></span><span>Marked: <strong>{data.markedDate||"—"}</strong></span></div></div>
 
       {/* Header bar 1 */}
-      <div className="wb-header no-print" style={{position:"sticky",top:0,zIndex:100,background:headerBg,color:"#fff",padding:"0 16px",height:56,display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:"0 2px 8px rgba(0,0,0,.15)",transition:"background .3s"}}>
+      <div className="wb-header no-print" style={{position:"sticky",top:0,zIndex:100,background:headerBg,color:"#fff",padding:"0 16px",height:64,boxSizing:"border-box",display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:"0 2px 8px rgba(0,0,0,.15)",transition:"background .3s"}}>
         <div style={{display:"flex",flexDirection:"column",lineHeight:1.2}}><span style={{fontWeight:700,fontSize:14}}>{UNIT_CODE} — {UNIT_TITLE}</span><span style={{fontSize:11,opacity:.8}}>{UNIT_SUBTITLE}</span></div>
         <div style={{display:"flex",alignItems:"center",gap:10}}><img src={LOGO_SRC} alt="Brynllywarch" style={{height:34,objectFit:"contain"}}/><img src={AGORED_LOGO_SRC} alt="Agored Cymru" style={{height:28,objectFit:"contain"}}/></div>
         <div style={{display:"flex",alignItems:"center",gap:8}}>
@@ -280,12 +286,12 @@ function App(){
       </div>
 
       {/* Header bar 2 */}
-      <div className="no-print" style={{position:"sticky",top:56,zIndex:99,background:am?ASSESSOR_BG:"#fff",borderBottom:`2px solid ${am?ASSESSOR_BD:BD}`,padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+      <div className="no-print" style={{position:"sticky",top:64,zIndex:99,height:41,boxSizing:"border-box",background:am?ASSESSOR_BG:"#fff",borderBottom:`2px solid ${am?ASSESSOR_BD:BD}`,padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         {am?<><span style={{fontSize:12,fontWeight:600,color:"#fff"}}>ASSESSOR MODE — You are marking this workbook.</span><button onClick={exitAM} style={{background:"rgba(255,255,255,.2)",border:"1px solid rgba(255,255,255,.4)",color:"#fff",borderRadius:5,padding:"4px 12px",fontSize:12,fontWeight:600,cursor:"pointer"}}>Exit Assessor Mode</button></>:<><span style={{fontSize:12,color:MG}}>Student mode — your answers are editable.</span><button onClick={()=>setShowPwd(true)} style={{background:LG,border:`1px solid ${G}`,color:G,borderRadius:5,padding:"4px 12px",fontSize:12,fontWeight:600,cursor:"pointer"}}>Enter Assessor Mode</button></>}
       </div>
 
       {/* Nav */}
-      <div className="no-print" style={{position:"sticky",top:108,zIndex:98,background:"#fff",borderBottom:`2px solid ${LG}`,overflowX:"auto",display:"flex",alignItems:"stretch",whiteSpace:"nowrap",boxShadow:"0 2px 4px rgba(0,0,0,.05)"}}>
+      <div className="no-print" style={{position:"sticky",top:105,zIndex:98,background:"#fff",borderBottom:`2px solid ${LG}`,overflowX:"auto",display:"flex",alignItems:"stretch",whiteSpace:"nowrap",boxShadow:"0 2px 4px rgba(0,0,0,.05)"}}>
         {navItems.map(n=>(<button key={n.id} onClick={()=>setSec(n.id)} style={{padding:"10px 14px",border:"none",borderBottom:`3px solid ${sec===n.id?G:"transparent"}`,background:"none",fontWeight:sec===n.id?700:400,color:sec===n.id?G:MG,fontSize:13,cursor:"pointer",transition:"all .15s",flexShrink:0}}>{n.label}</button>))}
       </div>
 
@@ -396,26 +402,32 @@ function App(){
             <div style={{background:DG,color:"#fff",borderRadius:6,padding:"8px 14px",fontSize:12,fontWeight:700,marginBottom:16,letterSpacing:".05em",textTransform:"uppercase"}}>Assessment Tasks — LO 1</div>
             <ACQ ac="1.1" am={am} label="Give examples of at least TWO pieces of legislation related to health and safety in outdoor activities. For each, explain what it requires and why it is relevant.">
               <Hint text="Name each piece of legislation with its full title and year. Explain what it requires from outdoor providers and why it is directly relevant to your chosen activity."/>
-              <TA value={data.ac11_text} onChange={upd("ac11_text")} rows={8} ph={"Legislation 1 — [Name + Year]:
+              <TA value={data.ac11_text} onChange={upd("ac11_text")} rows={8} ph={`Legislation 1 — [Name + Year]:
 What it requires: …
 Relevance to outdoor activities: …
 
 Legislation 2 — [Name + Year]:
 What it requires: …
-Relevance: …"} disabled={am} recordings={data.recordings?.ac11_text||[]} onAddRecording={updRec("ac11_text")}/>
+Relevance: …`} disabled={am} recordings={data.recordings?.ac11_text||[]} onAddRecording={updRec("ac11_text")}/>
               {am&&<ACStatus id="1.1" status={acStatus("1.1")} onChange={v=>setACStatus("1.1",v)}/>}
             </ACQ>
             <ACQ ac="1.2" am={am} label="Give examples of at least TWO sets of guidelines relevant to different outdoor activities. Explain who produces them and what they cover.">
               <Hint text="Name the NGB or body responsible, the qualification or framework, and explain what the guidelines specify — e.g. minimum leader qualifications, safety ratios, equipment requirements."/>
-              <TA value={data.ac12_text} onChange={upd("ac12_text")} rows={8} ph={"Guidelines 1 — [NGB/Organisation]:
+              <TA value={data.ac12_text} onChange={upd("ac12_text")} rows={8} ph={`Guidelines 1 — [NGB/Organisation]:
 Scope and content: …
 Relevance to practice: …
 
 Guidelines 2 — [NGB/Organisation]:
 Scope and content: …
-Relevance: …"} disabled={am} recordings={data.recordings?.ac12_text||[]} onAddRecording={updRec("ac12_text")}/>
+Relevance: …`} disabled={am} recordings={data.recordings?.ac12_text||[]} onAddRecording={updRec("ac12_text")}/>
               {am&&<ACStatus id="1.2" status={acStatus("1.2")} onChange={v=>setACStatus("1.2",v)}/>}
             </ACQ>
+            <ResearchLinks items={[
+              ["HSE — Health and Safety at Work etc. Act 1974","https://www.hse.gov.uk/legislation/hswa.htm","Overview of employer and employee duties under the primary UK H&S legislation"],
+              ["AALA — Adventure Activities Licensing","https://www.hse.gov.uk/aala/","Licensing requirements for providers of adventure activities to under-18s"],
+              ["OEAP National Guidance","https://oeapng.info","National guidance framework for educational visits and outdoor learning in England and Wales"],
+              ["BMC Participation Statement","https://www.thebmc.co.uk/participation-statement","The BMC's position on inherent risk in climbing and mountaineering"],
+            ]}/>
             <AssessorFeedback label="LO 1" value={loFb("lo1")} onChange={v=>setLOFeedback("lo1",v)} assessorMode={am}/>
             {!am&&<ContinueBtn label="Continue to LO 2 →" onClick={()=>setSec("lo2")}/>}
           </div>
@@ -461,9 +473,9 @@ Relevance: …"} disabled={am} recordings={data.recordings?.ac12_text||[]} onAdd
                 <thead><tr><th style={{width:"25%"}}>Hazard (source of harm)</th><th style={{width:"25%"}}>Who is at risk</th><th style={{width:"50%"}}>Associated Risk (what could happen)</th>{!am&&<th style={{width:"5%"}}></th>}</tr></thead>
                 <tbody>
                   {data.ac21_rows.map((row,i)=>(<tr key={row.id}>
-                    <td><textarea rows={2} value={row.hazard||""} readOnly={am} onChange={e=>updHR(row.id,"hazard",e.target.value)} placeholder={`Hazard ${i+1}…`} style={{fontSize:12,border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/></td>
-                    <td><textarea rows={2} value={row.person||""} readOnly={am} onChange={e=>updHR(row.id,"person",e.target.value)} placeholder="Participants, staff…" style={{fontSize:12,border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/></td>
-                    <td><textarea rows={2} value={row.risk||""} readOnly={am} onChange={e=>updHR(row.id,"risk",e.target.value)} placeholder="What could go wrong…" style={{fontSize:12,border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/></td>
+                    <td><textarea className="ta-screen" rows={2} value={row.hazard||""} readOnly={am} onChange={e=>updHR(row.id,"hazard",e.target.value)} placeholder={`Hazard ${i+1}…`} style={{fontSize:12,border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/><div className="ta-print" style={{fontSize:12,padding:"4px 6px"}}>{row.hazard||""}</div></td>
+                    <td><textarea className="ta-screen" rows={2} value={row.person||""} readOnly={am} onChange={e=>updHR(row.id,"person",e.target.value)} placeholder="Participants, staff…" style={{fontSize:12,border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/><div className="ta-print" style={{fontSize:12,padding:"4px 6px"}}>{row.person||""}</div></td>
+                    <td><textarea className="ta-screen" rows={2} value={row.risk||""} readOnly={am} onChange={e=>updHR(row.id,"risk",e.target.value)} placeholder="What could go wrong…" style={{fontSize:12,border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/><div className="ta-print" style={{fontSize:12,padding:"4px 6px"}}>{row.risk||""}</div></td>
                     {!am&&<td style={{textAlign:"center"}}>{data.ac21_rows.length>2&&<button onClick={()=>removeHR(row.id)} style={{background:"none",border:"none",color:RED,cursor:"pointer",fontSize:16}}>✕</button>}</td>}
                   </tr>))}
                 </tbody>
@@ -477,11 +489,11 @@ Relevance: …"} disabled={am} recordings={data.recordings?.ac12_text||[]} onAdd
               <div style={{marginBottom:8}}><div style={{fontSize:12,fontWeight:600,color:MG,marginBottom:4,textTransform:"uppercase",letterSpacing:".04em"}}>Accident / Emergency Scenario</div>
               <TA value={data.ac22_scenario} onChange={upd("ac22_scenario")} rows={3} ph="Describe the accident or emergency scenario…" disabled={am} recordings={data.recordings?.ac22_scenario||[]} onAddRecording={updRec("ac22_scenario")}/></div>
               <div><div style={{fontSize:12,fontWeight:600,color:MG,marginBottom:4,textTransform:"uppercase",letterSpacing:".04em"}}>Appropriate Responses (minimum 2)</div>
-              <TA value={data.ac22_responses} onChange={upd("ac22_responses")} rows={5} ph={"Response 1: …
+              <TA value={data.ac22_responses} onChange={upd("ac22_responses")} rows={5} ph={`Response 1: …
 
 Response 2: …
 
-Response 3 (optional): …"} disabled={am} recordings={data.recordings?.ac22_responses||[]} onAddRecording={updRec("ac22_responses")}/></div>
+Response 3 (optional): …`} disabled={am} recordings={data.recordings?.ac22_responses||[]} onAddRecording={updRec("ac22_responses")}/></div>
               {am&&<ACStatus id="2.2" status={acStatus("2.2")} onChange={v=>setACStatus("2.2",v)}/>}
             </ACQ>
 
@@ -497,6 +509,11 @@ Response 3 (optional): …"} disabled={am} recordings={data.recordings?.ac22_res
               {am&&<ACStatus id="2.4" status={acStatus("2.4")} onChange={v=>setACStatus("2.4",v)}/>}
             </ACQ>
 
+            <ResearchLinks items={[
+              ["HSE — Risk Assessment: A Brief Guide","https://www.hse.gov.uk/simple-health-safety/risk/index.htm","The HSE's five-step risk assessment process explained"],
+              ["RoSPA — Outdoor Learning","https://www.rospa.com/leisure-safety/advice/outdoor-play","Guidance on balancing risk and benefit in outdoor learning"],
+              ["OEAP — Dynamic Risk Assessment","https://oeapng.info/downloads/download-info/4-3g-dynamic-risk-assessment/","Guidance on dynamic risk assessment during outdoor activities"],
+            ]}/>
             <AssessorFeedback label="LO 2" value={loFb("lo2")} onChange={v=>setLOFeedback("lo2",v)} assessorMode={am}/>
             {!am&&<ContinueBtn label="Continue to LO 3 →" onClick={()=>setSec("lo3")}/>}
           </div>
@@ -553,9 +570,9 @@ Response 3 (optional): …"} disabled={am} recordings={data.recordings?.ac22_res
                       const rating=ratingFor(row);
                       const col=riskColour(rating);
                       return(<tr key={row.id} style={{background:i%2===0?"#fff":"#F7FAF8"}}>
-                        <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE"}}><textarea rows={2} value={row.hazard||""} readOnly={am} onChange={e=>updRA(row.id,"hazard",e.target.value)} placeholder="Hazard…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/></td>
-                        <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE"}}><textarea rows={2} value={row.who||""} readOnly={am} onChange={e=>updRA(row.id,"who",e.target.value)} placeholder="Who…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/></td>
-                        <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE"}}><textarea rows={2} value={row.risk||""} readOnly={am} onChange={e=>updRA(row.id,"risk",e.target.value)} placeholder="Risk…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/></td>
+                        <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE"}}><textarea className="ta-screen" rows={2} value={row.hazard||""} readOnly={am} onChange={e=>updRA(row.id,"hazard",e.target.value)} placeholder="Hazard…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/><div className="ta-print" style={{fontSize:11,padding:"3px 5px"}}>{row.hazard||""}</div></td>
+                        <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE"}}><textarea className="ta-screen" rows={2} value={row.who||""} readOnly={am} onChange={e=>updRA(row.id,"who",e.target.value)} placeholder="Who…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/><div className="ta-print" style={{fontSize:11,padding:"3px 5px"}}>{row.who||""}</div></td>
+                        <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE"}}><textarea className="ta-screen" rows={2} value={row.risk||""} readOnly={am} onChange={e=>updRA(row.id,"risk",e.target.value)} placeholder="Risk…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/><div className="ta-print" style={{fontSize:11,padding:"3px 5px"}}>{row.risk||""}</div></td>
                         <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE",textAlign:"center"}}>
                           {am?<span style={{fontWeight:700}}>{row.likelihood}</span>:<select value={row.likelihood||3} onChange={e=>updRA(row.id,"likelihood",parseInt(e.target.value))} style={{width:"100%",fontSize:11}}>{[1,2,3,4,5].map(n=><option key={n} value={n}>{n}</option>)}</select>}
                         </td>
@@ -565,7 +582,7 @@ Response 3 (optional): …"} disabled={am} recordings={data.recordings?.ac22_res
                         <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE",textAlign:"center"}}>
                           <div style={{background:col,color:"#fff",borderRadius:4,padding:"3px 6px",fontWeight:700,fontSize:11,textAlign:"center"}}>{rating}<br/><span style={{fontSize:9}}>{riskLabel(rating)}</span></div>
                         </td>
-                        <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE"}}><textarea rows={2} value={row.controls||""} readOnly={am} onChange={e=>updRA(row.id,"controls",e.target.value)} placeholder="Control measures…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/></td>
+                        <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE"}}><textarea className="ta-screen" rows={2} value={row.controls||""} readOnly={am} onChange={e=>updRA(row.id,"controls",e.target.value)} placeholder="Control measures…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/><div className="ta-print" style={{fontSize:11,padding:"3px 5px"}}>{row.controls||""}</div></td>
                         <td style={{padding:"4px 6px",borderBottom:"1px solid #E8F5EE",textAlign:"center"}}>
                           {am?<span style={{fontSize:11}}>{row.residual}</span>:<select value={row.residual||"Low"} onChange={e=>updRA(row.id,"residual",e.target.value)} style={{fontSize:11}}><option>Low</option><option>Medium</option><option>High</option></select>}
                         </td>
@@ -578,21 +595,21 @@ Response 3 (optional): …"} disabled={am} recordings={data.recordings?.ac22_res
               {!am&&<button onClick={addRA} style={{background:LG,border:`1px solid ${G}`,color:G,borderRadius:5,padding:"5px 12px",fontSize:12,fontWeight:600,cursor:"pointer",marginBottom:12}}>+ Add row</button>}
 
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:4}}>
-                <div><div style={{fontSize:12,fontWeight:600,color:MG,marginBottom:4,textTransform:"uppercase",letterSpacing:".04em"}}>Safety Requirements</div><TA value={data.ac31_conduct} onChange={upd("ac31_conduct")} rows={4} ph="Weather/water level limits, minimum equipment, supervision ratios, communication plan, go/no-go criteria…" disabled={am} recordings={data.recordings?.ac31_conduct||[]} onAddRecording={updRec("ac31_conduct")}/></div>
-                <div><div style={{fontSize:12,fontWeight:600,color:MG,marginBottom:4,textTransform:"uppercase",letterSpacing:".04em"}}>Codes of Conduct</div><TA value={data.ac31_conduct} onChange={upd("ac31_conduct")} rows={4} ph="Rules for participants, NGB guidelines followed, land access requirements, environmental responsibilities…" disabled={am}/></div>
+                <div><div style={{fontSize:12,fontWeight:600,color:MG,marginBottom:4,textTransform:"uppercase",letterSpacing:".04em"}}>Safety Requirements</div><TA value={data.ac31_safety_requirements} onChange={upd("ac31_safety_requirements")} rows={4} ph="Weather/water level limits, minimum equipment, supervision ratios, communication plan, go/no-go criteria…" disabled={am} recordings={data.recordings?.ac31_safety_requirements||[]} onAddRecording={updRec("ac31_safety_requirements")}/></div>
+                <div><div style={{fontSize:12,fontWeight:600,color:MG,marginBottom:4,textTransform:"uppercase",letterSpacing:".04em"}}>Codes of Conduct</div><TA value={data.ac31_codes_of_conduct} onChange={upd("ac31_codes_of_conduct")} rows={4} ph="Rules for participants, NGB guidelines followed, land access requirements, environmental responsibilities…" disabled={am} recordings={data.recordings?.ac31_codes_of_conduct||[]} onAddRecording={updRec("ac31_codes_of_conduct")}/></div>
               </div>
               {am&&<ACStatus id="3.1" status={acStatus("3.1")} onChange={v=>setACStatus("3.1",v)}/>}
             </div>
 
             <ACQ ac="3.2" am={am} label="Explain how you will ensure the equipment and clothing needed for the activity is fit for purpose.">
               <Hint text="List the key items of equipment and clothing needed for your activity. For each, explain what checks you carry out before and after use. Equipment includes clothing — include your full layering system."/>
-              <TA value={data.ac32_text} onChange={upd("ac32_text")} rows={8} ph={"Equipment/Clothing Item 1 — [Name]:
+              <TA value={data.ac32_text} onChange={upd("ac32_text")} rows={8} ph={`Equipment/Clothing Item 1 — [Name]:
 Pre-activity check: …
 Post-activity check: …
 
 Equipment/Clothing Item 2 — [Name]:
 Pre-activity check: …
-Post-activity check: …"} disabled={am} recordings={data.recordings?.ac32_text||[]} onAddRecording={updRec("ac32_text")}/>
+Post-activity check: …`} disabled={am} recordings={data.recordings?.ac32_text||[]} onAddRecording={updRec("ac32_text")}/>
               {am&&<ACStatus id="3.2" status={acStatus("3.2")} onChange={v=>setACStatus("3.2",v)}/>}
             </ACQ>
 
@@ -600,7 +617,7 @@ Post-activity check: …"} disabled={am} recordings={data.recordings?.ac32_text|
 
             <ACQ ac="3.4" am={am} label="Review the risk assessment from AC 3.1 following the activity. Explain how it worked and whether any revisions are needed.">
               <Hint text="AC 3.4 requires you to evaluate whether your risk assessment was effective in practice. Were all hazards correctly identified? Did any unexpected hazards arise? Were control measures effective? What would you change?"/>
-              <TA value={data.ac34_review} onChange={upd("ac34_review")} rows={7} ph={"Overall: Did the risk assessment work effectively? …
+              <TA value={data.ac34_review} onChange={upd("ac34_review")} rows={7} ph={`Overall: Did the risk assessment work effectively? …
 
 Hazards correctly identified? …
 
@@ -608,10 +625,15 @@ Unexpected hazards that arose: …
 
 Control measures — were they effective? …
 
-Revisions needed: …"} disabled={am} recordings={data.recordings?.ac34_review||[]} onAddRecording={updRec("ac34_review")}/>
+Revisions needed: …`} disabled={am} recordings={data.recordings?.ac34_review||[]} onAddRecording={updRec("ac34_review")}/>
               {am&&<ACStatus id="3.4" status={acStatus("3.4")} onChange={v=>setACStatus("3.4",v)}/>}
             </ACQ>
 
+            <ResearchLinks items={[
+              ["Mountain Training — Hill Skills and Leadership","https://www.mountain-training.org","Qualification frameworks and guidance for leading groups in hill and mountain terrain"],
+              ["Canoe Wales — Safety Guidance","https://canoewales.com/safety","Safety guidance and grading for paddlesport activities in Wales"],
+              ["Leave No Trace UK","https://lnt.org.uk","Codes of conduct for minimising environmental impact during outdoor activities"],
+            ]}/>
             <AssessorFeedback label="LO 3" value={loFb("lo3")} onChange={v=>setLOFeedback("lo3",v)} assessorMode={am}/>
             {!am&&<ContinueBtn label="Continue to LO 4 →" onClick={()=>setSec("lo4")}/>}
           </div>
@@ -649,7 +671,7 @@ Revisions needed: …"} disabled={am} recordings={data.recordings?.ac34_review||
 
             <ACQ ac="4.2" am={am} label="Describe at least TWO situations where environmental or other considerations may necessitate the use of alternative equipment.">
               <Hint text="Be specific to your chosen activity. Describe the situation, explain why the standard equipment is unsuitable, and state what alternative would be used instead."/>
-              <TA value={data.ac42_text} onChange={upd("ac42_text")} rows={8} ph={"Situation 1:
+              <TA value={data.ac42_text} onChange={upd("ac42_text")} rows={8} ph={`Situation 1:
 Condition/circumstance: …
 Why standard equipment is unsuitable: …
 Alternative equipment used: …
@@ -657,11 +679,16 @@ Alternative equipment used: …
 Situation 2:
 Condition/circumstance: …
 Why standard equipment is unsuitable: …
-Alternative equipment used: …"} disabled={am} recordings={data.recordings?.ac42_text||[]} onAddRecording={updRec("ac42_text")}/>
+Alternative equipment used: …`} disabled={am} recordings={data.recordings?.ac42_text||[]} onAddRecording={updRec("ac42_text")}/>
               {am&&<ACStatus id="4.2" status={acStatus("4.2")} onChange={v=>setACStatus("4.2",v)}/>}
             </ACQ>
 
             {am&&(<div style={{background:ASSESSOR_LT,border:`1.5px solid ${ASSESSOR_BD}`,borderRadius:8,padding:"16px 18px",marginTop:16}}><div style={{fontWeight:700,color:ASSESSOR_BG,fontSize:14,marginBottom:10,textTransform:"uppercase",letterSpacing:".05em"}}>Overall Result</div><div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>{["DISTINCTION","MERIT","PASS","REFER","PENDING"].map(v=>(<button key={v} onClick={()=>update({overall_result:v})} style={{padding:"6px 14px",border:`2px solid ${data.overall_result===v?(resultColour[v]||MG):BD}`,borderRadius:20,fontSize:12,fontWeight:700,cursor:"pointer",background:data.overall_result===v?"#f0f9ff":"#fff",color:data.overall_result===v?(resultColour[v]||MG):MG}}>{v}</button>))}</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}><Inp label="Assessor signature" value={data.assessorSig} onChange={upd("assessorSig")} ph="Assessor name"/><Inp label="Date marked" value={data.markedDate} onChange={upd("markedDate")} type="date"/></div></div>)}
+            <ResearchLinks items={[
+              ["BMC — Equipment Advice","https://www.thebmc.co.uk/equipment-care-and-safety-checks","Guidance on checking, maintaining and replacing climbing and walking equipment"],
+              ["RNLI — Water Safety Equipment","https://rnli.org/safety/choose-the-right-safety-kit","Guidance on appropriate safety equipment for water-based activities"],
+              ["HSE — Personal Protective Equipment at Work","https://www.hse.gov.uk/toolbox/ppe.htm","Legal requirements and best practice for PPE provision and use"],
+            ]}/>
             <AssessorFeedback label="LO 4" value={loFb("lo4")} onChange={v=>setLOFeedback("lo4",v)} assessorMode={am}/>
             {!am&&<ContinueBtn label="Continue to Evidence →" onClick={()=>setSec("evidence")}/>}
           </div>
