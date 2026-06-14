@@ -33,6 +33,16 @@
           "name": "SustainableResourcesDigital",
           "filename": "HB92CY003SustainableResourcesDigital.html",
           "type": "HTML"
+        },
+        {
+          "name": "SustainableResourcesSlides",
+          "filename": "HB92CY003SustainableResourcesSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "SustainableResourcesWorkbook",
+          "filename": "HB92CY003SustainableResourcesWorkbook.docx",
+          "type": "DOCX"
         }
       ]
     },
