@@ -29,7 +29,11 @@ table.data-tbl tr:nth-child(even) td{background:#F7FAF8}
   #ev-cover-strip{display:block!important}
   .wb-section{display:block!important}
   body{background:#fff}
+  .ta-screen{display:none!important}
+  .ta-print{display:block!important;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;font-family:'Segoe UI',system-ui,sans-serif;color:#1a1a1a;min-height:16px;line-height:1.5;border:1.5px solid #D4D4CC;border-radius:6px;padding:10px 12px;background:#fff}
+  input[type=text],input[type=date],input[type=number]{border:1px solid #ccc!important;background:#fff!important}
 }
+.ta-print{display:none}
 </style>
 </head>
 <body>
@@ -124,7 +128,8 @@ const AudioRecorder=({onSave,disabled=false})=>{
 const TA=({value,onChange,rows=5,ph="Write your answer here…",disabled=false,recordings,onAddRecording})=>{
   const hasRec=recordings&&recordings.length>0;
   return(<div>
-    <textarea rows={rows} style={{background:disabled?"#F7F7F5":"#fff",color:disabled?"#6B6B6B":"#1A1A1A"}} value={value||""} onChange={e=>!disabled&&onChange(e.target.value)} placeholder={ph} readOnly={disabled}/>
+    <textarea className="ta-screen" rows={rows} style={{background:disabled?"#F7F7F5":"#fff",color:disabled?"#6B6B6B":"#1A1A1A"}} value={value||""} onChange={e=>!disabled&&onChange(e.target.value)} placeholder={ph} readOnly={disabled}/>
+    <div className="ta-print">{value||<span style={{color:"#9ca3af",fontStyle:"italic"}}>{ph}</span>}</div>
     {!disabled&&onAddRecording&&<AudioRecorder disabled={false} onSave={(b64,name)=>onAddRecording({b64,name,id:Date.now()})}/>}
     {hasRec&&<div style={{marginTop:6,display:"flex",flexDirection:"column",gap:4}}>{recordings.map((r,i)=>(<div key={r.id||i} style={{display:"flex",alignItems:"center",gap:6,background:BLUE_LT,border:`1px solid ${ASSESSOR_BD}`,borderRadius:5,padding:"4px 8px"}}><svg width="12" height="12" viewBox="0 0 24 24" fill={BLUE}><path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm-6 10a6 6 0 0 0 12 0h2a8 8 0 0 1-7 7.93V21h-2v-2.07A8 8 0 0 1 4 11h2z"/></svg><audio controls src={r.b64} style={{flex:1,height:28}}/>{!disabled&&<button onClick={()=>onAddRecording(null,r.id)} style={{background:"none",border:"none",color:RED,cursor:"pointer",fontSize:14,fontWeight:700}}>&#215;</button>}</div>))}</div>}
   </div>);
@@ -137,9 +142,10 @@ const KB=({title,items})=>(<div style={{background:LG,border:`1.5px solid ${G}`,
 const KBTable=({title,headers,rows})=>(<div style={{background:LG,border:`1.5px solid ${G}`,borderRadius:8,padding:"14px 18px",marginBottom:14}}><div style={{fontWeight:700,fontSize:13,color:DG,textTransform:"uppercase",letterSpacing:".06em",marginBottom:10,display:"flex",alignItems:"center",gap:6}}><span style={{background:G,color:"#fff",borderRadius:4,width:18,height:18,display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:11}}>K</span>{title}</div><table className="data-tbl" style={{fontSize:12}}><thead><tr>{headers.map((h,i)=><th key={i}>{h}</th>)}</tr></thead><tbody>{rows.map((r,i)=>(<tr key={i}>{r.map((c,j)=><td key={j} dangerouslySetInnerHTML={{__html:c}}/>)}</tr>))}</tbody></table></div>);
 const ACQ=({ac,label,children,am})=>(<div style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:"14px 16px",marginBottom:16,background:am?"#fafafa":"#fff"}}><div style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:10}}><span style={{background:G,color:"#fff",fontSize:11,fontWeight:700,padding:"3px 8px",borderRadius:10,whiteSpace:"nowrap",flexShrink:0}}>AC {ac}</span><span style={{fontWeight:600,fontSize:14,color:"#1a1a1a",lineHeight:1.4}}>{label}</span></div>{children}</div>);
 const ACStatus=({id,status,onChange})=>(<div style={{marginTop:10,display:"flex",alignItems:"center",gap:8,paddingTop:8,borderTop:`1px dashed ${ASSESSOR_BD}`}}><span style={{fontSize:12,fontWeight:600,color:ASSESSOR_BG,marginRight:4}}>AC {id}:</span>{["Met","NYM"].map(v=>(<button key={v} onClick={()=>onChange(v)} style={{padding:"3px 12px",border:`1.5px solid ${status===v?(v==="Met"?G:RED):BD}`,borderRadius:20,fontSize:12,fontWeight:700,cursor:"pointer",background:status===v?(v==="Met"?LG:RED_LT):"#fff",color:status===v?(v==="Met"?G:RED):MG}}>{v==="Met"?"✓ Met":"✗ NYM"}</button>))}{status&&<span style={{fontSize:12,color:status==="Met"?G:RED,fontWeight:700,marginLeft:4}}>{status==="Met"?"Criterion met":"Not yet met"}</span>}</div>);
-const AssessorFeedback=({label,value,onChange,assessorMode})=>{if(!assessorMode)return null;return(<div data-wb-feedback="true" style={{background:ASSESSOR_LT,border:`1.5px solid ${ASSESSOR_BD}`,borderRadius:6,padding:"10px 14px",marginTop:12}}><div style={{fontSize:12,fontWeight:700,color:ASSESSOR_BG,marginBottom:6,textTransform:"uppercase",letterSpacing:".05em"}}>Assessor Feedback — {label}</div><textarea rows={3} value={value||""} onChange={e=>onChange(e.target.value)} placeholder="Enter assessor feedback…" style={{background:"#fff",border:`1px solid ${ASSESSOR_BD}`}}/></div>);};
+const AssessorFeedback=({label,value,onChange,assessorMode})=>{if(!assessorMode)return null;return(<div data-wb-feedback="true" style={{background:ASSESSOR_LT,border:`1.5px solid ${ASSESSOR_BD}`,borderRadius:6,padding:"10px 14px",marginTop:12}}><div style={{fontSize:12,fontWeight:700,color:ASSESSOR_BG,marginBottom:6,textTransform:"uppercase",letterSpacing:".05em"}}>Assessor Feedback — {label}</div><textarea className="ta-screen" rows={3} value={value||""} onChange={e=>onChange(e.target.value)} placeholder="Enter assessor feedback…" style={{background:"#fff",border:`1px solid ${ASSESSOR_BD}`}}/><div className="ta-print">{value||""}</div></div>);};
 const LOHeader=({num,title})=>(<div style={{background:DG,color:"#fff",borderRadius:8,padding:"14px 20px",marginBottom:18}}><div style={{fontSize:11,fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",opacity:.75,marginBottom:3}}>Learning Outcome {num}</div><div style={{fontSize:18,fontWeight:700}}>{title}</div></div>);
 const ContinueBtn=({label,onClick})=>(<div style={{textAlign:"right",marginTop:20}}><button onClick={onClick} style={{background:G,color:"#fff",border:"none",borderRadius:6,padding:"10px 22px",fontSize:14,fontWeight:700,cursor:"pointer",boxShadow:"0 2px 6px rgba(26,107,60,.25)"}}>{label}</button></div>);
+const ResearchLinks=({items})=>(<div style={{background:"#fff",border:`1.5px solid ${BD}`,borderRadius:8,padding:"12px 16px",marginBottom:14}}><div style={{fontWeight:700,fontSize:12,color:BLUE,textTransform:"uppercase",letterSpacing:".06em",marginBottom:8,display:"flex",alignItems:"center",gap:6}}><span style={{background:BLUE,color:"#fff",borderRadius:4,width:18,height:18,display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10}}>&#8599;</span>Further Research</div><ul style={{paddingLeft:0,listStyle:"none",display:"flex",flexDirection:"column",gap:6}}>{items.map((it,i)=>(<li key={i} style={{fontSize:13,display:"flex",gap:6,alignItems:"baseline"}}><span style={{color:BLUE,fontSize:11,flexShrink:0,fontWeight:700}}>&#8594;</span><span style={{lineHeight:1.4}}><strong style={{color:"#1a1a1a"}}>{it[0]}</strong>{" — "}<a href={it[1]} target="_blank" rel="noopener noreferrer" style={{color:BLUE,textDecoration:"none",wordBreak:"break-all"}}>{it[1]}</a>{it[2]&&<span style={{color:MG}}>{" — "+it[2]}</span>}</span></li>))}</ul></div>);
 
 /* ── Observation Record ───────────────────────── */
 const ObsRecord=({ac,title,date,assessor,notes,pass,onDate,onAssessor,onNotes,onPass,am,extra})=>(
@@ -155,7 +161,7 @@ const ObsRecord=({ac,title,date,assessor,notes,pass,onDate,onAssessor,onNotes,on
         <div><label style={{display:"block",fontSize:11,fontWeight:600,color:MG,marginBottom:3}}>Date(s) of observation</label><input type="date" value={date||""} onChange={e=>am&&onDate(e.target.value)} disabled={!am}/></div>
         <div><label style={{display:"block",fontSize:11,fontWeight:600,color:MG,marginBottom:3}}>Assessor name</label><input type="text" value={assessor||""} onChange={e=>am&&onAssessor(e.target.value)} placeholder="Assessor name" disabled={!am}/></div>
       </div>
-      <div style={{marginBottom:8}}><label style={{display:"block",fontSize:11,fontWeight:600,color:MG,marginBottom:3}}>Observation notes (including evidence of skill progression)</label><textarea rows={4} value={notes||""} onChange={e=>am&&onNotes(e.target.value)} placeholder="Record what you observed — describe specific skills demonstrated and how they have developed over the observation period…" readOnly={!am} style={{background:am?"#fff":"#F7F7F5"}}/></div>
+      <div style={{marginBottom:8}}><label style={{display:"block",fontSize:11,fontWeight:600,color:MG,marginBottom:3}}>Observation notes (including evidence of skill progression)</label><textarea className="ta-screen" rows={4} value={notes||""} onChange={e=>am&&onNotes(e.target.value)} placeholder="Record what you observed — describe specific skills demonstrated and how they have developed over the observation period…" readOnly={!am} style={{background:am?"#fff":"#F7F7F5"}}/><div className="ta-print">{notes||""}</div></div>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:12,fontWeight:600,color:am?ASSESSOR_BG:MG}}>Outcome:</span>
         {["PASS","NOT YET"].map(v=>(<button key={v} onClick={()=>am&&onPass(v==="PASS")} disabled={!am} style={{padding:"4px 14px",border:`2px solid ${pass===true&&v==="PASS"?G:pass===false&&v==="NOT YET"?RED:BD}`,borderRadius:20,fontSize:12,fontWeight:700,cursor:am?"pointer":"default",background:pass===true&&v==="PASS"?LG:pass===false&&v==="NOT YET"?RED_LT:"#fff",color:pass===true&&v==="PASS"?G:pass===false&&v==="NOT YET"?RED:MG}}>{v}</button>))}
@@ -181,7 +187,7 @@ const EvidenceSection=({data,update,am})=>{
   };
   return(<div>
     <div style={{background:LG,border:`1.5px solid ${G}`,borderRadius:7,padding:"10px 14px",marginBottom:16,fontSize:13,color:"#1a3a2a"}}>Upload activity photos, skill development videos/audio reflections, certificates, or any other supporting evidence.</div>
-    {items.map(it=>(<div key={it.id} style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:14,marginBottom:12,background:"#fff"}}><div style={{display:"flex",gap:12,alignItems:"flex-start"}}><div style={{flexShrink:0}}><Thumb it={it}/>{!am&&<label style={{display:"block",marginTop:6,padding:"4px 8px",background:LG,border:`1px solid ${G}`,borderRadius:4,fontSize:11,fontWeight:600,color:G,cursor:"pointer",textAlign:"center"}}>Upload<input type="file" accept="image/*,audio/*" style={{display:"none"}} onChange={e=>handleFile(it.id,e.target.files[0])}/></label>}</div><div style={{flex:1}}>{it.b64&&it.mediaType==="audio"&&<audio controls src={it.b64} style={{width:"100%",marginBottom:8,height:36}}/>}<textarea rows={3} value={it.desc||""} readOnly={am} onChange={e=>!am&&patchItem(it.id,{desc:e.target.value})} placeholder="Describe what this shows…" style={{background:am?"#F7F7F5":"#fff"}}/><div style={{marginTop:8}}><div style={{fontSize:11,fontWeight:600,color:MG,marginBottom:5,textTransform:"uppercase",letterSpacing:".04em"}}>Evidence for:</div><div style={{display:"flex",flexWrap:"wrap",gap:4}}>{allACs.map(ac=>(<label key={ac} style={{display:"flex",alignItems:"center",gap:3,padding:"2px 8px",border:`1px solid ${(it.acs||[]).includes(ac)?G:BD}`,borderRadius:12,fontSize:11,cursor:am?"default":"pointer",background:(it.acs||[]).includes(ac)?LG:"#fff",color:(it.acs||[]).includes(ac)?G:MG}}><input type="checkbox" checked={(it.acs||[]).includes(ac)} disabled={am} onChange={e=>{const next=e.target.checked?[...(it.acs||[]),ac]:(it.acs||[]).filter(a=>a!==ac);patchItem(it.id,{acs:next});}} style={{accentColor:G}}/>AC {ac}</label>))}</div></div></div>{!am&&<button onClick={()=>removeItem(it.id)} style={{background:"none",border:"none",color:RED,fontSize:18,cursor:"pointer",padding:"2px 6px",flexShrink:0}}>&#215;</button>}</div></div>))}
+    {items.map(it=>(<div key={it.id} style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:14,marginBottom:12,background:"#fff"}}><div style={{display:"flex",gap:12,alignItems:"flex-start"}}><div style={{flexShrink:0}}><Thumb it={it}/>{!am&&<label style={{display:"block",marginTop:6,padding:"4px 8px",background:LG,border:`1px solid ${G}`,borderRadius:4,fontSize:11,fontWeight:600,color:G,cursor:"pointer",textAlign:"center"}}>Upload<input type="file" accept="image/*,audio/*" style={{display:"none"}} onChange={e=>handleFile(it.id,e.target.files[0])}/></label>}</div><div style={{flex:1}}>{it.b64&&it.mediaType==="audio"&&<audio controls src={it.b64} style={{width:"100%",marginBottom:8,height:36}}/>}<textarea className="ta-screen" rows={3} value={it.desc||""} readOnly={am} onChange={e=>!am&&patchItem(it.id,{desc:e.target.value})} placeholder="Describe what this shows…" style={{background:am?"#F7F7F5":"#fff"}}/><div className="ta-print">{it.desc||""}</div><div style={{marginTop:8}}><div style={{fontSize:11,fontWeight:600,color:MG,marginBottom:5,textTransform:"uppercase",letterSpacing:".04em"}}>Evidence for:</div><div style={{display:"flex",flexWrap:"wrap",gap:4}}>{allACs.map(ac=>(<label key={ac} style={{display:"flex",alignItems:"center",gap:3,padding:"2px 8px",border:`1px solid ${(it.acs||[]).includes(ac)?G:BD}`,borderRadius:12,fontSize:11,cursor:am?"default":"pointer",background:(it.acs||[]).includes(ac)?LG:"#fff",color:(it.acs||[]).includes(ac)?G:MG}}><input type="checkbox" checked={(it.acs||[]).includes(ac)} disabled={am} onChange={e=>{const next=e.target.checked?[...(it.acs||[]),ac]:(it.acs||[]).filter(a=>a!==ac);patchItem(it.id,{acs:next});}} style={{accentColor:G}}/>AC {ac}</label>))}</div></div></div>{!am&&<button onClick={()=>removeItem(it.id)} style={{background:"none",border:"none",color:RED,fontSize:18,cursor:"pointer",padding:"2px 6px",flexShrink:0}}>&#215;</button>}</div></div>))}
     {!am&&<button onClick={addItem} style={{width:"100%",padding:"10px",border:`2px dashed ${G}`,borderRadius:7,background:LG,color:G,fontWeight:700,fontSize:13,cursor:"pointer"}}>+ Add photo / audio evidence</button>}
   </div>);
 };
@@ -203,7 +209,7 @@ function App(){
 
   const update=useCallback(patch=>{setData(d=>({...d,...patch}));},[]);
   useEffect(()=>{clearTimeout(saveTimer.current);saveTimer.current=setTimeout(()=>{try{localStorage.setItem(UNIT_KEY,JSON.stringify(data));}catch(e){}},600);},[data]);
-  useEffect(()=>{if(!printing)return;const t=setTimeout(()=>{window.print();setPrinting(false);const s=document.getElementById("ev-cover-strip");if(s)s.style.display="none";},200);return()=>clearTimeout(t);},[printing]);
+  useEffect(()=>{if(!printing)return;const originalTitle=document.title;const namePart=(data.studentName||"").trim().replace(/\s+/g,"");const modeSuffix=printMode==="ev"?"EV":printMode==="section"?`Section${sec.charAt(0).toUpperCase()+sec.slice(1)}`:"Complete";document.title=`HB93CY004SkillsDevelopment${modeSuffix}${namePart}`;const t=setTimeout(()=>{window.print();document.title=originalTitle;setPrinting(false);const s=document.getElementById("ev-cover-strip");if(s)s.style.display="none";},200);return()=>clearTimeout(t);},[printing]);
 
   const am=data.assessorMode;
   const upd=f=>v=>update({[f]:v});
@@ -219,7 +225,7 @@ function App(){
   const filled=fields.filter(f=>{const v=data[f];if(Array.isArray(v))return v.some(r=>Object.values(r).some(x=>String(x||"").trim().length>3));return String(v||"").trim().length>3;}).length;
   const pct=Math.round((filled/fields.length)*100);
 
-  const exportJSON=()=>{const exp={...data,_unit:UNIT_CODE,_exported:new Date().toISOString()};const blob=new Blob([JSON.stringify(exp,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`${UNIT_CODE}_${(data.studentName||"student").replace(/\s+/g,"_")}_workbook.json`;a.click();URL.revokeObjectURL(url);};
+  const exportJSON=()=>{const exp={...data,_unit:UNIT_CODE,_exported:new Date().toISOString()};const blob=new Blob([JSON.stringify(exp,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`HB93CY004Workbook${(data.studentName||"Student").replace(/\s+/g,"")}.json`;a.click();URL.revokeObjectURL(url);};
   const importJSON=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{try{const p=JSON.parse(ev.target.result);if(p._unit&&p._unit!==UNIT_CODE){alert(`Wrong workbook file. Expected ${UNIT_CODE}, got ${p._unit}.`);return;}setData({...init(),...p});alert("Workbook loaded.");}catch(err){alert("Could not read file.");}};reader.readAsText(file);e.target.value="";};
 
   const enterAM=()=>{if(pwd===ASSESSOR_PASS){update({assessorMode:true});setShowPwd(false);setPwd("");setPwdErr("");}else{setPwdErr("Incorrect password.");}};
@@ -244,7 +250,7 @@ function App(){
       </div>
 
       {/* Header */}
-      <div className="wb-header no-print" style={{position:"sticky",top:0,zIndex:100,background:headerBg,color:"#fff",padding:"0 16px",height:56,display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:"0 2px 8px rgba(0,0,0,.15)",transition:"background .3s"}}>
+      <div className="wb-header no-print" style={{position:"sticky",top:0,zIndex:100,background:headerBg,color:"#fff",padding:"0 16px",height:64,boxSizing:"border-box",display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:"0 2px 8px rgba(0,0,0,.15)",transition:"background .3s"}}>
         <div style={{display:"flex",flexDirection:"column",lineHeight:1.2}}><span style={{fontWeight:700,fontSize:14}}>{UNIT_CODE} — {UNIT_TITLE}</span><span style={{fontSize:11,opacity:.8}}>{UNIT_SUBTITLE}</span></div>
         <div style={{display:"flex",alignItems:"center",gap:10}}><img src={LOGO_SRC} alt="Brynllywarch" style={{height:34,objectFit:"contain"}}/><img src={AGORED_LOGO_SRC} alt="Agored Cymru" style={{height:28,objectFit:"contain"}}/></div>
         <div style={{display:"flex",alignItems:"center",gap:8}}>
@@ -257,12 +263,12 @@ function App(){
       </div>
 
       {/* Sub-header */}
-      <div className="no-print" style={{position:"sticky",top:56,zIndex:99,background:am?ASSESSOR_BG:"#fff",borderBottom:`2px solid ${am?ASSESSOR_BD:BD}`,padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+      <div className="no-print" style={{position:"sticky",top:64,zIndex:99,height:41,boxSizing:"border-box",background:am?ASSESSOR_BG:"#fff",borderBottom:`2px solid ${am?ASSESSOR_BD:BD}`,padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         {am?<><span style={{fontSize:12,fontWeight:600,color:"#fff"}}>ASSESSOR MODE — You are marking this workbook.</span><button onClick={exitAM} style={{background:"rgba(255,255,255,.2)",border:"1px solid rgba(255,255,255,.4)",color:"#fff",borderRadius:5,padding:"4px 12px",fontSize:12,fontWeight:600,cursor:"pointer"}}>Exit Assessor Mode</button></>:<><span style={{fontSize:12,color:MG}}>Student mode — your answers are editable.</span><button onClick={()=>setShowPwd(true)} style={{background:LG,border:`1px solid ${G}`,color:G,borderRadius:5,padding:"4px 12px",fontSize:12,fontWeight:600,cursor:"pointer"}}>Enter Assessor Mode</button></>}
       </div>
 
       {/* Nav */}
-      <div className="no-print" style={{position:"sticky",top:108,zIndex:98,background:"#fff",borderBottom:`2px solid ${LG}`,overflowX:"auto",display:"flex",alignItems:"stretch",whiteSpace:"nowrap",boxShadow:"0 2px 4px rgba(0,0,0,.05)"}}>
+      <div className="no-print" style={{position:"sticky",top:105,zIndex:98,background:"#fff",borderBottom:`2px solid ${LG}`,overflowX:"auto",display:"flex",alignItems:"stretch",whiteSpace:"nowrap",boxShadow:"0 2px 4px rgba(0,0,0,.05)"}}>
         {navItems.map(n=>(<button key={n.id} onClick={()=>setSec(n.id)} style={{padding:"10px 14px",border:"none",borderBottom:`3px solid ${sec===n.id?G:"transparent"}`,background:"none",fontWeight:sec===n.id?700:400,color:sec===n.id?G:MG,fontSize:13,cursor:"pointer",transition:"all .15s",flexShrink:0}}>{n.label}</button>))}
       </div>
 
@@ -384,23 +390,29 @@ function App(){
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
                 <div>
                   <div style={{fontSize:12,fontWeight:600,color:G,marginBottom:4,padding:"6px 8px",background:LG,borderRadius:5}}>Short-term goals (achievable within this unit)</div>
-                  <TA value={data.ac12_short_goals} onChange={upd("ac12_short_goals")} rows={6} ph={"Short-term goal 1: …
+                  <TA value={data.ac12_short_goals} onChange={upd("ac12_short_goals")} rows={6} ph={`Short-term goal 1: …
 How participation will help achieve this: …
 
 Short-term goal 2: …
-How participation will help: …"} disabled={am} recordings={data.recordings?.ac12_short_goals||[]} onAddRecording={updRec("ac12_short_goals")}/>
+How participation will help: …`} disabled={am} recordings={data.recordings?.ac12_short_goals||[]} onAddRecording={updRec("ac12_short_goals")}/>
                 </div>
                 <div>
                   <div style={{fontSize:12,fontWeight:600,color:DG,marginBottom:4,padding:"6px 8px",background:LG,borderRadius:5}}>Long-term goals (beyond this unit)</div>
-                  <TA value={data.ac12_long_goals} onChange={upd("ac12_long_goals")} rows={6} ph={"Long-term goal 1: …
+                  <TA value={data.ac12_long_goals} onChange={upd("ac12_long_goals")} rows={6} ph={`Long-term goal 1: …
 How this activity contributes to it: …
 
 Long-term goal 2: …
-Timeline and connection to the activity: …"} disabled={am} recordings={data.recordings?.ac12_long_goals||[]} onAddRecording={updRec("ac12_long_goals")}/>
+Timeline and connection to the activity: …`} disabled={am} recordings={data.recordings?.ac12_long_goals||[]} onAddRecording={updRec("ac12_long_goals")}/>
                 </div>
               </div>
               {am&&<ACStatus id="1.2" status={acStatus("1.2")} onChange={v=>setACStatus("1.2",v)}/>}
             </ACQ>
+            <ResearchLinks items={[
+              ["Canoe Wales — Paddlesport Pathway","https://canoewales.com/paddlesport-pathway","Skill progression awards and pathways for paddlesport in Wales"],
+              ["Mountain Training — Walking and Climbing Awards","https://www.mountain-training.org/walking","Qualification and skills pathways for hill walking and climbing"],
+              ["British Cycling — Mountain Bike Skills","https://www.britishcycling.org.uk/mtb","Skill progression frameworks for mountain biking"],
+              ["DofE — Skills Section Guidance","https://www.dofe.org/about-dofe/the-programme/","Setting and evidencing personal development goals"],
+            ]}/>
             <AssessorFeedback label="LO 1" value={loFb("lo1")} onChange={v=>setLOFeedback("lo1",v)} assessorMode={am}/>
             {!am&&<ContinueBtn label="Continue to LO 2 →" onClick={()=>setSec("lo2")}/>}
           </div>
@@ -456,9 +468,9 @@ Timeline and connection to the activity: …"} disabled={am} recordings={data.re
                         <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE"}}><input type="date" value={row.date||""} onChange={e=>updLog(row.id,"date",e.target.value)} disabled={am} style={{fontSize:11,padding:"3px 5px"}}/></td>
                         <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE",textAlign:"center"}}><input type="number" min="0" max="12" step="0.5" value={row.duration||""} onChange={e=>updLog(row.id,"duration",e.target.value)} disabled={am} style={{fontSize:11,padding:"3px 5px",textAlign:"center",width:"60px"}}/></td>
                         <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE"}}><input type="text" value={row.location||""} onChange={e=>updLog(row.id,"location",e.target.value)} disabled={am} placeholder="Site/location…" style={{fontSize:11,padding:"3px 5px"}}/></td>
-                        <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE"}}><textarea rows={2} value={row.activity_focus||""} readOnly={am} onChange={e=>updLog(row.id,"activity_focus",e.target.value)} placeholder="What was the session focus?…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/></td>
-                        <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE"}}><textarea rows={2} value={row.conditions||""} readOnly={am} onChange={e=>updLog(row.id,"conditions",e.target.value)} placeholder="Weather, water level, group…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/></td>
-                        <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE"}}><textarea rows={2} value={row.progress_notes||""} readOnly={am} onChange={e=>updLog(row.id,"progress_notes",e.target.value)} placeholder="Skills progressed…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/></td>
+                        <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE"}}><textarea className="ta-screen" rows={2} value={row.activity_focus||""} readOnly={am} onChange={e=>updLog(row.id,"activity_focus",e.target.value)} placeholder="What was the session focus?…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/><div className="ta-print" style={{fontSize:11,padding:"3px 5px"}}>{row.activity_focus||""}</div></td>
+                        <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE"}}><textarea className="ta-screen" rows={2} value={row.conditions||""} readOnly={am} onChange={e=>updLog(row.id,"conditions",e.target.value)} placeholder="Weather, water level, group…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/><div className="ta-print" style={{fontSize:11,padding:"3px 5px"}}>{row.conditions||""}</div></td>
+                        <td style={{padding:"4px 5px",borderBottom:"1px solid #E8F5EE"}}><textarea className="ta-screen" rows={2} value={row.progress_notes||""} readOnly={am} onChange={e=>updLog(row.id,"progress_notes",e.target.value)} placeholder="Skills progressed…" style={{width:"100%",fontSize:11,border:"1px solid #D4D4CC",borderRadius:3,padding:"3px 5px",resize:"vertical",background:am?"#F7F7F5":"#fff"}}/><div className="ta-print" style={{fontSize:11,padding:"3px 5px"}}>{row.progress_notes||""}</div></td>
                         {!am&&<td style={{textAlign:"center",padding:"4px"}}>{(data.participation_log||[]).length>1&&<button onClick={()=>removeLog(row.id)} style={{background:"none",border:"none",color:RED,cursor:"pointer",fontSize:14}}>✕</button>}</td>}
                       </tr>
                     ))}
@@ -477,17 +489,22 @@ Timeline and connection to the activity: …"} disabled={am} recordings={data.re
             {/* AC 2.2 */}
             <ACQ ac="2.2" am={am} label="Demonstrate progression of your skills during the activity.">
               <Hint text="Write a detailed account of how your skills have progressed over the 12+ hours. Use specific examples — name skills, describe what you could do at the start vs what you can do now. Reference your participation log entries."/>
-              <TA value={data.ac22_progression} onChange={upd("ac22_progression")} rows={8} ph={"At the start of the unit, I could…
+              <TA value={data.ac22_progression} onChange={upd("ac22_progression")} rows={8} ph={`At the start of the unit, I could…
 
 Over the sessions, I worked on…
 
 By the end of the unit, I can now…
 
-A specific example of skill progression: …"} disabled={am} recordings={data.recordings?.ac22_progression||[]} onAddRecording={updRec("ac22_progression")}/>
+A specific example of skill progression: …`} disabled={am} recordings={data.recordings?.ac22_progression||[]} onAddRecording={updRec("ac22_progression")}/>
               <ObsRecord ac="2.1 + 2.2" title="Participation in the activity (min. 12 hours) and demonstration of skill progression." date={data.ac22_obs_date} assessor={data.ac22_obs_assessor} notes={data.ac22_obs_notes} pass={data.ac22_obs_pass===true?true:data.ac22_obs_pass===false?false:null} onDate={v=>update({ac22_obs_date:v})} onAssessor={v=>update({ac22_obs_assessor:v})} onNotes={v=>update({ac22_obs_notes:v})} onPass={v=>update({ac22_obs_pass:v})} am={am}/>
               {am&&<ACStatus id="2.2" status={acStatus("2.2")} onChange={v=>setACStatus("2.2",v)}/>}
             </ACQ>
 
+            <ResearchLinks items={[
+              ["Outdoor Partnership — Skills Progression","https://www.outdoorpartnership.co.uk","Pathways for developing outdoor activity skills in North Wales"],
+              ["NRW — Visit Wales Outdoor Activities","https://naturalresources.wales/days-out/activities","Locations and conditions guidance for outdoor activities across Wales"],
+              ["Honey & Mumford — Learning Styles","https://www.businessballs.com/self-awareness/honey-and-mumford-learning-styles/","Background reading on experiential learning cycles relevant to skill progression"],
+            ]}/>
             <AssessorFeedback label="LO 2" value={loFb("lo2")} onChange={v=>setLOFeedback("lo2",v)} assessorMode={am}/>
             {!am&&<ContinueBtn label="Continue to LO 3 →" onClick={()=>setSec("lo3")}/>}
           </div>
@@ -513,7 +530,7 @@ A specific example of skill progression: …"} disabled={am} recordings={data.re
             <div style={{background:DG,color:"#fff",borderRadius:6,padding:"8px 14px",fontSize:12,fontWeight:700,marginBottom:16,letterSpacing:".05em",textTransform:"uppercase"}}>Assessment Tasks — LO 3</div>
             <ACQ ac="3.1" am={am} label="Evaluate your personal progress while participating in the outdoor learning activity.">
               <Hint text="Evaluate (not just describe) — this means making judgements about the quality of your progress and explaining why. Use specific examples from your sessions. Did you meet your goals from LO 1? Why/why not?"/>
-              <TA value={data.ac31_evaluation} onChange={upd("ac31_evaluation")} rows={8} ph={"Overall evaluation of my progress: …
+              <TA value={data.ac31_evaluation} onChange={upd("ac31_evaluation")} rows={8} ph={`Overall evaluation of my progress: …
 
 Short-term goal 1 review: Did I achieve it? Evidence: …
 
@@ -521,7 +538,7 @@ Short-term goal 2 review: Did I achieve it? Evidence: …
 
 Factors that helped/hindered progress: …
 
-Most significant skills developed: …"} disabled={am} recordings={data.recordings?.ac31_evaluation||[]} onAddRecording={updRec("ac31_evaluation")}/>
+Most significant skills developed: …`} disabled={am} recordings={data.recordings?.ac31_evaluation||[]} onAddRecording={updRec("ac31_evaluation")}/>
               {am&&<ACStatus id="3.1" status={acStatus("3.1")} onChange={v=>setACStatus("3.1",v)}/>}
             </ACQ>
             <ACQ ac="3.2" am={am} label="Review your personal goals from AC 1.2 and set new goals for future progression.">
@@ -529,24 +546,29 @@ Most significant skills developed: …"} disabled={am} recordings={data.recordin
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
                 <div>
                   <div style={{fontSize:12,fontWeight:600,color:G,marginBottom:4,padding:"6px 8px",background:LG,borderRadius:5}}>Review of goals from AC 1.2</div>
-                  <TA value={data.ac32_goal_review} onChange={upd("ac32_goal_review")} rows={7} ph={"Short-term goal 1 [state the original goal]: Met / Partially met / Not met
+                  <TA value={data.ac32_goal_review} onChange={upd("ac32_goal_review")} rows={7} ph={`Short-term goal 1 [state the original goal]: Met / Partially met / Not met
 Evidence: …
 Reason if not fully met: …
 
-Long-term goal 1: Progress made so far: …"} disabled={am} recordings={data.recordings?.ac32_goal_review||[]} onAddRecording={updRec("ac32_goal_review")}/>
+Long-term goal 1: Progress made so far: …`} disabled={am} recordings={data.recordings?.ac32_goal_review||[]} onAddRecording={updRec("ac32_goal_review")}/>
                 </div>
                 <div>
                   <div style={{fontSize:12,fontWeight:600,color:DG,marginBottom:4,padding:"6px 8px",background:LG,borderRadius:5}}>New goals for future progression</div>
-                  <TA value={data.ac32_new_goals} onChange={upd("ac32_new_goals")} rows={7} ph={"New short-term goal: …
+                  <TA value={data.ac32_new_goals} onChange={upd("ac32_new_goals")} rows={7} ph={`New short-term goal: …
 How I will work towards it: …
 Timeline: …
 
 New long-term goal: …
-Why I have set this goal: …"} disabled={am} recordings={data.recordings?.ac32_new_goals||[]} onAddRecording={updRec("ac32_new_goals")}/>
+Why I have set this goal: …`} disabled={am} recordings={data.recordings?.ac32_new_goals||[]} onAddRecording={updRec("ac32_new_goals")}/>
                 </div>
               </div>
               {am&&<ACStatus id="3.2" status={acStatus("3.2")} onChange={v=>setACStatus("3.2",v)}/>}
             </ACQ>
+            <ResearchLinks items={[
+              ["Agored Cymru — Goal Setting Resources","https://agored.cymru","Guidance on setting and reviewing personal development goals at Level 3"],
+              ["Mind Tools — SMART Goals","https://www.mindtools.com/a4wo118/smart-goals","Background reading on writing specific, measurable goals"],
+              ["UK Coaching — Reflective Practice","https://www.ukcoaching.org/resources/topics/guides/a-brief-guide-to-reflective-practice","Guidance on reflective evaluation of personal performance and progress"],
+            ]}/>
             <AssessorFeedback label="LO 3" value={loFb("lo3")} onChange={v=>setLOFeedback("lo3",v)} assessorMode={am}/>
             {!am&&<ContinueBtn label="Continue to LO 4 →" onClick={()=>setSec("lo4")}/>}
           </div>
@@ -574,7 +596,7 @@ Why I have set this goal: …"} disabled={am} recordings={data.recordings?.ac32_
             <div style={{background:DG,color:"#fff",borderRadius:6,padding:"8px 14px",fontSize:12,fontWeight:700,marginBottom:16,letterSpacing:".05em",textTransform:"uppercase"}}>Assessment Tasks — LO 4</div>
             <ACQ ac="4.1" am={am} label="Explain how participating in this outdoor learning activity has developed your employability skills.">
               <Hint text="Name specific employability skills from the table above. For each, explain HOW the activity specifically developed that skill — use examples from your sessions. At Level 3, 'I improved my teamwork' is not enough; explain what happened and why it developed the skill."/>
-              <TA value={data.ac41_employability} onChange={upd("ac41_employability")} rows={9} ph={"Employability skill 1 — [Name]:
+              <TA value={data.ac41_employability} onChange={upd("ac41_employability")} rows={9} ph={`Employability skill 1 — [Name]:
 How the activity developed it: …
 Specific example from a session: …
 
@@ -583,7 +605,7 @@ How the activity developed it: …
 Specific example: …
 
 Employability skill 3 — [Name]:
-How the activity developed it: …"} disabled={am} recordings={data.recordings?.ac41_employability||[]} onAddRecording={updRec("ac41_employability")}/>
+How the activity developed it: …`} disabled={am} recordings={data.recordings?.ac41_employability||[]} onAddRecording={updRec("ac41_employability")}/>
               {am&&<ACStatus id="4.1" status={acStatus("4.1")} onChange={v=>setACStatus("4.1",v)}/>}
             </ACQ>
             <ACQ ac="4.2" am={am} label="Evaluate how participating in this outdoor learning activity related to aspects of enjoyment, challenge and independence.">
@@ -600,6 +622,11 @@ How the activity developed it: …"} disabled={am} recordings={data.recordings?.
             </ACQ>
 
             {am&&(<div style={{background:ASSESSOR_LT,border:`1.5px solid ${ASSESSOR_BD}`,borderRadius:8,padding:"16px 18px",marginTop:16}}><div style={{fontWeight:700,color:ASSESSOR_BG,fontSize:14,marginBottom:10,textTransform:"uppercase",letterSpacing:".05em"}}>Overall Result</div><div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>{["DISTINCTION","MERIT","PASS","REFER","PENDING"].map(v=>(<button key={v} onClick={()=>update({overall_result:v})} style={{padding:"6px 14px",border:`2px solid ${data.overall_result===v?(resultColour[v]||MG):BD}`,borderRadius:20,fontSize:12,fontWeight:700,cursor:"pointer",background:data.overall_result===v?"#f0f9ff":"#fff",color:data.overall_result===v?(resultColour[v]||MG):MG}}>{v}</button>))}</div><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}><Inp label="Assessor signature" value={data.assessorSig} onChange={upd("assessorSig")} ph="Assessor name"/><Inp label="Date marked" value={data.markedDate} onChange={upd("markedDate")} type="date"/></div></div>)}
+            <ResearchLinks items={[
+              ["NCFE/CIPD — Employability Skills Framework","https://www.cipd.org/uk/knowledge/factsheets/employability-factsheet/","Overview of employability skills valued by employers"],
+              ["Institute for Outdoor Learning — Impact of Outdoor Learning","https://www.outdoor-learning.org/research","Research on how outdoor learning develops transferable skills"],
+              ["Brathay Trust — Outdoor Learning and Resilience","https://www.brathay.org.uk","Evidence on how challenge-based outdoor activities build resilience and independence"],
+            ]}/>
             <AssessorFeedback label="LO 4" value={loFb("lo4")} onChange={v=>setLOFeedback("lo4",v)} assessorMode={am}/>
             {!am&&<ContinueBtn label="Continue to Evidence →" onClick={()=>setSec("evidence")}/>}
           </div>

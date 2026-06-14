@@ -24,12 +24,16 @@ table.data-tbl th{background:#1A6B3C;color:#fff;padding:8px 10px;text-align:left
 table.data-tbl td{padding:7px 8px;border-bottom:1px solid #E8F5EE;vertical-align:top}
 table.data-tbl tr:nth-child(even) td{background:#F7FAF8}
 table.data-tbl td input[type=text]{border:1px solid #D4D4CC;border-radius:4px;padding:5px 7px;font-size:12px}
+.ta-print{display:none}
 @media print{
   .no-print{display:none!important}
   .wb-header{display:none!important}
   #ev-cover-strip{display:block!important}
   .wb-section{display:block!important}
   body{background:#fff}
+  .ta-screen{display:none!important}
+  .ta-print{display:block!important;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;font-family:'Segoe UI',system-ui,sans-serif;color:#1a1a1a;min-height:16px;line-height:1.5;border:1.5px solid #D4D4CC;border-radius:6px;padding:10px 12px;background:#fff}
+  input[type=text],input[type=date]{border:1px solid #ccc!important;background:#fff!important}
 }
 </style>
 </head>
@@ -153,9 +157,10 @@ const TA=({value,onChange,rows=5,ph="Write your answer here…",disabled=false,r
   const hasRec=recordings&&recordings.length>0;
   return(
     <div>
-      <textarea rows={rows} style={{background:disabled?"#F7F7F5":"#fff",color:disabled?"#6B6B6B":"#1A1A1A"}}
+      <textarea className="ta-screen" rows={rows} style={{background:disabled?"#F7F7F5":"#fff",color:disabled?"#6B6B6B":"#1A1A1A"}}
         value={value||""} onChange={e=>!disabled&&onChange(e.target.value)}
         placeholder={ph} readOnly={disabled}/>
+      <div className="ta-print">{value||<span style={{color:"#9ca3af",fontStyle:"italic"}}>{ph}</span>}</div>
       {!disabled&&onAddRecording&&(
         <AudioRecorder disabled={false}
           onSave={(b64,name)=>onAddRecording({b64,name,id:Date.now()})}/>
@@ -271,9 +276,10 @@ const AssessorFeedback=({label,value,onChange,assessorMode})=>{
         padding:"10px 14px",marginTop:12}}>
       <div style={{fontSize:12,fontWeight:700,color:ASSESSOR_BG,marginBottom:6,
         textTransform:"uppercase",letterSpacing:".05em"}}>Assessor Feedback — {label}</div>
-      <textarea rows={3} value={value||""} onChange={e=>onChange(e.target.value)}
+      <textarea className="ta-screen" rows={3} value={value||""} onChange={e=>onChange(e.target.value)}
         placeholder="Enter assessor feedback…"
         style={{background:"#fff",border:`1px solid ${ASSESSOR_BD}`}}/>
+      <div className="ta-print">{value||""}</div>
     </div>
   );
 };
@@ -392,10 +398,11 @@ const EvidenceSection=({data,update,am,acStatus,setACStatus})=>{
               {it.b64&&it.mediaType==="audio"&&(
                 <audio controls src={it.b64} style={{width:"100%",marginBottom:8,height:36}}/>
               )}
-              <textarea rows={3} value={it.desc||""} readOnly={am}
+              <textarea className="ta-screen" rows={3} value={it.desc||""} readOnly={am}
                 onChange={e=>!am&&patchItem(it.id,{desc:e.target.value})}
                 placeholder="Describe what this photo or audio recording shows…"
                 style={{background:am?"#F7F7F5":"#fff"}}/>
+              <div className="ta-print">{it.desc||""}</div>
               <div style={{marginTop:8}}>
                 <div style={{fontSize:11,fontWeight:600,color:MG,marginBottom:5,
                   textTransform:"uppercase",letterSpacing:".04em"}}>Evidence for:</div>
@@ -434,8 +441,9 @@ const EvidenceSection=({data,update,am,acStatus,setACStatus})=>{
                       color:it.amStatus===v?(v==="Sufficient"?G:RED):MG}}>{v}</button>
                 ))}
               </div>
-              <textarea rows={2} value={it.amFeedback||""} onChange={e=>patchItem(it.id,{amFeedback:e.target.value})}
+              <textarea className="ta-screen" rows={2} value={it.amFeedback||""} onChange={e=>patchItem(it.id,{amFeedback:e.target.value})}
                 placeholder="Evidence feedback…" style={{fontSize:12,background:"#fff",border:`1px solid ${ASSESSOR_BD}`}}/>
+              <div className="ta-print">{it.amFeedback||""}</div>
             </div>
           )}
         </div>
@@ -486,8 +494,13 @@ function App(){
   // Print effect — fires after React has rendered all sections
   useEffect(()=>{
     if(!printing)return;
+    const originalTitle=document.title;
+    const namePart=(data.studentName||"").trim().replace(/\s+/g,"");
+    const modeSuffix=printMode==="ev"?"EV":printMode==="section"?`Section${sec.charAt(0).toUpperCase()+sec.slice(1)}`:"Complete";
+    document.title=`HB93CY002SustainableParticipation${modeSuffix}${namePart}`;
     const t=setTimeout(()=>{
       window.print();
+      document.title=originalTitle;
       setPrinting(false);
       const strip=document.getElementById("ev-cover-strip");
       if(strip)strip.style.display="none";
@@ -529,7 +542,7 @@ function App(){
     const url=URL.createObjectURL(blob);
     const a=document.createElement("a");
     a.href=url;
-    const fn=`${UNIT_CODE}_${(data.studentName||"student").replace(/\s+/g,"_")}_workbook.json`;
+    const fn=`HB93CY002Workbook${(data.studentName||"Student").replace(/\s+/g,"")}.json`;
     a.download=fn; a.click(); URL.revokeObjectURL(url);
   };
   const importJSON=e=>{
@@ -634,7 +647,7 @@ function App(){
 
       {/* ── HEADER BAR 1 ── */}
       <div className="wb-header no-print" style={{position:"sticky",top:0,zIndex:100,
-        background:headerBg,color:"#fff",padding:"0 16px",height:56,
+        background:headerBg,color:"#fff",padding:"0 16px",height:64,boxSizing:"border-box",
         display:"flex",alignItems:"center",justifyContent:"space-between",
         boxShadow:"0 2px 8px rgba(0,0,0,.15)",transition:"background .3s"}}>
         <div style={{display:"flex",flexDirection:"column",lineHeight:1.2}}>
@@ -669,7 +682,7 @@ function App(){
       </div>
 
       {/* ── HEADER BAR 2 (assessor sub-banner) ── */}
-      <div className="no-print" style={{position:"sticky",top:56,zIndex:99,
+      <div className="no-print" style={{position:"sticky",top:64,zIndex:99,height:41,boxSizing:"border-box",
         background:am?ASSESSOR_BG:"#fff",borderBottom:`2px solid ${am?ASSESSOR_BD:BD}`,
         padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         {am?(
@@ -696,7 +709,7 @@ function App(){
       </div>
 
       {/* ── NAV ── */}
-      <div className="no-print" style={{position:"sticky",top:108,zIndex:98,
+      <div className="no-print" style={{position:"sticky",top:105,zIndex:98,
         background:"#fff",borderBottom:`2px solid ${LG}`,overflowX:"auto",
         display:"flex",alignItems:"stretch",whiteSpace:"nowrap",
         boxShadow:"0 2px 4px rgba(0,0,0,.05)"}}>
@@ -979,16 +992,16 @@ function App(){
                       <td><input type="text" value={row.ecosystem||""} disabled={am}
                         onChange={e=>updEco(row.id,"ecosystem",e.target.value)}
                         placeholder={`Eco-system ${i+1}`}/></td>
-                      <td><textarea rows={3} value={row.description||""} readOnly={am}
+                      <td><textarea className="ta-screen" rows={3} value={row.description||""} readOnly={am}
                         onChange={e=>updEco(row.id,"description",e.target.value)}
                         placeholder="Key characteristics…"
                         style={{border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",
-                          fontSize:12,resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/></td>
-                      <td><textarea rows={3} value={row.species||""} readOnly={am}
+                          fontSize:12,resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/><div className="ta-print" style={{fontSize:12,padding:"4px 6px"}}>{row.description||""}</div></td>
+                      <td><textarea className="ta-screen" rows={3} value={row.species||""} readOnly={am}
                         onChange={e=>updEco(row.id,"species",e.target.value)}
                         placeholder="Species 1, Species 2…"
                         style={{border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",
-                          fontSize:12,resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/></td>
+                          fontSize:12,resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/><div className="ta-print" style={{fontSize:12,padding:"4px 6px"}}>{row.species||""}</div></td>
                       {!am&&<td style={{textAlign:"center"}}>
                         {data.ac11_rows.length>3&&<button onClick={()=>removeEco(row.id)}
                           style={{background:"none",border:"none",color:RED,cursor:"pointer",fontSize:16}}>✕</button>}
@@ -1038,16 +1051,16 @@ function App(){
                       <td><input type="text" value={row.area||""} disabled={am}
                         onChange={e=>updInv(row.id,"area",e.target.value)}
                         placeholder="e.g. River Wye, Wye Valley"/></td>
-                      <td><textarea rows={4} value={row.impact||""} readOnly={am}
+                      <td><textarea className="ta-screen" rows={4} value={row.impact||""} readOnly={am}
                         onChange={e=>updInv(row.id,"impact",e.target.value)}
                         placeholder="Explain the ecological impact…"
                         style={{border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",
-                          fontSize:12,resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/></td>
-                      <td><textarea rows={4} value={row.control||""} readOnly={am}
+                          fontSize:12,resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/><div className="ta-print" style={{fontSize:12,padding:"4px 6px"}}>{row.impact||""}</div></td>
+                      <td><textarea className="ta-screen" rows={4} value={row.control||""} readOnly={am}
                         onChange={e=>updInv(row.id,"control",e.target.value)}
                         placeholder="Method to minimise spread…"
                         style={{border:"1px solid #D4D4CC",borderRadius:4,padding:"4px 6px",
-                          fontSize:12,resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/></td>
+                          fontSize:12,resize:"vertical",background:am?"#F7F7F5":"#fff",width:"100%"}}/><div className="ta-print" style={{fontSize:12,padding:"4px 6px"}}>{row.control||""}</div></td>
                       {!am&&<td style={{textAlign:"center"}}>
                         {data.ac14_rows.length>2&&<button onClick={()=>removeInv(row.id)}
                           style={{background:"none",border:"none",color:RED,cursor:"pointer",fontSize:16}}>✕</button>}
