@@ -82,8 +82,8 @@ const GLOSSARY = [
   ["Safe condition sign","A green square sign indicating safety equipment, exits, or first aid points."],
 ];
 
-const SECTIONS = ["cover","contents","intro","lo1","lo2","lo3","lo4","tasks","evidence","checklist","glossary"];
-const SEC_LABELS = {cover:"Cover",contents:"Contents",intro:"Introduction",lo1:"LO 1",lo2:"LO 2",lo3:"LO 3",lo4:"LO 4",tasks:"Assessment Tasks",evidence:"Photo Evidence",checklist:"Checklist",glossary:"Glossary"};
+const SECTIONS = ["cover","contents","intro","lo1","lo2","lo3","lo4","tasks","evidence","checklist","glossary","declaration"];
+const SEC_LABELS = {cover:"Cover",contents:"Contents",intro:"Introduction",lo1:"LO 1",lo2:"LO 2",lo3:"LO 3",lo4:"LO 4",tasks:"Assessment Tasks",evidence:"Photo Evidence",checklist:"Checklist",glossary:"Glossary",declaration:"Declaration"};
 
 const init = () => ({
   studentName:"", className:"", assessorName:"", startDate:"",
@@ -104,7 +104,7 @@ const init = () => ({
   t2_activity:"", t2_instructions:"",
   t3_process:"",
   t4_activity:"", t4_clothing:"", t4_use:"",
-  checklist:{}, studentSig:"", declarationDate:"",
+  checklist:{}, studentSig:"", declarationDate:"", submissionDate:"",
   evidence_items:[],
   recordings:{},
   assessorMode:false,
@@ -820,7 +820,7 @@ function App(){
         <div data-wb-section="contents" style={{display:secVis("contents")?"block":"none"}}>
           <h2 style={{color:G,marginBottom:16,fontSize:22}}>Contents</h2>
           <div style={{border:`1.5px solid ${BD}`,borderRadius:10,overflow:"hidden"}}>
-            {[["Introduction","Qualification overview and how to use this workbook"],["LO 1 — Risks & Hazards","Know about managing risks and hazards when learning in the outdoors"],["LO 2 — Health & Safety","Understand health and safety arrangements for learning in the outdoors"],["LO 3 — Accidents & Emergencies","Understand processes relating to accidents and emergencies"],["LO 4 — Safety Equipment","Be able to use safety clothing and equipment for outdoor activities"],["Assessment Tasks","Formal evidence tasks covering all 10 assessment criteria"],["Photo & Audio Evidence","Upload photos and audio recordings linked to assessment criteria"],["Checklist","Evidence checklist — student self-assessment and assessor verification"],["Glossary","Key terms and definitions for this unit"]].map(([title,desc],i)=>(
+            {[["Introduction","Qualification overview and how to use this workbook"],["LO 1 — Risks & Hazards","Know about managing risks and hazards when learning in the outdoors"],["LO 2 — Health & Safety","Understand health and safety arrangements for learning in the outdoors"],["LO 3 — Accidents & Emergencies","Understand processes relating to accidents and emergencies"],["LO 4 — Safety Equipment","Be able to use safety clothing and equipment for outdoor activities"],["Assessment Tasks","Formal evidence tasks covering all 10 assessment criteria"],["Photo & Audio Evidence","Upload photos and audio recordings linked to assessment criteria"],["Checklist","Evidence checklist — student self-assessment and assessor verification"],["Glossary","Key terms and definitions for this unit"],["Declaration","Learner declaration of authenticity / Datganiad dilysrwydd y dysgwr"]].map(([title,desc],i)=>(
               <div key={i} style={{padding:"12px 16px",borderBottom:i<8?`1px solid ${BD}`:"none",background:i%2===0?"#fff":LGR,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                 <div>
                   <div style={{fontSize:13,fontWeight:700,color:G}}>{title}</div>
@@ -1078,13 +1078,9 @@ function App(){
               </div>;
             })}
           </div>
-          <div style={{background:"#fff",border:`1.5px solid ${BD}`,borderRadius:10,padding:18,marginBottom:16}}>
-            <div style={{fontSize:13,fontWeight:700,color:G,marginBottom:10}}>Student Declaration</div>
-            <p style={{fontSize:12,color:"#374151",marginBottom:12}}>I confirm that the work submitted in this workbook is my own. I have not copied from other students or used unauthorised sources.</p>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-              <Inp label="Signature (type name)" value={data.studentSig} onChange={upd("studentSig")} ph="Type your full name" disabled={am}/>
-              <Inp label="Date" value={data.declarationDate} onChange={upd("declarationDate")} ph="DD/MM/YYYY" disabled={am}/>
-            </div>
+          <div style={{background:"#fff",border:`1.5px solid ${G}`,borderRadius:10,padding:18,marginBottom:16}}>
+            <div style={{fontSize:13,fontWeight:700,color:G,marginBottom:8}}>Declaration</div>
+            <p style={{fontSize:13,color:"#374151",lineHeight:1.7,margin:0}}>When you have finished your workbook, go to the <strong>Declaration</strong> tab to read and sign the full bilingual Learner Declaration of Authenticity before submitting.</p>
           </div>
           {!am&&<ContinueBtn label="Continue to Glossary →" onClick={()=>setSec("glossary")}/>}
         </div>
@@ -1102,6 +1098,95 @@ function App(){
                 <span style={{fontSize:12,color:"#374151"}}>{def}</span>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* ═══ DECLARATION ═══ */}
+        <div data-wb-section="declaration" style={{display:(secVis("declaration")||evVis)?"block":"none"}}>
+          <div style={{maxWidth:680,margin:"0 auto"}}>
+
+            <div style={{background:G,color:"#fff",padding:"20px 24px",borderRadius:"12px 12px 0 0",textAlign:"center"}}>
+              <div style={{fontSize:11,fontWeight:700,opacity:0.75,letterSpacing:1,textTransform:"uppercase",marginBottom:4}}>Agored Cymru</div>
+              <div style={{fontSize:19,fontWeight:700}}>Learner Declaration of Authenticity</div>
+              <div style={{fontSize:13,opacity:0.85,marginTop:3}}>Datganiad Dilysrwydd y Dysgwr</div>
+            </div>
+
+            <div style={{border:`1.5px solid ${BD}`,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"22px 24px",background:"#fff"}}>
+
+              {/* Details grid */}
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:22}}>
+                <div>
+                  <div style={{fontSize:11,color:MG,fontWeight:700,marginBottom:5}}>Learner Name / Enw'r Dysgwr</div>
+                  <div style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:"8px 12px",fontSize:13,background:LG,fontWeight:600,color:"#1a1a1a",minHeight:36}}>
+                    {data.studentName||<span style={{color:MG,fontStyle:"italic",fontWeight:400}}>Complete on Cover page</span>}
+                  </div>
+                </div>
+                <div>
+                  <div style={{fontSize:11,color:MG,fontWeight:700,marginBottom:5}}>Centre Name / Enw'r Ganolfan</div>
+                  <div style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:"8px 12px",fontSize:13,background:LG,fontWeight:600,color:"#1a1a1a"}}>Brynllywarch Hall School</div>
+                </div>
+                <div>
+                  <div style={{fontSize:11,color:MG,fontWeight:700,marginBottom:5}}>Workbook Title / Teitl y Llyfr Gwaith</div>
+                  <div style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:"8px 12px",fontSize:13,background:LG,fontWeight:600,color:"#1a1a1a"}}>Personal Safety when Learning in the Outdoors</div>
+                </div>
+                <div>
+                  <div style={{fontSize:11,color:MG,fontWeight:700,marginBottom:5}}>Unit / Uned</div>
+                  <div style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:"8px 12px",fontSize:13,background:LG,fontWeight:600,color:"#1a1a1a"}}>HB92CY002</div>
+                </div>
+                <div style={{gridColumn:"1/-1"}}>
+                  <div style={{fontSize:11,color:MG,fontWeight:700,marginBottom:5}}>Assessor Name / Enw'r Aseswr</div>
+                  <div style={{border:`1.5px solid ${BD}`,borderRadius:8,padding:"8px 12px",fontSize:13,background:LG,fontWeight:600,color:"#1a1a1a",minHeight:36}}>
+                    {data.assessorName||<span style={{color:MG,fontStyle:"italic",fontWeight:400}}>Complete on Cover page</span>}
+                  </div>
+                </div>
+              </div>
+
+              <hr style={{border:"none",borderTop:`2px solid ${G}`,margin:"0 0 20px 0"}}/>
+
+              {/* English statement */}
+              <div style={{marginBottom:22}}>
+                <div style={{fontSize:12,fontWeight:700,color:G,marginBottom:10,textTransform:"uppercase",letterSpacing:0.8}}>English Statement</div>
+                <div style={{fontSize:13,color:"#1a1a1a",lineHeight:1.9}}>
+                  <p style={{marginBottom:10}}>I hereby declare that:</p>
+                  <ol style={{paddingLeft:22,margin:0}}>
+                    <li style={{marginBottom:7}}>The evidence submitted in this workbook is entirely my own original work.</li>
+                    <li style={{marginBottom:7}}>I have not copied, closely paraphrased, or used ideas from any other person's work without clearly acknowledging and referencing the source.</li>
+                    <li style={{marginBottom:7}}>I understand that using unapproved artificial intelligence (AI) tools to generate this work constitutes academic misconduct.</li>
+                    <li style={{marginBottom:7}}>I understand that my work is subject to internal and external moderation processes overseen by Agored Cymru.</li>
+                    <li>I am aware that a false declaration is a serious offence that may lead to my work being disqualified.</li>
+                  </ol>
+                </div>
+              </div>
+
+              <hr style={{border:"none",borderTop:`1px solid ${BD}`,margin:"0 0 20px 0"}}/>
+
+              {/* Welsh statement */}
+              <div style={{marginBottom:22}}>
+                <div style={{fontSize:12,fontWeight:700,color:G,marginBottom:10,textTransform:"uppercase",letterSpacing:0.8}}>Datganiad Cymraeg</div>
+                <div style={{fontSize:13,color:"#1a1a1a",lineHeight:1.9}}>
+                  <p style={{marginBottom:10}}>Yr wyf yn datgan drwy hyn:</p>
+                  <ol style={{paddingLeft:22,margin:0}}>
+                    <li style={{marginBottom:7}}>Mai fy ngwaith gwreiddiol fy hun yn gyfan gwbl yw'r dystiolaeth a gyflwynir yn y llyfr gwaith hwn.</li>
+                    <li style={{marginBottom:7}}>Nid wyf wedi copio, parafraseio'n agos, na defnyddio syniadau o waith unrhyw berson arall heb gydnabod a chyfeirio'n glir at y ffynhonnell.</li>
+                    <li style={{marginBottom:7}}>Rwyf yn deall bod defnyddio offer deallusrwydd artiffisial (AI) heb gymeradwyaeth i gynhyrchu'r gwaith hwn yn cyfrif fel camymddygiad academaidd.</li>
+                    <li style={{marginBottom:7}}>Rwyf yn deall bod fy ngwaith yn amodol ar brosesau cymedroli mewnol ac allanol a arolygir gan Agored Cymru.</li>
+                    <li>Rwyf yn ymwybodol bod datganiad ffug yn drosedd ddifrifol a allai arwain at ddiarddel fy ngwaith.</li>
+                  </ol>
+                </div>
+              </div>
+
+              <hr style={{border:"none",borderTop:`2px solid ${G}`,margin:"0 0 20px 0"}}/>
+
+              {/* Signature fields */}
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+                <Inp label="Learner Signature / Llofnod y Dysgwr (type full name)" value={data.studentSig} onChange={upd("studentSig")} ph="Type your full name" disabled={am}/>
+                <Inp label="Date of Submission / Dyddiad Cyflwyno" value={data.submissionDate} onChange={upd("submissionDate")} ph="DD/MM/YYYY" disabled={am}/>
+              </div>
+
+              <div style={{marginTop:16,fontSize:11,color:MG,textAlign:"center",fontStyle:"italic"}}>
+                This declaration is included when you print or export your workbook.
+              </div>
+            </div>
           </div>
         </div>
 
