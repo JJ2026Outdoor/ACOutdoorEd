@@ -2,861 +2,1660 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PS5 Finding Out About Public Services – Digital Workbook</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PS5 — Finding Out About Public Services | Digital Workbook</title>
 <style>
-:root{
-  --navy:#1B3A6B; --navy-dark:#122952; --gold:#C8A951;
-  --light:#E8EEF7; --white:#FFFFFF; --muted:#6B7B8C;
-  --pass:#2E7D32; --merit:#1565C0; --distinction:#6A1B9A;
-  --green-hub:#E8F5E9; --green-border:#388E3C;
-}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#F4F6FB;color:#222;font-size:15px}
+body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;color:#1a1a2e}
+:root{
+  --navy:#1B3A6B;--navy-d:#122952;--navy-l:#E8EEF7;
+  --gold:#C8A951;--white:#fff;--muted:#6B7B8C;
+  --pass:#16a34a;--refer:#dc2626;--pending:#f59e0b;
+  --green-l:#f0fdf4;--red-l:#fef2f2;--amber-l:#fffbeb;
+}
 
-/* STICKY HEADER */
-#sticky-header{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--navy);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
-#sticky-header .logo{height:38px}
-#header-centre{flex:1;text-align:center}
-#header-title{color:var(--white);font-size:15px;font-weight:bold}
-#header-subtitle{color:var(--gold);font-size:12px}
-#progress-bar-wrap{width:180px;background:rgba(255,255,255,0.2);border-radius:10px;height:10px;margin:4px auto 0}
-#progress-bar{height:10px;background:var(--gold);border-radius:10px;width:0%;transition:width 0.4s}
-#progress-text{color:var(--gold);font-size:11px;text-align:center}
-.header-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.header-btns button{padding:5px 11px;border-radius:4px;border:none;cursor:pointer;font-size:12px;font-weight:bold}
-.btn-save{background:var(--gold);color:var(--navy)}
-.btn-load{background:rgba(255,255,255,0.2);color:var(--white)}
-.btn-assessor{background:var(--navy-dark);color:var(--gold);border:1px solid var(--gold) !important}
+/* ===== STICKY HEADER ===== */
+#sticky-header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:var(--navy);color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+.header-bar1{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 16px;min-height:60px;
+}
+.header-logos{display:flex;align-items:center;gap:10px}
+.header-logos img{height:48px;width:auto}
+.header-logos .divider{width:1px;height:44px;background:rgba(255,255,255,0.3)}
+.header-title{flex:1;text-align:center;padding:0 12px}
+.header-title h1{font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+.header-title p{font-size:11px;color:rgba(255,255,255,0.75);margin-top:2px}
+.header-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.header-controls button{
+  background:var(--gold);color:var(--navy-d);border:none;
+  padding:5px 10px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;
+  white-space:nowrap;
+}
+.header-controls button:hover{background:#b8961f}
+.header-controls button.outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.5)}
+.header-controls button.outline:hover{background:rgba(255,255,255,0.1)}
+#progress-bar-container{height:6px;background:rgba(255,255,255,0.2)}
+#progress-bar{height:6px;background:var(--gold);transition:width 0.3s;width:0%}
+#progress-text{text-align:right;font-size:10px;color:rgba(255,255,255,0.7);padding:1px 16px 2px}
 
-/* NAV BAR */
-#nav-bar{position:fixed;top:66px;left:0;right:0;z-index:999;background:var(--navy-dark);padding:0 12px;display:flex;gap:4px;overflow-x:auto;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
-.nav-btn{background:none;border:none;color:rgba(255,255,255,0.7);padding:10px 14px;cursor:pointer;font-size:13px;white-space:nowrap;border-bottom:3px solid transparent;transition:all 0.2s}
-.nav-btn:hover,.nav-btn.active{color:var(--white);border-bottom:3px solid var(--gold)}
+/* Assessor mode banner */
+#assessor-banner{
+  display:none;background:#1e3a8a;color:#fff;
+  text-align:center;padding:4px 16px;font-size:12px;font-weight:600;
+  border-top:2px solid var(--gold);
+}
+#assessor-banner.visible{display:block}
 
-/* MAIN CONTENT */
-main{margin-top:115px;max-width:900px;margin-left:auto;margin-right:auto;padding:20px}
-.section{display:none}
+/* ===== NAV BAR ===== */
+#nav-bar{
+  position:fixed;top:66px;left:0;right:0;z-index:999;
+  background:var(--navy-d);
+  display:flex;overflow-x:auto;
+  border-bottom:3px solid var(--gold);
+  scrollbar-width:none;
+}
+#nav-bar::-webkit-scrollbar{display:none}
+.nav-tab{
+  padding:8px 14px;color:rgba(255,255,255,0.75);
+  font-size:12px;font-weight:600;white-space:nowrap;
+  cursor:pointer;border-bottom:3px solid transparent;
+  margin-bottom:-3px;transition:all 0.2s;flex-shrink:0;
+}
+.nav-tab:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.nav-tab.active{color:#fff;border-bottom-color:var(--gold)}
+
+/* ===== MAIN CONTENT ===== */
+#main{margin-top:150px;padding:20px;max-width:900px;margin-left:auto;margin-right:auto}
+.section{display:none;animation:fadeIn 0.25s ease}
 .section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* CARDS */
-.card{background:var(--white);border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,0.1);padding:24px;margin-bottom:20px}
-.card h2{color:var(--navy);font-size:20px;margin-bottom:12px;padding-bottom:8px;border-bottom:3px solid var(--gold)}
-.card h3{color:var(--navy);font-size:16px;margin:16px 0 8px}
+/* ===== CARDS ===== */
+.card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.1);margin-bottom:20px;overflow:hidden}
+.card-header{background:var(--navy);color:#fff;padding:12px 16px}
+.card-header h2{font-size:16px;font-weight:700}
+.card-header p{font-size:12px;color:rgba(255,255,255,0.8);margin-top:3px}
+.card-body{padding:16px}
 
-/* KNOWLEDGE HUB */
-.knowledge-hub{background:var(--green-hub);border-left:5px solid var(--green-border);border-radius:0 6px 6px 0;padding:16px;margin-bottom:16px}
-.knowledge-hub .hub-title{color:var(--green-border);font-weight:bold;font-size:14px;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+/* Knowledge hub */
+.knowledge-hub{
+  background:var(--green-l);border-left:4px solid #16a34a;
+  border-radius:0 6px 6px 0;padding:14px 16px;margin-bottom:16px;
+}
+.knowledge-hub h3{color:#15803d;font-size:14px;font-weight:700;margin-bottom:8px}
+.knowledge-hub h4{color:#166534;font-size:13px;font-weight:600;margin:10px 0 5px}
+.knowledge-hub p,.knowledge-hub li{font-size:13px;line-height:1.6;color:#1a1a2e;margin-bottom:4px}
+.knowledge-hub ul,.knowledge-hub ol{margin-left:18px;margin-bottom:8px}
+.knowledge-hub table{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
+.knowledge-hub table th{background:#15803d;color:#fff;padding:6px 8px;text-align:left}
+.knowledge-hub table td{padding:5px 8px;border-bottom:1px solid #dcfce7}
+.knowledge-hub table tr:nth-child(even) td{background:#f0fdf4}
 
-/* TABLES */
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
-th{background:var(--navy);color:var(--white);padding:8px 10px;text-align:left}
-td{padding:7px 10px;border:1px solid #ddd}
-tr:nth-child(even) td{background:var(--light)}
-tr:nth-child(odd) td{background:var(--white)}
+/* Activity boxes */
+.activity-box{
+  background:var(--navy-l);border-left:4px solid var(--navy);
+  border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:14px;
+}
+.activity-box h4{color:var(--navy);font-size:13px;font-weight:700;margin-bottom:6px}
+.activity-box p,.activity-box li{font-size:13px;line-height:1.5;color:#333}
+.activity-box ul{margin-left:16px;margin-bottom:6px}
 
-/* INPUTS */
-textarea{width:100%;border:1px solid #ccc;border-radius:4px;padding:10px;font-family:Arial,sans-serif;font-size:14px;resize:vertical;min-height:90px;transition:border 0.2s}
-textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 2px rgba(27,58,107,0.15)}
-textarea.assessor-locked{background:#f5f5f5;color:#666;cursor:not-allowed}
-.input-label{font-weight:bold;color:var(--navy);font-size:13px;margin:10px 0 4px;display:block}
-input[type=text]{width:100%;border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:14px;font-family:Arial,sans-serif}
-input[type=text]:focus{outline:none;border-color:var(--navy)}
-input[type=text].assessor-locked{background:#f5f5f5;color:#666;cursor:not-allowed}
+/* Response fields */
+.response-field{
+  width:100%;border:1px solid #d1d5db;border-radius:4px;
+  padding:8px;font-family:inherit;font-size:13px;
+  resize:vertical;min-height:80px;background:#fff;
+  transition:border-color 0.2s;
+}
+.response-field:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 2px rgba(27,58,107,0.15)}
+.response-label{font-size:12px;color:var(--muted);margin-bottom:4px;display:block}
+.field-group{margin-bottom:12px}
 
-/* AC BADGES */
-.ac-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:bold;color:white;margin-bottom:8px}
-.badge-pass{background:var(--pass)}
-.badge-merit{background:var(--merit)}
-.badge-distinction{background:var(--distinction)}
+/* Tables for activities */
+.act-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px}
+.act-table th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-size:12px}
+.act-table td{padding:6px 8px;border:1px solid #d1d5db;vertical-align:top}
+.act-table tr:nth-child(even) td{background:#f8fafc}
+.act-table input[type=text]{width:100%;border:none;background:transparent;font-family:inherit;font-size:12px;padding:2px}
+.act-table input[type=text]:focus{outline:none;background:#fff;border-radius:2px}
 
-/* INFO BOX */
-.info-box{background:var(--light);border-left:5px solid var(--navy);border-radius:0 6px 6px 0;padding:14px;margin:12px 0;font-size:14px}
-.info-box strong{color:var(--navy)}
+/* AC badges */
+.ac-badge{
+  display:inline-block;background:var(--gold);color:var(--navy-d);
+  font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;
+  margin:2px 2px 6px 0;
+}
+.ac-badge.pass{background:#dcfce7;color:#166534}
+.ac-badge.merit{background:#dbeafe;color:#1e40af}
+.ac-badge.distinction{background:#fef3c7;color:#92400e}
 
-/* ASSESSMENT TASK */
-.task-section{border:2px solid var(--navy);border-radius:8px;padding:20px;margin-bottom:20px;background:var(--white)}
-.task-header{background:var(--navy);color:var(--white);padding:8px 14px;margin:-20px -20px 16px;border-radius:6px 6px 0 0;font-weight:bold}
+/* Assessment task cards */
+.task-card{border:1px solid var(--gold);border-radius:6px;margin-bottom:20px;overflow:hidden}
+.task-card-header{background:var(--navy-l);padding:10px 14px;border-bottom:1px solid var(--gold)}
+.task-card-header h3{font-size:14px;font-weight:700;color:var(--navy)}
+.task-card-header p{font-size:12px;color:var(--muted);margin-top:2px}
+.task-card-body{padding:14px}
+.grade-band{
+  border-radius:4px;padding:10px 12px;margin-bottom:10px;
+  border-left:4px solid transparent;
+}
+.grade-band.pass{background:#f0fdf4;border-color:#16a34a}
+.grade-band.merit{background:#eff6ff;border-color:#1d4ed8}
+.grade-band.distinction{background:#fffbeb;border-color:#d97706}
+.grade-band h4{font-size:12px;font-weight:700;margin-bottom:4px}
+.grade-band.pass h4{color:#15803d}
+.grade-band.merit h4{color:#1d4ed8}
+.grade-band.distinction h4{color:#b45309}
+.grade-band p{font-size:12px;color:#333;line-height:1.5}
 
-/* CHECKLIST */
-.checklist-item{display:flex;align-items:flex-start;gap:12px;padding:10px;border:1px solid #ddd;border-radius:6px;margin-bottom:8px;background:var(--white)}
-.checklist-item:nth-child(even){background:var(--light)}
-.ac-met-btn,.ac-notyet-btn{padding:4px 10px;border-radius:4px;border:none;cursor:pointer;font-size:12px;font-weight:bold;margin-right:4px}
-.ac-met-btn{background:#E8F5E9;color:var(--pass);border:1px solid var(--pass)}
-.ac-met-btn.active{background:var(--pass);color:white}
-.ac-notyet-btn{background:#FFF3E0;color:#E65100;border:1px solid #E65100}
-.ac-notyet-btn.active{background:#E65100;color:white}
+/* Cover page inputs */
+.cover-field{
+  display:flex;align-items:center;margin-bottom:10px;
+  border-bottom:1px solid var(--navy-l);padding-bottom:10px;
+}
+.cover-field label{font-size:13px;font-weight:600;color:var(--navy);width:160px;flex-shrink:0}
+.cover-field input,.cover-field select{
+  flex:1;border:1px solid #d1d5db;border-radius:4px;
+  padding:6px 10px;font-family:inherit;font-size:13px;
+}
+.cover-field input:focus,.cover-field select:focus{outline:none;border-color:var(--navy)}
 
-/* RESULT BANNER */
-#result-banner{display:none;padding:14px 20px;border-radius:8px;font-weight:bold;font-size:16px;text-align:center;margin-bottom:16px}
-.banner-pass{background:#E8F5E9;color:var(--pass);border:2px solid var(--pass)}
-.banner-refer{background:#FFF3E0;color:#E65100;border:2px solid #E65100}
-.banner-pending{background:var(--light);color:var(--navy);border:2px solid var(--navy)}
+/* Photo evidence */
+.drop-zone{
+  border:2px dashed #d1d5db;border-radius:8px;
+  padding:30px;text-align:center;cursor:pointer;
+  transition:all 0.2s;background:#fafafa;margin-bottom:16px;
+}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--navy);background:var(--navy-l)}
+.drop-zone p{font-size:13px;color:var(--muted)}
+.drop-zone strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.photo-card{background:#fff;border:1px solid #e5e7eb;border-radius:6px;overflow:hidden}
+.photo-card img{width:100%;height:140px;object-fit:cover;cursor:pointer;display:block}
+.photo-card-body{padding:10px}
+.photo-card textarea{width:100%;border:1px solid #d1d5db;border-radius:3px;font-size:12px;padding:5px;resize:vertical;min-height:50px;font-family:inherit}
+.photo-card select{width:100%;border:1px solid #d1d5db;border-radius:3px;font-size:12px;padding:4px;margin-top:5px;font-family:inherit}
+.photo-card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.photo-card-footer span{font-size:10px;color:var(--muted)}
+.btn-remove{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;padding:3px 8px;border-radius:3px;font-size:11px;cursor:pointer}
+.btn-remove:hover{background:#fee2e2}
 
-/* ASSESSOR PANEL */
-#assessor-panel{display:none;background:#FFF9C4;border:2px solid var(--gold);border-radius:8px;padding:20px;margin-bottom:20px}
-#assessor-panel h3{color:var(--navy-dark);margin-bottom:12px}
-.assessor-section{background:white;border-radius:6px;padding:14px;margin-bottom:12px;border-left:4px solid var(--gold)}
-select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px}
+/* Lightbox */
+#lightbox{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);
+  z-index:9999;align-items:center;justify-content:center;
+}
+#lightbox.open{display:flex}
+#lightbox img{max-width:90vw;max-height:90vh;border-radius:6px}
+#lightbox-close{
+  position:absolute;top:16px;right:20px;color:#fff;
+  font-size:28px;cursor:pointer;font-weight:700;
+}
 
-/* FEEDBACK BOXES (student view) */
-.feedback-box{display:none;background:#E3F2FD;border-left:4px solid #1565C0;border-radius:0 6px 6px 0;padding:12px;margin-top:8px;font-size:14px}
-.feedback-box.visible{display:block}
+/* Assessor mode */
+.assessor-section{display:none}
+.assessor-section.visible{display:block}
+.assessor-section textarea{width:100%;border:1px solid #93c5fd;border-radius:4px;padding:8px;font-size:13px;resize:vertical;min-height:60px;background:#eff6ff;font-family:inherit}
+.ac-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
+.ac-toggle-row:last-child{border-bottom:none}
+.ac-toggle-btn{padding:4px 12px;border-radius:4px;border:none;cursor:pointer;font-size:11px;font-weight:600}
+.ac-toggle-btn.met{background:#dcfce7;color:#15803d}
+.ac-toggle-btn.not-yet{background:#fee2e2;color:#dc2626}
+.result-banner{
+  border-radius:6px;padding:12px 16px;text-align:center;
+  font-size:16px;font-weight:700;margin-bottom:12px;
+}
+.result-banner.pass{background:#dcfce7;color:#15803d;border:2px solid #16a34a}
+.result-banner.refer{background:#fee2e2;color:#dc2626;border:2px solid #dc2626}
+.result-banner.pending{background:#fffbeb;color:#b45309;border:2px solid #d97706}
 
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:var(--white);border-radius:8px;padding:32px;max-width:380px;width:90%;text-align:center}
-.modal h3{color:var(--navy);margin-bottom:16px}
-.modal input{width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;font-size:15px;margin-bottom:12px}
-.modal-btns{display:flex;gap:10px;justify-content:center;margin-top:8px}
-.modal-btns button{padding:9px 22px;border-radius:4px;border:none;cursor:pointer;font-weight:bold}
-.btn-confirm{background:var(--navy);color:var(--white)}
-.btn-cancel{background:#eee;color:#444}
+/* Checklist */
+.checklist-table{width:100%;border-collapse:collapse;font-size:13px}
+.checklist-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left}
+.checklist-table td{padding:7px 10px;border-bottom:1px solid #e5e7eb;vertical-align:middle}
+.checklist-table tr:nth-child(even) td{background:#f8fafc}
+.ac-status-met{color:#15803d;font-weight:700}
+.ac-status-nyt{color:#dc2626;font-weight:700}
+.ac-status-pending{color:var(--muted)}
 
-/* COVER */
-.cover-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-.cover-grid label{font-weight:bold;color:var(--navy);font-size:13px;display:block;margin-bottom:4px}
-.cover-full{grid-column:1/-1}
+/* Password modal */
+#pwd-modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  z-index:9998;align-items:center;justify-content:center;
+}
+#pwd-modal.open{display:flex}
+.pwd-box{
+  background:#fff;border-radius:8px;padding:24px;width:320px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+}
+.pwd-box h3{font-size:16px;color:var(--navy);margin-bottom:12px}
+.pwd-box input{
+  width:100%;border:1px solid #d1d5db;border-radius:4px;
+  padding:8px;font-size:14px;margin-bottom:8px;
+}
+.pwd-box .error{color:#dc2626;font-size:12px;margin-bottom:8px;display:none}
+.pwd-box .btn-row{display:flex;gap:8px}
+.pwd-box button{flex:1;padding:8px;border-radius:4px;border:none;cursor:pointer;font-size:13px;font-weight:600}
+.pwd-box .btn-confirm{background:var(--navy);color:#fff}
+.pwd-box .btn-cancel{background:#f3f4f6;color:#333}
 
-/* UTILITIES */
-.gold-text{color:var(--gold)}
-.navy-text{color:var(--navy)}
-.muted{color:var(--muted);font-size:13px;font-style:italic}
-ul.styled{padding-left:20px;margin:8px 0}
-ul.styled li{margin-bottom:4px;font-size:14px}
-hr{border:none;border-top:1px solid #e0e0e0;margin:16px 0}
-.small{font-size:13px;color:var(--muted)}
+/* Contents page */
+.toc-item{
+  display:flex;align-items:center;padding:8px 12px;
+  border-bottom:1px solid #e5e7eb;cursor:pointer;
+  transition:background 0.15s;font-size:14px;
+}
+.toc-item:hover{background:var(--navy-l)}
+.toc-num{
+  background:var(--navy);color:#fff;
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;margin-right:12px;
+}
+.toc-label{flex:1;color:var(--navy);font-weight:600}
+.toc-arrow{color:var(--gold);font-size:16px}
+
+/* Info box */
+.info-box{
+  background:#fffbeb;border:1px solid var(--gold);
+  border-radius:6px;padding:12px;margin-bottom:16px;font-size:13px;
+}
+.info-box strong{color:#92400e}
+
+/* Misc utilities */
+.section-title{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:20px;padding-bottom:12px;
+  border-bottom:3px solid var(--gold);
+}
+.section-num{
+  background:var(--gold);color:var(--navy-d);
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;flex-shrink:0;
+}
+.section-title h2{font-size:20px;font-weight:700;color:var(--navy)}
+.intro-lo{
+  background:var(--navy-l);border-left:4px solid var(--navy);
+  border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:8px;
+}
+.intro-lo strong{color:var(--navy);font-size:13px}
+.intro-lo p{font-size:13px;color:#333;margin-top:2px}
+.lo-aim{
+  display:inline-block;background:var(--navy);color:#fff;
+  font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;margin-bottom:6px;
+}
+.lo-section-opener{
+  background:var(--navy);color:#fff;
+  border-radius:8px;padding:20px 24px;margin-bottom:20px;
+  border-bottom:4px solid var(--gold);
+}
+.lo-section-opener .lo-code{font-size:48px;font-weight:700;color:var(--gold);line-height:1}
+.lo-section-opener .lo-desc{font-size:16px;margin-top:6px;color:rgba(255,255,255,0.9)}
+.lo-section-opener .lo-acs{margin-top:10px;font-size:12px;color:rgba(255,255,255,0.7)}
+.save-indicator{
+  position:fixed;bottom:16px;right:16px;
+  background:#15803d;color:#fff;
+  padding:8px 14px;border-radius:6px;
+  font-size:12px;font-weight:600;
+  opacity:0;transition:opacity 0.3s;
+  pointer-events:none;z-index:2000;
+}
+.save-indicator.show{opacity:1}
+
+@media print{
+  .no-print{display:none!important}
+  #sticky-header,#nav-bar{position:static}
+  #main{margin-top:0;padding:0}
+  .section{display:block!important}
+}
 </style>
 </head>
 <body>
 
 <!-- STICKY HEADER -->
-<header id="sticky-header">
-  <img src="BrynLogo.png" alt="Bryn Celynnog Logo" class="logo" onerror="this.style.display='none'">
-  <div id="header-centre">
-    <div id="header-title">PS5: Finding Out About Public Services</div>
-    <div id="header-subtitle">BTEC Level 1 Introductory | Public Services</div>
-    <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
-    <div id="progress-text">0% Complete</div>
+<div id="sticky-header">
+  <div class="header-bar1">
+    <div class="header-logos">
+      <img src="data:image/png;base64,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" alt="Brynllywarch Hall School" title="Brynllywarch Hall School">
+      <div class="divider"></div>
+      <img src="data:image/png;base64,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" alt="BTEC" title="Pearson BTEC">
+    </div>
+    <div class="header-title">
+      <h1>PS5 — Finding Out About Public Services</h1>
+      <p>Pearson BTEC Level 1 Introductory in Public Services</p>
+    </div>
+    <div class="header-controls no-print">
+      <span id="progress-display" style="font-size:11px;color:rgba(255,255,255,0.8)">0%</span>
+      <button onclick="saveFile()" title="Export your work as a JSON file">Save File</button>
+      <button onclick="document.getElementById('load-input').click()" class="outline" title="Load previously saved work">Load File</button>
+      <input type="file" id="load-input" accept=".json" style="display:none" onchange="loadFile(event)">
+      <button id="assessor-btn" class="outline" onclick="openPasswordModal()">Enter Assessor Mode</button>
+    </div>
   </div>
-  <div class="header-btns">
-    <button class="btn-save" onclick="saveFile()">💾 Save</button>
-    <button class="btn-load" onclick="document.getElementById('file-input').click()">📂 Load</button>
-    <input type="file" id="file-input" accept=".json" style="display:none" onchange="loadFile(event)">
-    <button class="btn-assessor" onclick="openAssessorModal()">🔐 Assessor</button>
-  </div>
-</header>
+  <div id="progress-bar-container"><div id="progress-bar"></div></div>
+  <div id="assessor-banner">Assessor Mode Active — Student fields are locked</div>
+</div>
 
 <!-- NAV BAR -->
-<nav id="nav-bar">
-  <button class="nav-btn active" onclick="showSection('cover')">🏠 Cover</button>
-  <button class="nav-btn" onclick="showSection('intro')">📋 Introduction</button>
-  <button class="nav-btn" onclick="showSection('laA-hub')">📚 LA-A Knowledge</button>
-  <button class="nav-btn" onclick="showSection('laA-act')">✏️ LA-A Activities</button>
-  <button class="nav-btn" onclick="showSection('taskA')">📝 Task A</button>
-  <button class="nav-btn" onclick="showSection('laB-hub')">📚 LA-B Knowledge</button>
-  <button class="nav-btn" onclick="showSection('laB-act')">✏️ LA-B Activities</button>
-  <button class="nav-btn" onclick="showSection('taskB')">📝 Task B</button>
-  <button class="nav-btn" onclick="showSection('checklist')">✅ Checklist</button>
-  <button class="nav-btn" onclick="showSection('glossary')">📖 Glossary</button>
+<nav id="nav-bar" class="no-print">
+  <div class="nav-tab active" onclick="showSection('cover')" data-sec="cover">Cover</div>
+  <div class="nav-tab" onclick="showSection('contents')" data-sec="contents">Contents</div>
+  <div class="nav-tab" onclick="showSection('intro')" data-sec="intro">Introduction</div>
+  <div class="nav-tab" onclick="showSection('loA')" data-sec="loA">Learning Aim A</div>
+  <div class="nav-tab" onclick="showSection('loB')" data-sec="loB">Learning Aim B</div>
+  <div class="nav-tab" onclick="showSection('taskA')" data-sec="taskA">Task A</div>
+  <div class="nav-tab" onclick="showSection('taskB')" data-sec="taskB">Task B</div>
+  <div class="nav-tab" onclick="showSection('evidence')" data-sec="evidence">Photo Evidence</div>
+  <div class="nav-tab" onclick="showSection('checklist')" data-sec="checklist">Checklist</div>
+  <div class="nav-tab" onclick="showSection('declaration')" data-sec="declaration">Declaration</div>
 </nav>
 
-<!-- ASSESSOR MODAL -->
-<div class="modal-overlay" id="assessor-modal">
-  <div class="modal">
-    <h3>🔐 Assessor Login</h3>
-    <p style="margin-bottom:14px;font-size:14px;color:#555">Enter the assessor password to unlock marking mode.</p>
-    <input type="password" id="assessor-password" placeholder="Enter password" onkeyup="if(event.key==='Enter')checkPassword()">
-    <div id="pw-error" style="color:red;font-size:13px;margin-bottom:8px;display:none">Incorrect password. Try again.</div>
-    <div class="modal-btns">
-      <button class="btn-confirm" onclick="checkPassword()">Login</button>
-      <button class="btn-cancel" onclick="closeAssessorModal()">Cancel</button>
-    </div>
-  </div>
-</div>
+<!-- MAIN -->
+<div id="main">
 
-<main>
-
-<!-- ══════════════════════════════════════ -->
-<!-- COVER -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-cover" class="section active">
+<!-- ===== COVER ===== -->
+<div class="section active" id="sec-cover">
   <div class="card">
-    <div style="text-align:center;padding:10px 0 20px">
-      <div style="color:var(--muted);font-size:13px">BTEC Level 1 Introductory | Public Services</div>
-      <div style="color:var(--gold);font-size:18px;font-weight:bold;margin:4px 0">Unit PS5</div>
-      <div style="color:var(--navy);font-size:28px;font-weight:bold">Finding Out About Public Services</div>
-      <div style="color:var(--muted);font-size:13px;margin-top:4px">Guided Learning Hours: 40</div>
+    <div class="card-header">
+      <h2>Student Details</h2>
+      <p>Please complete all fields before starting your workbook</p>
     </div>
-    <div class="cover-grid">
-      <div>
+    <div class="card-body">
+      <div style="text-align:center;padding:12px 0 20px;border-bottom:2px solid var(--navy-l);margin-bottom:20px">
+        <p style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.5px;text-transform:uppercase">Pearson BTEC Level 1 Introductory in Public Services</p>
+        <h2 style="font-size:22px;font-weight:800;color:var(--navy);margin:6px 0">Unit PS5: Finding Out About Public Services</h2>
+        <div style="display:inline-block;background:var(--gold);color:var(--navy-d);font-size:12px;font-weight:700;padding:4px 14px;border-radius:4px">40 Guided Learning Hours</div>
+      </div>
+      <div class="cover-field">
         <label>Student Name</label>
-        <input type="text" id="student-name" placeholder="Enter your full name" oninput="autoSave()">
+        <input type="text" id="f-studentName" placeholder="Enter your full name" oninput="autoSave()">
       </div>
-      <div>
+      <div class="cover-field">
         <label>Class / Group</label>
-        <input type="text" id="student-class" placeholder="e.g. 10PS" oninput="autoSave()">
+        <input type="text" id="f-className" placeholder="e.g. 10PS" oninput="autoSave()">
       </div>
-      <div>
-        <label>Assessor Name</label>
-        <input type="text" id="assessor-name" value="Jonathan Jones" oninput="autoSave()">
+      <div class="cover-field">
+        <label>Assessor</label>
+        <input type="text" id="f-assessorName" value="Jonathan Jones" oninput="autoSave()">
       </div>
-      <div>
+      <div class="cover-field">
         <label>Start Date</label>
-        <input type="text" id="start-date" placeholder="dd/mm/yyyy" oninput="autoSave()">
+        <input type="date" id="f-startDate" oninput="autoSave()">
       </div>
-      <div class="cover-full">
+      <div class="cover-field">
         <label>Submission Date</label>
-        <input type="text" id="submission-date" placeholder="dd/mm/yyyy" oninput="autoSave()">
+        <input type="date" id="f-submitDate" oninput="autoSave()">
       </div>
     </div>
-    <div id="result-banner" style="margin-top:16px"></div>
   </div>
-</div>
-
-<!-- ══════════════════════════════════════ -->
-<!-- INTRODUCTION -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-intro" class="section">
   <div class="card">
-    <h2>Introduction to the Unit</h2>
-    <div class="knowledge-hub">
-      <div class="hub-title">📌 What This Unit Is About</div>
-      <p>Every day people across the UK use public services. Whether you call 999 in an emergency, visit your GP, or simply put your recycling out – you are using a public service.</p>
-      <p style="margin-top:8px">In this unit you will find out about the many different public services available in the UK and in your local area. You will research what they do, who provides them, and how they meet the needs of the public.</p>
-    </div>
-    <h3>Learning Aims</h3>
-    <div class="info-box">
-      <strong>Learning Aim A</strong> – Find out information about different public services<br><br>
-      <strong>Learning Aim B</strong> – Produce information about public services in your area, showing how they meet the needs of the public
-    </div>
-    <h3>Assessment Criteria</h3>
-    <table>
-      <tr><th>Code</th><th>What You Need to Do</th><th>Level</th></tr>
-      <tr><td><strong>A.P1</strong></td><td>Search for information about different public services using given sources</td><td><span class="ac-badge badge-pass">Pass</span></td></tr>
-      <tr><td><strong>A.P2</strong></td><td>Select and list information about different public services</td><td><span class="ac-badge badge-pass">Pass</span></td></tr>
-      <tr><td><strong>A.M1</strong></td><td>Search for correct information using own AND given sources</td><td><span class="ac-badge badge-merit">Merit</span></td></tr>
-      <tr><td><strong>A.M2</strong></td><td>Select mostly relevant information about different public services</td><td><span class="ac-badge badge-merit">Merit</span></td></tr>
-      <tr><td><strong>A.D1</strong></td><td>Search for relevant and detailed information about different public services</td><td><span class="ac-badge badge-distinction">Distinction</span></td></tr>
-      <tr><td><strong>A.D2</strong></td><td>Select accurate and appropriate information about different public services</td><td><span class="ac-badge badge-distinction">Distinction</span></td></tr>
-      <tr><td><strong>B.P3</strong></td><td>Produce information about different public services in your area</td><td><span class="ac-badge badge-pass">Pass</span></td></tr>
-      <tr><td><strong>B.M3</strong></td><td>Produce correct and logical information showing how services meet some needs of the public</td><td><span class="ac-badge badge-merit">Merit</span></td></tr>
-      <tr><td><strong>B.D3</strong></td><td>Produce detailed and well-organised information showing how public services meet the needs of the public in your area</td><td><span class="ac-badge badge-distinction">Distinction</span></td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════ -->
-<!-- LA-A KNOWLEDGE HUBS -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-laA-hub" class="section">
-  <div class="card">
-    <h2>Learning Aim A – Knowledge Hubs</h2>
-
-    <div class="knowledge-hub">
-      <div class="hub-title">📚 Knowledge Hub A1: Types and Purposes of Public Services</div>
-      <p>Public services are organisations that provide support and help to people. They are funded by the government or by charities.</p>
-    </div>
-    <h3>Categories of Public Services</h3>
-    <table>
-      <tr><th>Category</th><th>Examples</th><th>What They Do</th></tr>
-      <tr><td>Armed Services</td><td>British Army, Royal Navy, RAF</td><td>Defend the UK and support in emergencies</td></tr>
-      <tr><td>Emergency Services</td><td>Police, Fire Service, Ambulance</td><td>Respond to 999 calls and keep people safe</td></tr>
-      <tr><td>Health Services</td><td>NHS hospitals, GPs, Paramedics</td><td>Provide medical care and treatment</td></tr>
-      <tr><td>Law and Order</td><td>Courts, Prison Service, Probation</td><td>Maintain justice and the rule of law</td></tr>
-      <tr><td>Social Services</td><td>Children's services, care homes</td><td>Support vulnerable people in society</td></tr>
-      <tr><td>Environmental</td><td>Refuse collection, parks, recycling</td><td>Maintain a clean and safe environment</td></tr>
-      <tr><td>Leisure Services</td><td>Libraries, sports centres, museums</td><td>Improve quality of life for communities</td></tr>
-    </table>
-
-    <h3>Who Provides Public Services?</h3>
-    <table>
-      <tr><th>Provider</th><th>Explanation</th></tr>
-      <tr><td><strong>Central Government</strong></td><td>The UK government funds national services like the NHS and Armed Forces from Westminster.</td></tr>
-      <tr><td><strong>Local Government</strong></td><td>Your local council runs services like refuse collection, parks, and libraries in your area.</td></tr>
-      <tr><td><strong>Regional Government</strong></td><td>In Wales, the Senedd is responsible for services like health and education across Wales.</td></tr>
-      <tr><td><strong>Third Sector</strong></td><td>Charities and voluntary organisations provide services such as food banks and housing support.</td></tr>
-    </table>
-
-    <h3>Six Functions of Public Services</h3>
-    <table>
-      <tr><th>Function</th><th>What This Means</th></tr>
-      <tr><td>Defence</td><td>Protecting the UK from threats (e.g. the Armed Forces)</td></tr>
-      <tr><td>Protection</td><td>Keeping individuals safe from harm (e.g. Police, Fire Service)</td></tr>
-      <tr><td>Justice</td><td>Investigating crime and ensuring consequences (e.g. Courts, Prison)</td></tr>
-      <tr><td>Transportation</td><td>Maintaining roads and public transport (e.g. Local Councils)</td></tr>
-      <tr><td>Health & Wellbeing</td><td>Providing medical care and promoting healthy lifestyles (e.g. NHS)</td></tr>
-      <tr><td>Maintaining Security</td><td>Monitoring and responding to threats to public safety (e.g. Border Force)</td></tr>
-    </table>
-  </div>
-
-  <div class="card">
-    <div class="knowledge-hub">
-      <div class="hub-title">📚 Knowledge Hub A2: Ways of Working in Public Services</div>
-      <p>Some public services are uniformed. Some are not. Both types carry out essential work.</p>
-    </div>
-    <table>
-      <tr><th></th><th>Uniformed</th><th>Non-Uniformed</th></tr>
-      <tr><td><strong>Examples</strong></td><td>Police, Fire, Army, Ambulance, Prison Officers</td><td>Social workers, council staff, NHS managers, charity workers</td></tr>
-      <tr><td><strong>Why / Why Not?</strong></td><td>Helps identify them quickly, shows authority</td><td>Not required – their role does not need it in the same way</td></tr>
-    </table>
-    <h3>Types of Uniform</h3>
-    <table>
-      <tr><th>Type</th><th>Examples</th></tr>
-      <tr><td>Basic / Standard</td><td>Police officer's tunic, paramedic's uniform – worn daily for identification</td></tr>
-      <tr><td>Specialist / Protective</td><td>Fire kit, HAZCHEM suits, public order suits for riots</td></tr>
-      <tr><td>Ceremonial</td><td>Queen's Guard bearskin hats, police dress uniform for remembrance parades</td></tr>
-    </table>
-    <h3>Drill and Common Practices</h3>
-    <ul class="styled">
-      <li><strong>Discipline</strong> – Following orders precisely is essential in dangerous situations</li>
-      <li><strong>Teamwork</strong> – Everyone moves together as one unit</li>
-      <li><strong>Confidence</strong> – Practising routines builds self-assurance</li>
-      <li><strong>Standards</strong> – Smart appearance and posture reflect pride in the service</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <div class="knowledge-hub">
-      <div class="hub-title">📚 Knowledge Hub A3: Research Skills and Sources</div>
-      <p>To find information about public services, you need to use different sources. A good researcher uses more than one source and checks that information is accurate and up to date.</p>
-    </div>
-    <table>
-      <tr><th>Source Type</th><th>Examples</th><th>Things to Check</th></tr>
-      <tr><td>Websites</td><td>police.uk, gov.wales, nhs.uk</td><td>Is it official? When was it last updated?</td></tr>
-      <tr><td>Leaflets</td><td>From police stations, council offices</td><td>Is it still current? When produced?</td></tr>
-      <tr><td>Books / Journals</td><td>BTEC textbooks, professional magazines</td><td>Is the author qualified? Is it recent?</td></tr>
-      <tr><td>Interviews</td><td>Speaking to a police officer, firefighter</td><td>Prepare questions; record answers carefully</td></tr>
-      <tr><td>Visits</td><td>Fire station, police station, council offices</td><td>Take notes on what you see and find out</td></tr>
-    </table>
-    <div class="info-box">
-      <strong>Checking Validity:</strong> Is it recent? Is the author official? Does another source agree? Is the source trying to promote a particular point of view?
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════ -->
-<!-- LA-A ACTIVITIES -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-laA-act" class="section">
-  <div class="card">
-    <h2>Learning Aim A – Activities</h2>
-
-    <h3>Activity A1: Sorting Public Services</h3>
-    <p style="margin-bottom:10px">Sort the public services below into the correct column.</p>
-    <p class="muted">Police Service | Social Workers | British Army | NHS Nurses | Council Refuse Team | Fire Service | Probation Service | Charity Food Bank</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
-      <div>
-        <label class="input-label">Uniformed Services</label>
-        <textarea id="act-a1-uniform" placeholder="List the uniformed services here..." oninput="autoSave()"></textarea>
+    <div class="card-header"><h2>Unit Overview</h2></div>
+    <div class="card-body">
+      <div class="info-box">
+        <strong>What is this unit about?</strong><br>
+        In this unit you will find out about the different public services that help people every day. 
+        You will research services in your local area, find out what they do, and produce a document to share your findings.
       </div>
-      <div>
-        <label class="input-label">Non-Uniformed Services</label>
-        <textarea id="act-a1-nonuniform" placeholder="List the non-uniformed services here..." oninput="autoSave()"></textarea>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--navy-l);border-radius:6px;padding:12px">
+          <strong style="color:var(--navy);font-size:13px">Learning Aim A</strong>
+          <p style="font-size:12px;margin-top:4px;color:#333">Find out information about different public services</p>
+        </div>
+        <div style="background:var(--navy-l);border-radius:6px;padding:12px">
+          <strong style="color:var(--navy);font-size:13px">Learning Aim B</strong>
+          <p style="font-size:12px;margin-top:4px;color:#333">Produce information about public services in your area, showing how they meet the needs of the public</p>
+        </div>
       </div>
     </div>
-
-    <hr>
-    <h3>Activity A2: What Function Is It?</h3>
-    <p style="margin-bottom:10px">Match each scenario to the correct function: Defence | Protection | Justice | Transportation | Health &amp; Wellbeing | Maintaining Security</p>
-    <table>
-      <tr><th>Scenario</th><th>Your Answer</th></tr>
-      <tr><td>A firefighter rescues a family from a burning building.</td><td><input type="text" id="act-a2-1" placeholder="Function..." oninput="autoSave()"></td></tr>
-      <tr><td>A soldier is deployed to protect a UK base overseas.</td><td><input type="text" id="act-a2-2" placeholder="Function..." oninput="autoSave()"></td></tr>
-      <tr><td>A judge sentences a burglar in a crown court.</td><td><input type="text" id="act-a2-3" placeholder="Function..." oninput="autoSave()"></td></tr>
-      <tr><td>A GP carries out a health check on a patient.</td><td><input type="text" id="act-a2-4" placeholder="Function..." oninput="autoSave()"></td></tr>
-      <tr><td>The council repairs potholes in a road.</td><td><input type="text" id="act-a2-5" placeholder="Function..." oninput="autoSave()"></td></tr>
-      <tr><td>Border Force officers check passports at an airport.</td><td><input type="text" id="act-a2-6" placeholder="Function..." oninput="autoSave()"></td></tr>
-    </table>
-
-    <hr>
-    <h3>Activity A3: Research Planning Sheet</h3>
-    <p style="margin-bottom:10px">Plan how you will carry out your research for Assessment Task A.</p>
-    <label class="input-label">Which public services will you research?</label>
-    <textarea id="act-a3-services" placeholder="Name at least two services you plan to research..." oninput="autoSave()"></textarea>
-    <label class="input-label">What sources will you use?</label>
-    <textarea id="act-a3-sources" placeholder="List your planned sources..." oninput="autoSave()"></textarea>
-    <label class="input-label">How will you record your notes?</label>
-    <textarea id="act-a3-notes" placeholder="Describe how you will organise your notes..." rows="3" oninput="autoSave()"></textarea>
-    <label class="input-label">How will you check your sources are reliable?</label>
-    <textarea id="act-a3-valid" placeholder="Describe how you will check validity..." rows="3" oninput="autoSave()"></textarea>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- TASK A -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-taskA" class="section">
+<!-- ===== CONTENTS ===== -->
+<div class="section" id="sec-contents">
   <div class="card">
-    <h2>Assessment Task A</h2>
-    <div class="info-box">
-      <strong>Scenario:</strong> Your local council is creating a new information pack for young people about the different public services available in your area. They have asked your class to carry out research and present findings. Your task is to research at least <strong>TWO</strong> different public services.
-    </div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-pass">A.P1 – Pass</span> Search for information using given sources</div>
-    <label class="input-label">Research Log – Source 1 (Name the source and summarise what you found)</label>
-    <textarea id="ta-p1-src1" placeholder="Source 1 details and findings..." oninput="autoSave()"></textarea>
-    <label class="input-label">Research Log – Source 2</label>
-    <textarea id="ta-p1-src2" placeholder="Source 2 details and findings..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-ap1"></div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-pass">A.P2 – Pass</span> Select and list information</div>
-    <label class="input-label">Key facts about Public Service 1 (state which service)</label>
-    <textarea id="ta-p2-s1" placeholder="Name the service and list key facts..." oninput="autoSave()"></textarea>
-    <label class="input-label">Key facts about Public Service 2 (state which service)</label>
-    <textarea id="ta-p2-s2" placeholder="Name the service and list key facts..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-ap2"></div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-merit">A.M1 – Merit</span> Use own AND given sources</div>
-    <label class="input-label">Own Source 1 (where you found it and what you found)</label>
-    <textarea id="ta-m1-s1" placeholder="Your own source – describe it and what you found..." oninput="autoSave()"></textarea>
-    <label class="input-label">Own Source 2</label>
-    <textarea id="ta-m1-s2" placeholder="Your own source – describe it and what you found..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-am1"></div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-merit">A.M2 – Merit</span> Select mostly relevant information</div>
-    <label class="input-label">How did you decide what information was relevant? Explain your choices.</label>
-    <textarea id="ta-m2" placeholder="Explain how you selected the most relevant information..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-am2"></div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-distinction">A.D1 – Distinction</span> Search for relevant and detailed information</div>
-    <label class="input-label">Explain the different methods you used to find detailed information (e.g. website, interview, visit).</label>
-    <textarea id="ta-d1" placeholder="Describe your research methods in detail..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-ad1"></div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-distinction">A.D2 – Distinction</span> Select accurate and appropriate information</div>
-    <label class="input-label">Explain how the information you selected is accurate and appropriate for the council information pack.</label>
-    <textarea id="ta-d2" placeholder="Explain why your chosen information is accurate and appropriate..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-ad2"></div>
-  </div>
-
-  <div class="card" id="assessor-task-a-feedback" style="display:none">
-    <h3>📋 Assessor Feedback – Task A</h3>
-    <div class="assessor-section">
-      <label class="input-label">Assessor feedback on Task A:</label>
-      <textarea id="assessor-fb-a" placeholder="Enter feedback for the student on Task A..." oninput="autoSave()"></textarea>
+    <div class="card-header"><h2>Contents</h2><p>Click any section to navigate</p></div>
+    <div class="card-body" style="padding:0">
+      <div class="toc-item" onclick="showSection('intro')"><div class="toc-num">1</div><span class="toc-label">Introduction</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('loA')"><div class="toc-num">2</div><span class="toc-label">Learning Aim A — Find Out About Public Services</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('loB')"><div class="toc-num">3</div><span class="toc-label">Learning Aim B — Produce Information About Local Services</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('taskA')"><div class="toc-num">4</div><span class="toc-label">Assessment Task A — Research Notes</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('taskB')"><div class="toc-num">5</div><span class="toc-label">Assessment Task B — Information Document</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('evidence')"><div class="toc-num">6</div><span class="toc-label">Photo Evidence</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('checklist')"><div class="toc-num">7</div><span class="toc-label">Assessment Criteria Checklist</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('declaration')"><div class="toc-num">8</div><span class="toc-label">Student Declaration</span><span class="toc-arrow">&#8250;</span></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- LA-B KNOWLEDGE HUBS -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-laB-hub" class="section">
+<!-- ===== INTRODUCTION ===== -->
+<div class="section" id="sec-intro">
+  <div class="section-title"><div class="section-num">1</div><h2>Introduction to Unit PS5</h2></div>
   <div class="card">
-    <h2>Learning Aim B – Knowledge Hubs</h2>
-
-    <div class="knowledge-hub">
-      <div class="hub-title">📚 Knowledge Hub B1: Requirements and Expectations of the Public</div>
-      <p>Public services exist to serve the public. Different people in the community need different things from public services.</p>
-    </div>
-
-    <h3>Who Uses Public Services?</h3>
-    <table>
-      <tr><th>Type of User</th><th>Example</th><th>Service They Might Need</th></tr>
-      <tr><td>Individual Citizens</td><td>A family needing housing support</td><td>Social housing / local council</td></tr>
-      <tr><td>Sections of Community</td><td>Older people needing care</td><td>Care homes / social services / NHS</td></tr>
-      <tr><td>Whole Communities</td><td>A town needing refuse collected</td><td>Local council environmental services</td></tr>
-    </table>
-
-    <h3>What the Public Expects</h3>
-    <ul class="styled">
-      <li><strong>Value for money</strong> – services should be efficient and not wasteful</li>
-      <li><strong>Convenience</strong> – services should be accessible and easy to use</li>
-      <li><strong>Quality</strong> – services must be professional and effective</li>
-      <li><strong>Timely response</strong> – especially in emergencies</li>
-      <li><strong>Recognition of diversity</strong> – staff must treat everyone fairly</li>
-      <li><strong>Entitlement</strong> – people expect to receive services they have a right to</li>
-    </ul>
-    <div class="info-box" style="margin-top:12px">
-      <strong>Remember:</strong> The public may not always think about the availability of resources. During a major incident, response times may be longer because all units are deployed elsewhere.
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="knowledge-hub">
-      <div class="hub-title">📚 Knowledge Hub B2: Presenting Your Information</div>
-      <p>When you produce your document for Learning Aim B, you must think about your audience and choose the right format.</p>
-    </div>
-    <table>
-      <tr><th>Format</th><th>Good For</th><th>Tips</th></tr>
-      <tr><td>Leaflet</td><td>Short, clear info for the public</td><td>Headings, bullet points, images; simple language</td></tr>
-      <tr><td>Poster</td><td>Key facts and eye-catching info</td><td>Large text, clear layout, limited words</td></tr>
-      <tr><td>Report</td><td>Detailed written information</td><td>Use sections, paragraphs, and a clear structure</td></tr>
-      <tr><td>Slides</td><td>Talking to an audience</td><td>Use images, keep text short, practise</td></tr>
-    </table>
-    <h3>Key Communication Skills</h3>
-    <ul class="styled">
-      <li><strong>Audience awareness</strong> – write for the person who will read your document</li>
-      <li><strong>Accuracy</strong> – make sure all facts are correct</li>
-      <li><strong>Relevance</strong> – only include information related to the topic</li>
-      <li><strong>Legibility</strong> – make your document easy to read</li>
-      <li><strong>Organisation</strong> – use headings, sections, and a logical order</li>
-    </ul>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════ -->
-<!-- LA-B ACTIVITIES -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-laB-act" class="section">
-  <div class="card">
-    <h2>Learning Aim B – Activities</h2>
-
-    <h3>Activity B1: Public Services in My Area</h3>
-    <p style="margin-bottom:10px">Research the public services available in YOUR local area and complete the table.</p>
-    <label class="input-label">Service 1 – Name and details</label>
-    <textarea id="act-b1-s1" placeholder="Service name, uniformed/non-uniformed, what they do, how they help the public..." oninput="autoSave()"></textarea>
-    <label class="input-label">Service 2 – Name and details</label>
-    <textarea id="act-b1-s2" placeholder="Service name, uniformed/non-uniformed, what they do, how they help the public..." oninput="autoSave()"></textarea>
-    <label class="input-label">Service 3 – Name and details</label>
-    <textarea id="act-b1-s3" placeholder="Service name, uniformed/non-uniformed, what they do, how they help the public..." oninput="autoSave()"></textarea>
-
-    <hr>
-    <h3>Activity B2: Meeting the Needs of the Public</h3>
-    <p style="margin-bottom:10px">For each service, explain how it meets the needs of individuals, sections of the community, and whole communities.</p>
-    <label class="input-label">Service 1 – How does it meet public needs?</label>
-    <textarea id="act-b2-s1" placeholder="Explain for individuals, sections of community, and whole community..." oninput="autoSave()"></textarea>
-    <label class="input-label">Service 2 – How does it meet public needs?</label>
-    <textarea id="act-b2-s2" placeholder="Explain for individuals, sections of community, and whole community..." oninput="autoSave()"></textarea>
-    <label class="input-label">Service 3 – How does it meet public needs?</label>
-    <textarea id="act-b2-s3" placeholder="Explain for individuals, sections of community, and whole community..." oninput="autoSave()"></textarea>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════ -->
-<!-- TASK B -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-taskB" class="section">
-  <div class="card">
-    <h2>Assessment Task B</h2>
-    <div class="info-box">
-      <strong>Scenario (continued):</strong> Using your research from Task A, produce a document about public services in <strong>YOUR local area</strong>. Your document must cover at least <strong>THREE</strong> local public services and include at least <strong>ONE uniformed</strong> and <strong>ONE non-uniformed</strong> service.
-    </div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-pass">B.P3 – Pass</span> Produce information about public services in your area</div>
-    <label class="input-label">Document planning notes (what you will include, format you will use)</label>
-    <textarea id="tb-p3-plan" placeholder="Plan your document here..." oninput="autoSave()"></textarea>
-    <label class="input-label">Summary of your produced document (title, format, services covered)</label>
-    <textarea id="tb-p3-summary" placeholder="Describe your completed document..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-bp3"></div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-merit">B.M3 – Merit</span> Show how services meet some needs of the public</div>
-    <label class="input-label">Explain the links between your chosen services and the public needs they meet.</label>
-    <textarea id="tb-m3" placeholder="Explain the links between services and public needs for at least two services..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-bm3"></div>
-  </div>
-
-  <div class="task-section">
-    <div class="task-header"><span class="ac-badge badge-distinction">B.D3 – Distinction</span> Detailed, well-organised information covering at least THREE services</div>
-    <label class="input-label">Self-assessment: how have you shown detailed links between THREE services and the needs of the public in your local area?</label>
-    <textarea id="tb-d3" placeholder="Describe how your document is detailed, well-organised, and shows clear links for three services..." oninput="autoSave()"></textarea>
-    <div class="feedback-box" id="fb-bd3"></div>
-  </div>
-
-  <div class="card" id="assessor-task-b-feedback" style="display:none">
-    <h3>📋 Assessor Feedback – Task B</h3>
-    <div class="assessor-section">
-      <label class="input-label">Assessor feedback on Task B:</label>
-      <textarea id="assessor-fb-b" placeholder="Enter feedback for the student on Task B..." oninput="autoSave()"></textarea>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════ -->
-<!-- CHECKLIST -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-checklist" class="section">
-  <div class="card">
-    <h2>Assessment Criteria Evidence Checklist</h2>
-    <p style="margin-bottom:16px">Your assessor will mark each criterion as Met or Not Yet Met. You can see your results here once marked.</p>
-
-    <div id="assessor-panel">
-      <h3>🔐 Assessor Marking Panel</h3>
-      <div id="ac-marking"></div>
-      <div class="assessor-section" style="margin-top:16px">
-        <label class="input-label">Overall Result:</label>
-        <select id="overall-result" onchange="autoSave();updateResultBanner()">
-          <option value="Pending">Pending</option>
-          <option value="Pass">Pass</option>
-          <option value="Refer">Refer</option>
-        </select>
-        <label class="input-label" style="margin-top:12px">Assessor Signature:</label>
-        <input type="text" id="assessor-sig" placeholder="Assessor signature..." oninput="autoSave()">
-        <label class="input-label">Date Marked:</label>
-        <input type="text" id="date-marked" placeholder="dd/mm/yyyy" oninput="autoSave()">
+    <div class="card-header"><h2>What You Will Learn</h2></div>
+    <div class="card-body">
+      <p style="font-size:13px;line-height:1.7;margin-bottom:14px">
+        Can you name the different public services that support people where you live? Every day people use public services — 
+        to get help in an emergency, to receive crime prevention advice, or to seek medical attention. 
+        There are also many other services, including education services and health and safety inspections.
+      </p>
+      <p style="font-size:13px;line-height:1.7;margin-bottom:16px">
+        In this unit, you will find out about the different public services in your area and what purpose they serve. 
+        You will investigate common features such as uniforms and practices such as drill. 
+        You will then produce a document showing what you have found out.
+      </p>
+      <div class="intro-lo">
+        <span class="lo-aim">Learning Aim A</span>
+        <strong>Find out information about different public services</strong>
+        <p>You will research different types of public services, how they work, and what the public expects from them.</p>
+      </div>
+      <div class="intro-lo">
+        <span class="lo-aim">Learning Aim B</span>
+        <strong>Produce information about public services in your area, showing how they meet the needs of the public</strong>
+        <p>You will create a document that presents what you have found about local public services and their users.</p>
       </div>
     </div>
-
-    <div id="checklist-display"></div>
   </div>
-</div>
-
-<!-- ══════════════════════════════════════ -->
-<!-- GLOSSARY -->
-<!-- ══════════════════════════════════════ -->
-<div id="section-glossary" class="section">
   <div class="card">
-    <h2>Glossary of Key Terms</h2>
-    <table>
-      <tr><th>Term</th><th>Definition</th></tr>
-      <tr><td><strong>Armed Services</strong></td><td>The military forces of the UK: the British Army, Royal Navy, and Royal Air Force.</td></tr>
-      <tr><td><strong>Central Government</strong></td><td>The UK national government based in Westminster, responsible for running the country.</td></tr>
-      <tr><td><strong>Chain of Command</strong></td><td>The line of authority from senior officers down to junior ranks.</td></tr>
-      <tr><td><strong>Discipline</strong></td><td>Following rules, orders, and standards of behaviour.</td></tr>
-      <tr><td><strong>Drill</strong></td><td>A set of precise movements and commands practised to build discipline and teamwork.</td></tr>
-      <tr><td><strong>Emergency Services</strong></td><td>The police, fire service, and ambulance service – the three main 999 response services.</td></tr>
-      <tr><td><strong>HAZCHEM</strong></td><td>Hazardous chemicals – specialist equipment and suits used when dealing with dangerous chemical incidents.</td></tr>
-      <tr><td><strong>Local Government</strong></td><td>The council that manages local services such as refuse collection, parks, and libraries.</td></tr>
-      <tr><td><strong>Non-uniformed Services</strong></td><td>Public services whose staff do not wear a uniform, such as social workers and council planners.</td></tr>
-      <tr><td><strong>Public Service</strong></td><td>An organisation that provides a service to the public, funded by the government or charities.</td></tr>
-      <tr><td><strong>Regional Government</strong></td><td>In Wales, this is the Senedd (Welsh Parliament), which makes decisions about services like health and education in Wales.</td></tr>
-      <tr><td><strong>Research Log</strong></td><td>A record of sources used and information found during research.</td></tr>
-      <tr><td><strong>Secondary Source</strong></td><td>Information gathered from a source not originally created for your specific research, such as a website or book.</td></tr>
-      <tr><td><strong>Social Services</strong></td><td>A public service that supports vulnerable people including children at risk, older people, and those with disabilities.</td></tr>
-      <tr><td><strong>Third Sector</strong></td><td>Organisations that are not part of the government and are not businesses, such as charities and voluntary groups.</td></tr>
-      <tr><td><strong>Uniformed Services</strong></td><td>Public services whose staff wear a recognisable uniform, such as the police, fire service, and armed forces.</td></tr>
-      <tr><td><strong>Valid Source</strong></td><td>A source that is reliable, accurate, and up to date.</td></tr>
-    </table>
-    <p class="small" style="margin-top:12px">Last Registration Date: December 2021 | Specification Issue 3 – December 2019 © Pearson Education Limited</p>
+    <div class="card-header"><h2>Assessment Criteria at a Glance</h2></div>
+    <div class="card-body" style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr>
+            <th style="background:var(--navy);color:#fff;padding:8px 10px">Criterion</th>
+            <th style="background:#16a34a;color:#fff;padding:8px 10px">Pass</th>
+            <th style="background:#1565c0;color:#fff;padding:8px 10px">Merit</th>
+            <th style="background:#92400e;color:#fff;padding:8px 10px">Distinction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb;font-weight:600;color:var(--navy)">Aim A — Searching</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.P1 — Search using given sources</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.M1 — Search using own and given sources</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.D1 — Search for relevant and detailed info</td>
+          </tr>
+          <tr style="background:#f8fafc">
+            <td style="padding:7px 10px;border:1px solid #e5e7eb;font-weight:600;color:var(--navy)">Aim A — Selecting</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.P2 — Select and list information</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.M2 — Select mostly relevant information</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.D2 — Select accurate and appropriate info</td>
+          </tr>
+          <tr>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb;font-weight:600;color:var(--navy)">Aim B — Producing</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">B.P3 — Produce information about local services</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">B.M3 — Produce correct, logical information showing needs met</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">B.D3 — Produce detailed, well-organised information</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-</main>
+<!-- ===== LEARNING AIM A ===== -->
+<div class="section" id="sec-loA">
+  <div class="lo-section-opener">
+    <div class="lo-code">A</div>
+    <div class="lo-desc">Find out information about different public services</div>
+    <div class="lo-acs">Covers: A.P1 | A.P2 | A.M1 | A.M2 | A.D1 | A.D2</div>
+  </div>
+
+  <!-- KH1: Types and purposes -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 1 — Types of Public Services</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>What are Public Services?</h3>
+        <p>Public services are organisations that are provided to support everyone in the UK. They help keep people safe, healthy, and educated. Some are run by the government; others are run by charities or voluntary groups.</p>
+        <h4>Types of Public Service</h4>
+        <table>
+          <thead><tr><th>Type</th><th>What it does</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Armed Services</strong></td><td>Defend the country and respond to crises abroad</td><td>Army, Royal Navy, Royal Air Force</td></tr>
+            <tr><td><strong>Emergency Services</strong></td><td>Respond quickly when lives are at risk</td><td>Police, Fire Service, Ambulance</td></tr>
+            <tr><td><strong>Law and Order</strong></td><td>Uphold the law and deal with crime</td><td>Police, Courts, Probation Service</td></tr>
+            <tr><td><strong>Health</strong></td><td>Look after people when they are ill or injured</td><td>NHS hospitals, GP surgeries, NHS 111</td></tr>
+            <tr><td><strong>Social Services</strong></td><td>Support vulnerable people in the community</td><td>Children's services, adult care services</td></tr>
+            <tr><td><strong>Leisure Services</strong></td><td>Provide sport, recreation, and cultural activities</td><td>Libraries, leisure centres, parks</td></tr>
+            <tr><td><strong>Environmental</strong></td><td>Protect and maintain the environment</td><td>Refuse collection, recycling, environmental health</td></tr>
+          </tbody>
+        </table>
+        <h4>Who Provides Public Services?</h4>
+        <table>
+          <thead><tr><th>Provider</th><th>What they do</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Central Government</strong></td><td>Runs national services (e.g. NHS, army, national police)</td></tr>
+            <tr><td><strong>Local Government</strong></td><td>Runs local services (e.g. bin collection, local parks, libraries)</td></tr>
+            <tr><td><strong>Regional Government</strong></td><td>Runs devolved services (e.g. Welsh Government, Scottish Government)</td></tr>
+            <tr><td><strong>Third Sector</strong></td><td>Charities and voluntary organisations (e.g. St John Ambulance, RNLI)</td></tr>
+          </tbody>
+        </table>
+        <h4>Functions of Public Services</h4>
+        <ul>
+          <li><strong>Defence</strong> — protecting the country from threats</li>
+          <li><strong>Protection</strong> — keeping people safe from crime, fire and harm</li>
+          <li><strong>Justice</strong> — enforcing the law and dealing with offenders</li>
+          <li><strong>Transportation</strong> — maintaining roads, rail and infrastructure</li>
+          <li><strong>Health and wellbeing</strong> — providing medical care and support</li>
+          <li><strong>Maintaining security</strong> — monitoring threats and keeping order</li>
+        </ul>
+      </div>
+
+      <div class="activity-box">
+        <h4>Activity 1 — Sorting Public Services</h4>
+        <p>Using the table above, sort each public service below into the correct type. Write the type in the right-hand column.</p>
+      </div>
+      <table class="act-table" id="tbl-act1">
+        <thead><tr><th>Public Service</th><th>Type (armed/emergency/law/health/social/leisure/environmental)</th></tr></thead>
+        <tbody>
+          <tr><td>Royal Air Force</td><td><input type="text" id="act1-1" oninput="autoSave()"></td></tr>
+          <tr><td>West Midlands Ambulance Service</td><td><input type="text" id="act1-2" oninput="autoSave()"></td></tr>
+          <tr><td>HMCTS (Courts)</td><td><input type="text" id="act1-3" oninput="autoSave()"></td></tr>
+          <tr><td>Local Library</td><td><input type="text" id="act1-4" oninput="autoSave()"></td></tr>
+          <tr><td>Children's Social Care</td><td><input type="text" id="act1-5" oninput="autoSave()"></td></tr>
+          <tr><td>Local council refuse collection</td><td><input type="text" id="act1-6" oninput="autoSave()"></td></tr>
+        </tbody>
+      </table>
+      <details style="margin-bottom:14px">
+        <summary style="cursor:pointer;font-size:12px;color:var(--navy);font-weight:600;padding:6px 0">Show model answers</summary>
+        <div style="background:#f0fdf4;border-radius:4px;padding:10px;font-size:12px;margin-top:6px">
+          1. Armed Services &nbsp;|&nbsp; 2. Emergency Services &nbsp;|&nbsp; 3. Law and Order &nbsp;|&nbsp; 4. Leisure Services &nbsp;|&nbsp; 5. Social Services &nbsp;|&nbsp; 6. Environmental
+        </div>
+      </details>
+
+      <div class="activity-box">
+        <h4>Activity 2 — Functions</h4>
+        <p>Match each function to the correct public service. Write the function in the second column. Use each function once: <em>Defence, Protection, Justice, Transportation, Health and wellbeing, Maintaining security.</em></p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>Public Service</th><th>Main Function (write one)</th></tr></thead>
+        <tbody>
+          <tr><td>British Army</td><td><input type="text" id="act2-1" oninput="autoSave()"></td></tr>
+          <tr><td>NHS Ambulance</td><td><input type="text" id="act2-2" oninput="autoSave()"></td></tr>
+          <tr><td>Police Service</td><td><input type="text" id="act2-3" oninput="autoSave()"></td></tr>
+          <tr><td>Magistrates Court</td><td><input type="text" id="act2-4" oninput="autoSave()"></td></tr>
+          <tr><td>Highways Agency</td><td><input type="text" id="act2-5" oninput="autoSave()"></td></tr>
+          <tr><td>Border Force</td><td><input type="text" id="act2-6" oninput="autoSave()"></td></tr>
+        </tbody>
+      </table>
+      <details style="margin-bottom:14px">
+        <summary style="cursor:pointer;font-size:12px;color:var(--navy);font-weight:600;padding:6px 0">Show model answers</summary>
+        <div style="background:#f0fdf4;border-radius:4px;padding:10px;font-size:12px;margin-top:6px">
+          1. Defence &nbsp;|&nbsp; 2. Health and wellbeing &nbsp;|&nbsp; 3. Protection &nbsp;|&nbsp; 4. Justice &nbsp;|&nbsp; 5. Transportation &nbsp;|&nbsp; 6. Maintaining security
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- KH2: Ways of working -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 2 — Ways of Working</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>Uniformed and Non-Uniformed Services</h3>
+        <p>Public services can be divided into <strong>uniformed</strong> and <strong>non-uniformed</strong> services.</p>
+        <table>
+          <thead><tr><th>Uniformed Services</th><th>Non-Uniformed Services</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Wear a standard uniform at work. Examples: Police, Fire Service, Ambulance, Armed Forces</td>
+              <td>Do not wear a standard uniform. Examples: Social workers, council officers, probation workers</td>
+            </tr>
+          </tbody>
+        </table>
+        <h4>Why Do Some Services Wear Uniforms?</h4>
+        <ul>
+          <li><strong>Identification</strong> — the public can easily recognise who they are</li>
+          <li><strong>Authority</strong> — a uniform shows the person has official powers</li>
+          <li><strong>Safety</strong> — specialist uniform protects workers (e.g. fire kit, HAZCHEM suits)</li>
+          <li><strong>Team identity</strong> — uniform promotes a sense of belonging and discipline</li>
+          <li><strong>Ceremonial dress</strong> — used for formal occasions to show respect and tradition</li>
+        </ul>
+        <h4>Common Practices in Public Services</h4>
+        <ul>
+          <li><strong>Drill</strong> — practising marching and movements together. Drill teaches teamwork, discipline, and the importance of following orders.</li>
+          <li><strong>Team activities</strong> — exercises and training that build trust between colleagues and improve communication.</li>
+          <li><strong>Briefings</strong> — short meetings before a shift or operation to share important information.</li>
+        </ul>
+      </div>
+
+      <div class="activity-box">
+        <h4>Activity 3 — Uniformed or Non-Uniformed?</h4>
+        <p>For each service below, write U (uniformed) or N (non-uniformed) and explain your answer in one sentence.</p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>Service</th><th>U or N</th><th>Why?</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Fire Service</td>
+            <td><input type="text" id="act3-1a" oninput="autoSave()" style="width:40px"></td>
+            <td><input type="text" id="act3-1b" oninput="autoSave()"></td>
+          </tr>
+          <tr>
+            <td>NHS Social Worker</td>
+            <td><input type="text" id="act3-2a" oninput="autoSave()" style="width:40px"></td>
+            <td><input type="text" id="act3-2b" oninput="autoSave()"></td>
+          </tr>
+          <tr>
+            <td>Royal Marines</td>
+            <td><input type="text" id="act3-3a" oninput="autoSave()" style="width:40px"></td>
+            <td><input type="text" id="act3-3b" oninput="autoSave()"></td>
+          </tr>
+          <tr>
+            <td>Library Staff (council)</td>
+            <td><input type="text" id="act3-4a" oninput="autoSave()" style="width:40px"></td>
+            <td><input type="text" id="act3-4b" oninput="autoSave()"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="activity-box">
+        <h4>Activity 4 — Why Does Drill Matter?</h4>
+        <p>Give TWO reasons why drill is important in the public services.</p>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Reason 1:</span>
+        <textarea class="response-field" id="act4-1" rows="2" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Reason 2:</span>
+        <textarea class="response-field" id="act4-2" rows="2" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- KH3: Public requirements -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 3 — Requirements and Expectations of the Public</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>Who Uses Public Services?</h3>
+        <p>The people who use public services are called <strong>users</strong> or <strong>members of the public</strong>. They include:</p>
+        <ul>
+          <li><strong>Individual citizens</strong> — e.g. a family needing housing support</li>
+          <li><strong>Sections of the community</strong> — e.g. older people needing care services</li>
+          <li><strong>Whole communities</strong> — e.g. a town needing refuse collection</li>
+        </ul>
+        <h4>What Do the Public Expect from Public Services?</h4>
+        <table>
+          <thead><tr><th>Expectation</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Value for money</strong></td><td>Services should be worth the taxes people pay</td></tr>
+            <tr><td><strong>Convenience</strong></td><td>Services should be accessible and easy to use</td></tr>
+            <tr><td><strong>Quality</strong></td><td>Services should be carried out to a high standard</td></tr>
+            <tr><td><strong>Timely response</strong></td><td>Services should respond quickly, especially in emergencies</td></tr>
+            <tr><td><strong>Recognise diversity</strong></td><td>Services should treat everyone fairly regardless of background</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px">Most public services are an <strong>entitlement</strong> — this means people have a right to receive them. However, limited resources (money, staff, equipment) can affect what is available.</p>
+      </div>
+
+      <div class="activity-box">
+        <h4>Activity 5 — Who Uses It?</h4>
+        <p>For each scenario below, identify who is using the public service and what they need. Write your answers in the table.</p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>Scenario</th><th>Type of user (individual / section / community)</th><th>What do they need?</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>A woman calls 999 after a car accident</td>
+            <td><input type="text" id="act5-1a" oninput="autoSave()"></td>
+            <td><input type="text" id="act5-1b" oninput="autoSave()"></td>
+          </tr>
+          <tr>
+            <td>A town needs its roads gritted in winter</td>
+            <td><input type="text" id="act5-2a" oninput="autoSave()"></td>
+            <td><input type="text" id="act5-2b" oninput="autoSave()"></td>
+          </tr>
+          <tr>
+            <td>A group of elderly people need regular care visits</td>
+            <td><input type="text" id="act5-3a" oninput="autoSave()"></td>
+            <td><input type="text" id="act5-3b" oninput="autoSave()"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="activity-box">
+        <h4>Activity 6 — What Do the Public Expect?</h4>
+        <p>List THREE expectations the public might have when calling an ambulance. Use the Knowledge Hub above to help you.</p>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Expectation 1:</span>
+        <textarea class="response-field" id="act6-1" rows="2" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Expectation 2:</span>
+        <textarea class="response-field" id="act6-2" rows="2" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Expectation 3:</span>
+        <textarea class="response-field" id="act6-3" rows="2" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- KH4: Research skills -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 4 — Finding Out Information</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>Research Skills</h3>
+        <p>Good research means using a range of sources to find accurate information. Below are the main types of source you should use:</p>
+        <table>
+          <thead><tr><th>Source</th><th>How to use it</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Internet search</strong></td><td>Use a search engine to find websites about a public service</td><td>Google: "Dyfed-Powys Police what we do"</td></tr>
+            <tr><td><strong>Official websites</strong></td><td>Visit the service's own website for accurate info</td><td>gov.uk, nhs.uk, police.uk</td></tr>
+            <tr><td><strong>Information leaflets</strong></td><td>Leaflets from service offices, GP surgeries, libraries</td><td>NHS health leaflets, fire safety leaflets</td></tr>
+            <tr><td><strong>Interviews</strong></td><td>Ask questions of someone who works in a public service</td><td>Guest speaker visit, careers interview</td></tr>
+            <tr><td><strong>Books and journals</strong></td><td>Textbooks on public services topics</td><td>BTEC Public Services Student Book</td></tr>
+          </tbody>
+        </table>
+        <h4>Are Your Sources Valid?</h4>
+        <ul>
+          <li>Check the source is <strong>up to date</strong> (recent year)</li>
+          <li>Check the source is <strong>reliable</strong> (official organisation, not a random blog)</li>
+          <li>Check the information is <strong>relevant</strong> to what you need</li>
+          <li>Always <strong>record where you found</strong> your information (name of website, date accessed)</li>
+        </ul>
+      </div>
+      <div class="activity-box">
+        <h4>Activity 7 — Planning Your Research</h4>
+        <p>You are going to research TWO public services in your local area. Before you start, write down which services you will research and where you will look for information.</p>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Public Service 1 I will research:</span>
+        <textarea class="response-field" id="act7-s1" rows="2" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Where I will look for information about Service 1:</span>
+        <textarea class="response-field" id="act7-s1src" rows="2" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Public Service 2 I will research:</span>
+        <textarea class="response-field" id="act7-s2" rows="2" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Where I will look for information about Service 2:</span>
+        <textarea class="response-field" id="act7-s2src" rows="2" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LEARNING AIM B ===== -->
+<div class="section" id="sec-loB">
+  <div class="lo-section-opener">
+    <div class="lo-code">B</div>
+    <div class="lo-desc">Produce information about public services in your area, showing how they meet the needs of the public</div>
+    <div class="lo-acs">Covers: B.P3 | B.M3 | B.D3</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 5 — Presenting Information</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>How to Present Information About Public Services</h3>
+        <p>For your assessment you will need to produce a document that presents what you have found out about public services. This could be a leaflet, poster, brochure, or word-processed document.</p>
+        <h4>What to Include</h4>
+        <ul>
+          <li>The <strong>name</strong> of each public service</li>
+          <li>Whether it is <strong>uniformed or non-uniformed</strong></li>
+          <li>Who the <strong>main provider</strong> is (central government, local government, etc.)</li>
+          <li>The <strong>functions</strong> of the service (what it does)</li>
+          <li>Details about <strong>uniforms and common practices</strong></li>
+          <li>Who the service works with — <strong>individual citizens, sections of the community, whole communities</strong></li>
+          <li>How the service meets the <strong>requirements and expectations</strong> of the public</li>
+        </ul>
+        <h4>Tips for a Good Document</h4>
+        <ul>
+          <li>Use <strong>clear headings</strong> for each public service</li>
+          <li>Keep language <strong>simple and easy to read</strong></li>
+          <li>Use <strong>bullet points or short paragraphs</strong></li>
+          <li>Include information about at least <strong>THREE public services</strong></li>
+          <li>Include at least <strong>one uniformed and one non-uniformed</strong> service</li>
+          <li>Show how services <strong>link to the needs of the public</strong></li>
+        </ul>
+        <h4>Audience Awareness</h4>
+        <p>Think about who will read your document. For a community awareness exhibition, your audience will include members of the public who may not know much about public services. Keep your language clear and avoid jargon.</p>
+      </div>
+      <div class="activity-box">
+        <h4>Activity 8 — Planning Your Document</h4>
+        <p>Before you produce your document, plan it here. Write the name of each public service you will include and one key thing you found out about it.</p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>Public Service</th><th>Uniformed or Non-Uniformed?</th><th>One Key Thing I Found</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><input type="text" id="planb-1n" oninput="autoSave()" placeholder="Service name"></td>
+            <td><input type="text" id="planb-1u" oninput="autoSave()"></td>
+            <td><input type="text" id="planb-1k" oninput="autoSave()"></td>
+          </tr>
+          <tr>
+            <td><input type="text" id="planb-2n" oninput="autoSave()" placeholder="Service name"></td>
+            <td><input type="text" id="planb-2u" oninput="autoSave()"></td>
+            <td><input type="text" id="planb-2k" oninput="autoSave()"></td>
+          </tr>
+          <tr>
+            <td><input type="text" id="planb-3n" oninput="autoSave()" placeholder="Service name"></td>
+            <td><input type="text" id="planb-3u" oninput="autoSave()"></td>
+            <td><input type="text" id="planb-3k" oninput="autoSave()"></td>
+          </tr>
+          <tr>
+            <td><input type="text" id="planb-4n" oninput="autoSave()" placeholder="Optional 4th service"></td>
+            <td><input type="text" id="planb-4u" oninput="autoSave()"></td>
+            <td><input type="text" id="planb-4k" oninput="autoSave()"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="field-group" style="margin-top:10px">
+        <span class="response-label">What format will your document take? (e.g. leaflet, poster, word-processed list — explain your choice)</span>
+        <textarea class="response-field" id="planb-format" rows="3" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ASSESSMENT TASK A ===== -->
+<div class="section" id="sec-taskA">
+  <div class="section-title"><div class="section-num">4</div><h2>Assessment Task A — Research Notes</h2></div>
+  <div class="info-box">
+    <strong>Scenario:</strong> Your school is holding a community awareness exhibition looking at different industries in the local area. You have been asked to find out about and present information on the public services available in your area and how they meet the needs of different groups. Task A is the research stage.
+  </div>
+
+  <div class="task-card">
+    <div class="task-card-header">
+      <h3>Task A1 — Research Log</h3>
+      <p>Record your research into public services. You must show the sources you used and what information you found. Include at least THREE different public services, with at least THREE examples of uniformed and THREE examples of non-uniformed services across your research.</p>
+    </div>
+    <div class="task-card-body">
+      <div style="margin-bottom:10px">
+        <span class="ac-badge pass">A.P1</span>
+        <span class="ac-badge pass">A.P2</span>
+        <span class="ac-badge merit">A.M1</span>
+        <span class="ac-badge merit">A.M2</span>
+        <span class="ac-badge distinction">A.D1</span>
+        <span class="ac-badge distinction">A.D2</span>
+      </div>
+      <div class="grade-band pass">
+        <h4>Pass — A.P1 &amp; A.P2</h4>
+        <p>Use at least two given sources (provided by your teacher). Name each source and give reasons why you chose it. List the information you found.</p>
+      </div>
+      <div class="grade-band merit">
+        <h4>Merit — A.M1 &amp; A.M2</h4>
+        <p>Use given sources AND find your own sources. Name all sources and state how you used them. Select mostly relevant information from what you find.</p>
+      </div>
+      <div class="grade-band distinction">
+        <h4>Distinction — A.D1 &amp; A.D2</h4>
+        <p>Search for relevant and detailed information. Include details of how you searched (e.g. internet search terms used). Select accurate and appropriate information. Include source details (website name, date accessed).</p>
+      </div>
+
+      <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb">
+
+      <div class="field-group">
+        <span class="response-label">Source 1 — Name of source and why you chose it:</span>
+        <textarea class="response-field" id="ta1-src1" rows="3" oninput="autoSave()" placeholder="e.g. Dyfed-Powys Police website (https://www.dyfed-powys.police.uk) — I chose this because it is the official website for our local police service and contains accurate, up to date information."></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Information found from Source 1:</span>
+        <textarea class="response-field" id="ta1-info1" rows="5" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="response-label">Source 2 — Name of source and why you chose it:</span>
+        <textarea class="response-field" id="ta1-src2" rows="3" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Information found from Source 2:</span>
+        <textarea class="response-field" id="ta1-info2" rows="5" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="response-label">Source 3 — Name of source and why you chose it (for Merit/Distinction, find this source yourself):</span>
+        <textarea class="response-field" id="ta1-src3" rows="3" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Information found from Source 3:</span>
+        <textarea class="response-field" id="ta1-info3" rows="5" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card">
+    <div class="task-card-header">
+      <h3>Task A2 — Listing Public Services Found</h3>
+      <p>Using your research, complete the table below. You need at least SIX services: at least THREE uniformed and at least THREE non-uniformed.</p>
+    </div>
+    <div class="task-card-body">
+      <span class="ac-badge pass">A.P2</span>
+      <span class="ac-badge merit">A.M2</span>
+      <span class="ac-badge distinction">A.D2</span>
+      <table class="act-table" style="margin-top:10px">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name of Public Service</th>
+            <th>Uniformed (U) or Non-Uniformed (N)?</th>
+            <th>Main Provider (central/local/regional/third sector)</th>
+            <th>What is its main function?</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-ta2">
+        </tbody>
+      </table>
+      <button onclick="addTA2Row()" style="background:var(--navy);color:#fff;border:none;padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;margin-top:6px">+ Add row</button>
+      <span id="ta2-count" style="font-size:11px;color:var(--muted);margin-left:8px"></span>
+    </div>
+  </div>
+
+  <!-- Assessor section A -->
+  <div class="assessor-section" id="as-taskA">
+    <div class="card" style="border:2px solid #3b82f6">
+      <div class="card-header" style="background:#1e3a8a"><h2>Assessor Marking — Task A</h2></div>
+      <div class="card-body">
+        <p style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:10px">AC Status</p>
+        <div id="ac-toggles-A"></div>
+        <div style="margin-top:12px">
+          <span class="response-label">Assessor feedback for Task A:</span>
+          <textarea id="feedback-taskA" rows="4" oninput="autoSave()"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ASSESSMENT TASK B ===== -->
+<div class="section" id="sec-taskB">
+  <div class="section-title"><div class="section-num">5</div><h2>Assessment Task B — Information Document</h2></div>
+  <div class="info-box">
+    <strong>Scenario continued:</strong> Using your research from Task A, you will now produce your information document for the community awareness exhibition. Your document must be about public services in YOUR area.
+  </div>
+
+  <div class="task-card">
+    <div class="task-card-header">
+      <h3>Task B1 — Your Public Services Information Document</h3>
+      <p>Produce a document about at least THREE public services in your area. You must include at least one uniformed and one non-uniformed service. Use the planning notes below to draft your document content.</p>
+    </div>
+    <div class="task-card-body">
+      <div style="margin-bottom:10px">
+        <span class="ac-badge pass">B.P3</span>
+        <span class="ac-badge merit">B.M3</span>
+        <span class="ac-badge distinction">B.D3</span>
+      </div>
+      <div class="grade-band pass">
+        <h4>Pass — B.P3</h4>
+        <p>Produce a simple document (e.g. word-processed list) giving information about at least THREE public services. Information should cover at least TWO needs of the public. Services may be national rather than specifically local.</p>
+      </div>
+      <div class="grade-band merit">
+        <h4>Merit — B.M3</h4>
+        <p>Produce a clear document showing how at least THREE local public services meet the needs of the public. Show clear links between services and public needs. Choose at least one uniformed and one non-uniformed service. Document is easy to read with correct grammar.</p>
+      </div>
+      <div class="grade-band distinction">
+        <h4>Distinction — B.D3</h4>
+        <p>Produce a detailed, well-organised document explaining how at least THREE local public services meet the needs of the public in your area. Show detailed links between services and needs. The document should be a brochure, poster, or leaflet — clear, well-formatted, and suited to the audience.</p>
+      </div>
+
+      <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Use the text boxes below to draft the content for each public service section of your document.</p>
+
+      <div class="field-group">
+        <span class="response-label" style="font-weight:700;color:var(--navy)">Public Service 1 — Name:</span>
+        <input type="text" id="tb1-s1name" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px;margin-bottom:8px" oninput="autoSave()" placeholder="e.g. Dyfed-Powys Police">
+        <span class="response-label">About this service (what it does, who runs it, uniformed or not, what uniform if any):</span>
+        <textarea class="response-field" id="tb1-s1about" rows="5" oninput="autoSave()"></textarea>
+        <span class="response-label">Who uses this service and what do they need? How does this service meet their needs?</span>
+        <textarea class="response-field" id="tb1-s1needs" rows="5" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group" style="border-top:1px solid #e5e7eb;padding-top:14px">
+        <span class="response-label" style="font-weight:700;color:var(--navy)">Public Service 2 — Name:</span>
+        <input type="text" id="tb1-s2name" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px;margin-bottom:8px" oninput="autoSave()" placeholder="e.g. Welsh Ambulance Service">
+        <span class="response-label">About this service:</span>
+        <textarea class="response-field" id="tb1-s2about" rows="5" oninput="autoSave()"></textarea>
+        <span class="response-label">Who uses this service and how does it meet their needs?</span>
+        <textarea class="response-field" id="tb1-s2needs" rows="5" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group" style="border-top:1px solid #e5e7eb;padding-top:14px">
+        <span class="response-label" style="font-weight:700;color:var(--navy)">Public Service 3 — Name:</span>
+        <input type="text" id="tb1-s3name" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px;margin-bottom:8px" oninput="autoSave()" placeholder="e.g. Powys County Council Social Services">
+        <span class="response-label">About this service:</span>
+        <textarea class="response-field" id="tb1-s3about" rows="5" oninput="autoSave()"></textarea>
+        <span class="response-label">Who uses this service and how does it meet their needs?</span>
+        <textarea class="response-field" id="tb1-s3needs" rows="5" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group" style="border-top:1px solid #e5e7eb;padding-top:14px">
+        <span class="response-label" style="font-weight:700;color:var(--navy)">Common Practices — How do the services above work together or share common practices? (e.g. drill, teamwork, briefings)</span>
+        <textarea class="response-field" id="tb1-common" rows="4" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assessor section B -->
+  <div class="assessor-section" id="as-taskB">
+    <div class="card" style="border:2px solid #3b82f6">
+      <div class="card-header" style="background:#1e3a8a"><h2>Assessor Marking — Task B</h2></div>
+      <div class="card-body">
+        <p style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:10px">AC Status</p>
+        <div id="ac-toggles-B"></div>
+        <div style="margin-top:12px">
+          <span class="response-label">Assessor feedback for Task B:</span>
+          <textarea id="feedback-taskB" rows="4" oninput="autoSave()"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overall result (assessor only) -->
+  <div class="assessor-section" id="as-overall">
+    <div class="card" style="border:2px solid #3b82f6">
+      <div class="card-header" style="background:#1e3a8a"><h2>Overall Assessment Result</h2></div>
+      <div class="card-body">
+        <div id="result-banner-container"></div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button onclick="setResult('Pass')" style="flex:1;padding:8px;border-radius:4px;border:2px solid #16a34a;background:#dcfce7;color:#15803d;font-weight:700;cursor:pointer">Pass</button>
+          <button onclick="setResult('Refer')" style="flex:1;padding:8px;border-radius:4px;border:2px solid #dc2626;background:#fee2e2;color:#dc2626;font-weight:700;cursor:pointer">Refer</button>
+          <button onclick="setResult('Pending')" style="flex:1;padding:8px;border-radius:4px;border:2px solid #d97706;background:#fffbeb;color:#b45309;font-weight:700;cursor:pointer">Pending</button>
+        </div>
+        <div class="field-group">
+          <span class="response-label">Assessor Signature:</span>
+          <input type="text" id="assessor-sig" style="width:100%;border:1px solid #93c5fd;border-radius:4px;padding:7px;font-size:13px;background:#eff6ff" oninput="autoSave()">
+        </div>
+        <div class="field-group">
+          <span class="response-label">Date Marked:</span>
+          <input type="date" id="marked-date" style="width:100%;border:1px solid #93c5fd;border-radius:4px;padding:7px;font-size:13px;background:#eff6ff" oninput="autoSave()">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHOTO EVIDENCE ===== -->
+<div class="section" id="sec-evidence">
+  <div class="section-title"><div class="section-num">6</div><h2>Photo Evidence</h2></div>
+  <div class="info-box">
+    <strong>Tip:</strong> Upload photos that support your work — visits to public services, your research notes, your finished document, or any activities you completed. Link each photo to an assessment criterion using the dropdown.
+  </div>
+  <div id="drop-zone" class="drop-zone" onclick="document.getElementById('photo-input').click()"
+    ondragover="event.preventDefault();this.classList.add('drag-over')"
+    ondragleave="this.classList.remove('drag-over')"
+    ondrop="handleDrop(event)">
+    <strong>Click here or drag photos to upload</strong>
+    <p>JPG, PNG, GIF, WebP — multiple files supported</p>
+  </div>
+  <input type="file" id="photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotoInput(event)">
+  <div id="photo-grid" class="photo-grid"></div>
+</div>
+
+<!-- ===== CHECKLIST ===== -->
+<div class="section" id="sec-checklist">
+  <div class="section-title"><div class="section-num">7</div><h2>Assessment Criteria Checklist</h2></div>
+  <div class="card">
+    <div class="card-body" style="overflow-x:auto">
+      <table class="checklist-table">
+        <thead>
+          <tr>
+            <th>Criterion</th>
+            <th>What you need to do</th>
+            <th>Progress</th>
+            <th class="assessor-section">Assessor: Met / Not Yet Met</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="ac-badge pass">A.P1</span></td><td>Search for information about different public services using given sources</td><td id="self-AP1" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AP1"></td></tr>
+          <tr><td><span class="ac-badge pass">A.P2</span></td><td>Select and list information about different public services</td><td id="self-AP2" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AP2"></td></tr>
+          <tr><td><span class="ac-badge merit">A.M1</span></td><td>Search using own and given sources</td><td id="self-AM1" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AM1"></td></tr>
+          <tr><td><span class="ac-badge merit">A.M2</span></td><td>Select mostly relevant information</td><td id="self-AM2" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AM2"></td></tr>
+          <tr><td><span class="ac-badge distinction">A.D1</span></td><td>Search for relevant and detailed information</td><td id="self-AD1" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AD1"></td></tr>
+          <tr><td><span class="ac-badge distinction">A.D2</span></td><td>Select accurate and appropriate information</td><td id="self-AD2" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AD2"></td></tr>
+          <tr><td><span class="ac-badge pass">B.P3</span></td><td>Produce information about different public services in your area</td><td id="self-BP3" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-BP3"></td></tr>
+          <tr><td><span class="ac-badge merit">B.M3</span></td><td>Produce correct and logical information showing how services meet some public needs</td><td id="self-BM3" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-BM3"></td></tr>
+          <tr><td><span class="ac-badge distinction">B.D3</span></td><td>Produce detailed, well-organised information showing how services meet public needs in your area</td><td id="self-BD3" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-BD3"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px">Go to the Declaration tab to sign your learner declaration before submitting.</p>
+</div>
+
+<!-- ===== DECLARATION ===== -->
+<div class="section" id="sec-declaration">
+  <div class="section-title"><div class="section-num">8</div><h2>Student Declaration</h2></div>
+  <div class="card">
+    <div class="card-header"><h2>Declaration of Authenticity</h2></div>
+    <div class="card-body">
+      <div style="background:var(--navy-l);border-radius:6px;padding:12px;margin-bottom:16px;font-size:13px">
+        <strong>Centre:</strong> Brynllywarch Hall School &nbsp;|&nbsp;
+        <strong>Qualification:</strong> Pearson BTEC Level 1 Introductory in Public Services &nbsp;|&nbsp;
+        <strong>Unit:</strong> PS5 — Finding Out About Public Services
+      </div>
+      <p style="font-size:13px;margin-bottom:12px">By signing below I confirm that:</p>
+      <ol style="font-size:13px;line-height:1.8;margin-left:18px;margin-bottom:16px">
+        <li>The evidence submitted in this workbook is entirely my own original work.</li>
+        <li>I have not copied, closely paraphrased, or used ideas from any other person's work without clearly acknowledging and referencing the source.</li>
+        <li>I understand that using unapproved artificial intelligence (AI) tools to generate this work constitutes academic misconduct.</li>
+        <li>I understand that my work is subject to internal and external moderation processes.</li>
+        <li>I am aware that a false declaration is a serious offence that may lead to my work being disqualified.</li>
+      </ol>
+      <div class="field-group">
+        <span class="response-label">Student Name (auto-filled from Cover):</span>
+        <input type="text" id="decl-name" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" readonly>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Student Signature (type your name):</span>
+        <input type="text" id="f-studentSig" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px;font-style:italic" placeholder="Type your full name as a signature" oninput="autoSave()">
+      </div>
+      <div class="field-group">
+        <span class="response-label">Date of Submission:</span>
+        <input type="date" id="f-submissionDate" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" oninput="autoSave()">
+      </div>
+      <div class="field-group">
+        <span class="response-label">Assessor Name (auto-filled):</span>
+        <input type="text" id="decl-assessor" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" readonly>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #main -->
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+  <span id="lightbox-close">&times;</span>
+  <img id="lightbox-img" src="" alt="Photo evidence">
+</div>
+
+<!-- PASSWORD MODAL -->
+<div id="pwd-modal">
+  <div class="pwd-box">
+    <h3>Enter Assessor Mode</h3>
+    <input type="password" id="pwd-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')confirmPassword()">
+    <div class="error" id="pwd-error">Incorrect password. Please try again.</div>
+    <div class="btn-row">
+      <button class="btn-confirm" onclick="confirmPassword()">Confirm</button>
+      <button class="btn-cancel" onclick="closePasswordModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SAVE INDICATOR -->
+<div class="save-indicator" id="save-indicator">Saved</div>
 
 <script>
-const ASSESSOR_PW = 'BTEC2025';
-let assessorMode = false;
-
-const ACS = [
-  { id:'ap1', code:'A.P1', level:'Pass', desc:'Searched for information about different public services using given sources', fbId:'fb-ap1' },
-  { id:'ap2', code:'A.P2', level:'Pass', desc:'Selected and listed information about different public services', fbId:'fb-ap2' },
-  { id:'am1', code:'A.M1', level:'Merit', desc:'Searched using own AND given sources', fbId:'fb-am1' },
-  { id:'am2', code:'A.M2', level:'Merit', desc:'Selected mostly relevant information', fbId:'fb-am2' },
-  { id:'ad1', code:'A.D1', level:'Distinction', desc:'Searched for relevant and detailed information', fbId:'fb-ad1' },
-  { id:'ad2', code:'A.D2', level:'Distinction', desc:'Selected accurate and appropriate information', fbId:'fb-ad2' },
-  { id:'bp3', code:'B.P3', level:'Pass', desc:'Produced information about public services in your area', fbId:'fb-bp3' },
-  { id:'bm3', code:'B.M3', level:'Merit', desc:'Produced correct and logical info showing how services meet some needs', fbId:'fb-bm3' },
-  { id:'bd3', code:'B.D3', level:'Distinction', desc:'Produced detailed, well-organised info showing links between services and public needs', fbId:'fb-bd3' },
+// ===== DATA MODEL =====
+const UNIT_KEY = "ps5btecv1";
+const ASSESSOR_PASS = "BTEC2025";
+const ALL_ACS = [
+  {id:"A.P1", lo:"A"}, {id:"A.P2", lo:"A"},
+  {id:"A.M1", lo:"A"}, {id:"A.M2", lo:"A"},
+  {id:"A.D1", lo:"A"}, {id:"A.D2", lo:"A"},
+  {id:"B.P3", lo:"B"},
+  {id:"B.M3", lo:"B"},
+  {id:"B.D3", lo:"B"},
 ];
+const PHOTO_AC_OPTIONS = ["General evidence","A.P1","A.P2","A.M1","A.M2","A.D1","A.D2","B.P3","B.M3","B.D3"];
 
-const acStatus = {};
-const acFeedback = {};
-ACS.forEach(a => { acStatus[a.id] = 'pending'; acFeedback[a.id] = ''; });
+let data = {
+  studentName:"", className:"", assessorName:"Jonathan Jones",
+  startDate:"", submitDate:"",
+  act1:["","","","","",""],
+  act2:["","","","","",""],
+  act3:[["",""],["",""],["",""],["",""]],
+  act4:["",""],
+  act5:[["",""],["",""],["",""]],
+  act6:["","",""],
+  act7:["","","",""],
+  planb:[["","",""],["","",""],["","",""],["","",""]],
+  planbFormat:"",
+  ta1:{ src1:"", info1:"", src2:"", info2:"", src3:"", info3:"" },
+  ta2Rows:[ {svc:"",u:"",prov:"",fn:""}, {svc:"",u:"",prov:"",fn:""}, {svc:"",u:"",prov:"",fn:""} ],
+  tb1:{ s1name:"",s1about:"",s1needs:"",s2name:"",s2about:"",s2needs:"",s3name:"",s3about:"",s3needs:"",common:"" },
+  photos:[],
+  studentSig:"", submissionDate:"",
+  // Assessor
+  assessorMode:false,
+  ac_status:{},
+  feedback:{ taskA:"", taskB:"" },
+  overall_result:"",
+  assessorSig:"", markedDate:"",
+};
 
-function buildChecklistDisplay() {
-  const wrap = document.getElementById('checklist-display');
-  wrap.innerHTML = '';
-  ACS.forEach(a => {
-    const item = document.createElement('div');
-    item.className = 'checklist-item';
-    item.id = 'cl-' + a.id;
-    const levelClass = a.level === 'Pass' ? 'badge-pass' : a.level === 'Merit' ? 'badge-merit' : 'badge-distinction';
-    const st = acStatus[a.id];
-    item.innerHTML = `
-      <div style="flex:1">
-        <span class="ac-badge ${levelClass}">${a.code} – ${a.level}</span>
-        <div style="font-size:14px;margin-top:4px">${a.desc}</div>
-        ${acFeedback[a.id] ? `<div class="feedback-box visible" style="margin-top:6px">${acFeedback[a.id]}</div>` : ''}
-      </div>
-      <div style="text-align:right;min-width:130px">
-        ${st === 'met' ? '<span style="color:var(--pass);font-weight:bold">✅ Met</span>' : st === 'notyet' ? '<span style="color:#E65100;font-weight:bold">🔁 Not Yet Met</span>' : '<span style="color:var(--muted)">⏳ Pending</span>'}
-      </div>
-    `;
-    wrap.appendChild(item);
+// ===== NAVIGATION =====
+let currentSection = "cover";
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".nav-tab").forEach(t=>t.classList.remove("active"));
+  const sec = document.getElementById("sec-"+id);
+  if(sec) sec.classList.add("active");
+  const tab = document.querySelector("[data-sec='"+id+"']");
+  if(tab) tab.classList.add("active");
+  currentSection = id;
+  updateChecklist();
+}
+
+// ===== AUTOSAVE =====
+let saveTimer = null;
+function autoSave() {
+  collectFromDOM();
+  try { localStorage.setItem(UNIT_KEY, JSON.stringify(data)); } catch(e){}
+  updateProgress();
+  updateDeclarationMirror();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    const si = document.getElementById("save-indicator");
+    si.classList.add("show");
+    setTimeout(()=>si.classList.remove("show"), 1500);
+  }, 800);
+}
+
+function collectFromDOM() {
+  data.studentName = v("f-studentName");
+  data.className = v("f-className");
+  data.assessorName = v("f-assessorName");
+  data.startDate = v("f-startDate");
+  data.submitDate = v("f-submitDate");
+  // act1
+  for(let i=1;i<=6;i++) data.act1[i-1]=v("act1-"+i)||"";
+  // act2
+  for(let i=1;i<=6;i++) data.act2[i-1]=v("act2-"+i)||"";
+  // act3
+  for(let i=1;i<=4;i++) { data.act3[i-1]=[v("act3-"+i+"a")||"",v("act3-"+i+"b")||""]; }
+  // act4
+  data.act4=[v("act4-1")||"",v("act4-2")||""];
+  // act5
+  for(let i=1;i<=3;i++) data.act5[i-1]=[v("act5-"+i+"a")||"",v("act5-"+i+"b")||""];
+  // act6
+  for(let i=1;i<=3;i++) data.act6[i-1]=v("act6-"+i)||"";
+  // act7
+  data.act7=[v("act7-s1")||"",v("act7-s1src")||"",v("act7-s2")||"",v("act7-s2src")||""];
+  // planb
+  for(let i=1;i<=4;i++) data.planb[i-1]=[v("planb-"+i+"n")||"",v("planb-"+i+"u")||"",v("planb-"+i+"k")||""];
+  data.planbFormat=v("planb-format")||"";
+  // ta1
+  data.ta1={src1:v("ta1-src1")||"",info1:v("ta1-info1")||"",src2:v("ta1-src2")||"",info2:v("ta1-info2")||"",src3:v("ta1-src3")||"",info3:v("ta1-info3")||""};
+  // ta2 rows
+  const rows=document.querySelectorAll("#tbl-ta2 tr");
+  data.ta2Rows=[];
+  rows.forEach(r=>{
+    const inputs=r.querySelectorAll("input");
+    if(inputs.length>=4) data.ta2Rows.push({svc:inputs[0].value,u:inputs[1].value,prov:inputs[2].value,fn:inputs[3].value});
+  });
+  // tb1
+  data.tb1={
+    s1name:v("tb1-s1name")||"",s1about:v("tb1-s1about")||"",s1needs:v("tb1-s1needs")||"",
+    s2name:v("tb1-s2name")||"",s2about:v("tb1-s2about")||"",s2needs:v("tb1-s2needs")||"",
+    s3name:v("tb1-s3name")||"",s3about:v("tb1-s3about")||"",s3needs:v("tb1-s3needs")||"",
+    common:v("tb1-common")||"",
+  };
+  // student sig
+  data.studentSig=v("f-studentSig")||"";
+  data.submissionDate=v("f-submissionDate")||"";
+  // assessor feedback
+  if(data.assessorMode) {
+    data.feedback.taskA=v("feedback-taskA")||"";
+    data.feedback.taskB=v("feedback-taskB")||"";
+    data.assessorSig=v("assessor-sig")||"";
+    data.markedDate=v("marked-date")||"";
+  }
+}
+
+function v(id) {
+  const el=document.getElementById(id);
+  if(!el) return "";
+  return el.value||"";
+}
+
+function restoreToDOM() {
+  sv("f-studentName",data.studentName);
+  sv("f-className",data.className);
+  sv("f-assessorName",data.assessorName||"Jonathan Jones");
+  sv("f-startDate",data.startDate);
+  sv("f-submitDate",data.submitDate);
+  // act1
+  for(let i=1;i<=6;i++) sv("act1-"+i,(data.act1||[])[i-1]||"");
+  // act2
+  for(let i=1;i<=6;i++) sv("act2-"+i,(data.act2||[])[i-1]||"");
+  // act3
+  for(let i=1;i<=4;i++) { sv("act3-"+i+"a",((data.act3||[])[i-1]||[])[0]||""); sv("act3-"+i+"b",((data.act3||[])[i-1]||[])[1]||""); }
+  // act4
+  sv("act4-1",(data.act4||[])[0]||""); sv("act4-2",(data.act4||[])[1]||"");
+  // act5
+  for(let i=1;i<=3;i++) { sv("act5-"+i+"a",((data.act5||[])[i-1]||[])[0]||""); sv("act5-"+i+"b",((data.act5||[])[i-1]||[])[1]||""); }
+  // act6
+  for(let i=1;i<=3;i++) sv("act6-"+i,(data.act6||[])[i-1]||"");
+  // act7
+  sv("act7-s1",(data.act7||[])[0]||""); sv("act7-s1src",(data.act7||[])[1]||"");
+  sv("act7-s2",(data.act7||[])[2]||""); sv("act7-s2src",(data.act7||[])[3]||"");
+  // planb
+  for(let i=1;i<=4;i++) {
+    sv("planb-"+i+"n",((data.planb||[])[i-1]||[])[0]||"");
+    sv("planb-"+i+"u",((data.planb||[])[i-1]||[])[1]||"");
+    sv("planb-"+i+"k",((data.planb||[])[i-1]||[])[2]||"");
+  }
+  sv("planb-format",data.planbFormat||"");
+  // ta1
+  const t=data.ta1||{};
+  sv("ta1-src1",t.src1||""); sv("ta1-info1",t.info1||"");
+  sv("ta1-src2",t.src2||""); sv("ta1-info2",t.info2||"");
+  sv("ta1-src3",t.src3||""); sv("ta1-info3",t.info3||"");
+  // ta2 rows
+  const tbody=document.getElementById("tbl-ta2");
+  tbody.innerHTML="";
+  const rows=data.ta2Rows||[{},{},{}];
+  rows.forEach((r,i)=>{ addTA2RowWithData(r.svc||"",r.u||"",r.prov||"",r.fn||""); });
+  // tb1
+  const b=data.tb1||{};
+  sv("tb1-s1name",b.s1name||""); sv("tb1-s1about",b.s1about||""); sv("tb1-s1needs",b.s1needs||"");
+  sv("tb1-s2name",b.s2name||""); sv("tb1-s2about",b.s2about||""); sv("tb1-s2needs",b.s2needs||"");
+  sv("tb1-s3name",b.s3name||""); sv("tb1-s3about",b.s3about||""); sv("tb1-s3needs",b.s3needs||"");
+  sv("tb1-common",b.common||"");
+  // sig
+  sv("f-studentSig",data.studentSig||"");
+  sv("f-submissionDate",data.submissionDate||"");
+  // assessor
+  sv("feedback-taskA",(data.feedback||{}).taskA||"");
+  sv("feedback-taskB",(data.feedback||{}).taskB||"");
+  sv("assessor-sig",data.assessorSig||"");
+  sv("marked-date",data.markedDate||"");
+  // photos
+  renderPhotos();
+  updateDeclarationMirror();
+  updateProgress();
+  updateChecklist();
+  if(data.overall_result) updateResultBanner(data.overall_result);
+  renderACToggles();
+}
+
+function sv(id,val) {
+  const el=document.getElementById(id);
+  if(el) el.value=val;
+}
+
+// ===== PROGRESS =====
+function updateProgress() {
+  const fields=document.querySelectorAll("textarea.response-field, input[type=text]:not([readonly]), input[type=date]:not([readonly])");
+  let filled=0;
+  fields.forEach(f=>{ if(f.value && f.value.trim()) filled++; });
+  const pct=Math.min(100,Math.round((filled/Math.max(fields.length,1))*100));
+  document.getElementById("progress-bar").style.width=pct+"%";
+  document.getElementById("progress-display").textContent=pct+"%";
+  updateChecklist();
+}
+
+// ===== TA2 ROWS =====
+function addTA2Row() {
+  addTA2RowWithData("","","","");
+  autoSave();
+  updateCount();
+}
+function addTA2RowWithData(svc,u,prov,fn) {
+  const tbody=document.getElementById("tbl-ta2");
+  const tr=document.createElement("tr");
+  tr.innerHTML = `<td><input type="text" value="${esc(svc)}" oninput="autoSave()"></td>
+    <td><input type="text" value="${esc(u)}" oninput="autoSave()" style="width:60px"></td>
+    <td><input type="text" value="${esc(prov)}" oninput="autoSave()"></td>
+    <td><input type="text" value="${esc(fn)}" oninput="autoSave()"></td>`;
+  tbody.appendChild(tr);
+  updateCount();
+}
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function updateCount() {
+  const n=document.querySelectorAll("#tbl-ta2 tr").length;
+  const el=document.getElementById("ta2-count");
+  if(el) el.textContent=n+" service"+(n===1?"":"s")+" listed";
+}
+
+// ===== CHECKLIST =====
+function updateChecklist() {
+  const acs = {
+    "A.P1": !!(data.ta1&&(data.ta1.src1||data.ta1.info1)),
+    "A.P2": (data.ta2Rows||[]).filter(r=>r&&r.svc).length>=2,
+    "A.M1": !!(data.ta1&&data.ta1.src3),
+    "A.M2": (data.ta2Rows||[]).filter(r=>r&&r.svc&&r.u&&r.fn).length>=3,
+    "A.D1": !!(data.ta1&&data.ta1.info1&&data.ta1.info1.length>50),
+    "A.D2": (data.ta2Rows||[]).filter(r=>r&&r.svc&&r.u&&r.prov&&r.fn).length>=3,
+    "B.P3": !!(data.tb1&&data.tb1.s1about&&data.tb1.s2about&&data.tb1.s3about),
+    "B.M3": !!(data.tb1&&data.tb1.s1needs&&data.tb1.s2needs&&data.tb1.s3needs),
+    "B.D3": !!(data.tb1&&data.tb1.s1about&&data.tb1.s1needs&&data.tb1.s2about&&data.tb1.s2needs&&data.tb1.s3about&&data.tb1.s3needs&&data.tb1.common),
+  };
+  const ids={"A.P1":"AP1","A.P2":"AP2","A.M1":"AM1","A.M2":"AM2","A.D1":"AD1","A.D2":"AD2","B.P3":"BP3","B.M3":"BM3","B.D3":"BD3"};
+  Object.entries(acs).forEach(([ac,done])=>{
+    const el=document.getElementById("self-"+ids[ac]);
+    if(el) {
+      el.className=done?"ac-status-met":"ac-status-pending";
+      el.textContent=done?"Done":"Incomplete";
+    }
+    // Assessor check cells
+    const ast=data.ac_status||{};
+    const acel=document.getElementById("acheck-"+ids[ac]);
+    if(acel && data.assessorMode) {
+      const s=ast[ac]||"";
+      acel.innerHTML=`<button class="ac-toggle-btn ${s==="Met"?"met":"not-yet"}" onclick="toggleAC('${ac}')">${s||"Pending"}</button>`;
+    }
   });
 }
 
-function buildAssessorPanel() {
-  const wrap = document.getElementById('ac-marking');
-  wrap.innerHTML = '';
-  ACS.forEach(a => {
-    const levelClass = a.level === 'Pass' ? 'badge-pass' : a.level === 'Merit' ? 'badge-merit' : 'badge-distinction';
-    const div = document.createElement('div');
-    div.className = 'assessor-section';
-    div.innerHTML = `
-      <div style="margin-bottom:8px"><span class="ac-badge ${levelClass}">${a.code} – ${a.level}</span> <span style="font-size:13px">${a.desc}</span></div>
-      <div style="margin-bottom:6px">
-        <button class="ac-met-btn${acStatus[a.id]==='met'?' active':''}" onclick="setAC('${a.id}','met')">✅ Met</button>
-        <button class="ac-notyet-btn${acStatus[a.id]==='notyet'?' active':''}" onclick="setAC('${a.id}','notyet')">🔁 Not Yet Met</button>
-      </div>
-      <textarea id="acfb-${a.id}" placeholder="Feedback for ${a.code}..." rows="2" style="width:100%;font-size:13px;padding:7px;border:1px solid #ccc;border-radius:4px" oninput="acFeedback['${a.id}']=this.value;updateStudentFeedback('${a.id}');autoSave()">${acFeedback[a.id]}</textarea>
-    `;
-    wrap.appendChild(div);
-  });
-}
-
-function setAC(id, status) {
-  acStatus[id] = status;
-  buildAssessorPanel();
-  buildChecklistDisplay();
-  updateStudentFeedback(id);
+function toggleAC(id) {
+  if(!data.assessorMode) return;
+  const cur=data.ac_status[id]||"";
+  data.ac_status[id]=cur==="Met"?"Not Yet Met":"Met";
+  updateChecklist();
   autoSave();
 }
 
-function updateStudentFeedback(id) {
-  const a = ACS.find(x => x.id === id);
-  if (!a) return;
-  const fb = document.getElementById(a.fbId);
-  if (!fb) return;
-  if (acFeedback[id]) {
-    fb.classList.add('visible');
-    fb.innerHTML = '<strong>Assessor feedback:</strong> ' + acFeedback[id];
-  } else {
-    fb.classList.remove('visible');
-  }
-  buildChecklistDisplay();
-}
-
-function updateResultBanner() {
-  const val = document.getElementById('overall-result')?.value || 'Pending';
-  const banner = document.getElementById('result-banner');
-  if (!banner) return;
-  if (val === 'Pending') { banner.style.display = 'none'; return; }
-  banner.style.display = 'block';
-  banner.className = 'banner-' + val.toLowerCase();
-  banner.innerHTML = val === 'Pass' ? '🎉 Result: <strong>PASS</strong> – Well done!' : '🔁 Result: <strong>REFER</strong> – Please see your assessor for guidance.';
-}
-
-// NAVIGATION
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('section-' + id).classList.add('active');
-  event.target.classList.add('active');
-  updateProgress();
-}
-
-// PROGRESS
-function updateProgress() {
-  const fields = document.querySelectorAll('textarea, input[type=text]');
-  let filled = 0;
-  fields.forEach(f => { if(f.value.trim()) filled++; });
-  const pct = fields.length ? Math.round((filled / fields.length) * 100) : 0;
-  document.getElementById('progress-bar').style.width = pct + '%';
-  document.getElementById('progress-text').textContent = pct + '% Complete';
-}
-
-// AUTOSAVE
-let saveTimer;
-function autoSave() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    const data = collectData();
-    try { localStorage.setItem('ps5_workbook', JSON.stringify(data)); } catch(e){}
-    updateProgress();
-  }, 500);
-}
-
-function collectData() {
-  const fields = {};
-  document.querySelectorAll('textarea[id], input[type=text][id], select[id]').forEach(el => {
-    fields[el.id] = el.value;
-  });
-  return { fields, acStatus, acFeedback, ts: Date.now() };
-}
-
-function restoreData(data) {
-  if (!data) return;
-  if (data.fields) {
-    Object.entries(data.fields).forEach(([id, val]) => {
-      const el = document.getElementById(id);
-      if (el) el.value = val;
+// ===== ASSESSOR AC TOGGLES =====
+function renderACToggles() {
+  ["A","B"].forEach(lo=>{
+    const cont=document.getElementById("ac-toggles-"+lo);
+    if(!cont) return;
+    cont.innerHTML="";
+    const acs=ALL_ACS.filter(a=>a.lo===lo);
+    acs.forEach(ac=>{
+      const s=(data.ac_status||{})[ac.id]||"";
+      const row=document.createElement("div");
+      row.className="ac-toggle-row";
+      row.innerHTML=`<span><strong>${ac.id}</strong></span><button class="ac-toggle-btn ${s==="Met"?"met":"not-yet"}" onclick="toggleAC('${ac.id}')">${s||"Pending"}</button>`;
+      cont.appendChild(row);
     });
+  });
+  updateChecklist();
+}
+
+// ===== RESULT =====
+function setResult(r) {
+  data.overall_result=r;
+  updateResultBanner(r);
+  autoSave();
+}
+function updateResultBanner(r) {
+  const c=document.getElementById("result-banner-container");
+  if(!c) return;
+  const msgs={Pass:"Result: PASS — Well done! All criteria have been met.",Refer:"Result: REFER — Please review the feedback and resubmit.",Pending:"Result: PENDING — Assessment is in progress."};
+  c.innerHTML=`<div class="result-banner ${r.toLowerCase()}">${msgs[r]||""}</div>`;
+}
+
+// ===== ASSESSOR MODE =====
+function openPasswordModal() {
+  if(data.assessorMode) { exitAssessorMode(); return; }
+  document.getElementById("pwd-modal").classList.add("open");
+  document.getElementById("pwd-input").value="";
+  document.getElementById("pwd-error").style.display="none";
+  setTimeout(()=>document.getElementById("pwd-input").focus(),100);
+}
+function closePasswordModal() {
+  document.getElementById("pwd-modal").classList.remove("open");
+}
+function confirmPassword() {
+  const p=document.getElementById("pwd-input").value;
+  if(p===ASSESSOR_PASS) {
+    data.assessorMode=true;
+    closePasswordModal();
+    enterAssessorMode();
+  } else {
+    document.getElementById("pwd-error").style.display="block";
   }
-  if (data.acStatus) Object.assign(acStatus, data.acStatus);
-  if (data.acFeedback) Object.assign(acFeedback, data.acFeedback);
-  buildChecklistDisplay();
-  if (assessorMode) buildAssessorPanel();
-  ACS.forEach(a => updateStudentFeedback(a.id));
-  updateResultBanner();
-  updateProgress();
+}
+function enterAssessorMode() {
+  document.getElementById("assessor-banner").classList.add("visible");
+  document.getElementById("assessor-btn").textContent="Exit Assessor Mode";
+  // Lock student fields
+  document.querySelectorAll("textarea.response-field, input[type=text]:not([readonly]):not(#assessor-sig), input[type=date]:not([readonly]):not(#marked-date)").forEach(el=>{
+    el.setAttribute("readonly","true");
+    el.style.background="#f3f4f6";
+  });
+  // Show assessor sections
+  document.querySelectorAll(".assessor-section").forEach(s=>s.classList.add("visible"));
+  renderACToggles();
+  updateChecklist();
+}
+function exitAssessorMode() {
+  data.assessorMode=false;
+  document.getElementById("assessor-banner").classList.remove("visible");
+  document.getElementById("assessor-btn").textContent="Enter Assessor Mode";
+  document.querySelectorAll("textarea.response-field, input[type=text]:not([readonly]), input[type=date]:not([readonly])").forEach(el=>{
+    el.removeAttribute("readonly");
+    el.style.background="";
+  });
+  document.querySelectorAll(".assessor-section").forEach(s=>s.classList.remove("visible"));
 }
 
-// SAVE FILE
+// ===== PHOTO EVIDENCE =====
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById("drop-zone").classList.remove("drag-over");
+  const files=Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith("image/"));
+  processPhotoFiles(files);
+}
+function handlePhotoInput(e) {
+  processPhotoFiles(Array.from(e.target.files));
+  e.target.value="";
+}
+function processPhotoFiles(files) {
+  files.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const item={ id:Date.now()+"_"+Math.random().toString(36).slice(2), b64:ev.target.result, name:file.name, desc:"", ac:"General evidence", ts:new Date().toLocaleString() };
+      data.photos.push(item);
+      renderPhotos();
+      autoSave();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderPhotos() {
+  var grid=document.getElementById("photo-grid");
+  grid.innerHTML="";
+  (data.photos||[]).forEach(function(item){
+    var locked=data.assessorMode;
+    var card=document.createElement("div");
+    card.className="photo-card";
+
+    var img=document.createElement("img");
+    img.src=item.b64; img.alt=item.name;
+    img.style.cssText="width:100%;height:140px;object-fit:cover;cursor:pointer;display:block";
+    img.addEventListener("click",(function(id){return function(){openLightbox(id);};})(item.id));
+    card.appendChild(img);
+
+    var body=document.createElement("div");
+    body.className="photo-card-body";
+    body.style.padding="10px";
+
+    var ta=document.createElement("textarea");
+    ta.rows=2; ta.placeholder="Describe this photo..."; ta.value=item.desc||"";
+    ta.style.cssText="width:100%;border:1px solid #d1d5db;border-radius:3px;font-size:12px;padding:5px;resize:vertical;min-height:50px;font-family:inherit";
+    if(locked){ta.readOnly=true;ta.style.background="#f3f4f6";}
+    ta.addEventListener("input",(function(id,el){return function(){updatePhotoDesc(id,el.value);};})(item.id,ta));
+    body.appendChild(ta);
+
+    var sel=document.createElement("select");
+    sel.style.cssText="width:100%;border:1px solid #d1d5db;border-radius:3px;font-size:12px;padding:4px;margin-top:5px;font-family:inherit";
+    if(locked) sel.disabled=true;
+    PHOTO_AC_OPTIONS.forEach(function(o){
+      var opt=document.createElement("option");
+      opt.value=o; opt.textContent=o;
+      if(item.ac===o) opt.selected=true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener("change",(function(id,el){return function(){updatePhotoAC(id,el.value);};})(item.id,sel));
+    body.appendChild(sel);
+
+    var footer=document.createElement("div");
+    footer.className="photo-card-footer";
+    footer.style.cssText="display:flex;justify-content:space-between;align-items:center;margin-top:6px";
+
+    var span=document.createElement("span");
+    span.textContent=(item.name||"")+" \u2014 "+(item.ts||"");
+    span.style.cssText="font-size:10px;color:var(--muted)";
+    footer.appendChild(span);
+
+    if(!locked){
+      var btn=document.createElement("button");
+      btn.className="btn-remove"; btn.textContent="Remove";
+      btn.addEventListener("click",(function(id){return function(){removePhoto(id);};})(item.id));
+      footer.appendChild(btn);
+    }
+    body.appendChild(footer);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+}
+function updatePhotoDesc(id,v){ const p=data.photos.find(x=>x.id===id); if(p){p.desc=v;autoSave();} }
+function updatePhotoAC(id,v){ const p=data.photos.find(x=>x.id===id); if(p){p.ac=v;autoSave();} }
+function removePhoto(id){ if(!confirm("Remove this photo?"))return; data.photos=data.photos.filter(x=>x.id!==id); renderPhotos(); autoSave(); }
+function openLightbox(id){ const p=data.photos.find(x=>x.id===id); if(!p)return; document.getElementById("lightbox-img").src=p.b64; document.getElementById("lightbox").classList.add("open"); }
+function closeLightbox(){ document.getElementById("lightbox").classList.remove("open"); }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape")closeLightbox(); });
+
+// ===== SAVE / LOAD =====
 function saveFile() {
-  const name = (document.getElementById('student-name')?.value || 'student').replace(/\s+/g,'_');
-  const data = collectData();
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `PS5_${name}_workbook.json`;
-  a.click();
+  collectFromDOM();
+  const name=(data.studentName||"student").replace(/\s+/g,"_").toLowerCase();
+  const json=JSON.stringify(data,null,2);
+  const blob=new Blob([json],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="PS5_"+name+"_workbook.json";
+  a.click(); URL.revokeObjectURL(url);
 }
-
-function loadFile(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
+function loadFile(e) {
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
     try {
-      const data = JSON.parse(e.target.result);
-      restoreData(data);
-    } catch(err) { alert('Could not load file. Please check it is a valid PS5 workbook file.'); }
+      const loaded=JSON.parse(ev.target.result);
+      data=Object.assign({},data,loaded);
+      if(data.assessorMode){ data.assessorMode=false; } // don't auto-enter assessor
+      restoreToDOM();
+    } catch(err){ alert("Could not load file. Is it a valid PS5 workbook JSON?"); }
   };
   reader.readAsText(file);
-  event.target.value = '';
 }
 
-// ASSESSOR
-function openAssessorModal() {
-  document.getElementById('assessor-modal').classList.add('open');
-  document.getElementById('assessor-password').focus();
-}
-function closeAssessorModal() {
-  document.getElementById('assessor-modal').classList.remove('open');
-  document.getElementById('assessor-password').value = '';
-  document.getElementById('pw-error').style.display = 'none';
-}
-function checkPassword() {
-  const pw = document.getElementById('assessor-password').value;
-  if (pw === ASSESSOR_PW) {
-    assessorMode = true;
-    closeAssessorModal();
-    enableAssessorMode();
-  } else {
-    document.getElementById('pw-error').style.display = 'block';
-  }
-}
-function enableAssessorMode() {
-  // Lock student inputs
-  document.querySelectorAll('textarea, input[type=text]').forEach(el => {
-    if (!el.id.startsWith('assessor') && !el.id.startsWith('acfb') && !el.id.startsWith('overall') && !el.id.startsWith('date-marked')) {
-      el.classList.add('assessor-locked');
-      el.readOnly = true;
-    }
-  });
-  // Show assessor panels
-  document.getElementById('assessor-panel').style.display = 'block';
-  document.getElementById('assessor-task-a-feedback').style.display = 'block';
-  document.getElementById('assessor-task-b-feedback').style.display = 'block';
-  buildAssessorPanel();
+// ===== DECLARATION MIRROR =====
+function updateDeclarationMirror() {
+  const dn=document.getElementById("decl-name");
+  const da=document.getElementById("decl-assessor");
+  if(dn) dn.value=data.studentName||"";
+  if(da) da.value=data.assessorName||"Jonathan Jones";
 }
 
-// INIT
-window.addEventListener('load', () => {
-  buildChecklistDisplay();
+// ===== INIT =====
+window.addEventListener("load",()=>{
+  // Ensure ta2 tbody has rows
+  document.getElementById("tbl-ta2").innerHTML="";
+  // Load from localStorage
   try {
-    const saved = localStorage.getItem('ps5_workbook');
-    if (saved) restoreData(JSON.parse(saved));
-  } catch(e) {}
+    const saved=localStorage.getItem(UNIT_KEY);
+    if(saved) { const p=JSON.parse(saved); data=Object.assign({},data,p); if(data.assessorMode)data.assessorMode=false; }
+  } catch(e){}
+  restoreToDOM();
   updateProgress();
 });
 </script>
