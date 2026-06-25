@@ -244,6 +244,15 @@ body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;
 .pwd-box .btn-confirm{background:var(--navy);color:#fff}
 .pwd-box .btn-cancel{background:#f3f4f6;color:#333}
 
+/* ===== PRINT MODE MODAL + EVIDENCE SUMMARY ===== */
+#print-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9998;align-items:center;justify-content:center}
+#print-modal.open{display:flex}
+.print-opt{display:flex;gap:8px;align-items:flex-start;padding:9px 10px;border:1px solid #e5e7eb;border-radius:6px;margin-bottom:6px;cursor:pointer;font-size:13px;line-height:1.35}
+.print-opt:hover{border-color:var(--navy);background:var(--navy-l)}
+.print-opt input{margin-top:3px;flex-shrink:0}
+.print-opt small{color:#666;font-size:11px}
+#ev-summary{display:none}
+
 /* Contents page */
 .toc-item{
   display:flex;align-items:center;padding:8px 12px;
@@ -319,6 +328,28 @@ body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;
   input[type=text],input[type=date]{border:none!important;border-bottom:1px solid #999!important;
     background:#fff!important}
   @page{margin:15mm 12mm;size:A4}
+  /* Evidence summary mode: hide the workbook, show the summary */
+  body.print-ev #main,body.print-ev #sticky-header,body.print-ev #nav-bar{display:none!important}
+  body.print-ev #ev-summary{display:block!important}
+  #ev-summary .ev-head{border-bottom:2px solid var(--navy);padding-bottom:8px;margin-bottom:14px}
+  #ev-summary h1{font-size:20px;color:var(--navy);margin:0}
+  #ev-summary .ev-sub{font-size:11px;color:#555;margin-top:2px}
+  #ev-summary .ev-meta{font-size:12px;margin-top:8px;width:100%;border-collapse:collapse}
+  #ev-summary .ev-meta td{padding:2px 0}
+  #ev-summary .ev-section{margin-bottom:14px}
+  #ev-summary .ev-section h2{font-size:14px;color:#fff;background:var(--navy);padding:5px 8px;border-radius:3px;margin:14px 0 8px}
+  #ev-summary .ev-section h3{font-size:13px;color:var(--navy);margin:10px 0 4px}
+  #ev-summary .ev-qhead{font-weight:700;font-size:12px;margin:10px 0 4px;color:#333}
+  #ev-summary .ev-qhead small{font-weight:400;color:#666}
+  #ev-summary .ev-qa{margin-bottom:8px;page-break-inside:avoid}
+  #ev-summary .ev-q{font-size:11.5px;font-weight:600;color:#444}
+  #ev-summary .ev-a{font-size:12px;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
+    border:1px solid #bbb;border-radius:3px;padding:5px 7px;background:#fff;margin-top:2px}
+  #ev-summary .ev-a.empty{color:#999;font-style:italic;border-style:dashed}
+  #ev-summary .ev-table{width:100%;border-collapse:collapse;font-size:11px;margin:4px 0 8px}
+  #ev-summary .ev-table th,#ev-summary .ev-table td{border:1px solid #999;padding:3px 5px;text-align:left;vertical-align:top}
+  #ev-summary .ev-table th{background:var(--navy-l)}
+  #ev-summary .ev-result{font-size:13px;margin-top:8px}
 }
 </style>
 </head>
@@ -341,7 +372,7 @@ body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;
       <button onclick="saveFile()" title="Export your work as a JSON file">Save File</button>
       <button onclick="document.getElementById('load-input').click()" class="outline" title="Load previously saved work">Load File</button>
       <input type="file" id="load-input" accept=".json" style="display:none" onchange="loadFile(event)">
-      <button onclick="doPrint()" title="Print this workbook (formatted for A4)">Print</button>
+      <button onclick="openPrintModal()" title="Print the workbook or an evidence summary">Print</button>
       <button id="assessor-btn" class="outline" onclick="openPasswordModal()">Enter Assessor Mode</button>
     </div>
   </div>
@@ -1743,6 +1774,25 @@ body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;
   </div>
 </div>
 
+<!-- PRINT MODE MODAL -->
+<div id="print-modal">
+  <div class="pwd-box" style="width:400px">
+    <h3>Print</h3>
+    <p style="font-size:12.5px;color:#555;margin-bottom:12px">Choose what to print. Both are formatted for A4.</p>
+    <label class="print-opt"><input type="radio" name="print-mode" value="full" checked>
+      <span><strong>Complete workbook</strong><br><small>Everything — teaching content, activities, answers and marking.</small></span></label>
+    <label class="print-opt"><input type="radio" name="print-mode" value="ev">
+      <span><strong>Evidence summary</strong><br><small>Assessment Tasks A &amp; B — questions, learner answers and assessor marking only. Teaching content removed. For the assessment file / internal verification.</small></span></label>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn-confirm" onclick="runPrint()">Print</button>
+      <button class="btn-cancel" onclick="closePrintModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- EVIDENCE SUMMARY (print-only, built on demand) -->
+<div id="ev-summary"></div>
+
 <!-- SAVE INDICATOR -->
 <div class="save-indicator" id="save-indicator">Saved</div>
 
@@ -1829,6 +1879,110 @@ function restoreTextareasAfterPrint() {
 function doPrint() { expandTextareasForPrint(); window.print(); }
 window.addEventListener("beforeprint", expandTextareasForPrint);
 window.addEventListener("afterprint", restoreTextareasAfterPrint);
+
+// --- Print mode chooser + Evidence Summary ---
+function openPrintModal(){ document.getElementById("print-modal").classList.add("open"); }
+function closePrintModal(){ document.getElementById("print-modal").classList.remove("open"); }
+function runPrint(){
+  var sel=document.querySelector('input[name="print-mode"]:checked');
+  var mode=sel?sel.value:"full";
+  closePrintModal();
+  if(mode==="ev"){
+    document.getElementById("ev-summary").innerHTML=buildEvidenceSummary();
+    document.body.classList.add("print-ev");
+    setTimeout(function(){ window.print(); }, 80);
+  } else {
+    expandTextareasForPrint();
+    setTimeout(function(){ window.print(); }, 80);
+  }
+}
+window.addEventListener("afterprint", function(){ document.body.classList.remove("print-ev"); });
+
+function evEsc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function evVal(el){
+  if(!el) return "";
+  if(el.tagName==="SELECT") return el.options[el.selectedIndex]?el.options[el.selectedIndex].text:"";
+  return el.value||"";
+}
+function evTable(tbl){
+  if(!tbl.querySelector("input,textarea,select")) return ""; // teaching-only table, skip
+  var out='<table class="ev-table">';
+  tbl.querySelectorAll("tr").forEach(function(tr){
+    out+="<tr>";
+    tr.querySelectorAll("th,td").forEach(function(cell){
+      var tag=cell.tagName==="TH"?"th":"td";
+      var fld=cell.querySelector("input,textarea,select");
+      var content=fld?evEsc(evVal(fld).trim()):evEsc(cell.textContent.trim());
+      out+="<"+tag+">"+content+"</"+tag+">";
+    });
+    out+="</tr>";
+  });
+  return out+"</table>";
+}
+function buildEvidenceSummary(){
+  collectFromDOM();
+  var d=data, html="";
+  html+='<div class="ev-head"><h1>Evidence Summary</h1>'
+      +'<p class="ev-sub">PS5 — Finding Out About Public Services · Pearson BTEC Level 1 Introductory in Public Services</p>'
+      +'<table class="ev-meta">'
+      +'<tr><td><strong>Learner:</strong> '+evEsc(d.studentName)+'</td><td><strong>Group:</strong> '+evEsc(d.className)+'</td></tr>'
+      +'<tr><td><strong>Assessor:</strong> '+evEsc(d.assessorName)+'</td><td><strong>Date:</strong> '+evEsc(d.submitDate||d.startDate)+'</td></tr>'
+      +'</table></div>';
+
+  ["sec-taskA","sec-taskB"].forEach(function(secId){
+    var sec=document.getElementById(secId);
+    if(!sec) return;
+    var body="";
+    sec.querySelectorAll(".activity-box, .task-card-header, .field-group, table").forEach(function(n){
+      if(n.closest(".assessor-section")) return; // assessor content handled separately
+      if(n.classList.contains("activity-box")){
+        var h4=n.querySelector("h4"), p=n.querySelector("p");
+        body+='<div class="ev-qhead">'+(h4?evEsc(h4.textContent):"")+(p?' <small>'+evEsc(p.textContent)+'</small>':"")+'</div>';
+      } else if(n.classList.contains("task-card-header")){
+        var h3=n.querySelector("h3"), p2=n.querySelector("p");
+        body+='<div class="ev-qhead">'+(h3?evEsc(h3.textContent):"")+(p2?'<br><small>'+evEsc(p2.textContent)+'</small>':"")+'</div>';
+      } else if(n.classList.contains("field-group")){
+        var kids=n.querySelectorAll(".response-label, input, textarea, select");
+        var curLabel=null;
+        kids.forEach(function(k){
+          if(k.classList && k.classList.contains("response-label")){ curLabel=k.textContent; return; }
+          var v=evVal(k).trim();
+          body+='<div class="ev-qa"><div class="ev-q">'+(curLabel?evEsc(curLabel):"")+'</div>'
+              +'<div class="ev-a'+(v?"":" empty")+'">'+(v?evEsc(v):"[No answer given]")+'</div></div>';
+          curLabel=null;
+        });
+      } else if(n.tagName==="TABLE"){
+        body+=evTable(n);
+      }
+    });
+    if(body.trim()){
+      var t=sec.querySelector(".section-title h2");
+      html+='<div class="ev-section"><h2>'+evEsc(t?t.textContent:"")+'</h2>'+body+'</div>';
+    }
+  });
+
+  html+='<div class="ev-section ev-marking"><h2>Assessor Marking</h2>';
+  [["A","Task A"],["B","Task B"]].forEach(function(g){
+    html+='<h3>'+g[1]+'</h3><table class="ev-table"><tr><th>Criterion</th><th>Status</th></tr>';
+    ALL_ACS.filter(function(a){return a.lo===g[0];}).forEach(function(a){
+      var st=(d.ac_status&&d.ac_status[a.id])||"Pending";
+      html+='<tr><td>'+evEsc(a.id)+'</td><td>'+evEsc(st)+'</td></tr>';
+    });
+    html+='</table>';
+    var fbEl=document.getElementById("feedback-task"+g[0]);
+    var fb=fbEl?fbEl.value:((d.feedback&&d.feedback["task"+g[0]])||"");
+    html+='<div class="ev-qa"><div class="ev-q">Assessor feedback — '+g[1]+':</div>'
+        +'<div class="ev-a'+(fb?"":" empty")+'">'+(fb?evEsc(fb):"[None recorded]")+'</div></div>';
+  });
+  if(d.overall_result){ html+='<p class="ev-result"><strong>Overall result:</strong> '+evEsc(d.overall_result)+'</p>'; }
+  var sigEl=document.getElementById("assessor-sig"), mdEl=document.getElementById("marked-date");
+  var sig=sigEl?sigEl.value:"", md=mdEl?mdEl.value:"";
+  html+='<table class="ev-meta" style="margin-top:10px"><tr>'
+      +'<td><strong>Assessor signature:</strong> '+(sig?evEsc(sig):"____________________")+'</td>'
+      +'<td><strong>Date marked:</strong> '+(md?evEsc(md):"____________________")+'</td></tr></table>';
+  html+='</div>';
+  return html;
+}
 
 function collectFromDOM() {
   data.studentName = v("f-studentName");
