@@ -312,7 +312,13 @@ body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;
   .no-print{display:none!important}
   #sticky-header,#nav-bar{position:static}
   #main{margin-top:0;padding:0}
-  .section{display:block!important}
+  .section{display:block!important;page-break-inside:auto}
+  textarea,.response-field{min-height:0!important;height:auto!important;overflow:visible!important;
+    resize:none!important;border:1px solid #999!important;background:#fff!important;
+    page-break-inside:avoid;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+  input[type=text],input[type=date]{border:none!important;border-bottom:1px solid #999!important;
+    background:#fff!important}
+  @page{margin:15mm 12mm;size:A4}
 }
 </style>
 </head>
@@ -335,6 +341,7 @@ body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;
       <button onclick="saveFile()" title="Export your work as a JSON file">Save File</button>
       <button onclick="document.getElementById('load-input').click()" class="outline" title="Load previously saved work">Load File</button>
       <input type="file" id="load-input" accept=".json" style="display:none" onchange="loadFile(event)">
+      <button onclick="doPrint()" title="Print this workbook (formatted for A4)">Print</button>
       <button id="assessor-btn" class="outline" onclick="openPasswordModal()">Enter Assessor Mode</button>
     </div>
   </div>
@@ -1805,6 +1812,23 @@ function autoSave() {
     setTimeout(()=>si.classList.remove("show"), 1500);
   }, 800);
 }
+
+// --- Print: expand textareas to full content so answers don't clip, restore after ---
+function expandTextareasForPrint() {
+  document.querySelectorAll("textarea").forEach(function(t){
+    if (t.dataset._printH === undefined) t.dataset._printH = t.style.height || "";
+    t.style.height = "auto";
+    t.style.height = (t.scrollHeight + 2) + "px";
+  });
+}
+function restoreTextareasAfterPrint() {
+  document.querySelectorAll("textarea").forEach(function(t){
+    if (t.dataset._printH !== undefined) { t.style.height = t.dataset._printH; delete t.dataset._printH; }
+  });
+}
+function doPrint() { expandTextareasForPrint(); window.print(); }
+window.addEventListener("beforeprint", expandTextareasForPrint);
+window.addEventListener("afterprint", restoreTextareasAfterPrint);
 
 function collectFromDOM() {
   data.studentName = v("f-studentName");
