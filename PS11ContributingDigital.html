@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PS11 — Contributing to Your Community | Digital Workbook</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;color:#1a1a2e}
+:root{
+  --navy:#1B3A6B;--navy-d:#122952;--navy-l:#E8EEF7;
+  --gold:#C8A951;--white:#fff;--muted:#6B7B8C;
+  --pass:#16a34a;--refer:#dc2626;--pending:#f59e0b;
+  --green-l:#f0fdf4;--red-l:#fef2f2;--amber-l:#fffbeb;
+}
+
+/* ===== STICKY HEADER ===== */
+#sticky-header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:var(--navy);color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+.header-bar1{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 16px;min-height:60px;
+}
+.header-logos{display:flex;align-items:center;gap:10px}
+.header-logos img{height:48px;width:auto}
+.header-logos .divider{width:1px;height:44px;background:rgba(255,255,255,0.3)}
+.header-title{flex:1;text-align:center;padding:0 12px}
+.header-title h1{font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+.header-title p{font-size:11px;color:rgba(255,255,255,0.75);margin-top:2px}
+.header-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.header-controls button{
+  background:var(--gold);color:var(--navy-d);border:none;
+  padding:5px 10px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;
+  white-space:nowrap;
+}
+.header-controls button:hover{background:#b8961f}
+.header-controls button.outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.5)}
+.header-controls button.outline:hover{background:rgba(255,255,255,0.1)}
+#progress-bar-container{height:6px;background:rgba(255,255,255,0.2)}
+#progress-bar{height:6px;background:var(--gold);transition:width 0.3s;width:0%}
+#progress-text{text-align:right;font-size:10px;color:rgba(255,255,255,0.7);padding:1px 16px 2px}
+
+/* Assessor mode banner */
+#assessor-banner{
+  display:none;background:#1e3a8a;color:#fff;
+  text-align:center;padding:4px 16px;font-size:12px;font-weight:600;
+  border-top:2px solid var(--gold);
+}
+#assessor-banner.visible{display:block}
+
+/* ===== NAV BAR ===== */
+#nav-bar{
+  position:fixed;top:66px;left:0;right:0;z-index:999;
+  background:var(--navy-d);
+  display:flex;overflow-x:auto;
+  border-bottom:3px solid var(--gold);
+  scrollbar-width:none;
+}
+#nav-bar::-webkit-scrollbar{display:none}
+.nav-tab{
+  padding:8px 14px;color:rgba(255,255,255,0.75);
+  font-size:12px;font-weight:600;white-space:nowrap;
+  cursor:pointer;border-bottom:3px solid transparent;
+  margin-bottom:-3px;transition:all 0.2s;flex-shrink:0;
+}
+.nav-tab:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.nav-tab.active{color:#fff;border-bottom-color:var(--gold)}
+
+/* ===== MAIN CONTENT ===== */
+#main{margin-top:150px;padding:20px;max-width:900px;margin-left:auto;margin-right:auto}
+.section{display:none;animation:fadeIn 0.25s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== CARDS ===== */
+.card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.1);margin-bottom:20px;overflow:hidden}
+.card-header{background:var(--navy);color:#fff;padding:12px 16px}
+.card-header h2{font-size:16px;font-weight:700}
+.card-header p{font-size:12px;color:rgba(255,255,255,0.8);margin-top:3px}
+.card-body{padding:16px}
+
+/* Knowledge hub */
+.knowledge-hub{
+  background:var(--green-l);border-left:4px solid #16a34a;
+  border-radius:0 6px 6px 0;padding:14px 16px;margin-bottom:16px;
+}
+.knowledge-hub h3{color:#15803d;font-size:14px;font-weight:700;margin-bottom:8px}
+.knowledge-hub h4{color:#166534;font-size:13px;font-weight:600;margin:10px 0 5px}
+.knowledge-hub p,.knowledge-hub li{font-size:13px;line-height:1.6;color:#1a1a2e;margin-bottom:4px}
+.knowledge-hub ul,.knowledge-hub ol{margin-left:18px;margin-bottom:8px}
+.knowledge-hub table{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
+.knowledge-hub table th{background:#15803d;color:#fff;padding:6px 8px;text-align:left}
+.knowledge-hub table td{padding:5px 8px;border-bottom:1px solid #dcfce7}
+.knowledge-hub table tr:nth-child(even) td{background:#f0fdf4}
+
+/* Activity boxes */
+.activity-box{
+  background:var(--navy-l);border-left:4px solid var(--navy);
+  border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:14px;
+}
+.activity-box h4{color:var(--navy);font-size:13px;font-weight:700;margin-bottom:6px}
+.activity-box p,.activity-box li{font-size:13px;line-height:1.5;color:#333}
+.activity-box ul{margin-left:16px;margin-bottom:6px}
+
+/* Response fields */
+.response-field{
+  width:100%;border:1px solid #d1d5db;border-radius:4px;
+  padding:8px;font-family:inherit;font-size:13px;
+  resize:vertical;min-height:80px;background:#fff;
+  transition:border-color 0.2s;
+}
+.response-field:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 2px rgba(27,58,107,0.15)}
+.response-label{font-size:12px;color:var(--muted);margin-bottom:4px;display:block}
+.field-group{margin-bottom:12px}
+
+/* Tables for activities */
+.act-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px}
+.act-table th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-size:12px}
+.act-table td{padding:6px 8px;border:1px solid #d1d5db;vertical-align:top}
+.act-table tr:nth-child(even) td{background:#f8fafc}
+.act-table input[type=text]{width:100%;border:none;background:transparent;font-family:inherit;font-size:12px;padding:2px}
+.act-table input[type=text]:focus{outline:none;background:#fff;border-radius:2px}
+
+/* AC badges */
+.ac-badge{
+  display:inline-block;background:var(--gold);color:var(--navy-d);
+  font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;
+  margin:2px 2px 6px 0;
+}
+.ac-badge.pass{background:#dcfce7;color:#166534}
+.ac-badge.merit{background:#dbeafe;color:#1e40af}
+.ac-badge.distinction{background:#fef3c7;color:#92400e}
+
+/* Assessment task cards */
+.task-card{border:1px solid var(--gold);border-radius:6px;margin-bottom:20px;overflow:hidden}
+.task-card-header{background:var(--navy-l);padding:10px 14px;border-bottom:1px solid var(--gold)}
+.task-card-header h3{font-size:14px;font-weight:700;color:var(--navy)}
+.task-card-header p{font-size:12px;color:var(--muted);margin-top:2px}
+.task-card-body{padding:14px}
+.grade-band{
+  border-radius:4px;padding:10px 12px;margin-bottom:10px;
+  border-left:4px solid transparent;
+}
+.grade-band.pass{background:#f0fdf4;border-color:#16a34a}
+.grade-band.merit{background:#eff6ff;border-color:#1d4ed8}
+.grade-band.distinction{background:#fffbeb;border-color:#d97706}
+.grade-band h4{font-size:12px;font-weight:700;margin-bottom:4px}
+.grade-band.pass h4{color:#15803d}
+.grade-band.merit h4{color:#1d4ed8}
+.grade-band.distinction h4{color:#b45309}
+.grade-band p{font-size:12px;color:#333;line-height:1.5}
+
+/* Cover page inputs */
+.cover-field{
+  display:flex;align-items:center;margin-bottom:10px;
+  border-bottom:1px solid var(--navy-l);padding-bottom:10px;
+}
+.cover-field label{font-size:13px;font-weight:600;color:var(--navy);width:160px;flex-shrink:0}
+.cover-field input,.cover-field select{
+  flex:1;border:1px solid #d1d5db;border-radius:4px;
+  padding:6px 10px;font-family:inherit;font-size:13px;
+}
+.cover-field input:focus,.cover-field select:focus{outline:none;border-color:var(--navy)}
+
+/* Photo evidence */
+.drop-zone{
+  border:2px dashed #d1d5db;border-radius:8px;
+  padding:30px;text-align:center;cursor:pointer;
+  transition:all 0.2s;background:#fafafa;margin-bottom:16px;
+}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--navy);background:var(--navy-l)}
+.drop-zone p{font-size:13px;color:var(--muted)}
+.drop-zone strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.photo-card{background:#fff;border:1px solid #e5e7eb;border-radius:6px;overflow:hidden}
+.photo-card img{width:100%;height:140px;object-fit:cover;cursor:pointer;display:block}
+.photo-card-body{padding:10px}
+.photo-card textarea{width:100%;border:1px solid #d1d5db;border-radius:3px;font-size:12px;padding:5px;resize:vertical;min-height:50px;font-family:inherit}
+.photo-card select{width:100%;border:1px solid #d1d5db;border-radius:3px;font-size:12px;padding:4px;margin-top:5px;font-family:inherit}
+.photo-card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.photo-card-footer span{font-size:10px;color:var(--muted)}
+.btn-remove{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;padding:3px 8px;border-radius:3px;font-size:11px;cursor:pointer}
+.btn-remove:hover{background:#fee2e2}
+
+/* Lightbox */
+#lightbox{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);
+  z-index:9999;align-items:center;justify-content:center;
+}
+#lightbox.open{display:flex}
+#lightbox img{max-width:90vw;max-height:90vh;border-radius:6px}
+#lightbox-close{
+  position:absolute;top:16px;right:20px;color:#fff;
+  font-size:28px;cursor:pointer;font-weight:700;
+}
+
+/* Assessor mode */
+.assessor-section{display:none}
+.assessor-section.visible{display:block}
+.assessor-section textarea{width:100%;border:1px solid #93c5fd;border-radius:4px;padding:8px;font-size:13px;resize:vertical;min-height:60px;background:#eff6ff;font-family:inherit}
+.ac-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
+.ac-toggle-row:last-child{border-bottom:none}
+.ac-toggle-btn{padding:4px 12px;border-radius:4px;border:none;cursor:pointer;font-size:11px;font-weight:600}
+.ac-toggle-btn.met{background:#dcfce7;color:#15803d}
+.ac-toggle-btn.not-yet{background:#fee2e2;color:#dc2626}
+.result-banner{
+  border-radius:6px;padding:12px 16px;text-align:center;
+  font-size:16px;font-weight:700;margin-bottom:12px;
+}
+.result-banner.pass{background:#dcfce7;color:#15803d;border:2px solid #16a34a}
+.result-banner.refer{background:#fee2e2;color:#dc2626;border:2px solid #dc2626}
+.result-banner.pending{background:#fffbeb;color:#b45309;border:2px solid #d97706}
+
+/* Checklist */
+.checklist-table{width:100%;border-collapse:collapse;font-size:13px}
+.checklist-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left}
+.checklist-table td{padding:7px 10px;border-bottom:1px solid #e5e7eb;vertical-align:middle}
+.checklist-table tr:nth-child(even) td{background:#f8fafc}
+.ac-status-met{color:#15803d;font-weight:700}
+.ac-status-nyt{color:#dc2626;font-weight:700}
+.ac-status-pending{color:var(--muted)}
+
+/* Password modal */
+#pwd-modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  z-index:9998;align-items:center;justify-content:center;
+}
+#pwd-modal.open{display:flex}
+.pwd-box{
+  background:#fff;border-radius:8px;padding:24px;width:320px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+}
+.pwd-box h3{font-size:16px;color:var(--navy);margin-bottom:12px}
+.pwd-box input{
+  width:100%;border:1px solid #d1d5db;border-radius:4px;
+  padding:8px;font-size:14px;margin-bottom:8px;
+}
+.pwd-box .error{color:#dc2626;font-size:12px;margin-bottom:8px;display:none}
+.pwd-box .btn-row{display:flex;gap:8px}
+.pwd-box button{flex:1;padding:8px;border-radius:4px;border:none;cursor:pointer;font-size:13px;font-weight:600}
+.pwd-box .btn-confirm{background:var(--navy);color:#fff}
+.pwd-box .btn-cancel{background:#f3f4f6;color:#333}
+
+/* ===== PRINT MODE MODAL + EVIDENCE SUMMARY ===== */
+#print-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9998;align-items:center;justify-content:center}
+#print-modal.open{display:flex}
+.print-opt{display:flex;gap:8px;align-items:flex-start;padding:9px 10px;border:1px solid #e5e7eb;border-radius:6px;margin-bottom:6px;cursor:pointer;font-size:13px;line-height:1.35}
+.print-opt:hover{border-color:var(--navy);background:var(--navy-l)}
+.print-opt input[type="radio"]{width:auto;border:none;padding:0;margin:0;margin-top:3px;flex-shrink:0;appearance:auto}
+.print-opt small{color:#666;font-size:11px}
+#ev-summary{display:none}
+
+/* Contents page */
+.toc-item{
+  display:flex;align-items:center;padding:8px 12px;
+  border-bottom:1px solid #e5e7eb;cursor:pointer;
+  transition:background 0.15s;font-size:14px;
+}
+.toc-item:hover{background:var(--navy-l)}
+.toc-num{
+  background:var(--navy);color:#fff;
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;margin-right:12px;
+}
+.toc-label{flex:1;color:var(--navy);font-weight:600}
+.toc-arrow{color:var(--gold);font-size:16px}
+
+/* Info box */
+.info-box{
+  background:#fffbeb;border:1px solid var(--gold);
+  border-radius:6px;padding:12px;margin-bottom:16px;font-size:13px;
+}
+.info-box strong{color:#92400e}
+
+/* Misc utilities */
+.section-title{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:20px;padding-bottom:12px;
+  border-bottom:3px solid var(--gold);
+}
+.section-num{
+  background:var(--gold);color:var(--navy-d);
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;flex-shrink:0;
+}
+.section-title h2{font-size:20px;font-weight:700;color:var(--navy)}
+.intro-lo{
+  background:var(--navy-l);border-left:4px solid var(--navy);
+  border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:8px;
+}
+.intro-lo strong{color:var(--navy);font-size:13px}
+.intro-lo p{font-size:13px;color:#333;margin-top:2px}
+.lo-aim{
+  display:inline-block;background:var(--navy);color:#fff;
+  font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;margin-bottom:6px;
+}
+.lo-section-opener{
+  background:var(--navy);color:#fff;
+  border-radius:8px;padding:20px 24px;margin-bottom:20px;
+  border-bottom:4px solid var(--gold);
+}
+.lo-section-opener .lo-code{font-size:48px;font-weight:700;color:var(--gold);line-height:1}
+.lo-section-opener .lo-desc{font-size:16px;margin-top:6px;color:rgba(255,255,255,0.9)}
+.lo-section-opener .lo-acs{margin-top:10px;font-size:12px;color:rgba(255,255,255,0.7)}
+.save-indicator{
+  position:fixed;bottom:16px;right:16px;
+  background:#15803d;color:#fff;
+  padding:8px 14px;border-radius:6px;
+  font-size:12px;font-weight:600;
+  opacity:0;transition:opacity 0.3s;
+  pointer-events:none;z-index:2000;
+}
+.save-indicator.show{opacity:1}
+
+@media print{
+  .no-print{display:none!important}
+  #sticky-header,#nav-bar{position:static}
+  #main{margin-top:0;padding:0}
+  .section{display:block!important;page-break-inside:auto}
+  textarea,.response-field{min-height:0!important;height:auto!important;overflow:visible!important;
+    resize:none!important;border:1px solid #999!important;background:#fff!important;
+    page-break-inside:avoid;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+  input[type=text],input[type=date]{border:none!important;border-bottom:1px solid #999!important;
+    background:#fff!important}
+  @page{margin:15mm 12mm;size:A4}
+  /* Evidence summary mode: hide the workbook, show the summary */
+  body.print-ev #main,body.print-ev #sticky-header,body.print-ev #nav-bar{display:none!important}
+  body.print-ev #ev-summary{display:block!important}
+  #ev-summary .ev-head{border-bottom:2px solid var(--navy);padding-bottom:8px;margin-bottom:14px}
+  #ev-summary h1{font-size:20px;color:var(--navy);margin:0}
+  #ev-summary .ev-sub{font-size:11px;color:#555;margin-top:2px}
+  #ev-summary .ev-meta{font-size:12px;margin-top:8px;width:100%;border-collapse:collapse}
+  #ev-summary .ev-meta td{padding:2px 0}
+  #ev-summary .ev-section{margin-bottom:14px}
+  #ev-summary .ev-section h2{font-size:14px;color:#fff;background:var(--navy);padding:5px 8px;border-radius:3px;margin:14px 0 8px}
+  #ev-summary .ev-section h3{font-size:13px;color:var(--navy);margin:10px 0 4px}
+  #ev-summary .ev-qhead{font-weight:700;font-size:12px;margin:10px 0 4px;color:#333}
+  #ev-summary .ev-qhead small{font-weight:400;color:#666}
+  #ev-summary .ev-qa{margin-bottom:8px;page-break-inside:avoid}
+  #ev-summary .ev-q{font-size:11.5px;font-weight:600;color:#444}
+  #ev-summary .ev-a{font-size:12px;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
+    border:1px solid #bbb;border-radius:3px;padding:5px 7px;background:#fff;margin-top:2px}
+  #ev-summary .ev-a.empty{color:#999;font-style:italic;border-style:dashed}
+  #ev-summary .ev-table{width:100%;border-collapse:collapse;font-size:11px;margin:4px 0 8px}
+  #ev-summary .ev-table th,#ev-summary .ev-table td{border:1px solid #999;padding:3px 5px;text-align:left;vertical-align:top}
+  #ev-summary .ev-table th{background:var(--navy-l)}
+  #ev-summary .ev-result{font-size:13px;margin-top:8px}
+}
+</style>
+</head>
+<body>
+
+<!-- STICKY HEADER -->
+<div id="sticky-header">
+  <div class="header-bar1">
+    <div class="header-logos">
+      <img src="data:image/png;base64,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" alt="Brynllywarch Hall School" title="Brynllywarch Hall School">
+      <div class="divider"></div>
+      <img src="data:image/png;base64,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" alt="BTEC" title="Pearson BTEC">
+    </div>
+    <div class="header-title">
+      <h1>PS11 — Contributing to Your Community</h1>
+      <p>Pearson BTEC Level 1 Introductory in Public Services</p>
+    </div>
+    <div class="header-controls no-print">
+      <span id="progress-display" style="font-size:11px;color:rgba(255,255,255,0.8)">0%</span>
+      <button onclick="saveFile()" title="Export your work as a JSON file">Save File</button>
+      <button onclick="document.getElementById('load-input').click()" class="outline" title="Load previously saved work">Load File</button>
+      <input type="file" id="load-input" accept=".json" style="display:none" onchange="loadFile(event)">
+      <button onclick="openPrintModal()" title="Print the workbook or an evidence summary">Print</button>
+      <button id="assessor-btn" class="outline" onclick="openPasswordModal()">Enter Assessor Mode</button>
+    </div>
+  </div>
+  <div id="progress-bar-container"><div id="progress-bar"></div></div>
+  <div id="assessor-banner">Assessor Mode Active — Student fields are locked</div>
+</div>
+
+<!-- NAV BAR -->
+<nav id="nav-bar" class="no-print">
+  <div class="nav-tab active" onclick="showSection('cover')" data-sec="cover">Cover</div>
+  <div class="nav-tab" onclick="showSection('contents')" data-sec="contents">Contents</div>
+  <div class="nav-tab" onclick="showSection('intro')" data-sec="intro">Introduction</div>
+  <div class="nav-tab" onclick="showSection('glossary')" data-sec="glossary">Glossary</div>
+  <div class="nav-tab" onclick="showSection('loA')" data-sec="loA">Learning Aim A</div>
+  <div class="nav-tab" onclick="showSection('loB')" data-sec="loB">Learning Aim B</div>
+  <div class="nav-tab" onclick="showSection('taskA')" data-sec="taskA">Task A</div>
+  <div class="nav-tab" onclick="showSection('sources')" data-sec="sources">Source Pack</div>
+  <div class="nav-tab" onclick="showSection('taskB')" data-sec="taskB">Task B</div>
+  <div class="nav-tab" onclick="showSection('evidence')" data-sec="evidence">Photo Evidence</div>
+  <div class="nav-tab" onclick="showSection('checklist')" data-sec="checklist">Checklist</div>
+  <div class="nav-tab" onclick="showSection('declaration')" data-sec="declaration">Declaration</div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- ===== COVER ===== -->
+<div class="section active" id="sec-cover">
+  <div class="card">
+    <div class="card-header">
+      <h2>Student Details</h2>
+      <p>Please complete all fields before starting your workbook</p>
+    </div>
+    <div class="card-body">
+      <div style="text-align:center;padding:12px 0 20px;border-bottom:2px solid var(--navy-l);margin-bottom:20px">
+        <p style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.5px;text-transform:uppercase">Pearson BTEC Level 1 Introductory in Public Services</p>
+        <h2 style="font-size:22px;font-weight:800;color:var(--navy);margin:6px 0">Unit PS11: Contributing to Your Community</h2>
+        <div style="display:inline-block;background:var(--gold);color:var(--navy-d);font-size:12px;font-weight:700;padding:4px 14px;border-radius:4px">40 Guided Learning Hours</div>
+      </div>
+      <div class="cover-field">
+        <label>Student Name</label>
+        <input type="text" id="f-studentName" placeholder="Enter your full name" oninput="autoSave()">
+      </div>
+      <div class="cover-field">
+        <label>Class / Group</label>
+        <input type="text" id="f-className" placeholder="e.g. 10PS" oninput="autoSave()">
+      </div>
+      <div class="cover-field">
+        <label>Assessor</label>
+        <input type="text" id="f-assessorName" value="Jonathan Jones" oninput="autoSave()">
+      </div>
+      <div class="cover-field">
+        <label>Start Date</label>
+        <input type="date" id="f-startDate" oninput="autoSave()">
+      </div>
+      <div class="cover-field">
+        <label>Submission Date</label>
+        <input type="date" id="f-submitDate" oninput="autoSave()">
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>Unit Overview</h2></div>
+    <div class="card-body">
+      <div class="info-box">
+        <strong>What is this unit about?</strong><br>
+        Volunteers are a key resource for the public services. Some services, such as the RNLI and Mountain Rescue,
+        could not operate without volunteers. In this unit you will find out about a volunteering organisation and the
+        activities it runs that have a positive impact on the community, present what you have found, and then take part
+        in a volunteering activity that contributes to your own community.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--navy-l);border-radius:6px;padding:12px">
+          <strong style="color:var(--navy);font-size:13px">Learning Aim A</strong>
+          <p style="font-size:12px;margin-top:4px;color:#333">Find out about a volunteering organisation and how its activities have a positive impact on the community</p>
+        </div>
+        <div style="background:var(--navy-l);border-radius:6px;padding:12px">
+          <strong style="color:var(--navy);font-size:13px">Learning Aim B</strong>
+          <p style="font-size:12px;margin-top:4px;color:#333">Carry out a volunteering activity that contributes to your community</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTENTS ===== -->
+<div class="section" id="sec-contents">
+  <div class="card">
+    <div class="card-header"><h2>Contents</h2><p>Click any section to navigate</p></div>
+    <div class="card-body" style="padding:0">
+      <div class="toc-item" onclick="showSection('intro')"><div class="toc-num">1</div><span class="toc-label">Introduction</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('glossary')"><div class="toc-num">2</div><span class="toc-label">Glossary of Key Terms</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('loA')"><div class="toc-num">3</div><span class="toc-label">Learning Aim A — Find Out About a Volunteering Organisation</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('loB')"><div class="toc-num">4</div><span class="toc-label">Learning Aim B — Carry Out a Volunteering Activity</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('taskA')"><div class="toc-num">5</div><span class="toc-label">Assessment Task A — Research &amp; Information Document</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('sources')"><div class="toc-num">6</div><span class="toc-label">Source Pack — Given Sources for Task A</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('taskB')"><div class="toc-num">7</div><span class="toc-label">Assessment Task B — Volunteering Activity Log</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('evidence')"><div class="toc-num">8</div><span class="toc-label">Photo Evidence</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('checklist')"><div class="toc-num">9</div><span class="toc-label">Assessment Criteria Checklist</span><span class="toc-arrow">&#8250;</span></div>
+      <div class="toc-item" onclick="showSection('declaration')"><div class="toc-num">10</div><span class="toc-label">Student Declaration</span><span class="toc-arrow">&#8250;</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTRODUCTION ===== -->
+<div class="section" id="sec-intro">
+  <div class="section-title"><div class="section-num">1</div><h2>Introduction to Unit PS11</h2></div>
+  <div class="card">
+    <div class="card-header"><h2>What You Will Learn</h2></div>
+    <div class="card-body">
+      <p style="font-size:13px;line-height:1.7;margin-bottom:14px">
+        Volunteers are a key resource for the public services. Some public services &mdash; for example the Royal National
+        Lifeboat Institution (RNLI) &mdash; would not be able to operate without the skills, experience and fund-raising of
+        volunteers. By volunteering, you make a contribution to your local community and also gain new skills.
+      </p>
+      <p style="font-size:13px;line-height:1.7;margin-bottom:16px">
+        In this unit you will find out about a voluntary organisation and the activities it runs, and present information
+        on how those activities have a positive impact on the community. You will then take part in a volunteering
+        activity yourself and keep a log of your experience. Volunteering is enjoyable and a good way to meet people of
+        different ages, backgrounds and nationalities who share your interests.
+      </p>
+      <div class="intro-lo">
+        <span class="lo-aim">Learning Aim A</span>
+        <strong>Find out about a volunteering organisation and how its activities have a positive impact on the community</strong>
+        <p>You will research a voluntary organisation, identify the activities it runs, and produce information showing how those activities benefit the community.</p>
+      </div>
+      <div class="intro-lo">
+        <span class="lo-aim">Learning Aim B</span>
+        <strong>Carry out a volunteering activity that contributes to your community</strong>
+        <p>You will take part in a real volunteering activity, keep a log, and show a positive, committed and helpful attitude. Your tutor will confirm your contribution with a witness statement.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>Assessment Criteria at a Glance</h2></div>
+    <div class="card-body" style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr>
+            <th style="background:var(--navy);color:#fff;padding:8px 10px">Criterion</th>
+            <th style="background:#16a34a;color:#fff;padding:8px 10px">Pass</th>
+            <th style="background:#1565c0;color:#fff;padding:8px 10px">Merit</th>
+            <th style="background:#92400e;color:#fff;padding:8px 10px">Distinction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb;font-weight:600;color:var(--navy)">Aim A — Researching</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.P1 — Select info from given sources, identifying positive community impact</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.M1 — Select info from given sources, outlining the positive impact</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.D1 — Search own &amp; given sources, describing the positive impact</td>
+          </tr>
+          <tr style="background:#f8fafc">
+            <td style="padding:7px 10px;border:1px solid #e5e7eb;font-weight:600;color:var(--navy)">Aim A — Producing</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.P2 — Produce information on the organisation and its activities</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.M2 — Produce clear information</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">A.D2 — Produce detailed information</td>
+          </tr>
+          <tr>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb;font-weight:600;color:var(--navy)">Aim B — Volunteering</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">B.P3 — Carry out a volunteering activity that contributes to your community</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">B.M3 — &hellip;showing a positive and helpful attitude</td>
+            <td style="padding:7px 10px;border:1px solid #e5e7eb">B.D3 — &hellip;effectively, showing commitment and responsibility for others</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== GLOSSARY ===== -->
+<div class="section" id="sec-glossary">
+  <div class="section-title"><div class="section-num">2</div><h2>Glossary of Key Terms</h2></div>
+  <div class="card">
+    <div class="card-header">
+      <h2>Key Words for Unit PS11</h2>
+      <p>Learn these words before you start your work &mdash; they will help you understand the activities and assessment tasks</p>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th style="background:var(--navy);color:#fff;padding:10px 12px;
+              text-align:left;font-size:13px;width:220px">Term</th>
+            <th style="background:var(--navy);color:#fff;padding:10px 12px;
+              text-align:left;font-size:13px">Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Volunteer</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">A person who gives their time to help others or an organisation without being paid.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Voluntary organisation</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">A group or charity that organises unpaid work to help people or the community. Also called a volunteering organisation.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Community</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">The people who live in the same area or share something in common, such as a town, village or neighbourhood.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Positive impact</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">A good or helpful effect that an activity has on people or the community.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Community cohesion</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">When people from different backgrounds in an area get on well together and feel they belong.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Charity</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">An organisation set up to help people in need, raise money for a cause, or support the community.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">RNLI</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">The Royal National Lifeboat Institution &mdash; a charity that saves lives at sea, run mainly by volunteers.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Mountain Rescue</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Volunteer teams that search for and help people who are lost or injured in the mountains.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Public services</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Organisations that serve and protect the public, such as the police, fire service and ambulance service.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Fund-raising</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Collecting money to support a charity or organisation, for example through events or sponsorship.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Disadvantaged</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">People who have fewer opportunities or face difficulties, for example through poverty, illness or disability.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Commitment</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Sticking to a task or role &mdash; turning up reliably and trying your best.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Reliability</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Being someone others can depend on to do what you said you would do.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Punctuality</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Arriving on time for an activity or commitment.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Self-management</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Organising yourself, your time and your behaviour without needing to be told.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Interpersonal skills</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">The skills you use to get on with and work alongside other people, such as listening, respect and teamwork.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Witness statement</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">A signed record written by your tutor or supervisor confirming what you did during your volunteering activity.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Research log</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">A record of the sources you used and the information you found when researching an organisation.</td>
+      </tr>
+      <tr style="background:#f8fafc">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Source</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Where information comes from, for example a website, leaflet, interview, blog or noticeboard.</td>
+      </tr>
+      <tr style="background:#ffffff">
+        <td style="padding:8px 12px;font-weight:700;color:var(--navy-d);font-size:13px;
+          border-bottom:1px solid #e5e7eb;vertical-align:top;width:220px;
+          border-right:2px solid var(--gold)">Work placement</td>
+        <td style="padding:8px 12px;font-size:13px;color:#333;
+          border-bottom:1px solid #e5e7eb;line-height:1.6">Time spent helping at a real organisation, which can be used as evidence for this unit.</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LEARNING AIM A ===== -->
+<div class="section" id="sec-loA">
+  <div class="lo-section-opener">
+    <div class="lo-code">A</div>
+    <div class="lo-desc">Find out about a volunteering organisation and how its activities have a positive impact on the community</div>
+    <div class="lo-acs">Covers: A.P1 | A.P2 | A.M1 | A.M2 | A.D1 | A.D2</div>
+  </div>
+
+  <!-- KH1: Volunteering and the public services -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 1 — Volunteering and the Public Services</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>What is volunteering?</h3>
+        <p>A <strong>volunteer</strong> is someone who gives their time to help others or an organisation <strong>without being paid</strong>. Volunteers are a key resource for the public services and the wider community.</p>
+        <h4>Why volunteers matter to the public services</h4>
+        <p>Some public services depend heavily on volunteers. Without them, these organisations could not do their work.</p>
+        <table>
+          <thead><tr><th>Organisation</th><th>What volunteers do</th></tr></thead>
+          <tbody>
+            <tr><td><strong>RNLI</strong> (Royal National Lifeboat Institution)</td><td>Crew lifeboats and raise money to save lives at sea &mdash; most RNLI crew are unpaid volunteers</td></tr>
+            <tr><td><strong>Mountain Rescue</strong></td><td>Search for and rescue people who are lost or injured in the mountains</td></tr>
+            <tr><td><strong>School and college governors</strong></td><td>Help run schools and colleges, giving their time for free</td></tr>
+            <tr><td><strong>St John Ambulance</strong></td><td>Provide first aid cover at events, run by trained volunteers</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>Key idea:</strong> Volunteering helps the community <em>and</em> helps the volunteer gain new skills and experience.</div>
+      </div>
+
+      <div class="activity-box">
+        <h4>Activity 1 — Who relies on volunteers?</h4>
+        <p>Name <strong>THREE</strong> public services, charities or community groups that rely on volunteers. Use the Knowledge Hub above and your own ideas.</p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>#</th><th>Organisation that relies on volunteers</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><input type="text" id="act1-1" oninput="autoSave()"></td></tr>
+          <tr><td>2</td><td><input type="text" id="act1-2" oninput="autoSave()"></td></tr>
+          <tr><td>3</td><td><input type="text" id="act1-3" oninput="autoSave()"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- KH2: Types of community volunteering and their impact -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 2 — Types of Community Volunteering</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>Types of community volunteering work</h3>
+        <p>Volunteering can take many forms. Each type has a <strong>positive impact</strong> on the community.</p>
+        <table>
+          <thead><tr><th>Type of volunteering</th><th>Example</th><th>Positive impact on the community</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Advice, support or care</strong> for people who need it</td><td>Helping at a food bank, befriending older people, a disability charity</td><td>Helps disadvantaged people and improves their wellbeing</td></tr>
+            <tr><td><strong>Community cohesion</strong> through clubs and societies</td><td>Running a youth club, music club or sports team</td><td>Brings people together and helps them feel they belong</td></tr>
+            <tr><td><strong>Work experience</strong> at charities or public-funded organisations</td><td>Volunteering in a charity shop, helping at a community centre</td><td>Keeps services running and supports good causes</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>Remember:</strong> for this unit you must show how an organisation's activities make a <strong>positive contribution to the community</strong> &mdash; not just what it does.</div>
+      </div>
+
+      <div class="activity-box">
+        <h4>Activity 2 — Volunteering and its impact</h4>
+        <p>Give <strong>THREE</strong> types of volunteering activity. For each one, explain the positive impact it has on the community.</p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>Volunteering activity</th><th>Positive impact on the community</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" id="act3-1a" oninput="autoSave()"></td><td><input type="text" id="act3-1b" oninput="autoSave()"></td></tr>
+          <tr><td><input type="text" id="act3-2a" oninput="autoSave()"></td><td><input type="text" id="act3-2b" oninput="autoSave()"></td></tr>
+          <tr><td><input type="text" id="act3-3a" oninput="autoSave()"></td><td><input type="text" id="act3-3b" oninput="autoSave()"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- KH3: Benefits and skills -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 3 — Benefits to You and Skills You Need</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>Benefits for the individual</h3>
+        <ul>
+          <li><strong>New and improved skills</strong> &mdash; you learn by doing</li>
+          <li><strong>Awareness of your community</strong> &mdash; you understand local needs better</li>
+          <li><strong>Commitment and giving back</strong> &mdash; you help others and feel good about it</li>
+          <li><strong>Experience of public-service work</strong> &mdash; useful for future jobs and study</li>
+        </ul>
+        <h3>Skills needed to volunteer</h3>
+        <table>
+          <thead><tr><th>Skill area</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Personal skills</strong></td><td>Commitment, discipline, self-management, time management, punctuality, reliability</td></tr>
+            <tr><td><strong>Interpersonal skills</strong></td><td>Teamwork, respect, helping others, taking part</td></tr>
+            <tr><td><strong>Specific skills</strong> (for some roles)</td><td>Driving, cooking, using a computer, sign language, physical fitness</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="activity-box">
+        <h4>Activity 3 — Benefits to you</h4>
+        <p>List <strong>THREE</strong> benefits <em>you</em> would gain from volunteering.</p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>#</th><th>Benefit to me</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><input type="text" id="act6-1" oninput="autoSave()"></td></tr>
+          <tr><td>2</td><td><input type="text" id="act6-2" oninput="autoSave()"></td></tr>
+          <tr><td>3</td><td><input type="text" id="act6-3" oninput="autoSave()"></td></tr>
+        </tbody>
+      </table>
+
+      <div class="activity-box">
+        <h4>Activity 4 — Skills a volunteer needs</h4>
+        <p>Name <strong>THREE</strong> skills a volunteer needs. Try to include at least one interpersonal skill.</p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>#</th><th>Skill</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><input type="text" id="act2-1" oninput="autoSave()"></td></tr>
+          <tr><td>2</td><td><input type="text" id="act2-2" oninput="autoSave()"></td></tr>
+          <tr><td>3</td><td><input type="text" id="act2-3" oninput="autoSave()"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- KH4: Finding out and presenting -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 4 — Finding Out and Presenting Information</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>Where to find out about volunteering</h3>
+        <p>You can find out about volunteering organisations and their activities from many sources:</p>
+        <ul>
+          <li>Volunteering organisations themselves (visit or phone them)</li>
+          <li>Websites and blogs</li>
+          <li>Local community centres</li>
+          <li>Local authorities (the council)</li>
+          <li>Advertisements and noticeboards in public places</li>
+        </ul>
+        <h3>Presenting your information</h3>
+        <p>For Task A you will <strong>produce information</strong> about an organisation &mdash; this can be a short <strong>report or a presentation</strong>. Good information is:</p>
+        <ul>
+          <li>Clear and easy to understand</li>
+          <li>Set out in a sensible order with suitable headings</li>
+          <li>Written in language that suits your audience</li>
+          <li>Accurate &mdash; based on the sources you used</li>
+        </ul>
+      </div>
+
+      <div class="activity-box">
+        <h4>Activity 5 — Where would you look?</h4>
+        <p>Name <strong>THREE</strong> places or sources you could use to find out about a volunteering organisation in your area.</p>
+      </div>
+      <table class="act-table">
+        <thead><tr><th>#</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><input type="text" id="act2-4" oninput="autoSave()"></td></tr>
+          <tr><td>2</td><td><input type="text" id="act2-5" oninput="autoSave()"></td></tr>
+          <tr><td>3</td><td><input type="text" id="act2-6" oninput="autoSave()"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LEARNING AIM B ===== -->
+<div class="section" id="sec-loB">
+  <div class="lo-section-opener">
+    <div class="lo-code">B</div>
+    <div class="lo-desc">Carry out a volunteering activity that contributes to your community</div>
+    <div class="lo-acs">Covers: B.P3 | B.M3 | B.D3</div>
+  </div>
+
+  <!-- KH5: Taking part in a volunteering activity -->
+  <div class="card">
+    <div class="card-header"><h2>Knowledge Hub 5 — Taking Part in a Volunteering Activity</h2></div>
+    <div class="card-body">
+      <div class="knowledge-hub">
+        <h3>Planning and preparing</h3>
+        <ul>
+          <li>Make contact with the organisation to find out more about the activity</li>
+          <li>Check any <strong>health and safety</strong> rules that apply</li>
+          <li>Find out the practical details &mdash; what to wear, start time, where to go</li>
+        </ul>
+        <h3>How to show a good contribution</h3>
+        <p>While volunteering, the way you behave is just as important as the task itself. To reach the higher grades you need to show:</p>
+        <table>
+          <thead><tr><th>Grade</th><th>What you need to show</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Pass (B.P3)</strong></td><td>Take part in a volunteering activity, showing some commitment. You may rely on others for direction.</td></tr>
+            <tr><td><strong>Merit (B.M3)</strong></td><td>Take part showing a <strong>positive and helpful attitude</strong> &mdash; be reliable and manage your own time.</td></tr>
+            <tr><td><strong>Distinction (B.D3)</strong></td><td>Contribute <strong>effectively</strong>, showing <strong>commitment and responsibility for others</strong> &mdash; support others and take ownership of your role.</td></tr>
+          </tbody>
+        </table>
+        <h3>Keeping a log and witness statement</h3>
+        <p>Keep a <strong>log</strong> of what you do during your volunteering. Your tutor or supervisor will write a <strong>witness statement</strong> confirming your contribution. Both are needed as evidence for Aim B.</p>
+        <div class="info-box"><strong>Note:</strong> A work placement in a suitable charity or voluntary organisation can be used as evidence for this unit.</div>
+      </div>
+
+      <div class="activity-box">
+        <h4>Activity 6 — Plan your volunteering</h4>
+        <p>Before you start, plan ahead. Write down which activity you will do and what you need to prepare.</p>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Which volunteering activity will you take part in?</span>
+        <textarea class="response-field" id="act4-1" rows="2" oninput="autoSave()" placeholder="e.g. helping at the community litter pick / charity shop / youth club"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">What do you need to do or bring to be ready? (e.g. who to contact, what to wear, start time, health and safety)</span>
+        <textarea class="response-field" id="act4-2" rows="3" oninput="autoSave()" placeholder="List how you will prepare..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ASSESSMENT TASK A ===== -->
+<div class="section" id="sec-taskA">
+  <div class="section-title"><div class="section-num">5</div><h2>Assessment Task A — Research &amp; Information Document</h2></div>
+  <div class="info-box">
+    <strong>Scenario:</strong> You have been asked to select a voluntary organisation in your local community and find out what they do and how their activities make a positive contribution to the community. You will then compile your findings into a report or presentation to inform others about the organisation's work and how it benefits the community.
+  </div>
+  <div class="info-box" style="background:#fff7ed;border-left-color:var(--gold)">
+    <strong>Plural rule:</strong> where a criterion asks for activities (plural), you must give at least <strong>TWO</strong>.
+  </div>
+
+  <div class="task-card">
+    <div class="task-card-header">
+      <h3>Task A1 — Research Log</h3>
+      <p>Research ONE volunteering organisation. Record the sources you used and what you found out about the organisation and its activities. Show how its activities have a positive impact on the community.</p>
+    </div>
+    <div class="task-card-body">
+      <div style="margin-bottom:10px">
+        <span class="ac-badge pass">A.P1</span>
+        <span class="ac-badge merit">A.M1</span>
+        <span class="ac-badge distinction">A.D1</span>
+      </div>
+      <div class="grade-band pass">
+        <h4>Pass — A.P1</h4>
+        <p>Select information about a volunteering organisation from <strong>given sources</strong> (the Source Pack). Identify activities that have a positive impact on the community.</p>
+      </div>
+      <div class="grade-band merit">
+        <h4>Merit — A.M1</h4>
+        <p>As Pass, but <strong>outline how</strong> the activities have a positive impact on the community (give a little detail for each).</p>
+      </div>
+      <div class="grade-band distinction">
+        <h4>Distinction — A.D1</h4>
+        <p>Search for and select information from your <strong>own AND given sources</strong>, and <strong>describe how</strong> the activities have a positive impact on the community.</p>
+      </div>
+
+      <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb">
+
+      <div class="field-group">
+        <span class="response-label">Source 1 — Name of source and why you chose it (use a given source from the Source Pack):</span>
+        <textarea class="response-field" id="ta1-src1" rows="3" oninput="autoSave()" placeholder="e.g. RNLI website (rnli.org) — chosen because it is the official site of the organisation and has accurate information."></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Information found from Source 1 (what the organisation does + how its activities help the community):</span>
+        <textarea class="response-field" id="ta1-info1" rows="5" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="response-label">Source 2 — Name of source and why you chose it:</span>
+        <textarea class="response-field" id="ta1-src2" rows="3" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Information found from Source 2:</span>
+        <textarea class="response-field" id="ta1-info2" rows="5" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="response-label">Source 3 — Name of source and why you chose it (for Distinction, find this source yourself):</span>
+        <textarea class="response-field" id="ta1-src3" rows="3" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Information found from Source 3:</span>
+        <textarea class="response-field" id="ta1-info3" rows="5" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card">
+    <div class="task-card-header">
+      <h3>Task A2 — Produce Information About the Organisation</h3>
+      <p>Using your research, produce information about the organisation and its activities. This is your report / presentation. Show clearly how the activities benefit the community.</p>
+    </div>
+    <div class="task-card-body">
+      <div style="margin-bottom:10px">
+        <span class="ac-badge pass">A.P2</span>
+        <span class="ac-badge merit">A.M2</span>
+        <span class="ac-badge distinction">A.D2</span>
+      </div>
+      <div class="grade-band pass">
+        <h4>Pass — A.P2</h4>
+        <p>Produce information on the volunteering organisation and its activities (a basic understanding).</p>
+      </div>
+      <div class="grade-band merit">
+        <h4>Merit — A.M2</h4>
+        <p>Produce <strong>clear</strong> information, with clear details on the activities.</p>
+      </div>
+      <div class="grade-band distinction">
+        <h4>Distinction — A.D2</h4>
+        <p>Produce <strong>detailed</strong> information, relevant and informative, giving full examples of the positive community contribution.</p>
+      </div>
+
+      <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb">
+
+      <div class="field-group">
+        <span class="response-label">Name of the volunteering organisation:</span>
+        <textarea class="response-field" id="tb1-s1name" rows="1" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">What does the organisation do?</span>
+        <textarea class="response-field" id="tb1-s1about" rows="4" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">In general, how does its work have a positive impact on the community?</span>
+        <textarea class="response-field" id="tb1-s1needs" rows="4" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="response-label">Activity 1 run by the organisation:</span>
+        <textarea class="response-field" id="tb1-s2name" rows="1" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Describe Activity 1:</span>
+        <textarea class="response-field" id="tb1-s2about" rows="3" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Positive impact of Activity 1 on the community:</span>
+        <textarea class="response-field" id="tb1-s2needs" rows="3" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="response-label">Activity 2 run by the organisation:</span>
+        <textarea class="response-field" id="tb1-s3name" rows="1" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Describe Activity 2:</span>
+        <textarea class="response-field" id="tb1-s3about" rows="3" oninput="autoSave()"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Positive impact of Activity 2 on the community:</span>
+        <textarea class="response-field" id="tb1-s3needs" rows="3" oninput="autoSave()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="response-label">Summary — why is this organisation's work important to your community?</span>
+        <textarea class="response-field" id="tb1-common" rows="4" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assessor section A -->
+  <div class="assessor-section" id="as-taskA">
+    <div class="card" style="border:2px solid #3b82f6">
+      <div class="card-header" style="background:#1e3a8a"><h2>Assessor Marking — Task A</h2></div>
+      <div class="card-body">
+        <p style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:10px">AC Status</p>
+        <div id="ac-toggles-A"></div>
+        <div style="margin-top:12px">
+          <span class="response-label">Assessor feedback for Task A:</span>
+          <textarea id="feedback-taskA" rows="4" oninput="autoSave()"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== SOURCE PACK ===== -->
+<div class="section" id="sec-sources">
+  <div class="section-title"><div class="section-num">6</div><h2>Source Pack — Given Sources for Task A</h2></div>
+  <div class="info-box">
+    <strong>How to use this section:</strong> These are your <strong>given sources</strong> for Task A. Read each one carefully, then go back to Task A to record what you found in your Research Log. Click the heading bar of any source card to open or close it. Use the SOURCE REFERENCE line at the bottom of each card when filling in your research log.
+  </div>
+
+  <!-- shared styles for source cards -->
+  <style>
+  .src-card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.1);margin-bottom:14px;overflow:hidden}
+  .src-summary{display:flex;align-items:center;justify-content:space-between;
+    background:var(--navy);color:#fff;padding:12px 16px;cursor:pointer;
+    list-style:none;user-select:none}
+  .src-summary::-webkit-details-marker{display:none}
+  .src-summary h3{font-size:14px;font-weight:700;margin:0}
+  .src-summary .src-meta{font-size:11px;color:rgba(255,255,255,0.75);margin-top:3px}
+  .src-badge{background:var(--gold);color:var(--navy-d);font-size:11px;font-weight:700;
+    padding:3px 10px;border-radius:4px;white-space:nowrap;margin-left:12px;flex-shrink:0}
+  .src-badge.non-u{background:#16a34a;color:#fff}
+  .src-body{padding:14px 16px}
+  .src-row{display:grid;grid-template-columns:140px 1fr;gap:0;margin-bottom:2px}
+  .src-row-label{font-size:12px;font-weight:700;color:var(--navy-d);padding:6px 8px;
+    background:var(--navy-l);border:1px solid #d1d5db}
+  .src-row-val{font-size:12px;padding:6px 8px;border:1px solid #d1d5db;border-left:none;background:#fff}
+  .src-sub{font-size:12px;font-weight:700;color:var(--navy);margin:10px 0 4px;
+    padding:5px 8px;background:var(--navy-l);border-left:3px solid var(--gold)}
+  .src-list{margin:0 0 8px 0;padding:0}
+  .src-list li{font-size:12px;line-height:1.6;padding:3px 0 3px 20px;position:relative;
+    border-bottom:1px solid #f3f4f6;list-style:none}
+  .src-list li::before{content:"\2022";position:absolute;left:6px;color:var(--navy)}
+  .src-fact{background:#fffbeb;border:1px solid var(--gold);border-radius:4px;
+    padding:8px 12px;font-size:12px;margin:8px 0;color:#92400e}
+  .src-fact strong{color:#b45309}
+  .src-cite{background:#f5f5f5;border:1px solid #d1d5db;border-radius:4px;
+    padding:8px 12px;font-size:11px;margin-top:8px;color:#444}
+  .src-cite strong{color:var(--navy-d);display:block;margin-bottom:3px}
+  details[open] .src-summary .src-toggle{transform:rotate(90deg)}
+  .src-toggle{transition:transform 0.2s;display:inline-block;margin-left:8px;color:var(--gold)}
+  </style>
+
+  <!-- SOURCE 1 -->
+  <details class="src-card" open>
+    <summary class="src-summary">
+      <div><h3>Source 1 of 4 &mdash; RNLI (Royal National Lifeboat Institution)</h3><div class="src-meta">National charity &bull; rnli.org</div></div>
+      <span class="src-badge">NATIONAL CHARITY <span class="src-toggle">&#8250;</span></span>
+    </summary>
+    <div class="src-body">
+      <p class="src-sub">What Does This Organisation Do?</p>
+      <ul class="src-list">
+        <li>A charity that saves lives at sea around the UK and Ireland</li>
+        <li>Runs lifeboat stations and trains volunteer crews</li>
+        <li>Provides lifeguards on many beaches and water-safety education</li>
+      </ul>
+      <p class="src-sub">Volunteering Activities</p>
+      <ul class="src-list">
+        <li>Crewing lifeboats and shore crew roles</li>
+        <li>Fund-raising events and charity shops</li>
+        <li>Giving water-safety talks in schools and communities</li>
+      </ul>
+      <p class="src-sub">Positive Impact on the Community</p>
+      <ul class="src-list">
+        <li>Saves lives at sea and on the coast</li>
+        <li>Teaches people how to stay safe near water, preventing accidents</li>
+        <li>Brings volunteers together for a shared cause</li>
+      </ul>
+      <p class="src-sub">Who Benefits?</p>
+      <ul class="src-list">
+        <li>People in danger at sea or on the coast</li>
+        <li>Beach visitors and water users</li>
+        <li>Local communities near the coast</li>
+      </ul>
+      <p class="src-sub">How to Get Involved</p>
+      <ul class="src-list">
+        <li>Volunteer as crew, shore crew or fund-raiser</li>
+        <li>Help in an RNLI charity shop</li>
+        <li>Contact your nearest lifeboat station</li>
+      </ul>
+      <div class="src-fact"><strong>Did You Know?</strong> Around 95% of RNLI lifeboat crew are unpaid volunteers.</div>
+      <div class="src-cite"><strong>SOURCE REFERENCE (copy this into your research log):</strong>RNLI &mdash; rnli.org (accessed June 2026)</div>
+    </div>
+  </details>
+
+  <!-- SOURCE 2 -->
+  <details class="src-card">
+    <summary class="src-summary">
+      <div><h3>Source 2 of 4 &mdash; Mountain Rescue (Wales)</h3><div class="src-meta">Voluntary rescue service &bull; mountain.rescue.org.uk</div></div>
+      <span class="src-badge non-u">VOLUNTEER SERVICE <span class="src-toggle">&#8250;</span></span>
+    </summary>
+    <div class="src-body">
+      <p class="src-sub">What Does This Organisation Do?</p>
+      <ul class="src-list">
+        <li>Volunteer teams that search for and rescue people lost or injured in the mountains and countryside</li>
+        <li>On call 24 hours a day, all year round</li>
+        <li>Work closely with the police and ambulance service</li>
+      </ul>
+      <p class="src-sub">Volunteering Activities</p>
+      <ul class="src-list">
+        <li>Search and rescue call-outs</li>
+        <li>Training exercises and first-aid practice</li>
+        <li>Fund-raising and giving safety talks to walkers and clubs</li>
+      </ul>
+      <p class="src-sub">Positive Impact on the Community</p>
+      <ul class="src-list">
+        <li>Saves lives in remote and dangerous places</li>
+        <li>Helps keep walkers and climbers safe</li>
+        <li>Supports the emergency services at no cost to them</li>
+      </ul>
+      <p class="src-sub">Who Benefits?</p>
+      <ul class="src-list">
+        <li>Walkers, climbers and outdoor users in difficulty</li>
+        <li>Families of missing people</li>
+        <li>The wider public who enjoy the outdoors</li>
+      </ul>
+      <p class="src-sub">How to Get Involved</p>
+      <ul class="src-list">
+        <li>Join a local team (training is provided)</li>
+        <li>Help with fund-raising or admin</li>
+        <li>Donate or support events</li>
+      </ul>
+      <div class="src-fact"><strong>Did You Know?</strong> Mountain Rescue team members are unpaid volunteers who give up their own time and often pay for some of their own kit.</div>
+      <div class="src-cite"><strong>SOURCE REFERENCE (copy this into your research log):</strong>Mountain Rescue England and Wales &mdash; mountain.rescue.org.uk (accessed June 2026)</div>
+    </div>
+  </details>
+
+  <!-- SOURCE 3 -->
+  <details class="src-card">
+    <summary class="src-summary">
+      <div><h3>Source 3 of 4 &mdash; Local Foodbank (Trussell Trust network)</h3><div class="src-meta">Community charity &bull; trussell.org.uk</div></div>
+      <span class="src-badge non-u">LOCAL CHARITY <span class="src-toggle">&#8250;</span></span>
+    </summary>
+    <div class="src-body">
+      <p class="src-sub">What Does This Organisation Do?</p>
+      <ul class="src-list">
+        <li>Provides emergency food and support to people who cannot afford to eat</li>
+        <li>Run from local centres, often in churches or community halls</li>
+        <li>Works with referral agencies such as schools and support workers</li>
+      </ul>
+      <p class="src-sub">Volunteering Activities</p>
+      <ul class="src-list">
+        <li>Sorting and packing food donations</li>
+        <li>Welcoming visitors and making hot drinks</li>
+        <li>Collecting donations at supermarkets</li>
+      </ul>
+      <p class="src-sub">Positive Impact on the Community</p>
+      <ul class="src-list">
+        <li>Stops local people going hungry</li>
+        <li>Offers a friendly, non-judgemental place for people in crisis</li>
+        <li>Brings the community together to help neighbours</li>
+      </ul>
+      <p class="src-sub">Who Benefits?</p>
+      <ul class="src-list">
+        <li>Families and individuals in financial hardship</li>
+        <li>People hit by an unexpected crisis</li>
+        <li>The local community as a whole</li>
+      </ul>
+      <p class="src-sub">How to Get Involved</p>
+      <ul class="src-list">
+        <li>Volunteer to sort food or welcome visitors</li>
+        <li>Help at a supermarket collection</li>
+        <li>Donate food or money</li>
+      </ul>
+      <div class="src-fact"><strong>Did You Know?</strong> Most foodbanks are run almost entirely by local volunteers.</div>
+      <div class="src-cite"><strong>SOURCE REFERENCE (copy this into your research log):</strong>The Trussell Trust &mdash; trussell.org.uk (accessed June 2026)</div>
+    </div>
+  </details>
+
+  <!-- SOURCE 4 -->
+  <details class="src-card">
+    <summary class="src-summary">
+      <div><h3>Source 4 of 4 &mdash; Local Youth Club / Community Group</h3><div class="src-meta">Community organisation &bull; local council or charity</div></div>
+      <span class="src-badge non-u">COMMUNITY GROUP <span class="src-toggle">&#8250;</span></span>
+    </summary>
+    <div class="src-body">
+      <p class="src-sub">What Does This Organisation Do?</p>
+      <ul class="src-list">
+        <li>Provides safe activities and a place to meet for young people</li>
+        <li>Run by volunteers, sometimes with paid youth workers</li>
+        <li>Offers sport, music, arts and trips</li>
+      </ul>
+      <p class="src-sub">Volunteering Activities</p>
+      <ul class="src-list">
+        <li>Helping to run sessions and activities</li>
+        <li>Coaching or mentoring younger members</li>
+        <li>Helping organise events and trips</li>
+      </ul>
+      <p class="src-sub">Positive Impact on the Community</p>
+      <ul class="src-list">
+        <li>Gives young people somewhere safe to go</li>
+        <li>Builds community cohesion and friendships</li>
+        <li>Helps young people gain confidence and skills</li>
+      </ul>
+      <p class="src-sub">Who Benefits?</p>
+      <ul class="src-list">
+        <li>Young people in the local area</li>
+        <li>Families who need somewhere safe for their children</li>
+        <li>The wider community</li>
+      </ul>
+      <p class="src-sub">How to Get Involved</p>
+      <ul class="src-list">
+        <li>Volunteer as a helper or junior leader</li>
+        <li>Help at events or fund-raising</li>
+        <li>Ask your local council about youth provision</li>
+      </ul>
+      <div class="src-fact"><strong>Did You Know?</strong> Many adults who work in the public services started out by volunteering at a youth or community club.</div>
+      <div class="src-cite"><strong>SOURCE REFERENCE (copy this into your research log):</strong>Example community youth provision &mdash; via your local authority (accessed June 2026)</div>
+    </div>
+  </details>
+
+</div>
+
+<!-- ===== ASSESSMENT TASK B ===== -->
+<div class="section" id="sec-taskB">
+  <div class="section-title"><div class="section-num">7</div><h2>Assessment Task B — Volunteering Activity</h2></div>
+  <div class="info-box">
+    <strong>Scenario continued:</strong> You will now take part in a volunteering activity that benefits your community. This could be with the organisation you researched in Task A or a different one. Approach it with a positive attitude and keep a log of your experience. Your tutor or supervisor will complete a witness statement to confirm what you did.
+  </div>
+  <div class="info-box" style="background:#fff7ed;border-left-color:var(--gold)">
+    <strong>Evidence for Aim B:</strong> your activity log <em>and</em> a signed witness statement are both required. Photos can be added in the Photo Evidence section.
+  </div>
+
+  <div class="task-card">
+    <div class="task-card-header">
+      <h3>Task B1 — Volunteering Activity Log</h3>
+      <p>Record what you did during your volunteering. Add a row for each session or task.</p>
+    </div>
+    <div class="task-card-body">
+      <div style="margin-bottom:10px">
+        <span class="ac-badge pass">B.P3</span>
+        <span class="ac-badge merit">B.M3</span>
+        <span class="ac-badge distinction">B.D3</span>
+      </div>
+      <div class="grade-band pass">
+        <h4>Pass — B.P3</h4>
+        <p>Carry out a volunteering activity that contributes to your community, showing some commitment. You may rely on others for direction.</p>
+      </div>
+      <div class="grade-band merit">
+        <h4>Merit — B.M3</h4>
+        <p>As Pass, but show a <strong>positive and helpful attitude</strong> &mdash; be reliable and manage your own time.</p>
+      </div>
+      <div class="grade-band distinction">
+        <h4>Distinction — B.D3</h4>
+        <p>Contribute <strong>effectively</strong>, showing <strong>commitment and responsibility for others</strong> &mdash; support others and take ownership of your role.</p>
+      </div>
+
+      <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb">
+
+      <table class="act-table" style="margin-top:10px">
+        <thead>
+          <tr>
+            <th style="width:90px">Date</th>
+            <th>Activity / task</th>
+            <th>What I did</th>
+            <th style="width:60px">Hours</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-ta2">
+        </tbody>
+      </table>
+      <button onclick="addTA2Row()" style="background:var(--navy);color:#fff;border:none;padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;margin-top:6px">+ Add row</button>
+      <span id="ta2-count" style="font-size:11px;color:var(--muted);margin-left:8px"></span>
+    </div>
+  </div>
+
+  <div class="task-card">
+    <div class="task-card-header">
+      <h3>Task B2 — Reflection on Your Contribution</h3>
+      <p>Write about your volunteering. This helps your assessor see the attitude, commitment and responsibility you showed.</p>
+    </div>
+    <div class="task-card-body">
+      <div class="field-group">
+        <span class="response-label">Describe what you did during your volunteering activity (B.P3):</span>
+        <textarea class="response-field" id="taB-desc" rows="5" oninput="autoSave()" placeholder="What was the activity? What tasks did you carry out? How did it contribute to your community?"></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">How did you show a positive and helpful attitude? Give examples (B.M3):</span>
+        <textarea class="response-field" id="taB-attitude" rows="4" oninput="autoSave()" placeholder="e.g. I arrived on time, stayed cheerful, helped without being asked, managed my own time..."></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">How did you show commitment and take responsibility for others? Give examples (B.D3):</span>
+        <textarea class="response-field" id="taB-commit" rows="4" oninput="autoSave()" placeholder="e.g. I kept going when it was hard, supported other volunteers, looked after the people we were helping..."></textarea>
+      </div>
+      <div class="field-group">
+        <span class="response-label">What did you gain from the experience? (optional reflection)</span>
+        <textarea class="response-field" id="taB-reflect" rows="3" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card">
+    <div class="task-card-header">
+      <h3>Task B3 — Witness Statement</h3>
+      <p>To be completed by your tutor or supervisor to confirm your contribution.</p>
+    </div>
+    <div class="task-card-body">
+      <div class="field-group">
+        <span class="response-label">Witness name:</span>
+        <input type="text" id="wit-name" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" oninput="autoSave()">
+      </div>
+      <div class="field-group">
+        <span class="response-label">Witness role / job:</span>
+        <input type="text" id="wit-role" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" oninput="autoSave()">
+      </div>
+      <div class="field-group">
+        <span class="response-label">Organisation:</span>
+        <input type="text" id="wit-org" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" oninput="autoSave()">
+      </div>
+      <div class="field-group">
+        <span class="response-label">Date(s) of activity:</span>
+        <input type="text" id="wit-date" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" oninput="autoSave()">
+      </div>
+      <div class="field-group">
+        <span class="response-label">Statement — describe what the learner did and the attitude, commitment and responsibility they showed:</span>
+        <textarea class="response-field" id="wit-statement" rows="5" oninput="autoSave()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assessor section B -->
+  <div class="assessor-section" id="as-taskB">
+    <div class="card" style="border:2px solid #3b82f6">
+      <div class="card-header" style="background:#1e3a8a"><h2>Assessor Marking — Task B</h2></div>
+      <div class="card-body">
+        <p style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:10px">AC Status</p>
+        <div id="ac-toggles-B"></div>
+        <div style="margin-top:12px">
+          <span class="response-label">Assessor feedback for Task B:</span>
+          <textarea id="feedback-taskB" rows="4" oninput="autoSave()"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overall result (assessor only) -->
+  <div class="assessor-section" id="as-overall">
+    <div class="card" style="border:2px solid #3b82f6">
+      <div class="card-header" style="background:#1e3a8a"><h2>Overall Assessment Result</h2></div>
+      <div class="card-body">
+        <div id="result-banner-container"></div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button onclick="setResult('Pass')" style="flex:1;padding:8px;border-radius:4px;border:2px solid #16a34a;background:#dcfce7;color:#15803d;font-weight:700;cursor:pointer">Pass</button>
+          <button onclick="setResult('Refer')" style="flex:1;padding:8px;border-radius:4px;border:2px solid #dc2626;background:#fee2e2;color:#dc2626;font-weight:700;cursor:pointer">Refer</button>
+          <button onclick="setResult('Pending')" style="flex:1;padding:8px;border-radius:4px;border:2px solid #d97706;background:#fffbeb;color:#b45309;font-weight:700;cursor:pointer">Pending</button>
+        </div>
+        <div class="field-group">
+          <span class="response-label">Assessor Signature:</span>
+          <input type="text" id="assessor-sig" style="width:100%;border:1px solid #93c5fd;border-radius:4px;padding:7px;font-size:13px;background:#eff6ff" oninput="autoSave()">
+        </div>
+        <div class="field-group">
+          <span class="response-label">Date Marked:</span>
+          <input type="date" id="marked-date" style="width:100%;border:1px solid #93c5fd;border-radius:4px;padding:7px;font-size:13px;background:#eff6ff" oninput="autoSave()">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHOTO EVIDENCE ===== -->
+<div class="section" id="sec-evidence">
+  <div class="section-title"><div class="section-num">8</div><h2>Photo Evidence</h2></div>
+  <div class="info-box">
+    <strong>Tip:</strong> Upload photos that support your work &mdash; your research, your finished information document, or photos of you taking part in your volunteering activity. Link each photo to an assessment criterion using the dropdown.
+  </div>
+  <div id="drop-zone" class="drop-zone" onclick="document.getElementById('photo-input').click()"
+    ondragover="event.preventDefault();this.classList.add('drag-over')"
+    ondragleave="this.classList.remove('drag-over')"
+    ondrop="handleDrop(event)">
+    <strong>Click here or drag photos to upload</strong>
+    <p>JPG, PNG, GIF, WebP — multiple files supported</p>
+  </div>
+  <input type="file" id="photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotoInput(event)">
+  <div id="photo-grid" class="photo-grid"></div>
+</div>
+
+<!-- ===== CHECKLIST ===== -->
+<div class="section" id="sec-checklist">
+  <div class="section-title"><div class="section-num">9</div><h2>Assessment Criteria Checklist</h2></div>
+  <div class="card">
+    <div class="card-body" style="overflow-x:auto">
+      <table class="checklist-table">
+        <thead>
+          <tr>
+            <th>Criterion</th>
+            <th>What you need to do</th>
+            <th>Progress</th>
+            <th class="assessor-section">Assessor: Met / Not Yet Met</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="ac-badge pass">A.P1</span></td><td>Select information about a volunteering organisation from given sources, identifying activities with a positive impact on the community</td><td id="self-AP1" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AP1"></td></tr>
+          <tr><td><span class="ac-badge pass">A.P2</span></td><td>Produce information on the volunteering organisation and its activities</td><td id="self-AP2" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AP2"></td></tr>
+          <tr><td><span class="ac-badge merit">A.M1</span></td><td>Select information from given sources, outlining how its activities have a positive impact</td><td id="self-AM1" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AM1"></td></tr>
+          <tr><td><span class="ac-badge merit">A.M2</span></td><td>Produce clear information on the organisation and its activities</td><td id="self-AM2" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AM2"></td></tr>
+          <tr><td><span class="ac-badge distinction">A.D1</span></td><td>Search own and given sources, describing how its activities have a positive impact</td><td id="self-AD1" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AD1"></td></tr>
+          <tr><td><span class="ac-badge distinction">A.D2</span></td><td>Produce detailed information on the organisation and its activities</td><td id="self-AD2" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-AD2"></td></tr>
+          <tr><td><span class="ac-badge pass">B.P3</span></td><td>Carry out a volunteering activity that contributes to your community</td><td id="self-BP3" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-BP3"></td></tr>
+          <tr><td><span class="ac-badge merit">B.M3</span></td><td>Carry out the activity showing a positive and helpful attitude</td><td id="self-BM3" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-BM3"></td></tr>
+          <tr><td><span class="ac-badge distinction">B.D3</span></td><td>Contribute effectively, showing commitment and responsibility for others</td><td id="self-BD3" class="ac-status-pending">&#8212;</td><td class="assessor-section" id="acheck-BD3"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px">Go to the Declaration tab to sign your learner declaration before submitting.</p>
+</div>
+
+<!-- ===== DECLARATION ===== -->
+<div class="section" id="sec-declaration">
+  <div class="section-title"><div class="section-num">10</div><h2>Student Declaration</h2></div>
+  <div class="card">
+    <div class="card-header"><h2>Declaration of Authenticity</h2></div>
+    <div class="card-body">
+      <div style="background:var(--navy-l);border-radius:6px;padding:12px;margin-bottom:16px;font-size:13px">
+        <strong>Centre:</strong> Brynllywarch Hall School &nbsp;|&nbsp;
+        <strong>Qualification:</strong> Pearson BTEC Level 1 Introductory in Public Services &nbsp;|&nbsp;
+        <strong>Unit:</strong> PS11 — Contributing to Your Community
+      </div>
+      <p style="font-size:13px;margin-bottom:12px">By signing below I confirm that:</p>
+      <ol style="font-size:13px;line-height:1.8;margin-left:18px;margin-bottom:16px">
+        <li>The evidence submitted in this workbook is entirely my own original work.</li>
+        <li>I have not copied, closely paraphrased, or used ideas from any other person's work without clearly acknowledging and referencing the source.</li>
+        <li>I understand that using unapproved artificial intelligence (AI) tools to generate this work constitutes academic misconduct.</li>
+        <li>I understand that my work is subject to internal and external moderation processes.</li>
+        <li>I am aware that a false declaration is a serious offence that may lead to my work being disqualified.</li>
+      </ol>
+      <div class="field-group">
+        <span class="response-label">Student Name (auto-filled from Cover):</span>
+        <input type="text" id="decl-name" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" readonly>
+      </div>
+      <div class="field-group">
+        <span class="response-label">Student Signature (type your name):</span>
+        <input type="text" id="f-studentSig" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px;font-style:italic" placeholder="Type your full name as a signature" oninput="autoSave()">
+      </div>
+      <div class="field-group">
+        <span class="response-label">Date of Submission:</span>
+        <input type="date" id="f-submissionDate" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" oninput="autoSave()">
+      </div>
+      <div class="field-group">
+        <span class="response-label">Assessor Name (auto-filled):</span>
+        <input type="text" id="decl-assessor" style="width:100%;border:1px solid #d1d5db;border-radius:4px;padding:7px;font-size:13px" readonly>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #main -->
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+  <span id="lightbox-close">&times;</span>
+  <img id="lightbox-img" src="" alt="Photo evidence">
+</div>
+
+<!-- PASSWORD MODAL -->
+<div id="pwd-modal">
+  <div class="pwd-box">
+    <h3>Enter Assessor Mode</h3>
+    <input type="password" id="pwd-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')confirmPassword()">
+    <div class="error" id="pwd-error">Incorrect password. Please try again.</div>
+    <div class="btn-row">
+      <button class="btn-confirm" onclick="confirmPassword()">Confirm</button>
+      <button class="btn-cancel" onclick="closePasswordModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT MODE MODAL -->
+<div id="print-modal">
+  <div class="pwd-box" style="width:400px">
+    <h3>Print</h3>
+    <p style="font-size:12.5px;color:#555;margin-bottom:12px">Choose what to print. Both are formatted for A4.</p>
+    <label class="print-opt"><input type="radio" name="print-mode" value="full" checked>
+      <span><strong>Complete workbook</strong><br><small>Everything — teaching content, activities, answers and marking.</small></span></label>
+    <label class="print-opt"><input type="radio" name="print-mode" value="ev">
+      <span><strong>Evidence summary</strong><br><small>Assessment Tasks A &amp; B — questions, learner answers and assessor marking only. Teaching content removed. For the assessment file / internal verification.</small></span></label>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn-confirm" onclick="runPrint()">Print</button>
+      <button class="btn-cancel" onclick="closePrintModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- EVIDENCE SUMMARY (print-only, built on demand) -->
+<div id="ev-summary"></div>
+
+<!-- SAVE INDICATOR -->
+<div class="save-indicator" id="save-indicator">Saved</div>
+
+<script>
+// ===== DATA MODEL =====
+const UNIT_KEY = "ps11btecv1";
+const ASSESSOR_PASS = "BTEC2025";
+const ALL_ACS = [
+  {id:"A.P1", lo:"A"}, {id:"A.P2", lo:"A"},
+  {id:"A.M1", lo:"A"}, {id:"A.M2", lo:"A"},
+  {id:"A.D1", lo:"A"}, {id:"A.D2", lo:"A"},
+  {id:"B.P3", lo:"B"},
+  {id:"B.M3", lo:"B"},
+  {id:"B.D3", lo:"B"},
+];
+const PHOTO_AC_OPTIONS = ["General evidence","A.P1","A.P2","A.M1","A.M2","A.D1","A.D2","B.P3","B.M3","B.D3"];
+
+let data = {
+  studentName:"", className:"", assessorName:"Jonathan Jones",
+  startDate:"", submitDate:"",
+  act1:["","","","","",""],
+  act2:["","","","","",""],
+  act3:[["",""],["",""],["",""],["",""]],
+  act4:["",""],
+  act5:[["",""],["",""],["",""]],
+  act6:["","",""],
+  act7:["","","",""],
+  planb:[["","",""],["","",""],["","",""],["","",""]],
+  planbFormat:"",
+  ta1:{ src1:"", info1:"", src2:"", info2:"", src3:"", info3:"" },
+  ta2Rows:[ {svc:"",u:"",prov:"",fn:""}, {svc:"",u:"",prov:"",fn:""}, {svc:"",u:"",prov:"",fn:""} ],
+  tb1:{ s1name:"",s1about:"",s1needs:"",s2name:"",s2about:"",s2needs:"",s3name:"",s3about:"",s3needs:"",common:"" },
+  taB:{ desc:"", attitude:"", commit:"", reflect:"" },
+  wit:{ name:"", role:"", org:"", date:"", statement:"" },
+  photos:[],
+  studentSig:"", submissionDate:"",
+  // Assessor
+  assessorMode:false,
+  ac_status:{},
+  feedback:{ taskA:"", taskB:"" },
+  overall_result:"",
+  assessorSig:"", markedDate:"",
+};
+
+// ===== NAVIGATION =====
+let currentSection = "cover";
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".nav-tab").forEach(t=>t.classList.remove("active"));
+  const sec = document.getElementById("sec-"+id);
+  if(sec) sec.classList.add("active");
+  const tab = document.querySelector("[data-sec='"+id+"']");
+  if(tab) tab.classList.add("active");
+  currentSection = id;
+  updateChecklist();
+}
+
+// ===== AUTOSAVE =====
+let saveTimer = null;
+function autoSave() {
+  collectFromDOM();
+  try { localStorage.setItem(UNIT_KEY, JSON.stringify(data)); } catch(e){}
+  updateProgress();
+  updateDeclarationMirror();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    const si = document.getElementById("save-indicator");
+    si.classList.add("show");
+    setTimeout(()=>si.classList.remove("show"), 1500);
+  }, 800);
+}
+
+// --- Print: expand textareas to full content so answers don't clip, restore after ---
+function expandTextareasForPrint() {
+  document.querySelectorAll("textarea").forEach(function(t){
+    if (t.dataset._printH === undefined) t.dataset._printH = t.style.height || "";
+    t.style.height = "auto";
+    t.style.height = (t.scrollHeight + 2) + "px";
+  });
+}
+function restoreTextareasAfterPrint() {
+  document.querySelectorAll("textarea").forEach(function(t){
+    if (t.dataset._printH !== undefined) { t.style.height = t.dataset._printH; delete t.dataset._printH; }
+  });
+}
+function doPrint() { expandTextareasForPrint(); window.print(); }
+window.addEventListener("beforeprint", expandTextareasForPrint);
+window.addEventListener("afterprint", restoreTextareasAfterPrint);
+
+// --- Print mode chooser + Evidence Summary ---
+function openPrintModal(){ document.getElementById("print-modal").classList.add("open"); }
+function closePrintModal(){ document.getElementById("print-modal").classList.remove("open"); }
+function runPrint(){
+  var sel=document.querySelector('input[name="print-mode"]:checked');
+  var mode=sel?sel.value:"full";
+  closePrintModal();
+  if(mode==="ev"){
+    document.getElementById("ev-summary").innerHTML=buildEvidenceSummary();
+    document.body.classList.add("print-ev");
+    setTimeout(function(){ window.print(); }, 80);
+  } else {
+    expandTextareasForPrint();
+    setTimeout(function(){ window.print(); }, 80);
+  }
+}
+window.addEventListener("afterprint", function(){ document.body.classList.remove("print-ev"); });
+
+function evEsc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function evVal(el){
+  if(!el) return "";
+  if(el.tagName==="SELECT") return el.options[el.selectedIndex]?el.options[el.selectedIndex].text:"";
+  return el.value||"";
+}
+function evTable(tbl){
+  if(!tbl.querySelector("input,textarea,select")) return ""; // teaching-only table, skip
+  var out='<table class="ev-table">';
+  tbl.querySelectorAll("tr").forEach(function(tr){
+    out+="<tr>";
+    tr.querySelectorAll("th,td").forEach(function(cell){
+      var tag=cell.tagName==="TH"?"th":"td";
+      var fld=cell.querySelector("input,textarea,select");
+      var content=fld?evEsc(evVal(fld).trim()):evEsc(cell.textContent.trim());
+      out+="<"+tag+">"+content+"</"+tag+">";
+    });
+    out+="</tr>";
+  });
+  return out+"</table>";
+}
+function buildEvidenceSummary(){
+  collectFromDOM();
+  var d=data, html="";
+  html+='<div class="ev-head"><h1>Evidence Summary</h1>'
+      +'<p class="ev-sub">PS11 — Contributing to Your Community · Pearson BTEC Level 1 Introductory in Public Services</p>'
+      +'<table class="ev-meta">'
+      +'<tr><td><strong>Learner:</strong> '+evEsc(d.studentName)+'</td><td><strong>Group:</strong> '+evEsc(d.className)+'</td></tr>'
+      +'<tr><td><strong>Assessor:</strong> '+evEsc(d.assessorName)+'</td><td><strong>Date:</strong> '+evEsc(d.submitDate||d.startDate)+'</td></tr>'
+      +'</table></div>';
+
+  ["sec-taskA","sec-taskB"].forEach(function(secId){
+    var sec=document.getElementById(secId);
+    if(!sec) return;
+    var body="";
+    sec.querySelectorAll(".activity-box, .task-card-header, .field-group, table").forEach(function(n){
+      if(n.closest(".assessor-section")) return; // assessor content handled separately
+      if(n.classList.contains("activity-box")){
+        var h4=n.querySelector("h4"), p=n.querySelector("p");
+        body+='<div class="ev-qhead">'+(h4?evEsc(h4.textContent):"")+(p?' <small>'+evEsc(p.textContent)+'</small>':"")+'</div>';
+      } else if(n.classList.contains("task-card-header")){
+        var h3=n.querySelector("h3"), p2=n.querySelector("p");
+        body+='<div class="ev-qhead">'+(h3?evEsc(h3.textContent):"")+(p2?'<br><small>'+evEsc(p2.textContent)+'</small>':"")+'</div>';
+      } else if(n.classList.contains("field-group")){
+        var kids=n.querySelectorAll(".response-label, input, textarea, select");
+        var curLabel=null;
+        kids.forEach(function(k){
+          if(k.classList && k.classList.contains("response-label")){ curLabel=k.textContent; return; }
+          var v=evVal(k).trim();
+          body+='<div class="ev-qa"><div class="ev-q">'+(curLabel?evEsc(curLabel):"")+'</div>'
+              +'<div class="ev-a'+(v?"":" empty")+'">'+(v?evEsc(v):"[No answer given]")+'</div></div>';
+          curLabel=null;
+        });
+      } else if(n.tagName==="TABLE"){
+        body+=evTable(n);
+      }
+    });
+    if(body.trim()){
+      var t=sec.querySelector(".section-title h2");
+      html+='<div class="ev-section"><h2>'+evEsc(t?t.textContent:"")+'</h2>'+body+'</div>';
+    }
+  });
+
+  html+='<div class="ev-section ev-marking"><h2>Assessor Marking</h2>';
+  [["A","Task A"],["B","Task B"]].forEach(function(g){
+    html+='<h3>'+g[1]+'</h3><table class="ev-table"><tr><th>Criterion</th><th>Status</th></tr>';
+    ALL_ACS.filter(function(a){return a.lo===g[0];}).forEach(function(a){
+      var st=(d.ac_status&&d.ac_status[a.id])||"Pending";
+      html+='<tr><td>'+evEsc(a.id)+'</td><td>'+evEsc(st)+'</td></tr>';
+    });
+    html+='</table>';
+    var fbEl=document.getElementById("feedback-task"+g[0]);
+    var fb=fbEl?fbEl.value:((d.feedback&&d.feedback["task"+g[0]])||"");
+    html+='<div class="ev-qa"><div class="ev-q">Assessor feedback — '+g[1]+':</div>'
+        +'<div class="ev-a'+(fb?"":" empty")+'">'+(fb?evEsc(fb):"[None recorded]")+'</div></div>';
+  });
+  if(d.overall_result){ html+='<p class="ev-result"><strong>Overall result:</strong> '+evEsc(d.overall_result)+'</p>'; }
+  var sigEl=document.getElementById("assessor-sig"), mdEl=document.getElementById("marked-date");
+  var sig=sigEl?sigEl.value:"", md=mdEl?mdEl.value:"";
+  html+='<table class="ev-meta" style="margin-top:10px"><tr>'
+      +'<td><strong>Assessor signature:</strong> '+(sig?evEsc(sig):"____________________")+'</td>'
+      +'<td><strong>Date marked:</strong> '+(md?evEsc(md):"____________________")+'</td></tr></table>';
+  html+='</div>';
+  return html;
+}
+
+function collectFromDOM() {
+  data.studentName = v("f-studentName");
+  data.className = v("f-className");
+  data.assessorName = v("f-assessorName");
+  data.startDate = v("f-startDate");
+  data.submitDate = v("f-submitDate");
+  // act1
+  for(let i=1;i<=6;i++) data.act1[i-1]=v("act1-"+i)||"";
+  // act2
+  for(let i=1;i<=6;i++) data.act2[i-1]=v("act2-"+i)||"";
+  // act3
+  for(let i=1;i<=4;i++) { data.act3[i-1]=[v("act3-"+i+"a")||"",v("act3-"+i+"b")||""]; }
+  // act4
+  data.act4=[v("act4-1")||"",v("act4-2")||""];
+  // act5
+  for(let i=1;i<=3;i++) data.act5[i-1]=[v("act5-"+i+"a")||"",v("act5-"+i+"b")||""];
+  // act6
+  for(let i=1;i<=3;i++) data.act6[i-1]=v("act6-"+i)||"";
+  // act7
+  data.act7=[v("act7-s1")||"",v("act7-s1src")||"",v("act7-s2")||"",v("act7-s2src")||""];
+  // planb
+  for(let i=1;i<=4;i++) data.planb[i-1]=[v("planb-"+i+"n")||"",v("planb-"+i+"u")||"",v("planb-"+i+"k")||""];
+  data.planbFormat=v("planb-format")||"";
+  // ta1
+  data.ta1={src1:v("ta1-src1")||"",info1:v("ta1-info1")||"",src2:v("ta1-src2")||"",info2:v("ta1-info2")||"",src3:v("ta1-src3")||"",info3:v("ta1-info3")||""};
+  // ta2 rows
+  const rows=document.querySelectorAll("#tbl-ta2 tr");
+  data.ta2Rows=[];
+  rows.forEach(r=>{
+    const inputs=r.querySelectorAll("input");
+    if(inputs.length>=4) data.ta2Rows.push({svc:inputs[0].value,u:inputs[1].value,prov:inputs[2].value,fn:inputs[3].value});
+  });
+  // tb1
+  data.tb1={
+    s1name:v("tb1-s1name")||"",s1about:v("tb1-s1about")||"",s1needs:v("tb1-s1needs")||"",
+    s2name:v("tb1-s2name")||"",s2about:v("tb1-s2about")||"",s2needs:v("tb1-s2needs")||"",
+    s3name:v("tb1-s3name")||"",s3about:v("tb1-s3about")||"",s3needs:v("tb1-s3needs")||"",
+    common:v("tb1-common")||"",
+  };
+  data.taB={ desc:v("taB-desc")||"", attitude:v("taB-attitude")||"", commit:v("taB-commit")||"", reflect:v("taB-reflect")||"" };
+  data.wit={ name:v("wit-name")||"", role:v("wit-role")||"", org:v("wit-org")||"", date:v("wit-date")||"", statement:v("wit-statement")||"" };
+  // student sig
+  data.studentSig=v("f-studentSig")||"";
+  data.submissionDate=v("f-submissionDate")||"";
+  // assessor feedback
+  if(data.assessorMode) {
+    data.feedback.taskA=v("feedback-taskA")||"";
+    data.feedback.taskB=v("feedback-taskB")||"";
+    data.assessorSig=v("assessor-sig")||"";
+    data.markedDate=v("marked-date")||"";
+  }
+}
+
+function v(id) {
+  const el=document.getElementById(id);
+  if(!el) return "";
+  return el.value||"";
+}
+
+function restoreToDOM() {
+  sv("f-studentName",data.studentName);
+  sv("f-className",data.className);
+  sv("f-assessorName",data.assessorName||"Jonathan Jones");
+  sv("f-startDate",data.startDate);
+  sv("f-submitDate",data.submitDate);
+  // act1
+  for(let i=1;i<=6;i++) sv("act1-"+i,(data.act1||[])[i-1]||"");
+  // act2
+  for(let i=1;i<=6;i++) sv("act2-"+i,(data.act2||[])[i-1]||"");
+  // act3
+  for(let i=1;i<=4;i++) { sv("act3-"+i+"a",((data.act3||[])[i-1]||[])[0]||""); sv("act3-"+i+"b",((data.act3||[])[i-1]||[])[1]||""); }
+  // act4
+  sv("act4-1",(data.act4||[])[0]||""); sv("act4-2",(data.act4||[])[1]||"");
+  // act5
+  for(let i=1;i<=3;i++) { sv("act5-"+i+"a",((data.act5||[])[i-1]||[])[0]||""); sv("act5-"+i+"b",((data.act5||[])[i-1]||[])[1]||""); }
+  // act6
+  for(let i=1;i<=3;i++) sv("act6-"+i,(data.act6||[])[i-1]||"");
+  // act7
+  sv("act7-s1",(data.act7||[])[0]||""); sv("act7-s1src",(data.act7||[])[1]||"");
+  sv("act7-s2",(data.act7||[])[2]||""); sv("act7-s2src",(data.act7||[])[3]||"");
+  // planb
+  for(let i=1;i<=4;i++) {
+    sv("planb-"+i+"n",((data.planb||[])[i-1]||[])[0]||"");
+    sv("planb-"+i+"u",((data.planb||[])[i-1]||[])[1]||"");
+    sv("planb-"+i+"k",((data.planb||[])[i-1]||[])[2]||"");
+  }
+  sv("planb-format",data.planbFormat||"");
+  // ta1
+  const t=data.ta1||{};
+  sv("ta1-src1",t.src1||""); sv("ta1-info1",t.info1||"");
+  sv("ta1-src2",t.src2||""); sv("ta1-info2",t.info2||"");
+  sv("ta1-src3",t.src3||""); sv("ta1-info3",t.info3||"");
+  // ta2 rows
+  const tbody=document.getElementById("tbl-ta2");
+  tbody.innerHTML="";
+  const rows=data.ta2Rows||[{},{},{}];
+  rows.forEach((r,i)=>{ addTA2RowWithData(r.svc||"",r.u||"",r.prov||"",r.fn||""); });
+  // tb1
+  const b=data.tb1||{};
+  sv("tb1-s1name",b.s1name||""); sv("tb1-s1about",b.s1about||""); sv("tb1-s1needs",b.s1needs||"");
+  sv("tb1-s2name",b.s2name||""); sv("tb1-s2about",b.s2about||""); sv("tb1-s2needs",b.s2needs||"");
+  sv("tb1-s3name",b.s3name||""); sv("tb1-s3about",b.s3about||""); sv("tb1-s3needs",b.s3needs||"");
+  sv("tb1-common",b.common||"");
+  const tB=data.taB||{};
+  sv("taB-desc",tB.desc||""); sv("taB-attitude",tB.attitude||""); sv("taB-commit",tB.commit||""); sv("taB-reflect",tB.reflect||"");
+  const w=data.wit||{};
+  sv("wit-name",w.name||""); sv("wit-role",w.role||""); sv("wit-org",w.org||""); sv("wit-date",w.date||""); sv("wit-statement",w.statement||"");
+  // sig
+  sv("f-studentSig",data.studentSig||"");
+  sv("f-submissionDate",data.submissionDate||"");
+  // assessor
+  sv("feedback-taskA",(data.feedback||{}).taskA||"");
+  sv("feedback-taskB",(data.feedback||{}).taskB||"");
+  sv("assessor-sig",data.assessorSig||"");
+  sv("marked-date",data.markedDate||"");
+  // photos
+  renderPhotos();
+  updateDeclarationMirror();
+  updateProgress();
+  updateChecklist();
+  if(data.overall_result) updateResultBanner(data.overall_result);
+  renderACToggles();
+}
+
+function sv(id,val) {
+  const el=document.getElementById(id);
+  if(el) el.value=val;
+}
+
+// ===== PROGRESS =====
+function updateProgress() {
+  const fields=document.querySelectorAll("textarea.response-field, input[type=text]:not([readonly]), input[type=date]:not([readonly])");
+  let filled=0;
+  fields.forEach(f=>{ if(f.value && f.value.trim()) filled++; });
+  const pct=Math.min(100,Math.round((filled/Math.max(fields.length,1))*100));
+  document.getElementById("progress-bar").style.width=pct+"%";
+  document.getElementById("progress-display").textContent=pct+"%";
+  updateChecklist();
+}
+
+// ===== TA2 ROWS =====
+function addTA2Row() {
+  addTA2RowWithData("","","","");
+  autoSave();
+  updateCount();
+}
+function addTA2RowWithData(svc,u,prov,fn) {
+  const tbody=document.getElementById("tbl-ta2");
+  const tr=document.createElement("tr");
+  tr.innerHTML = `<td><input type="text" value="${esc(svc)}" oninput="autoSave()"></td>
+    <td><input type="text" value="${esc(u)}" oninput="autoSave()" style="width:60px"></td>
+    <td><input type="text" value="${esc(prov)}" oninput="autoSave()"></td>
+    <td><input type="text" value="${esc(fn)}" oninput="autoSave()"></td>`;
+  tbody.appendChild(tr);
+  updateCount();
+}
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function updateCount() {
+  const n=document.querySelectorAll("#tbl-ta2 tr").length;
+  const el=document.getElementById("ta2-count");
+  if(el) el.textContent=n+" service"+(n===1?"":"s")+" listed";
+}
+
+// ===== CHECKLIST =====
+function updateChecklist() {
+  const acs = {
+    "A.P1": !!(data.ta1&&data.ta1.src1&&data.ta1.info1),
+    "A.P2": !!(data.tb1&&data.tb1.s1name&&data.tb1.s1about),
+    "A.M1": !!(data.ta1&&data.ta1.src1&&data.ta1.info1&&data.ta1.info1.length>40),
+    "A.M2": !!(data.tb1&&data.tb1.s1about&&data.tb1.s1needs&&data.tb1.s2about),
+    "A.D1": !!(data.ta1&&data.ta1.src1&&data.ta1.src3&&data.ta1.info1&&data.ta1.info1.length>40),
+    "A.D2": !!(data.tb1&&data.tb1.s1about&&data.tb1.s1needs&&data.tb1.s2about&&data.tb1.s2needs&&data.tb1.s3about&&data.tb1.common),
+    "B.P3": !!((data.taB&&data.taB.desc) || (data.ta2Rows||[]).filter(r=>r&&r.fn&&r.prov).length>=1),
+    "B.M3": !!(data.taB&&data.taB.desc&&data.taB.attitude),
+    "B.D3": !!(data.taB&&data.taB.desc&&data.taB.attitude&&data.taB.commit&&data.wit&&data.wit.statement),
+  };
+  const ids={"A.P1":"AP1","A.P2":"AP2","A.M1":"AM1","A.M2":"AM2","A.D1":"AD1","A.D2":"AD2","B.P3":"BP3","B.M3":"BM3","B.D3":"BD3"};
+  Object.entries(acs).forEach(([ac,done])=>{
+    const el=document.getElementById("self-"+ids[ac]);
+    if(el) {
+      el.className=done?"ac-status-met":"ac-status-pending";
+      el.textContent=done?"Done":"Incomplete";
+    }
+    // Assessor check cells
+    const ast=data.ac_status||{};
+    const acel=document.getElementById("acheck-"+ids[ac]);
+    if(acel && data.assessorMode) {
+      const s=ast[ac]||"";
+      acel.innerHTML=`<button class="ac-toggle-btn ${s==="Met"?"met":"not-yet"}" onclick="toggleAC('${ac}')">${s||"Pending"}</button>`;
+    }
+  });
+}
+
+function toggleAC(id) {
+  if(!data.assessorMode) return;
+  const cur=data.ac_status[id]||"";
+  data.ac_status[id]=cur==="Met"?"Not Yet Met":"Met";
+  updateChecklist();
+  autoSave();
+}
+
+// ===== ASSESSOR AC TOGGLES =====
+function renderACToggles() {
+  ["A","B"].forEach(lo=>{
+    const cont=document.getElementById("ac-toggles-"+lo);
+    if(!cont) return;
+    cont.innerHTML="";
+    const acs=ALL_ACS.filter(a=>a.lo===lo);
+    acs.forEach(ac=>{
+      const s=(data.ac_status||{})[ac.id]||"";
+      const row=document.createElement("div");
+      row.className="ac-toggle-row";
+      row.innerHTML=`<span><strong>${ac.id}</strong></span><button class="ac-toggle-btn ${s==="Met"?"met":"not-yet"}" onclick="toggleAC('${ac.id}')">${s||"Pending"}</button>`;
+      cont.appendChild(row);
+    });
+  });
+  updateChecklist();
+}
+
+// ===== RESULT =====
+function setResult(r) {
+  data.overall_result=r;
+  updateResultBanner(r);
+  autoSave();
+}
+function updateResultBanner(r) {
+  const c=document.getElementById("result-banner-container");
+  if(!c) return;
+  const msgs={Pass:"Result: PASS — Well done! All criteria have been met.",Refer:"Result: REFER — Please review the feedback and resubmit.",Pending:"Result: PENDING — Assessment is in progress."};
+  c.innerHTML=`<div class="result-banner ${r.toLowerCase()}">${msgs[r]||""}</div>`;
+}
+
+// ===== ASSESSOR MODE =====
+function openPasswordModal() {
+  if(data.assessorMode) { exitAssessorMode(); return; }
+  document.getElementById("pwd-modal").classList.add("open");
+  document.getElementById("pwd-input").value="";
+  document.getElementById("pwd-error").style.display="none";
+  setTimeout(()=>document.getElementById("pwd-input").focus(),100);
+}
+function closePasswordModal() {
+  document.getElementById("pwd-modal").classList.remove("open");
+}
+function confirmPassword() {
+  const p=document.getElementById("pwd-input").value;
+  if(p===ASSESSOR_PASS) {
+    data.assessorMode=true;
+    closePasswordModal();
+    enterAssessorMode();
+  } else {
+    document.getElementById("pwd-error").style.display="block";
+  }
+}
+function enterAssessorMode() {
+  document.getElementById("assessor-banner").classList.add("visible");
+  document.getElementById("assessor-btn").textContent="Exit Assessor Mode";
+  // Lock student fields
+  document.querySelectorAll("textarea.response-field, input[type=text]:not([readonly]):not(#assessor-sig), input[type=date]:not([readonly]):not(#marked-date)").forEach(el=>{
+    el.setAttribute("readonly","true");
+    el.style.background="#f3f4f6";
+  });
+  // Show assessor sections
+  document.querySelectorAll(".assessor-section").forEach(s=>s.classList.add("visible"));
+  renderACToggles();
+  updateChecklist();
+}
+function exitAssessorMode() {
+  data.assessorMode=false;
+  document.getElementById("assessor-banner").classList.remove("visible");
+  document.getElementById("assessor-btn").textContent="Enter Assessor Mode";
+  document.querySelectorAll("textarea.response-field, input[type=text]:not([readonly]), input[type=date]:not([readonly])").forEach(el=>{
+    el.removeAttribute("readonly");
+    el.style.background="";
+  });
+  document.querySelectorAll(".assessor-section").forEach(s=>s.classList.remove("visible"));
+}
+
+// ===== PHOTO EVIDENCE =====
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById("drop-zone").classList.remove("drag-over");
+  const files=Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith("image/"));
+  processPhotoFiles(files);
+}
+function handlePhotoInput(e) {
+  processPhotoFiles(Array.from(e.target.files));
+  e.target.value="";
+}
+function processPhotoFiles(files) {
+  files.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const item={ id:Date.now()+"_"+Math.random().toString(36).slice(2), b64:ev.target.result, name:file.name, desc:"", ac:"General evidence", ts:new Date().toLocaleString() };
+      data.photos.push(item);
+      renderPhotos();
+      autoSave();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderPhotos() {
+  var grid=document.getElementById("photo-grid");
+  grid.innerHTML="";
+  (data.photos||[]).forEach(function(item){
+    var locked=data.assessorMode;
+    var card=document.createElement("div");
+    card.className="photo-card";
+
+    var img=document.createElement("img");
+    img.src=item.b64; img.alt=item.name;
+    img.style.cssText="width:100%;height:140px;object-fit:cover;cursor:pointer;display:block";
+    img.addEventListener("click",(function(id){return function(){openLightbox(id);};})(item.id));
+    card.appendChild(img);
+
+    var body=document.createElement("div");
+    body.className="photo-card-body";
+    body.style.padding="10px";
+
+    var ta=document.createElement("textarea");
+    ta.rows=2; ta.placeholder="Describe this photo..."; ta.value=item.desc||"";
+    ta.style.cssText="width:100%;border:1px solid #d1d5db;border-radius:3px;font-size:12px;padding:5px;resize:vertical;min-height:50px;font-family:inherit";
+    if(locked){ta.readOnly=true;ta.style.background="#f3f4f6";}
+    ta.addEventListener("input",(function(id,el){return function(){updatePhotoDesc(id,el.value);};})(item.id,ta));
+    body.appendChild(ta);
+
+    var sel=document.createElement("select");
+    sel.style.cssText="width:100%;border:1px solid #d1d5db;border-radius:3px;font-size:12px;padding:4px;margin-top:5px;font-family:inherit";
+    if(locked) sel.disabled=true;
+    PHOTO_AC_OPTIONS.forEach(function(o){
+      var opt=document.createElement("option");
+      opt.value=o; opt.textContent=o;
+      if(item.ac===o) opt.selected=true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener("change",(function(id,el){return function(){updatePhotoAC(id,el.value);};})(item.id,sel));
+    body.appendChild(sel);
+
+    var footer=document.createElement("div");
+    footer.className="photo-card-footer";
+    footer.style.cssText="display:flex;justify-content:space-between;align-items:center;margin-top:6px";
+
+    var span=document.createElement("span");
+    span.textContent=(item.name||"")+" \u2014 "+(item.ts||"");
+    span.style.cssText="font-size:10px;color:var(--muted)";
+    footer.appendChild(span);
+
+    if(!locked){
+      var btn=document.createElement("button");
+      btn.className="btn-remove"; btn.textContent="Remove";
+      btn.addEventListener("click",(function(id){return function(){removePhoto(id);};})(item.id));
+      footer.appendChild(btn);
+    }
+    body.appendChild(footer);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+}
+function updatePhotoDesc(id,v){ const p=data.photos.find(x=>x.id===id); if(p){p.desc=v;autoSave();} }
+function updatePhotoAC(id,v){ const p=data.photos.find(x=>x.id===id); if(p){p.ac=v;autoSave();} }
+function removePhoto(id){ if(!confirm("Remove this photo?"))return; data.photos=data.photos.filter(x=>x.id!==id); renderPhotos(); autoSave(); }
+function openLightbox(id){ const p=data.photos.find(x=>x.id===id); if(!p)return; document.getElementById("lightbox-img").src=p.b64; document.getElementById("lightbox").classList.add("open"); }
+function closeLightbox(){ document.getElementById("lightbox").classList.remove("open"); }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape")closeLightbox(); });
+
+// ===== SAVE / LOAD =====
+function saveFile() {
+  collectFromDOM();
+  const name=(data.studentName||"student").replace(/\s+/g,"_").toLowerCase();
+  const json=JSON.stringify(data,null,2);
+  const blob=new Blob([json],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="PS5_"+name+"_workbook.json";
+  a.click(); URL.revokeObjectURL(url);
+}
+function loadFile(e) {
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try {
+      const loaded=JSON.parse(ev.target.result);
+      data=Object.assign({},data,loaded);
+      if(data.assessorMode){ data.assessorMode=false; } // don't auto-enter assessor
+      restoreToDOM();
+    } catch(err){ alert("Could not load file. Is it a valid PS5 workbook JSON?"); }
+  };
+  reader.readAsText(file);
+}
+
+// ===== DECLARATION MIRROR =====
+function updateDeclarationMirror() {
+  const dn=document.getElementById("decl-name");
+  const da=document.getElementById("decl-assessor");
+  if(dn) dn.value=data.studentName||"";
+  if(da) da.value=data.assessorName||"Jonathan Jones";
+}
+
+// ===== INIT =====
+window.addEventListener("load",()=>{
+  // Ensure ta2 tbody has rows
+  document.getElementById("tbl-ta2").innerHTML="";
+  // Load from localStorage
+  try {
+    const saved=localStorage.getItem(UNIT_KEY);
+    if(saved) { const p=JSON.parse(saved); data=Object.assign({},data,p); if(data.assessorMode)data.assessorMode=false; }
+  } catch(e){}
+  restoreToDOM();
+  updateProgress();
+});
+</script>
+</body>
+</html>
