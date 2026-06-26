@@ -141,7 +141,13 @@
       "subtitle": "40 GLH · Sector",
       "brief": "Learners explore how the public services contribute to and support their local communities. They research community projects and volunteering, plan and carry out their own community contribution, and reflect on the impact and skills developed.",
       "aims": "A — Know about the contribution of public services to the community | B — Contribute to the community.",
-      "files": []
+      "files": [
+        {
+          "name": "ContributingDigital",
+          "filename": "PS11ContributingDigital.html",
+          "type": "HTML"
+        }
+      ]
     },
     {
       "id": "PS12",
