@@ -20,7 +20,13 @@
       "subtitle": "30 GLH · Core · Award & Certificate",
       "brief": "Learners develop the skills and behaviours needed to progress to the next stage of their learning — carrying out a self-audit, identifying strengths, setting goals, and producing a personal progression plan.",
       "aims": "A — Explore the skills and behaviours needed to meet personal progression goal | B — Produce a progression plan to meet intended progression goal.",
-      "files": []
+      "files": [
+        {
+          "name": "ProgressionPlanDigital",
+          "filename": "A2ProgressionPlanDigital.html",
+          "type": "HTML"
+        }
+      ]
     },
     {
       "id": "PS5",
