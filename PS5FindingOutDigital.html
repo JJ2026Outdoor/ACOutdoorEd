@@ -351,6 +351,21 @@ body{font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;background:#f0f4f8;
   #ev-summary .ev-table th{background:var(--navy-l)}
   #ev-summary .ev-result{font-size:13px;margin-top:8px}
 }
+
+/* ===== Audio recorder (per-answer) ===== */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.rec-wrap{margin:6px 0 2px;display:flex;flex-direction:column;gap:6px}
+.rec-btn{align-self:flex-start;background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;border-radius:6px;padding:5px 12px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.rec-btn:hover{background:#dbeafe}
+.rec-btn.recording{background:#fef2f2;color:#b91c1c;border-color:#fecaca;animation:pulse 1.2s infinite}
+.rec-mic{font-size:11px}
+.rec-dot{width:9px;height:9px;border-radius:50%;background:#dc2626;display:inline-block}
+.rec-list{display:flex;flex-direction:column;gap:5px}
+.rec-row{display:flex;align-items:center;gap:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:4px 8px}
+.rec-audio{flex:1;height:32px}
+.rec-del{background:#fee2e2;color:#b91c1c;border:none;border-radius:5px;width:26px;height:26px;font-size:16px;line-height:1;cursor:pointer;flex-shrink:0}
+.rec-del:hover{background:#fecaca}
+@media print{.rec-btn,.rec-del,.rec-audio{display:none!important}}
 </style>
 </head>
 <body>
@@ -1826,6 +1841,7 @@ let data = {
   ta2Rows:[ {svc:"",u:"",prov:"",fn:""}, {svc:"",u:"",prov:"",fn:""}, {svc:"",u:"",prov:"",fn:""} ],
   tb1:{ s1name:"",s1about:"",s1needs:"",s2name:"",s2about:"",s2needs:"",s3name:"",s3about:"",s3needs:"",common:"" },
   photos:[],
+  recordings:{},
   studentSig:"", submissionDate:"",
   // Assessor
   assessorMode:false,
@@ -2095,6 +2111,7 @@ function restoreToDOM() {
   sv("marked-date",data.markedDate||"");
   // photos
   renderPhotos();
+  attachRecorders();
   updateDeclarationMirror();
   updateProgress();
   updateChecklist();
@@ -2243,6 +2260,7 @@ function enterAssessorMode() {
   document.querySelectorAll(".assessor-section").forEach(s=>s.classList.add("visible"));
   renderACToggles();
   updateChecklist();
+  renderAllRecorders();
 }
 function exitAssessorMode() {
   data.assessorMode=false;
@@ -2253,6 +2271,7 @@ function exitAssessorMode() {
     el.style.background="";
   });
   document.querySelectorAll(".assessor-section").forEach(s=>s.classList.remove("visible"));
+  renderAllRecorders();
 }
 
 // ===== PHOTO EVIDENCE =====
@@ -2346,7 +2365,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape")closeLightbox(); })
 function saveFile() {
   collectFromDOM();
   const name=(data.studentName||"student").replace(/\s+/g,"_").toLowerCase();
-  const json=JSON.stringify(data,null,2);
+  const json=JSON.stringify(Object.assign({_unit:"PS5",_exported:new Date().toISOString()},data),null,2);
   const blob=new Blob([json],{type:"application/json"});
   const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
@@ -2359,6 +2378,7 @@ function loadFile(e) {
   reader.onload=ev=>{
     try {
       const loaded=JSON.parse(ev.target.result);
+      if(loaded._unit && loaded._unit!=="PS5"){ if(!confirm("This file looks like a "+loaded._unit+" workbook, not PS5. Load it anyway?")){ e.target.value=""; return; } }
       data=Object.assign({},data,loaded);
       if(data.assessorMode){ data.assessorMode=false; } // don't auto-enter assessor
       restoreToDOM();
@@ -2387,6 +2407,100 @@ window.addEventListener("load",()=>{
   restoreToDOM();
   updateProgress();
 });
+
+// ===== AUDIO RECORDING (per-answer) =====
+var _recState = {};
+function _fmtSecs(x){return Math.floor(x/60)+":"+String(x%60).padStart(2,"0");}
+function attachRecorders(){
+  var tas = document.querySelectorAll("textarea.response-field");
+  for (var i=0;i<tas.length;i++){
+    var ta = tas[i]; var fid = ta.id; if(!fid) continue;
+    var nxt = ta.nextElementSibling;
+    if (nxt && nxt.classList && nxt.classList.contains("rec-wrap")) { renderRecList(fid); continue; }
+    var wrap = document.createElement("div");
+    wrap.className = "rec-wrap"; wrap.setAttribute("data-field", fid);
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "rec-btn"; btn.setAttribute("data-field", fid);
+    btn.innerHTML = '<span class="rec-mic">&#9679;</span> Record audio';
+    (function(f, b){ b.onclick = function(){ toggleRec(f, b); }; })(fid, btn);
+    var list = document.createElement("div");
+    list.className = "rec-list"; list.setAttribute("data-list", fid);
+    wrap.appendChild(btn); wrap.appendChild(list);
+    ta.parentNode.insertBefore(wrap, ta.nextSibling);
+    renderRecList(fid);
+  }
+}
+function renderAllRecorders(){ attachRecorders(); }
+function toggleRec(fid, btn){
+  var st = _recState[fid];
+  if (st && st.mr && st.mr.state === "recording"){ stopRec(fid); return; }
+  if (data.assessorMode) return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    alert("Audio recording is not supported in this browser. Try Chrome or Edge."); return;
+  }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    var mr = new MediaRecorder(stream); var chunks = [];
+    mr.ondataavailable = function(e){ if (e.data && e.data.size > 0) chunks.push(e.data); };
+    mr.onstop = function(){
+      stream.getTracks().forEach(function(t){ t.stop(); });
+      var blob = new Blob(chunks, {type:"audio/webm"});
+      var fr = new FileReader();
+      fr.onload = function(ev){
+        if (!data.recordings) data.recordings = {};
+        if (!data.recordings[fid]) data.recordings[fid] = [];
+        data.recordings[fid].push({
+          id: Date.now()+"_"+Math.random().toString(36).slice(2),
+          b64: ev.target.result, name:"recording.webm", ts:new Date().toLocaleString()
+        });
+        autoSave(); renderRecList(fid);
+      };
+      fr.readAsDataURL(blob);
+      var cur = _recState[fid]; if (cur && cur.timer) clearInterval(cur.timer);
+      _recState[fid] = null;
+      btn.classList.remove("recording");
+      btn.innerHTML = '<span class="rec-mic">&#9679;</span> Record audio';
+    };
+    var stObj = {mr:mr, stream:stream, secs:0, timer:null};
+    _recState[fid] = stObj;
+    mr.start();
+    btn.classList.add("recording");
+    btn.innerHTML = '<span class="rec-dot"></span> Stop &mdash; 0:00';
+    stObj.timer = setInterval(function(){
+      stObj.secs++;
+      btn.innerHTML = '<span class="rec-dot"></span> Stop &mdash; '+_fmtSecs(stObj.secs);
+    }, 1000);
+  }).catch(function(){
+    alert("Microphone access was denied. Please allow microphone access in your browser and try again.");
+  });
+}
+function stopRec(fid){ var st = _recState[fid]; if (st && st.mr && st.mr.state === "recording") st.mr.stop(); }
+function deleteRec(fid, rid){
+  if (data.assessorMode) return;
+  if (!confirm("Delete this recording?")) return;
+  if (data.recordings && data.recordings[fid])
+    data.recordings[fid] = data.recordings[fid].filter(function(r){ return r.id !== rid; });
+  autoSave(); renderRecList(fid);
+}
+function renderRecList(fid){
+  var list = document.querySelector('.rec-list[data-list="'+fid+'"]'); if (!list) return;
+  var recs = (data.recordings && data.recordings[fid]) || [];
+  list.innerHTML = "";
+  recs.forEach(function(r){
+    var row = document.createElement("div"); row.className = "rec-row";
+    var au = document.createElement("audio"); au.controls = true; au.src = r.b64; au.className = "rec-audio";
+    row.appendChild(au);
+    if (!data.assessorMode){
+      var del = document.createElement("button"); del.type = "button"; del.className = "rec-del";
+      del.innerHTML = "&#215;"; del.title = "Delete recording";
+      (function(f, id){ del.onclick = function(){ deleteRec(f, id); }; })(fid, r.id);
+      row.appendChild(del);
+    }
+    list.appendChild(row);
+  });
+  var btn = document.querySelector('.rec-btn[data-field="'+fid+'"]');
+  if (btn) btn.style.display = data.assessorMode ? "none" : "";
+}
 </script>
+
 </body>
 </html>
