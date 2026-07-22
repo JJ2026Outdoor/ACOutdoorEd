@@ -205,9 +205,24 @@
       "mandatory": false,
       "files": [
         {
+          "name": "NavigationAccessible",
+          "filename": "MH12CY010NavigationAccessible.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "NavigationDigital",
           "filename": "MH12CY010NavigationDigital.html",
           "type": "HTML"
+        },
+        {
+          "name": "NavigationSlides",
+          "filename": "MH12CY010NavigationSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "NavigationWorkbook",
+          "filename": "MH12CY010NavigationWorkbook.docx",
+          "type": "DOCX"
         }
       ]
     }
