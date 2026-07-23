@@ -165,11 +165,6 @@
       "mandatory": false,
       "files": [
         {
-          "name": "PaddleboardingWorkbook",
-          "filename": "MH32CY008PaddleboardingWorkbook.docx",
-          "type": "DOCX"
-        },
-        {
           "name": "WaterActivityAccessible",
           "filename": "MH32CY008WaterActivityAccessible.docx",
           "type": "DOCX"
