@@ -157,11 +157,6 @@
           "type": "PPTX"
         },
         {
-          "name": "LandWalkingDigital",
-          "filename": "MH32CY007LandWalkingDigital.html",
-          "type": "HTML"
-        },
-        {
           "name": "LandWalkingWorkbook",
           "filename": "MH32CY007LandWalkingWorkbook.docx",
           "type": "DOCX"
