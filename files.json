@@ -20,6 +20,16 @@
           "name": "PersonalSafetyWorkbook",
           "filename": "HB92CY002PersonalSafetyWorkbook.docx",
           "type": "DOCX"
+        },
+        {
+          "name": "PersonalSafetyAnswerKey",
+          "filename": "HB92CY002PersonalSafetyAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "PersonalSafetyAccessible",
+          "filename": "HB92CY002PersonalSafetyAccessible.docx",
+          "type": "DOCX"
         }
       ]
     },
@@ -42,6 +52,16 @@
         {
           "name": "SustainableResourcesWorkbook",
           "filename": "HB92CY003SustainableResourcesWorkbook.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "SustainableResourcesAnswerKey",
+          "filename": "HB92CY003SustainableResourcesAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "SustainableResourcesAccessible",
+          "filename": "HB92CY003SustainableResourcesAccessible.docx",
           "type": "DOCX"
         }
       ]
@@ -155,6 +175,16 @@
           "name": "LandActivitySlides",
           "filename": "MH32CY007LandActivitySlides.pptx",
           "type": "PPTX"
+        },
+        {
+          "name": "LandActivityWorkbook",
+          "filename": "MH32CY007LandActivityWorkbook.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "LandActivityAccessible",
+          "filename": "MH32CY007LandActivityAccessible.docx",
+          "type": "DOCX"
         }
       ]
     },
