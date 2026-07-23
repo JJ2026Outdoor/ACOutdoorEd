@@ -165,11 +165,6 @@
       "mandatory": false,
       "files": [
         {
-          "name": "CanoeingDigital",
-          "filename": "MH32CY008CanoeingDigital.html",
-          "type": "HTML"
-        },
-        {
           "name": "CanoeingWorkbook",
           "filename": "MH32CY008CanoeingWorkbook.docx",
           "type": "DOCX"
