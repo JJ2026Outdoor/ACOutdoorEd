@@ -165,11 +165,6 @@
       "mandatory": false,
       "files": [
         {
-          "name": "PaddleboardingDigital",
-          "filename": "MH32CY008PaddleboardingDigital.html",
-          "type": "HTML"
-        },
-        {
           "name": "PaddleboardingWorkbook",
           "filename": "MH32CY008PaddleboardingWorkbook.docx",
           "type": "DOCX"
