@@ -165,11 +165,6 @@
       "mandatory": false,
       "files": [
         {
-          "name": "CanoeingAnswerKey",
-          "filename": "MH32CY008CanoeingAnswerKey.docx",
-          "type": "DOCX"
-        },
-        {
           "name": "CanoeingDigital",
           "filename": "MH32CY008CanoeingDigital.html",
           "type": "HTML"
