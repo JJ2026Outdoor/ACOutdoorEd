@@ -147,6 +147,11 @@
       "mandatory": false,
       "files": [
         {
+          "name": "LandActivityDigital",
+          "filename": "MH32CY007LandActivityDigital.html",
+          "type": "HTML"
+        },
+        {
           "name": "LandActivitySlides",
           "filename": "MH32CY007LandActivitySlides.pptx",
           "type": "PPTX"
