@@ -7,6 +7,16 @@
       "mandatory": true,
       "files": [
         {
+          "name": "PersonalSafetyAccessible",
+          "filename": "HB92CY002PersonalSafetyAccessible.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "PersonalSafetyAnswerKey",
+          "filename": "HB92CY002PersonalSafetyAnswerKey.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "PersonalSafetyDigital",
           "filename": "HB92CY002PersonalSafetyDigital.html",
           "type": "HTML"
@@ -20,16 +30,6 @@
           "name": "PersonalSafetyWorkbook",
           "filename": "HB92CY002PersonalSafetyWorkbook.docx",
           "type": "DOCX"
-        },
-        {
-          "name": "PersonalSafetyAnswerKey",
-          "filename": "HB92CY002PersonalSafetyAnswerKey.docx",
-          "type": "DOCX"
-        },
-        {
-          "name": "PersonalSafetyAccessible",
-          "filename": "HB92CY002PersonalSafetyAccessible.docx",
-          "type": "DOCX"
         }
       ]
     },
@@ -39,6 +39,16 @@
       "title": "Sustainable Use of Natural Resources",
       "mandatory": true,
       "files": [
+        {
+          "name": "SustainableResourcesAccessible",
+          "filename": "HB92CY003SustainableResourcesAccessible.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "SustainableResourcesAnswerKey",
+          "filename": "HB92CY003SustainableResourcesAnswerKey.docx",
+          "type": "DOCX"
+        },
         {
           "name": "SustainableResourcesDigital",
           "filename": "HB92CY003SustainableResourcesDigital.html",
@@ -52,16 +62,6 @@
         {
           "name": "SustainableResourcesWorkbook",
           "filename": "HB92CY003SustainableResourcesWorkbook.docx",
-          "type": "DOCX"
-        },
-        {
-          "name": "SustainableResourcesAnswerKey",
-          "filename": "HB92CY003SustainableResourcesAnswerKey.docx",
-          "type": "DOCX"
-        },
-        {
-          "name": "SustainableResourcesAccessible",
-          "filename": "HB92CY003SustainableResourcesAccessible.docx",
           "type": "DOCX"
         }
       ]
@@ -167,6 +167,11 @@
       "mandatory": false,
       "files": [
         {
+          "name": "LandActivityAccessible",
+          "filename": "MH32CY007LandActivityAccessible.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "LandActivityDigital",
           "filename": "MH32CY007LandActivityDigital.html",
           "type": "HTML"
@@ -179,11 +184,6 @@
         {
           "name": "LandActivityWorkbook",
           "filename": "MH32CY007LandActivityWorkbook.docx",
-          "type": "DOCX"
-        },
-        {
-          "name": "LandActivityAccessible",
-          "filename": "MH32CY007LandActivityAccessible.docx",
           "type": "DOCX"
         }
       ]
