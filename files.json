@@ -47,6 +47,34 @@
       ]
     },
     {
+      "id": "AF42CY008",
+      "credits": 3,
+      "title": "Team Working",
+      "mandatory": false,
+      "files": [
+        {
+          "name": "TeamWorkingAccessible",
+          "filename": "AF42CY008TeamWorkingAccessible.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "TeamWorkingDigital",
+          "filename": "AF42CY008TeamWorkingDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "TeamWorkingSlides",
+          "filename": "AF42CY008TeamWorkingSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "TeamWorkingWorkbook",
+          "filename": "AF42CY008TeamWorkingWorkbook.docx",
+          "type": "DOCX"
+        }
+      ]
+    },
+    {
       "id": "MH12CY006",
       "credits": 4,
       "title": "Participate in an Expedition (4 credits)",
@@ -192,9 +220,24 @@
           "type": "DOCX"
         },
         {
+          "name": "WaterActivityAccessible",
+          "filename": "MH32CY008WaterActivityAccessible.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "WaterActivityDigital",
+          "filename": "MH32CY008WaterActivityDigital.html",
+          "type": "HTML"
+        },
+        {
           "name": "WaterActivitySlides",
           "filename": "MH32CY008WaterActivitySlides.pptx",
           "type": "PPTX"
+        },
+        {
+          "name": "WaterActivityWorkbook",
+          "filename": "MH32CY008WaterActivityWorkbook.docx",
+          "type": "DOCX"
         }
       ]
     },
