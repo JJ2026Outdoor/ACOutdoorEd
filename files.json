@@ -165,11 +165,6 @@
       "mandatory": false,
       "files": [
         {
-          "name": "CanoeingWorkbook",
-          "filename": "MH32CY008CanoeingWorkbook.docx",
-          "type": "DOCX"
-        },
-        {
           "name": "PaddleboardingAnswerKey",
           "filename": "MH32CY008PaddleboardingAnswerKey.docx",
           "type": "DOCX"
