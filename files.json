@@ -157,11 +157,6 @@
           "type": "PPTX"
         },
         {
-          "name": "LandBikingDigital",
-          "filename": "MH32CY007LandBikingDigital.html",
-          "type": "HTML"
-        },
-        {
           "name": "LandBikingWorkbook",
           "filename": "MH32CY007LandBikingWorkbook.docx",
           "type": "DOCX"
