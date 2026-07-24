@@ -9,7 +9,18 @@
       "subtitle": "30 GLH · Core · Certificate only",
       "brief": "Learners develop key techniques to organise their work, manage priorities and use time effectively — practising these techniques over a period before final assessment.",
       "aims": "A — Explore techniques to improve own organisational skills | B — Review the use of techniques to improve own organisational skills.",
-      "files": []
+      "files": [
+        {
+          "name": "BeingOrganisedDigital",
+          "filename": "A1BeingOrganisedDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "BeingOrganisedSlides",
+          "filename": "A1BeingOrganisedSlides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "A2",
@@ -25,6 +36,11 @@
           "name": "ProgressionPlanDigital",
           "filename": "A2ProgressionPlanDigital.html",
           "type": "HTML"
+        },
+        {
+          "name": "ProgressionPlanSlides",
+          "filename": "A2ProgressionPlanSlides.pptx",
+          "type": "PPTX"
         }
       ]
     },
