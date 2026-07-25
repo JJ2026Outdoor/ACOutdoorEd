@@ -93,11 +93,6 @@
       "aims": "A — Plan a route using Ordnance Survey maps | B — Navigate an agreed route within an agreed timeframe.",
       "files": [
         {
-          "name": "CyclingDigital",
-          "filename": "PS9CyclingDigital.html",
-          "type": "HTML"
-        },
-        {
           "name": "MapSkillsReferenceSheet",
           "filename": "PS9MapSkillsReferenceSheet.docx",
           "type": "DOCX"
