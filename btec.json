@@ -85,7 +85,23 @@
       "subtitle": "40 GLH · Sector",
       "brief": "Learners develop skills in planning, taking part in, recording and reviewing fitness testing activities required for the public services. Covers the basic fitness tests used during public services selection and reviewing personal performance against those standards.",
       "aims": "A — Plan and take part in fitness testing activities required for different public services | B — Record and review participation in fitness testing activities.",
-      "files": []
+      "files": [
+        {
+          "name": "TakingPartFitnessTestingDigital",
+          "filename": "PS6TakingPartFitnessTestingDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "TakingPartFitnessTestingSlides",
+          "filename": "PS6TakingPartFitnessTestingSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "TakingPartFitnessTestingWorkbook",
+          "filename": "PS6TakingPartFitnessTestingWorkbook.docx",
+          "type": "DOCX"
+        }
+      ]
     },
     {
       "id": "PS9",
@@ -160,7 +176,23 @@
       "subtitle": "40 GLH · Sector",
       "brief": "Learners develop participation skills in sport and adventurous activities, with a focus on how these relate to working in a public service. Covers planning, health and fitness, communication and teamwork across individual sports, team sports and adventurous activities.",
       "aims": "A — Plan and take part in sport and adventurous activities | B — Demonstrate effective communication and teamwork skills when taking part in sport and adventurous activities.",
-      "files": []
+      "files": [
+        {
+          "name": "SportAdventurousDigital",
+          "filename": "PS12SportAdventurousDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "SportAdventurousSlides",
+          "filename": "PS12SportAdventurousSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "SportAdventurousWorkbook",
+          "filename": "PS12SportAdventurousWorkbook.docx",
+          "type": "DOCX"
+        }
+      ]
     }
   ]
 }
