@@ -168,6 +168,16 @@
           "name": "ContributingDigital",
           "filename": "PS11ContributingDigital.html",
           "type": "HTML"
+        },
+        {
+          "name": "ContributingSlides",
+          "filename": "PS11ContributingSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "ContributingWorkbook",
+          "filename": "PS11ContributingWorkbook.docx",
+          "type": "DOCX"
         }
       ]
     },
