@@ -123,11 +123,6 @@
           "type": "PPTX"
         },
         {
-          "name": "NavigationWorkbook",
-          "filename": "PS9NavigationWorkbook.docx",
-          "type": "DOCX"
-        },
-        {
           "name": "RouteCardTemplate",
           "filename": "PS9RouteCardTemplate.docx",
           "type": "DOCX"
