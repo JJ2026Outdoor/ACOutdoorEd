@@ -131,11 +131,6 @@
           "name": "RouteCardTemplate",
           "filename": "PS9RouteCardTemplate.docx",
           "type": "DOCX"
-        },
-        {
-          "name": "WatercraftWorkbook",
-          "filename": "PS9WatercraftWorkbook.docx",
-          "type": "DOCX"
         }
       ]
     },
