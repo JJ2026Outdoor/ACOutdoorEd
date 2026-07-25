@@ -68,6 +68,11 @@
           "name": "FindingOutWorkbook",
           "filename": "PS5FindingOutWorkbook.docx",
           "type": "DOCX"
+        },
+        {
+          "name": "TaskASourcePack",
+          "filename": "PS5TaskASourcePack.docx",
+          "type": "DOCX"
         }
       ]
     },
