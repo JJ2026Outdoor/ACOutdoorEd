@@ -93,11 +93,6 @@
       "aims": "A — Plan a route using Ordnance Survey maps | B — Navigate an agreed route within an agreed timeframe.",
       "files": [
         {
-          "name": "AnswerKey",
-          "filename": "PS9AnswerKey.docx",
-          "type": "DOCX"
-        },
-        {
           "name": "AssessmentBrief",
           "filename": "PS9AssessmentBrief.docx",
           "type": "DOCX"
