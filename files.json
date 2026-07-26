@@ -67,6 +67,29 @@
       ]
     },
     {
+      "id": "RF42CY026",
+      "credits": 3,
+      "title": "Physical Geography and Climate of Wales",
+      "mandatory": false,
+      "files": [
+        {
+          "name": "PhysicalGeographyDigital",
+          "filename": "RF42CY026PhysicalGeographyDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "PhysicalGeographySlides",
+          "filename": "RF42CY026PhysicalGeographySlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "PhysicalGeographyWorkbook",
+          "filename": "RF42CY026PhysicalGeographyWorkbook.docx",
+          "type": "DOCX"
+        }
+      ]
+    },
+    {
       "id": "AF42CY008",
       "credits": 3,
       "title": "Team Working",
@@ -212,6 +235,29 @@
         {
           "name": "WaterActivityWorkbook",
           "filename": "MH32CY008WaterActivityWorkbook.docx",
+          "type": "DOCX"
+        }
+      ]
+    },
+    {
+      "id": "HB12CY080",
+      "credits": 2,
+      "title": "The Health Benefits of Being Outdoors",
+      "mandatory": false,
+      "files": [
+        {
+          "name": "HealthBenefitsDigital",
+          "filename": "HB12CY080HealthBenefitsDigital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "HealthBenefitsSlides",
+          "filename": "HB12CY080HealthBenefitsSlides.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "HealthBenefitsWorkbook",
+          "filename": "HB12CY080HealthBenefitsWorkbook.docx",
           "type": "DOCX"
         }
       ]
