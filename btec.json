@@ -19,6 +19,11 @@
           "name": "BeingOrganisedSlides",
           "filename": "A1BeingOrganisedSlides.pptx",
           "type": "PPTX"
+        },
+        {
+          "name": "BeingOrganisedWorkbook",
+          "filename": "A1BeingOrganisedWorkbook.docx",
+          "type": "DOCX"
         }
       ]
     },
@@ -41,6 +46,11 @@
           "name": "ProgressionPlanSlides",
           "filename": "A2ProgressionPlanSlides.pptx",
           "type": "PPTX"
+        },
+        {
+          "name": "ProgressionPlanWorkbook",
+          "filename": "A2ProgressionPlanWorkbook.docx",
+          "type": "DOCX"
         }
       ]
     },
