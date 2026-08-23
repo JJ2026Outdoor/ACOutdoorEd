@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Personal &amp; Social Education — Level 2 | Resources</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --teal: #3E7A8C;
+  --teal-dark: #1F4A56;
+  --teal-mid: #2E6070;
+  --teal-light: #E7F1F3;
+  --teal-xlight: #F3F9FA;
+  --gold: #C8A951;
+  --gold-light: #FDF8EC;
+  --text: #1A1A1A;
+  --muted: #6B7B8C;
+  --border: #D4D4CC;
+  --white: #FFFFFF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color: var(--text); min-height: 100vh; }
+
+.site-header { background: var(--teal-dark); padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.18); }
+.header-inner { max-width: 900px; margin: 0 auto; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
+.header-title { font-family: 'DM Serif Display', serif; color: #fff; font-size: 17px; line-height: 1.3; }
+.header-sub { color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.header-back { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); transition: background 0.12s, color 0.12s; white-space: nowrap; }
+.header-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+.hero { background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); padding: 52px 24px 48px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 320px; height: 320px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.hero::after { content: ''; position: absolute; bottom: -80px; left: -40px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,0.03); }
+.hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.qual-badge { display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.85); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+.hero h1 { font-family: 'DM Serif Display', serif; color: #fff; font-size: clamp(26px, 5vw, 38px); line-height: 1.2; margin-bottom: 10px; }
+.hero-desc { color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.7; max-width: 600px; margin-bottom: 28px; }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 12px; }
+.stat-pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 10px 16px; color: #fff; }
+.stat-pill .val { font-size: 20px; font-weight: 700; line-height: 1; }
+.stat-pill .lbl { font-size: 10px; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+.main { max-width: 900px; margin: 0 auto; padding: 36px 24px 80px; }
+
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 40px; }
+.info-card { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; padding: 20px; }
+.info-card-icon { width: 36px; height: 36px; background: var(--teal); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.02em; margin-bottom: 12px; }
+.info-card h3 { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+.info-card p, .info-card li { font-size: 13px; color: #2a2a2a; line-height: 1.7; }
+.info-card ul { padding-left: 16px; }
+.info-card li { margin-bottom: 2px; }
+
+.credit-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
+.credit-table th { background: var(--teal); color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; }
+.credit-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.credit-table tr:nth-child(even) td { background: var(--teal-xlight); }
+.credit-table tr.row-cert td { background: #E8F5EE; font-weight: 700; color: #0F4525; }
+.credit-table tr.row-extcert td { background: #FFF8E1; font-weight: 700; color: #7a5c00; }
+
+.section-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--teal-dark); margin-bottom: 8px; padding-bottom: 10px; border-bottom: 2px solid var(--teal-light); }
+.section-note { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+
+.checkpoint-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 14px; font-size: 12px; color: var(--muted); }
+.checkpoint-legend span.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -2px; }
+
+.pairing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 12px; margin-bottom: 40px; }
+.pairing-card { background: var(--teal-xlight); border: 1.5px solid var(--teal-light); border-radius: 10px; padding: 12px 14px; font-size: 12.5px; color: #234; line-height: 1.6; }
+.pairing-card strong { color: var(--teal-dark); }
+.pairing-card.gap { background: var(--gold-light); border-color: #e8d48a; color: #5a4800; }
+
+.folder-section { margin-bottom: 14px; }
+.folder-group { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 10px; }
+.folder-group-header { display: flex; align-items: center; gap: 12px; padding: 15px 18px; cursor: pointer; background: var(--teal-dark); color: #fff; user-select: none; transition: background 0.15s; }
+.folder-group-header:hover { background: #163a44; }
+.folder-group-header .chevron { margin-left: auto; font-size: 14px; transition: transform 0.25s; }
+.folder-group-header.open .chevron { transform: rotate(90deg); }
+.folder-group-title { font-weight: 700; font-size: 14px; }
+.folder-group-sub { font-size: 11px; opacity: 0.65; margin-top: 1px; }
+.folder-group-body { display: none; padding: 8px 0; }
+.folder-group-body.open { display: block; }
+
+.unit-folder { border-bottom: 1px solid var(--teal-light); }
+.unit-folder:last-child { border-bottom: none; }
+.unit-folder-header { display: flex; align-items: center; gap: 10px; padding: 12px 20px; cursor: pointer; user-select: none; background: var(--teal-xlight); transition: background 0.12s; }
+.unit-folder-header:hover { background: #dcedf0; }
+.unit-folder-header .uf-info { flex: 1; }
+.unit-folder-header .uf-code { font-size: 10px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.06em; }
+.unit-folder-header .uf-title { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 1px; }
+.unit-folder-header .uf-chevron { color: var(--muted); font-size: 12px; transition: transform 0.2s; }
+.unit-folder-header.open .uf-chevron { transform: rotate(90deg); }
+.unit-folder-files { display: none; padding: 6px 0 6px 44px; background: #fff; }
+.unit-folder-files.open { display: block; }
+.file-link { display: flex; align-items: center; gap: 10px; padding: 9px 18px 9px 0; text-decoration: none; border-radius: 6px; transition: background 0.12s; color: var(--text); }
+.file-link:hover { background: var(--teal-light); }
+.file-link .fl-name { font-size: 13px; font-weight: 500; color: var(--teal-dark); }
+.file-link .fl-type { font-size: 10px; color: var(--muted); margin-left: auto; text-transform: uppercase; letter-spacing: 0.05em; padding-right: 16px; }
+.file-link:hover .fl-name { color: var(--teal); text-decoration: underline; }
+.empty-note { padding: 10px 0; font-size: 12px; color: var(--muted); font-style: italic; }
+
+.site-footer { background: var(--teal-dark); color: rgba(255,255,255,0.55); text-align: center; padding: 20px; font-size: 12px; }
+.site-footer a { color: rgba(255,255,255,0.7); }
+
+@media (max-width: 700px) {
+  .credit-table { display: block; overflow-x: auto; white-space: nowrap; }
+}
+@media (max-width: 600px) {
+  .hero { padding: 36px 16px 32px; }
+  .main { padding: 24px 16px 60px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="header-sub">Agored Cymru &middot; Level 2</div>
+      <div class="header-title">Personal &amp; Social Education — Resources</div>
+    </div>
+    <a class="header-back" href="index.html">&#8592; Back to Hub</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="qual-badge">Agored Cymru Qualification &middot; 6th Form Life Skills</div>
+    <h1>Personal and Social Education</h1>
+    <p class="hero-desc">A 14-unit, sequential 6th-form life-skills programme. Level 1 units are taught first and each Level 2 unit is deliberately placed to build on a named Level 1 unit taught earlier in the year — no unit is a cold start.</p>
+    <div class="hero-stats">
+      <div class="stat-pill"><div class="val">14</div><div class="lbl">Units, Fixed Sequence</div></div>
+      <div class="stat-pill"><div class="val">143</div><div class="lbl">Total GLH</div></div>
+      <div class="stat-pill"><div class="val">18</div><div class="lbl">Credits (Ext. Certificate)</div></div>
+      <div class="stat-pill"><div class="val">2</div><div class="lbl">Award Sizes</div></div>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+
+  <div class="info-grid" style="margin-bottom:32px;">
+
+    <div class="info-card">
+      <div class="info-card-icon">i</div>
+      <h3>About this Programme</h3>
+      <p>Delivered as a 6th-form Life Skills programme, this suite covers emotional regulation, assertiveness, decision-making, personal safety, money management, problem-solving and online safety. Units are taught in a fixed order so each Level 2 unit extends the vocabulary and concepts of a specific Level 1 unit taught earlier in the year.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon">S</div>
+      <h3>Qualification Sizes</h3>
+      <table class="credit-table">
+        <thead><tr><th>Qualification</th><th>Ref.</th><th>Credits Req.</th></tr></thead>
+        <tbody>
+          <tr><td>Certificate (fallback)</td><td>127711</td><td>13</td></tr>
+          <tr class="row-extcert"><td><strong>Extended Certificate (target)</strong></td><td>127712</td><td><strong>18</strong></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:8px;font-size:12px;color:var(--muted);">Same suite — the Certificate is a safety net, not a separate teaching plan. Max 6 L1 credits count toward the Certificate (7 toward the Extended Certificate); min 7 L2 credits required for the Certificate (10 for the Extended Certificate). This programme delivers 7 L1 + 11 L2 = 18 credits total.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon">F</div>
+      <h3>Digital Workbook Format</h3>
+      <p>Each unit is delivered as a self-contained HTML digital workbook (works offline, no installation), a printable DOCX version for handwriting, and a PPTX teaching deck. Digital workbooks have a learner mode and a password-gated assessor mode with Met / Not-yet judgements per assessment criterion.</p>
+      <p style="margin-top:8px;font-size:12px;color:var(--muted);">The assessor password is shared with staff directly and is not stored in this repository.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon">A</div>
+      <h3>Assessment</h3>
+      <p>All units are internally assessed by the teacher (assessor) and internally verified by the centre. There are no exams. Evidence is gathered through written tasks, structured lists, personal reflection, and — where relevant to a unit's assessment method — voice recording or practical demonstration.</p>
+    </div>
+
+  </div>
+
+  <!-- SEQUENCE & CHECKPOINTS -->
+  <h2 class="section-title">Unit Sequence &amp; Award Checkpoints</h2>
+  <p class="section-note">Units are taught in this fixed order. The Certificate (127711) becomes claimable once Level 2 credits cross the 7-credit floor — reached at Unit 12, not Unit 10 as an earlier estimate assumed, because Anti-bullying Awareness is a single 2-credit block that cannot be part-claimed. The Extended Certificate (127712) completes at Unit 14.</p>
+
+  <div class="checkpoint-legend">
+    <span><span class="sw" style="background:#E8F5EE;border:1px solid #0F4525"></span>Certificate (127711) claimable from this row</span>
+    <span><span class="sw" style="background:#FFF8E1;border:1px solid #7a5c00"></span>Extended Certificate (127712) complete</span>
+  </div>
+
+  <div style="overflow-x:auto;margin-bottom:12px;">
+    <table class="credit-table">
+      <thead>
+        <tr><th>#</th><th>Unit</th><th>Code</th><th>Level</th><th>Credits</th><th>GLH</th><th>Cum. GLH</th></tr>
+      </thead>
+      <tbody id="sequence-table-body"></tbody>
+    </table>
+  </div>
+
+  <p class="section-note" style="margin-bottom:0;">Programme total: 143 GLH against confirmed unit specifications — 26 hours under Agored's published 169 GLH figure for the suite. At 4 hours/week this is roughly 36 sessions, leaving 9–13 hours of contingency for absence, resits, moderation and portfolio catch-up across a 38–39 week year.</p>
+
+  <h2 class="section-title" style="margin-top:32px;">Foundation &#8594; Progression Pairings</h2>
+  <p class="section-note">Each Level 2 unit sits after the Level 1 unit whose vocabulary and concepts it extends.</p>
+  <div class="pairing-grid">
+    <div class="pairing-card"><strong>Understanding Stress</strong> (Unit 8) extends <strong>Anger Management</strong> (Unit 1)</div>
+    <div class="pairing-card"><strong>Emotional Intelligence</strong> (Unit 9) extends <strong>Assertiveness Skills</strong> (Unit 2)</div>
+    <div class="pairing-card"><strong>Personal Money Management</strong> (Unit 10) extends <strong>Decision-Making</strong> (Unit 3)</div>
+    <div class="pairing-card"><strong>Problem-Solving Skills</strong> (Unit 11) extends <strong>Decision-Making</strong> (Unit 3)</div>
+    <div class="pairing-card"><strong>Anti-bullying Awareness</strong> (Unit 12) extends <strong>Negotiation Skills</strong> (Unit 4)</div>
+    <div class="pairing-card"><strong>Staying Safe Online</strong> (Unit 13) extends <strong>Fire Safety in the Home</strong> (Unit 6)</div>
+    <div class="pairing-card"><strong>Crime Prevention and Keeping Safe</strong> (Unit 14) extends <strong>Social/Legal Aspects of Personal Safety</strong> (Unit 7)</div>
+    <div class="pairing-card gap"><strong>Healthy Lifestyles</strong> (Unit 5) has no Level 2 partner in this programme — a deliberate, agreed gap.</div>
+  </div>
+
+  <!-- RESOURCES — rendered dynamically from pse.json -->
+  <h2 class="section-title">Unit Resources</h2>
+  <p class="section-note">Click a unit folder to see available resources. New files appear automatically once uploaded to the repository with the correct unit code in the filename.</p>
+
+  <div id="resources-l1" class="folder-section"></div>
+  <div id="resources-l2" class="folder-section"></div>
+
+</main>
+
+<footer class="site-footer">
+  Agored Cymru Level 2 Personal &amp; Social Education &mdash; Resources prepared by Jonathan &mdash; Brynllywarch Hall School &mdash;
+  <a href="https://www.agored.cymru" target="_blank">agored.cymru</a>
+</footer>
+
+<script>
+function toggleGroup(header) {
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
+}
+function toggleUnit(header) {
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
+}
+
+function buildUnit(unit) {
+  var codeLabel = '#' + unit.sequence + ' &middot; ' + unit.id + ' &middot; ' + unit.credits + ' Credit' + (unit.credits !== 1 ? 's' : '') + ' &middot; ' + unit.glh + ' GLH';
+
+  var filesHtml = (unit.files && unit.files.length)
+    ? unit.files.map(function(f) {
+        return '<a class="file-link" href="' + encodeURI(f.filename) + '" target="_blank">' +
+          '<span class="fl-name">' + f.name + '</span>' +
+          '<span class="fl-type">' + f.type + '</span>' +
+        '</a>';
+      }).join('')
+    : '<div class="empty-note">Resources not yet uploaded — check back shortly.</div>';
+
+  return '<div class="unit-folder">' +
+    '<div class="unit-folder-header" onclick="toggleUnit(this)">' +
+      '<div class="uf-info">' +
+        '<div class="uf-code">' + codeLabel + '</div>' +
+        '<div class="uf-title">' + unit.title + '</div>' +
+      '</div>' +
+      '<span class="uf-chevron">&#9654;</span>' +
+    '</div>' +
+    '<div class="unit-folder-files">' + filesHtml + '</div>' +
+  '</div>';
+}
+
+function buildGroup(title, subtitle, units, openByDefault) {
+  var unitsHtml = units.map(buildUnit).join('');
+  var openClass = openByDefault ? ' open' : '';
+  return '<div class="folder-group">' +
+    '<div class="folder-group-header' + openClass + '" onclick="toggleGroup(this)">' +
+      '<div>' +
+        '<div class="folder-group-title">' + title + '</div>' +
+        '<div class="folder-group-sub">' + subtitle + '</div>' +
+      '</div>' +
+      '<span class="chevron">&#9654;</span>' +
+    '</div>' +
+    '<div class="folder-group-body' + openClass + '">' + unitsHtml + '</div>' +
+  '</div>';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('pse.json?_=' + Date.now())
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var units = data.units.slice().sort(function(a, b) { return a.sequence - b.sequence; });
+      var l1 = units.filter(function(u) { return u.level === 1; });
+      var l2 = units.filter(function(u) { return u.level === 2; });
+
+      // Sequence table
+      var rows = units.map(function(u) {
+        var rowClass = u.checkpoint === 'certificate' ? ' class="row-cert"' :
+                        u.checkpoint === 'extended_certificate' ? ' class="row-extcert"' : '';
+        return '<tr' + rowClass + '>' +
+          '<td>' + u.sequence + '</td>' +
+          '<td>' + u.title + (u.checkpoint === 'certificate' ? ' <strong>&larr; Certificate claimable</strong>' : '') + (u.checkpoint === 'extended_certificate' ? ' <strong>&larr; Extended Certificate complete</strong>' : '') + '</td>' +
+          '<td>' + u.id + '</td>' +
+          '<td>L' + u.level + '</td>' +
+          '<td>' + u.credits + '</td>' +
+          '<td>' + u.glh + '</td>' +
+          '<td>' + u.cumGLH + '</td>' +
+        '</tr>';
+      }).join('');
+      document.getElementById('sequence-table-body').innerHTML = rows;
+
+      document.getElementById('resources-l1').innerHTML =
+        buildGroup('Level 1 Foundation Units (1–7)', '7 credits · 64 GLH · taught first', l1, true);
+
+      document.getElementById('resources-l2').innerHTML =
+        buildGroup('Level 2 Units (8–14)', '11 credits · 79 GLH · each extends a named Level 1 unit', l2, false);
+    })
+    .catch(function() {
+      document.getElementById('resources-l1').innerHTML =
+        '<p style="color:var(--muted);font-size:13px;padding:16px;">Could not load resource list. Please refresh or check back shortly.</p>';
+    });
+});
+</script>
+</body>
+</html>

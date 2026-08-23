@@ -1,0 +1,177 @@
+{
+  "units": [
+    {
+      "id": "HB31CY011",
+      "sequence": 1,
+      "level": 1,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 9,
+      "title": "Anger Management",
+      "extendsInto": null,
+      "checkpoint": null,
+      "files": [
+        { "name": "Digital Workbook", "filename": "AngerManagement_HB31CY011_Digital.html", "type": "HTML" },
+        { "name": "Printable Workbook", "filename": "AngerManagement_HB31CY011_Workbook.docx", "type": "DOCX" },
+        { "name": "Teaching Slides", "filename": "AngerManagement_HB31CY011_Teaching.pptx", "type": "PPTX" },
+        { "name": "Handout: Match the Emotion", "filename": "AngerManagement_HB31CY011_Handout_MatchTheEmotion.docx", "type": "DOCX" }
+      ]
+    },
+    {
+      "id": "HB61CY011",
+      "sequence": 2,
+      "level": 1,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 18,
+      "title": "Assertiveness Skills",
+      "extendsInto": "HB12CY079",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "AF21CY003",
+      "sequence": 3,
+      "level": 1,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 27,
+      "title": "Decision-Making",
+      "extendsInto": "HE12CY001 / AF72CY003",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "HB71CY018",
+      "sequence": 4,
+      "level": 1,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 36,
+      "title": "Negotiation Skills",
+      "extendsInto": "HB12CY057",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "PA91CY015",
+      "sequence": 5,
+      "level": 1,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 45,
+      "title": "Healthy Lifestyles",
+      "extendsInto": null,
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "QJ21CY002",
+      "sequence": 6,
+      "level": 1,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 54,
+      "title": "Fire Safety in the Home",
+      "extendsInto": "HD22CY028",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "HB11CY075",
+      "sequence": 7,
+      "level": 1,
+      "credits": 1,
+      "glh": 10,
+      "cumGLH": 64,
+      "title": "Social and Legal Aspects of Personal Safety",
+      "extendsInto": "QH52CY004",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "HB32CY014",
+      "sequence": 8,
+      "level": 2,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 73,
+      "title": "Understanding Stress",
+      "extendsFrom": "HB31CY011",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "HB12CY079",
+      "sequence": 9,
+      "level": 2,
+      "credits": 2,
+      "glh": 10,
+      "cumGLH": 83,
+      "title": "Emotional Intelligence",
+      "extendsFrom": "HB61CY011",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "HE12CY001",
+      "sequence": 10,
+      "level": 2,
+      "credits": 2,
+      "glh": 19,
+      "cumGLH": 102,
+      "title": "Personal Money Management",
+      "extendsFrom": "AF21CY003",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "AF72CY003",
+      "sequence": 11,
+      "level": 2,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 111,
+      "title": "Problem-Solving Skills",
+      "extendsFrom": "AF21CY003",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "HB12CY057",
+      "sequence": 12,
+      "level": 2,
+      "credits": 2,
+      "glh": 18,
+      "cumGLH": 129,
+      "title": "Anti-bullying Awareness",
+      "extendsFrom": "HB71CY018",
+      "checkpoint": "certificate",
+      "files": []
+    },
+    {
+      "id": "HD22CY028",
+      "sequence": 13,
+      "level": 2,
+      "credits": 2,
+      "glh": 5,
+      "cumGLH": 134,
+      "title": "Staying Safe Online",
+      "extendsFrom": "QJ21CY002",
+      "checkpoint": null,
+      "files": []
+    },
+    {
+      "id": "QH52CY004",
+      "sequence": 14,
+      "level": 2,
+      "credits": 1,
+      "glh": 9,
+      "cumGLH": 143,
+      "title": "Crime Prevention and Keeping Safe",
+      "extendsFrom": "HB11CY075",
+      "checkpoint": "extended_certificate",
+      "files": []
+    }
+  ]
+}

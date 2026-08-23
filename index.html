@@ -193,6 +193,9 @@ body {
 .qual-card.btec .qual-card-header {
   background: linear-gradient(135deg, #1a3a6b 0%, #2a5cb8 100%);
 }
+.qual-card.pse .qual-card-header {
+  background: linear-gradient(135deg, #1F4A56 0%, #3E7A8C 100%);
+}
 .qual-card.locations .qual-card-header {
   background: linear-gradient(135deg, #5a3a1a 0%, #a0652a 100%);
 }
@@ -243,6 +246,7 @@ body {
 }
 .agored .qual-tag { background: var(--green-light); color: var(--green-dark); }
 .btec .qual-tag { background: #e8eeff; color: #1a3a6b; }
+.pse .qual-tag { background: #E7F1F3; color: #1F4A56; }
 .locations .qual-tag { background: #fef0e2; color: #5a3a1a; }
 
 .qual-cta {
@@ -259,6 +263,7 @@ body {
 .qual-cta:hover { opacity: 0.88; }
 .agored .qual-cta { background: var(--green-light); color: var(--green-dark); }
 .btec .qual-cta { background: #e8eeff; color: #1a3a6b; }
+.pse .qual-cta { background: #E7F1F3; color: #1F4A56; }
 .locations .qual-cta { background: #fef0e2; color: #5a3a1a; }
 .qual-cta-arrow { font-size: 16px; }
 
@@ -453,185 +458,6 @@ body {
   .main { padding: 32px 16px 60px; }
   .qual-grid { grid-template-columns: 1fr; }
 }
-
-/* ── WEATHER HEADER ── */
-.wx-header { margin-bottom: 8px; }
-.wx-header-loc {
-  font-size: 15px; font-weight: 700; color: var(--green-dark);
-  letter-spacing: 0.02em;
-}
-.wx-header-summary {
-  font-size: 12px; color: var(--muted);
-  margin-top: 3px; line-height: 1.5; min-height: 18px;
-}
-
-/* ── WEATHER STRIP ── */
-.weather-strip {
-  display: grid; grid-template-columns: repeat(5, 1fr);
-  border: 2px solid var(--border); border-radius: 14px;
-  overflow: hidden; margin-bottom: 16px; min-height: 100px;
-}
-.weather-strip.wx-msg-state {
-  display: flex; align-items: center; padding: 16px 20px;
-  background: var(--white);
-}
-.wx-loading  { color: var(--muted); font-size: 13px; }
-.wx-error    { color: #9b2020; font-size: 13px; }
-.wx-unavail  { color: var(--muted); font-size: 12px; font-style: italic; }
-
-/* day column */
-.wx-day {
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center; padding: 10px 6px; border-right: 1px solid rgba(0,0,0,0.08);
-  gap: 3px; position: relative; background: #f5f5f5;
-}
-.wx-day:last-child { border-right: none; }
-
-/* condition colours */
-.wx-c-sunny      { background: linear-gradient(180deg, #fffbe6 0%, #fff5cc 100%); }
-.wx-c-pcloudy    { background: linear-gradient(180deg, #f5f5f0 0%, #ededea 100%); }
-.wx-c-overcast   { background: linear-gradient(180deg, #e9e9e9 0%, #dfdfe0 100%); }
-.wx-c-fog        { background: linear-gradient(180deg, #efede6 0%, #e5e3d8 100%); }
-.wx-c-drizzle    { background: linear-gradient(180deg, #eef4fb 0%, #e2eef8 100%); }
-.wx-c-rain       { background: linear-gradient(180deg, #daeaf8 0%, #c8dff5 100%); }
-.wx-c-heavy-rain { background: linear-gradient(180deg, #c4d8f0 0%, #b0cce8 100%); }
-.wx-c-snow       { background: linear-gradient(180deg, #eaf5fc 0%, #d8eef8 100%); }
-.wx-c-heavy-snow { background: linear-gradient(180deg, #d2eaf8 0%, #bee0f5 100%); }
-.wx-c-storm      { background: linear-gradient(180deg, #2a2a3e 0%, #1e1e32 100%); }
-
-/* storm text overrides */
-.wx-c-storm .wx-day-name,
-.wx-c-storm .wx-day-date,
-.wx-c-storm .wx-max,
-.wx-c-storm .wx-min,
-.wx-c-storm .wx-desc,
-.wx-c-storm .wx-detail,
-.wx-c-storm .wx-today-band { color: rgba(255,255,255,0.88); }
-.wx-c-storm .wx-rain-prob  { color: #88bbff; }
-
-/* today — green top border only, colour from condition class */
-.wx-today { border-top: 3px solid var(--green); padding-top: 7px; }
-/* past days muted */
-.wx-past  { opacity: 0.65; }
-
-.wx-today-band {
-  font-size: 8px; font-weight: 800; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--green); margin-bottom: 1px;
-}
-.wx-c-storm .wx-today-band { color: #88ffaa; }
-
-.wx-day-name { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.wx-today .wx-day-name { color: var(--green-dark); }
-.wx-c-storm.wx-today .wx-day-name { color: #88ffaa; }
-.wx-day-date { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
-.wx-icon    { font-size: 26px; line-height: 1; margin: 2px 0; }
-.wx-icon-lg { font-size: 38px; line-height: 1; margin: 4px 0; }
-.wx-desc    { font-size: 10px; color: var(--muted); line-height: 1.3; max-width: 90px; }
-.wx-temps    { display: flex; gap: 5px; align-items: baseline; margin-top: 2px; }
-.wx-temps-lg { display: flex; gap: 6px; align-items: baseline; margin-top: 3px; }
-.wx-max { font-weight: 700; color: var(--text); font-size: 14px; }
-.wx-temps-lg .wx-max { font-size: 20px; }
-.wx-min { font-size: 11px; color: var(--muted); }
-.wx-temps-lg .wx-min { font-size: 14px; }
-.wx-detail    { font-size: 10px; color: var(--muted); margin-top: 1px; }
-.wx-rain-prob { font-size: 9px; color: #4a7ab5; margin-top: 2px; }
-
-/* alert badges */
-.wx-alert {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.04em;
-  text-transform: uppercase; padding: 2px 6px; border-radius: 8px;
-  margin-bottom: 1px;
-}
-.wx-alert-red    { background: #fee2e2; color: #9b1c1c; }
-.wx-alert-amber  { background: #fef3c7; color: #92400e; }
-.wx-alert-yellow { background: #fefce8; color: #713f12; }
-.wx-c-storm .wx-alert-red   { background: rgba(255,100,100,0.25); color: #ffaaaa; }
-
-@media (max-width: 700px) {
-  .wx-icon-lg { font-size: 26px; }
-  .wx-temps-lg .wx-max { font-size: 16px; }
-  .wx-detail, .wx-desc { display: none; }
-}
-@media (max-width: 500px) {
-  .weather-strip { border-radius: 10px; }
-  .wx-day { padding: 8px 3px; }
-  .wx-icon { font-size: 20px; }
-}
-
-/* ── DAY CLICK / ACTIVE ── */
-.wx-day { cursor: pointer; transition: filter 0.12s; }
-.wx-day:hover { filter: brightness(0.93); }
-.wx-day.wx-active { outline: 3px solid var(--green); outline-offset: -3px; position: relative; z-index: 1; }
-.wx-c-storm.wx-active { outline-color: #88ffaa; }
-/* ── HOURLY DETAIL PANEL ── */
-.wx-detail-panel {
-  background: var(--white); border: 2px solid var(--border);
-  border-radius: 14px; overflow: hidden; margin-bottom: 16px;
-  max-height: 0; opacity: 0; pointer-events: none;
-  transition: max-height 0.35s ease, opacity 0.2s ease;
-}
-.wx-detail-panel.open { max-height: 700px; opacity: 1; pointer-events: auto; }
-.wx-dp-header {
-  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
-  padding: 14px 20px 12px; display: flex; align-items: flex-start;
-  justify-content: space-between; gap: 12px;
-}
-.wx-dp-title { font-family: 'DM Serif Display', serif; color: #fff; font-size: 16px; line-height: 1.2; }
-.wx-dp-title-sub { color: rgba(255,255,255,0.65); font-size: 11px; margin-top: 3px; }
-.wx-dp-close {
-  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-  color: #fff; width: 28px; height: 28px; border-radius: 7px; font-size: 16px;
-  cursor: pointer; flex-shrink: 0; display: flex; align-items: center;
-  justify-content: center; transition: background 0.15s;
-}
-.wx-dp-close:hover { background: rgba(255,255,255,0.28); }
-.wx-dp-sun { color: rgba(255,255,255,0.7); font-size: 11px; margin-top: 4px; }
-.wx-dp-loading { padding: 18px 20px; color: var(--muted); font-size: 13px; }
-.wx-dp-body { overflow-y: auto; max-height: 500px; }
-.wx-dp-col-heads {
-  display: grid;
-  grid-template-columns: 52px 28px 70px 80px 70px 65px 1fr;
-  padding: 6px 20px; gap: 8px; background: #fafafa;
-  border-bottom: 1px solid var(--border); font-size: 9px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
-}
-.wx-dp-row {
-  display: grid;
-  grid-template-columns: 52px 28px 70px 80px 70px 65px 1fr;
-  align-items: center; padding: 9px 20px; gap: 8px;
-  border-bottom: 1px solid rgba(0,0,0,0.04);
-  border-left: 3px solid transparent; transition: background 0.1s;
-}
-.wx-dp-row:last-child { border-bottom: none; }
-.wx-dp-row:hover { background: var(--green-xlight); }
-.wx-dp-row.wx-c-sunny      { border-left-color: #e8c030; }
-.wx-dp-row.wx-c-pcloudy    { border-left-color: #b8b8c0; }
-.wx-dp-row.wx-c-overcast   { border-left-color: #909090; }
-.wx-dp-row.wx-c-fog        { border-left-color: #b0aa88; }
-.wx-dp-row.wx-c-drizzle    { border-left-color: #88aad8; }
-.wx-dp-row.wx-c-rain       { border-left-color: #4a88d0; }
-.wx-dp-row.wx-c-heavy-rain { border-left-color: #2060b0; }
-.wx-dp-row.wx-c-snow       { border-left-color: #88c8f0; }
-.wx-dp-row.wx-c-heavy-snow { border-left-color: #40a8e0; }
-.wx-dp-row.wx-c-storm      { border-left-color: #cc2020; background: #fff5f5; }
-.wx-dp-time  { font-size: 12px; font-weight: 700; color: var(--muted); }
-.wx-dp-icon  { font-size: 18px; line-height: 1; }
-.wx-dp-temp  { font-size: 14px; font-weight: 700; color: var(--text); }
-.wx-dp-feels { font-size: 12px; color: var(--muted); }
-.wx-dp-wind  { font-size: 12px; color: var(--muted); }
-.wx-dp-rain  { font-size: 12px; color: #4a7ab5; }
-@media (max-width: 700px) {
-  .wx-dp-col-heads, .wx-dp-row {
-    grid-template-columns: 44px 24px 60px 70px 60px 55px 1fr;
-    padding: 8px 12px; gap: 5px;
-  }
-}
-@media (max-width: 480px) {
-  .wx-dp-col-heads { display: none; }
-  .wx-dp-row { grid-template-columns: 40px 22px 55px 55px 55px; padding: 8px 10px; }
-  .wx-dp-row > div:last-child { display: none; }
-}
-
 </style>
 </head>
 <body>
@@ -660,16 +486,6 @@ body {
 <main class="main">
   <!-- ══ WEEKLY PLANNER ══ -->
   <p class="section-label">Department Planner</p>
-
-  <!-- Weather header + strip -->
-  <div class="wx-header">
-    <div class="wx-header-loc" id="wxLocationLabel">&#128205; Loading location&hellip;</div>
-    <div class="wx-header-summary" id="wxSummary"></div>
-  </div>
-  <div class="weather-strip wx-msg-state" id="weatherStrip">
-    <span class="wx-loading">Loading weather&hellip;</span>
-  </div>
-  <div class="wx-detail-panel" id="wxDetailPanel"></div>
 
   <div class="planner-section">
     <div class="planner-card">
@@ -760,6 +576,28 @@ body {
       </div>
     </a>
 
+    <!-- PSE CARD -->
+    <a class="qual-card pse" href="pse.html">
+      <div class="qual-card-header">
+        <span class="qual-icon">🧭</span>
+        <h2>Personal &amp; Social Education</h2>
+        <p class="qual-sub">Level 2 · 6th Form Life Skills Programme</p>
+      </div>
+      <div class="qual-card-body">
+        <p>14-unit digital workbooks, printable workbooks and teaching decks for the Agored Cymru Level 2 PSE suite — Certificate (127711) and Extended Certificate (127712).</p>
+        <div class="qual-tags">
+          <span class="qual-tag">Level 1 &amp; 2</span>
+          <span class="qual-tag">Certificate</span>
+          <span class="qual-tag">Extended Certificate</span>
+          <span class="qual-tag">14 Units</span>
+        </div>
+        <div class="qual-cta">
+          <span>Open PSE Resources</span>
+          <span class="qual-cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
     <!-- LOCATIONS CARD -->
     <a class="qual-card locations" href="locations.html">
       <div class="qual-card-header">
@@ -796,10 +634,14 @@ body {
 </footer>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────
+// ── CONFIG: paste your Google Sheet published CSV URL here ──────────
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXUvXWJq-Ic1h9ayW3zbLEe3uSf7PhmthNGZ5-jdo7a77tUbsurZMoCdg3yfYV-A/pub?gid=1636461447&single=true&output=csv';
 
-// ── Helpers ──────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────
+function parseDate(str) {
+  const [y,m,d] = str.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
 function dateKey(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
@@ -849,6 +691,7 @@ function buildScheduleMap(rows) {
     let key = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : '';
     if (!key) { const d = new Date(raw); if (!isNaN(d)) key = dateKey(d); }
     if (!key) continue;
+    // Sheet columns: date(0), day(1), status(2), class(3), length(4), activity(5), location(6), notes(7)
     map[key] = {
       status:   (row[2]||'').trim(),
       class:    (row[3]||'').trim(),
@@ -877,7 +720,7 @@ function renderDay(date, entry, isToday) {
   const mon  = MONTH_ABBR[date.getMonth()];
   const type = dayType(entry);
   let cls = 'planner-day';
-  if (isToday)          cls += ' today';
+  if (isToday)         cls += ' today';
   if (type==='holiday') cls += ' holiday';
   if (type==='inset')   cls += ' inset';
 
@@ -896,7 +739,7 @@ function renderDay(date, entry, isToday) {
     if (entry.length && entry.length!=='—Select—')
       content += `<div class="day-length">${entry.length}</div>`;
     if (entry.location)
-      content += `<div class="day-location">&#128205; ${entry.location}</div>`;
+      content += `<div class="day-location">📍 ${entry.location}</div>`;
     if (!content) content = '<span class="day-empty">No session</span>';
     if (entry.notes)
       content += `<div class="day-notes">${entry.notes}</div>`;
@@ -916,519 +759,14 @@ function renderWeek(monday, map, today) {
   const label = document.getElementById('weekLabel');
   const fri   = new Date(monday); fri.setDate(monday.getDate()+4);
   label.textContent = monday.getMonth()===fri.getMonth()
-    ? `${monday.getDate()}\u2013${fri.getDate()} ${MONTH_ABBR[monday.getMonth()]} ${monday.getFullYear()}`
-    : `${monday.getDate()} ${MONTH_ABBR[monday.getMonth()]} \u2013 ${fri.getDate()} ${MONTH_ABBR[fri.getMonth()]} ${fri.getFullYear()}`;
+    ? `${monday.getDate()}–${fri.getDate()} ${MONTH_ABBR[monday.getMonth()]} ${monday.getFullYear()}`
+    : `${monday.getDate()} ${MONTH_ABBR[monday.getMonth()]} – ${fri.getDate()} ${MONTH_ABBR[fri.getMonth()]} ${fri.getFullYear()}`;
   let html = '';
   for (let i=0; i<5; i++) {
     const d = new Date(monday); d.setDate(monday.getDate()+i);
     html += renderDay(d, map[dateKey(d)]||null, dateKey(d)===dateKey(today));
   }
   grid.innerHTML = html;
-}
-
-// ── WEATHER ──────────────────────────────────────────────────────────
-const FALLBACK_LOCATION = 'Kerry, Powys';
-const FALLBACK_LAT = 52.526;
-const FALLBACK_LON = -3.187;
-
-// Resolved once on load; reused for all week navigation
-let wxLat = FALLBACK_LAT, wxLon = FALLBACK_LON, wxName = FALLBACK_LOCATION;
-
-const WMO = {
-  0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',
-  45:'Fog',48:'Icy fog',
-  51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',
-  61:'Light rain',63:'Rain',65:'Heavy rain',
-  71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',
-  80:'Light showers',81:'Showers',82:'Heavy showers',
-  85:'Snow showers',86:'Heavy snow showers',
-  95:'Thunderstorm',96:'Thunderstorm + hail',99:'Thunderstorm + heavy hail',
-};
-const WMO_ICON = {
-  0:'\u2600\uFE0F',1:'\uD83C\uDF24\uFE0F',2:'\u26C5',3:'\u2601\uFE0F',
-  45:'\uD83C\uDF2B\uFE0F',48:'\uD83C\uDF2B\uFE0F',
-  51:'\uD83C\uDF26\uFE0F',53:'\uD83C\uDF26\uFE0F',55:'\uD83C\uDF27\uFE0F',
-  61:'\uD83C\uDF27\uFE0F',63:'\uD83C\uDF27\uFE0F',65:'\uD83C\uDF27\uFE0F',
-  71:'\u2744\uFE0F',73:'\u2744\uFE0F',75:'\u2744\uFE0F',77:'\uD83C\uDDFF\uD83C\uDDE6',
-  80:'\uD83C\uDF26\uFE0F',81:'\uD83C\uDF27\uFE0F',82:'\u26C8\uFE0F',
-  85:'\uD83C\uDF28\uFE0F',86:'\u2744\uFE0F',
-  95:'\u26C8\uFE0F',96:'\u26C8\uFE0F',99:'\u26C8\uFE0F',
-};
-
-async function geocodeWeatherLocation(locationName) {
-  if (!locationName || locationName === FALLBACK_LOCATION) return;
-  try {
-    const res  = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locationName)}&count=1&language=en&format=json`);
-    const data = await res.json();
-    if (data.results && data.results.length > 0) {
-      wxLat  = data.results[0].latitude;
-      wxLon  = data.results[0].longitude;
-      wxName = data.results[0].name + (data.results[0].admin1 ? ', ' + data.results[0].admin1 : '');
-    } else {
-      wxName = FALLBACK_LOCATION + ' ⚠️ “' + locationName + '” not found';
-    }
-  } catch(_) {
-    wxName = FALLBACK_LOCATION + ' ⚠️ geocode failed';
-  }
-}
-
-// ── Day detail ────────────────────────────────────────────────────────
-let selectedDayKey = null;
-
-function closeDayDetail() {
-  selectedDayKey = null;
-  const panel = document.getElementById('wxDetailPanel');
-  if (panel) panel.classList.remove('open');
-  document.querySelectorAll('.wx-day').forEach(el => el.classList.remove('wx-active'));
-}
-
-async function fetchDayDetail(dk) {
-  const panel = document.getElementById('wxDetailPanel');
-  if (selectedDayKey === dk) { closeDayDetail(); return; }
-
-  selectedDayKey = dk;
-  document.querySelectorAll('.wx-day').forEach(el =>
-    el.classList.toggle('wx-active', el.dataset.dk === dk)
-  );
-
-  panel.innerHTML = '<div class="wx-dp-loading">Loading hourly forecast...</div>';
-  panel.classList.add('open');
-
-  const d       = new Date(dk + 'T00:00:00');
-  const today   = new Date(); today.setHours(0,0,0,0);
-  const isPast  = d < today;
-  const FULL_DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const dayFull = FULL_DAYS[d.getDay()];
-  const dateStr = d.getDate() + ' ' + MONTH_ABBR[d.getMonth()] + ' ' + d.getFullYear();
-
-  // Resolve this day's location from the schedule (geocoded with cache)
-  const dayEntry    = scheduleMap[dk];
-  const dayLocName  = (dayEntry && dayEntry.location && dayEntry.location.trim())
-    ? dayEntry.location.trim() : null;
-  const loc = await geocodeForDetail(dayLocName);
-
-  try {
-    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + loc.lat + '&longitude=' + loc.lon
-      + '&hourly=temperature_2m,apparent_temperature,weather_code,precipitation_probability,wind_speed_10m,precipitation'
-      + '&daily=sunrise,sunset'
-      + '&start_date=' + dk + '&end_date=' + dk
-      + '&wind_speed_unit=mph&temperature_unit=celsius&timezone=Europe%2FLondon';
-
-    const res  = await fetch(url);
-    const data = await res.json();
-    const h    = data.hourly;
-
-    const sunrise = (data.daily && data.daily.sunrise) ? data.daily.sunrise[0].slice(-5) : null;
-    const sunset  = (data.daily && data.daily.sunset)  ? data.daily.sunset[0].slice(-5)  : null;
-
-    const sunHTML = (sunrise && sunset)
-      ? '<div class="wx-dp-sun">Sunrise ' + sunrise + '&emsp;Sunset ' + sunset + '</div>'
-      : '';
-
-    let rows = '<div class="wx-dp-col-heads">'
-      + '<div>Time</div><div></div><div>Temp</div><div>Feels like</div>'
-      + '<div>Wind</div><div>Rain %</div><div>Alert</div></div><div class="wx-dp-body">';
-
-    // Every 2 hours, 06:00-20:00
-    const slots = [6,8,10,12,14,16,18,20];
-    for (const hi of slots) {
-      if (!h.time || hi >= h.time.length) continue;
-      const timeStr = h.time[hi].slice(-5);
-      const code  = h.weather_code[hi];
-      const temp  = Math.round(h.temperature_2m[hi]);
-      const feels = Math.round(h.apparent_temperature[hi]);
-      const wind  = Math.round(h.wind_speed_10m[hi]);
-      const rp    = h.precipitation_probability ? h.precipitation_probability[hi] : null;
-      const pr    = h.precipitation ? Math.round(h.precipitation[hi] * 10) / 10 : null;
-      const icon  = WMO_ICON[code] || '?';
-      const wxCls = getWxClass(code);
-      const alert = getAlertLevel(code, wind, pr != null ? pr * 24 : null);
-      const badgeHTML = alert
-        ? '<span class="wx-alert wx-alert-' + alert.level + '" style="font-size:10px">' + alert.reason + '</span>'
-        : '';
-      rows += '<div class="wx-dp-row ' + wxCls + '">'
-        + '<div class="wx-dp-time">' + timeStr + '</div>'
-        + '<div class="wx-dp-icon">' + icon + '</div>'
-        + '<div class="wx-dp-temp">' + temp + '&deg;C</div>'
-        + '<div class="wx-dp-feels">' + feels + '&deg;C</div>'
-        + '<div class="wx-dp-wind">' + wind + ' mph</div>'
-        + '<div class="wx-dp-rain">' + (rp != null ? rp + '%' : '&mdash;') + '</div>'
-        + '<div>' + badgeHTML + '</div>'
-        + '</div>';
-    }
-    rows += '</div>';
-
-    const histNote = isPast ? ' &mdash; historical' : ' &mdash; forecast';
-    panel.innerHTML = '<div class="wx-dp-header">'
-      + '<div>'
-      + '<div class="wx-dp-title">' + dayFull + ', ' + dateStr + '</div>'
-      + '<div class="wx-dp-title-sub">&#128205; ' + loc.name + histNote + '</div>'
-      + sunHTML + '</div>'
-      + '<button class="wx-dp-close" onclick="closeDayDetail()">&times;</button>'
-      + '</div>' + rows;
-
-  } catch(err) {
-    panel.innerHTML = '<div class="wx-dp-loading">Could not load hourly data (' + err.message + ')</div>';
-  }
-}
-
-// ── Weather helpers ──────────────────────────────────────────────────
-function getWxClass(code) {
-  if ([95,96,99].includes(code))     return 'wx-c-storm';
-  if ([65,82].includes(code))        return 'wx-c-heavy-rain';
-  if ([61,63,80,81].includes(code))  return 'wx-c-rain';
-  if ([51,53,55].includes(code))     return 'wx-c-drizzle';
-  if ([75,86].includes(code))        return 'wx-c-heavy-snow';
-  if ([71,73,77,85].includes(code))  return 'wx-c-snow';
-  if ([45,48].includes(code))        return 'wx-c-fog';
-  if (code === 3)                    return 'wx-c-overcast';
-  if (code === 2)                    return 'wx-c-pcloudy';
-  if ([0,1].includes(code))          return 'wx-c-sunny';
-  return 'wx-c-pcloudy';
-}
-
-function getAlertLevel(code, wind, precip) {
-  if ([95,96,99].includes(code))            return { level:'red',    reason:'Thunderstorm' };
-  if (wind > 55)                            return { level:'red',    reason:'Extreme wind' };
-  if (precip > 30)                          return { level:'red',    reason:'Extreme rain' };
-  if ([65,82].includes(code))               return { level:'amber',  reason:'Heavy rain' };
-  if (code === 75)                          return { level:'amber',  reason:'Heavy snow' };
-  if (wind > 40)                            return { level:'amber',  reason:'Strong winds' };
-  if (precip > 18)                          return { level:'amber',  reason:'Heavy rain' };
-  if ([71,73].includes(code))               return { level:'yellow', reason:'Snow' };
-  if ([45,48].includes(code))               return { level:'yellow', reason:'Fog' };
-  if (wind > 30)                            return { level:'yellow', reason:'Gusty winds' };
-  if (precip != null && precip > 10)        return { level:'yellow', reason:'Rain' };
-  return null;
-}
-
-function listDayNames(indices) {
-  const N = ['Mon','Tue','Wed','Thu','Fri'];
-  if (indices.length === 5) return 'all week';
-  if (indices.length === 1) return N[indices[0]];
-  if (indices.length === 2) return N[indices[0]] + ' & ' + N[indices[1]];
-  return indices.slice(0,-1).map(i=>N[i]).join(', ') + ' & ' + N[indices[indices.length-1]];
-}
-
-function generateWeekSummary(days) {
-  if (!days || days.length === 0) return '';
-  const cat = days.map(d => {
-    const c = d.code;
-    if ([95,96,99].includes(c)) return 'storm';
-    if ([65,82].includes(c))    return 'heavy-rain';
-    if ([61,63,80,81].includes(c)) return 'rain';
-    if ([51,53,55].includes(c)) return 'drizzle';
-    if ([75,86].includes(c))    return 'heavy-snow';
-    if ([71,73,77,85].includes(c)) return 'snow';
-    if ([45,48].includes(c))    return 'fog';
-    if (c === 3)                return 'overcast';
-    if (c === 2)                return 'cloudy';
-    if ([0,1].includes(c))      return 'sunny';
-    return 'mixed';
-  });
-  const idx = (type) => cat.map((c,i) => c===type ? i : -1).filter(i=>i>=0);
-  const idxMulti = (...types) => cat.map((c,i) => types.includes(c) ? i : -1).filter(i=>i>=0);
-
-  const storms    = idx('storm');
-  const heavyRain = idx('heavy-rain');
-  const rain      = idxMulti('rain','heavy-rain');
-  const snow      = idxMulti('snow','heavy-snow');
-  const sunny     = idx('sunny');
-  const cloudy    = idxMulti('cloudy','overcast');
-  const maxWind   = Math.max(...days.map(d => d.wind));
-  const avgMax    = Math.round(days.reduce((s,d) => s + d.tmax, 0) / days.length);
-  const parts     = [];
-
-  if (storms.length)       parts.push('Thunderstorms expected ' + listDayNames(storms) + '.');
-  if (snow.length)         parts.push('Snow possible ' + listDayNames(snow) + '.');
-  if (rain.length >= 4)    parts.push('Rain likely most of the week.');
-  else if (rain.length > 0) parts.push('Rain expected ' + listDayNames(rain) + '.');
-  if (sunny.length >= 4)   parts.push('Mainly sunny, around ' + avgMax + '°C.');
-  else if (sunny.length > 0 && rain.length > 0) parts.push('Some sunny spells ' + listDayNames(sunny) + '.');
-  else if (sunny.length > 0) parts.push('Clear skies ' + listDayNames(sunny) + '.');
-  if (cloudy.length >= 4 && rain.length === 0 && sunny.length === 0)
-    parts.push('Mostly cloudy, around ' + avgMax + '°C.');
-  if (maxWind > 45)        parts.push('Very strong winds expected.');
-  else if (maxWind > 32)   parts.push('Blustery conditions likely.');
-  if (parts.length === 0)  parts.push('Mixed conditions throughout, around ' + avgMax + '°C.');
-  return parts.slice(0, 2).join(' ');
-}
-
-async function fetchWeekWeather(monday) {
-  const strip   = document.getElementById('weatherStrip');
-  const locEl   = document.getElementById('wxLocationLabel');
-  const summEl  = document.getElementById('wxSummary');
-  if (locEl)  locEl.textContent = '\u{1F4CD} ' + wxName;
-  if (summEl) summEl.textContent = '';
-
-  strip.className = 'weather-strip wx-msg-state';
-  strip.innerHTML = '<span class="wx-loading">Loading weather\u2026</span>';
-
-  const fri      = new Date(monday); fri.setDate(monday.getDate() + 4);
-  const startStr = dateKey(monday);
-  const endStr   = dateKey(fri);
-  const today    = new Date(); today.setHours(0,0,0,0);
-  const daysFromMon = Math.floor((monday - today) / 86400000);
-  const daysFromFri = Math.floor((fri    - today) / 86400000);
-
-  if (daysFromMon > 16) {
-    strip.innerHTML = '<span class="wx-unavail">No forecast available this far ahead \u2014 Open-Meteo covers up to 16 days.</span>';
-    return;
-  }
-  if (daysFromFri < -92) {
-    strip.innerHTML = '<span class="wx-unavail">Historical data not available this far back.</span>';
-    return;
-  }
-
-  try {
-    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + wxLat + '&longitude=' + wxLon
-      + '&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,precipitation_probability_max,precipitation_sum'
-      + '&start_date=' + startStr + '&end_date=' + endStr
-      + '&wind_speed_unit=mph&temperature_unit=celsius&timezone=Europe%2FLondon';
-
-    const res  = await fetch(url);
-    const data = await res.json();
-    if (!data.daily || !data.daily.time) throw new Error('No data returned');
-
-    const todayKey = dateKey(today);
-
-    // Build day objects for summary
-    const dayObjs = data.daily.time.map((dk, i) => ({
-      dk, code: data.daily.weather_code[i],
-      tmax: Math.round(data.daily.temperature_2m_max[i]),
-      tmin: Math.round(data.daily.temperature_2m_min[i]),
-      wind: Math.round(data.daily.wind_speed_10m_max[i]),
-      precip: data.daily.precipitation_sum[i] != null ? Math.round(data.daily.precipitation_sum[i]*10)/10 : null,
-      rainProb: data.daily.precipitation_probability_max[i],
-    }));
-
-    if (summEl) summEl.textContent = generateWeekSummary(dayObjs);
-
-    let html = '';
-    for (const day of dayObjs) {
-      const d       = new Date(day.dk + 'T00:00:00');
-      const dayName = DAY_NAMES[d.getDay()];
-      const dayNum  = d.getDate();
-      const mon     = MONTH_ABBR[d.getMonth()];
-      const icon    = WMO_ICON[day.code] || '\uD83C\uDF21\uFE0F';
-      const desc    = WMO[day.code] || '';
-      const isToday = day.dk === todayKey;
-      const isPast  = day.dk < todayKey;
-      const wxCls   = getWxClass(day.code);
-      const alert   = getAlertLevel(day.code, day.wind, day.precip);
-
-      let cls = 'wx-day ' + wxCls;
-      if (isToday) cls += ' wx-today';
-      if (isPast)  cls += ' wx-past';
-
-      const alertHTML = alert
-        ? '<div class="wx-alert wx-alert-' + alert.level + '">' + alert.reason + '</div>'
-        : '';
-
-      if (isToday) {
-        html += '<div class="' + cls + '" data-dk="' + day.dk + '" onclick="fetchDayDetail(\'' + day.dk + '\')">'
-          + '<div class="wx-today-band">TODAY</div>'
-          + alertHTML
-          + '<div class="wx-day-name">' + dayName + '</div>'
-          + '<div class="wx-day-date">' + dayNum + ' ' + mon + '</div>'
-          + '<div class="wx-icon-lg">' + icon + '</div>'
-          + '<div class="wx-desc">' + desc + '</div>'
-          + '<div class="wx-temps-lg"><span class="wx-max">' + day.tmax + '&deg;</span><span class="wx-min">' + day.tmin + '&deg;</span></div>'
-          + '<div class="wx-detail">\uD83D\uDCA8 ' + day.wind + ' mph</div>'
-          + (day.rainProb != null ? '<div class="wx-detail">\uD83C\uDF27 ' + day.rainProb + '% rain</div>' : '')
-          + (day.precip != null && day.precip > 0 ? '<div class="wx-detail">\uD83D\uDCA7 ' + day.precip + ' mm</div>' : '')
-          + '</div>';
-      } else {
-        html += '<div class="' + cls + '" data-dk="' + day.dk + '" onclick="fetchDayDetail(\'' + day.dk + '\')">'
-          + alertHTML
-          + '<div class="wx-day-name">' + dayName + '</div>'
-          + '<div class="wx-day-date">' + dayNum + ' ' + mon + '</div>'
-          + '<div class="wx-icon">' + icon + '</div>'
-          + '<div class="wx-temps"><span class="wx-max">' + day.tmax + '&deg;</span><span class="wx-min">' + day.tmin + '&deg;</span></div>'
-          + (day.rainProb != null ? '<div class="wx-rain-prob">\uD83C\uDF27 ' + day.rainProb + '%</div>' : '')
-          + '</div>';
-      }
-    }
-
-    strip.className = 'weather-strip';
-    strip.innerHTML = html;
-
-  } catch(err) {
-    strip.className = 'weather-strip wx-msg-state';
-    strip.innerHTML = '<span class="wx-error">Weather unavailable (' + err.message + ')</span>';
-  }
-}
-
-// ── INIT ─────────────────────────────────────────────────────────────
-// Module-level schedule map so fetchDayDetail can look up per-day locations
-let scheduleMap = {};
-
-// ── LOCATION LOOKUP TABLE ──────────────────────────────────────────────
-// Add new locations here — keys are lowercase, values have lat/lon/name.
-// Partial matching is used so "Afan" will find "afan forest park".
-// -----------------------------------------------------------------------
-const LOCATION_TABLE = {
-  // Department base
-  'kerry':                    { lat: 52.526,    lon: -3.187,  name: 'Kerry, Powys' },
-  // Mountain Biking
-  'afan forest park':         { lat: 51.6425,   lon: -3.7046, name: 'Afan Forest Park' },
-  'coed y brenin':            { lat: 52.8243,   lon: -3.8964, name: 'Coed Y Brenin' },
-  'bwlch nant yr arian':      { lat: 52.4153,   lon: -3.8858, name: 'Bwlch Nant Yr Arian' },
-  'llandegla':                { lat: 53.0627,   lon: -3.1358, name: 'Llandegla' },
-  'nantgwyllt':               { lat: 52.2623,   lon: -3.5995, name: 'Nantgwyllt Trails' },
-  'forest of dean':           { lat: 51.8093,   lon: -2.5696, name: 'Forest of Dean' },
-  'rhayader pump track':      { lat: 52.2985,   lon: -3.5128, name: 'Rhayader Pump Track' },
-  'trehafren':                { lat: 52.5115,   lon: -3.3238, name: 'Trehafren Trail' },
-  // Mountain Walking
-  'snowdon':                  { lat: 53.0685,   lon: -4.0762, name: 'Snowdon (Yr Wyddfa)' },
-  'yr wyddfa':                { lat: 53.0685,   lon: -4.0762, name: 'Snowdon (Yr Wyddfa)' },
-  'cader idris':              { lat: 52.6984,   lon: -3.9104, name: 'Cader Idris' },
-  'cadair idris':             { lat: 52.6984,   lon: -3.9104, name: 'Cadair Idris' },
-  'pen y fan':                { lat: 51.8842,   lon: -3.4366, name: 'Pen y Fan' },
-  // Watercraft
-  'lake vyrnwy':              { lat: 52.7731,   lon: -3.5042, name: 'Lake Vyrnwy' },
-  'llyn clywedog':            { lat: 52.4440,   lon: -3.6590, name: 'Llyn Clywedog' },
-  'llyn bala':                { lat: 52.9110,   lon: -3.6780, name: 'Llyn Bala (Llyn Tegid)' },
-  'bala':                     { lat: 52.9110,   lon: -3.6780, name: 'Llyn Bala (Llyn Tegid)' },
-  'berriew aqueduct':         { lat: 52.5830,   lon: -3.2030, name: 'Berriew Aqueduct' },
-  // Gorge / Jumps
-  "wolf's leap":              { lat: 52.1810,   lon: -3.6960, name: "Wolf's Leap, Abergwesyn" },
-  'wolfs leap':               { lat: 52.1810,   lon: -3.6960, name: "Wolf's Leap, Abergwesyn" },
-  'meifod bridge':            { lat: 52.7130,   lon: -3.2570, name: 'Meifod Bridge' },
-  'prysor':                   { lat: 52.9343,   lon: -3.9887, name: 'Prysor Jumps' },
-  'traws bridge':             { lat: 52.8627,   lon: -3.8823, name: 'Traws Bridge' },
-  // Walking
-  'newtown canal':            { lat: 52.5133,   lon: -3.3130, name: 'Newtown Canal Walk' },
-  'kerry ridgeway':           { lat: 52.4720,   lon: -3.2180, name: 'Kerry Ridgeway' },
-  // Climbing
-  'llanymynech rocks':        { lat: 52.7955,   lon: -3.0885, name: 'Llanymynech Rocks' },
-  'llanymynech':              { lat: 52.7955,   lon: -3.0885, name: 'Llanymynech Rocks' },
-  'trevor quarry':            { lat: 52.9730,   lon: -3.1570, name: 'Trevor Quarry' },
-  // Underground / Mines
-  'wrysgan':                  { lat: 52.9720,   lon: -3.9680, name: 'Wrysgan Slate Mine' },
-  'bwlch y plwm':             { lat: 52.9460,   lon: -4.0100, name: 'Bwlch y Plwm Lead Mine' },
-  'llanymynech ogof':         { lat: 52.7908,   lon: -3.0917, name: 'Llanymynech Ogof' },
-  'rhiwbach':                 { lat: 53.0010,   lon: -3.8820, name: 'Rhiwbach Slate Quarry' },
-  // Waterfalls
-  'pistyll rhaeadr':          { lat: 52.8564,   lon: -3.3678, name: 'Pistyll Rhaeadr' },
-  'pistyll rhayder':          { lat: 52.8564,   lon: -3.3678, name: 'Pistyll Rhaeadr' },
-  'aber falls':               { lat: 53.2100,   lon: -3.9530, name: 'Aber Falls (Rhaeadr Fawr)' },
-  'rhaeadr fawr':             { lat: 53.2100,   lon: -3.9530, name: 'Aber Falls (Rhaeadr Fawr)' },
-  'henrhyd falls':            { lat: 51.8360,   lon: -3.6630, name: 'Henrhyd Falls' },
-  "devil's bridge":           { lat: 52.3770,   lon: -3.8530, name: "Devil's Bridge Falls" },
-  'devils bridge':            { lat: 52.3770,   lon: -3.8530, name: "Devil's Bridge Falls" },
-
-  // Snowdonia peaks & cwms
-  'tryfan':                   { lat: 53.0854,   lon: -3.9928, name: 'Tryfan' },
-  'glyder fawr':              { lat: 53.1012,   lon: -3.9985, name: 'Glyder Fawr' },
-  'glyder fach':              { lat: 53.1021,   lon: -3.9811, name: 'Glyder Fach' },
-  'glyderau':                 { lat: 53.1012,   lon: -3.9985, name: 'Glyderau' },
-  'pen yr ole wen':           { lat: 53.1285,   lon: -3.9883, name: 'Pen yr Ole Wen' },
-  'carnedd llewelyn':         { lat: 53.1568,   lon: -3.9834, name: 'Carnedd Llewelyn' },
-  'carneddau':                { lat: 53.1568,   lon: -3.9834, name: 'Carneddau' },
-  'cwm idwal':                { lat: 53.1185,   lon: -4.0165, name: 'Cwm Idwal' },
-  'llyn idwal':               { lat: 53.1185,   lon: -4.0165, name: 'Llyn Idwal' },
-
-  // Brecon Beacons
-  'llyn y fan fach':          { lat: 51.8967,   lon: -3.7150, name: 'Llyn y Fan Fach' },
-  'waterfall country':        { lat: 51.8360,   lon: -3.6630, name: 'Waterfall Country, Brecon Beacons' },
-  'sugarloaf':                { lat: 51.8480,   lon: -3.1200, name: 'Sugarloaf Mountain' },
-
-  // Pembrokeshire & Gower
-  'st davids':                { lat: 51.8815,   lon: -5.2660, name: "St David's Peninsula" },
-  "st david's":               { lat: 51.8815,   lon: -5.2660, name: "St David's Peninsula" },
-  'three cliffs bay':         { lat: 51.5665,   lon: -4.1085, name: 'Three Cliffs Bay, Gower' },
-  'gower':                    { lat: 51.5700,   lon: -4.1000, name: 'Gower Peninsula' },
-  'rhossili':                 { lat: 51.5680,   lon: -4.2890, name: 'Rhossili Bay' },
-  'barafundle':               { lat: 51.6230,   lon: -4.9460, name: 'Barafundle Bay, Pembrokeshire' },
-  'tenby':                    { lat: 51.6740,   lon: -4.7020, name: 'Tenby' },
-
-  // Anglesey & Llyn Peninsula beaches
-  'llanddwyn':                { lat: 53.1430,   lon: -4.3870, name: 'Llanddwyn Beach, Newborough' },
-  'newborough':               { lat: 53.1430,   lon: -4.3870, name: 'Newborough, Anglesey' },
-  'porthor':                  { lat: 52.8670,   lon: -4.6550, name: 'Porthor (Whistling Sands)' },
-  'whistling sands':          { lat: 52.8670,   lon: -4.6550, name: 'Porthor (Whistling Sands)' },
-
-  // West coast beaches & towns
-  'harlech':                  { lat: 52.8440,   lon: -4.1220, name: 'Harlech' },
-  'barmouth':                 { lat: 52.7200,   lon: -4.0560, name: 'Barmouth' },
-  'aberdyfi':                 { lat: 52.5440,   lon: -4.0570, name: 'Aberdyfi' },
-  'new quay':                 { lat: 52.2210,   lon: -4.3580, name: 'New Quay, Ceredigion' },
-  'llangrannog':              { lat: 52.1530,   lon: -4.4740, name: 'Llangrannog' },
-  'ynyslas':                  { lat: 52.5280,   lon: -4.0370, name: 'Ynyslas Dunes' },
-
-  // Fishing lakes & rivers
-  'llyn dywarchen':           { lat: 53.0290,   lon: -4.1350, name: 'Llyn Dywarchen' },
-  'llyn trawsfynydd':         { lat: 52.8890,   lon: -3.9480, name: 'Llyn Trawsfynydd' },
-  'trawsfynydd':              { lat: 52.8890,   lon: -3.9480, name: 'Llyn Trawsfynydd' },
-  'llyn cwellyn':             { lat: 53.0590,   lon: -4.1540, name: 'Llyn Cwellyn' },
-  'river mawddach':           { lat: 52.7440,   lon: -3.8810, name: 'River Mawddach, Dolgellau' },
-  'mawddach':                 { lat: 52.7440,   lon: -3.8810, name: 'Mawddach Estuary' },
-  'llyn y gors':              { lat: 53.3240,   lon: -4.3760, name: 'Llyn Y Gors, Anglesey' },
-  'pant-y-llyn':              { lat: 51.9980,   lon: -3.7870, name: 'Pant-y-llyn' },
-  'pant y llyn':              { lat: 51.9980,   lon: -3.7870, name: 'Pant-y-llyn' },
-
-  // Mid Wales towns & tourist sites
-  'aberystwyth':              { lat: 52.4153,   lon: -4.0829, name: 'Aberystwyth' },
-  'elan valley':              { lat: 52.2800,   lon: -3.5500, name: 'Elan Valley' },
-  'gigrin farm':              { lat: 52.2985,   lon: -3.5128, name: 'Gigrin Farm, Rhayader' },
-  'powis castle':             { lat: 52.6550,   lon: -3.1540, name: 'Powis Castle, Welshpool' },
-  'welshpool':                { lat: 52.6590,   lon: -3.1470, name: 'Welshpool' },
-  'llandrindod wells':        { lat: 52.2420,   lon: -3.3780, name: 'Llandrindod Wells' },
-  'builth wells':             { lat: 52.1520,   lon: -3.4060, name: 'Builth Wells' },
-  'hay-on-wye':               { lat: 52.0760,   lon: -3.1270, name: 'Hay-on-Wye' },
-  'hay on wye':               { lat: 52.0760,   lon: -3.1270, name: 'Hay-on-Wye' },
-  'machynlleth':              { lat: 52.5900,   lon: -3.8580, name: 'Machynlleth' },
-  'dolgellau':                { lat: 52.7440,   lon: -3.8810, name: 'Dolgellau' },
-  'centre for alternative technology': { lat: 52.6430, lon: -3.8490, name: 'Centre for Alternative Technology' },
-  'cat machynlleth':          { lat: 52.6430,   lon: -3.8490, name: 'Centre for Alternative Technology' },
-  'abergavenny':              { lat: 51.8240,   lon: -3.0160, name: 'Abergavenny' },
-  'brecon':                   { lat: 51.9457,   lon: -3.3862, name: 'Brecon' },
-  'rhayader':                 { lat: 52.2985,   lon: -3.5128, name: 'Rhayader' },
-};
-
-function lookupLocation(name) {
-  if (!name) return null;
-  const n = name.toLowerCase().trim();
-  // 1. Exact key match
-  if (LOCATION_TABLE[n]) return LOCATION_TABLE[n];
-  // 2. Partial match — sheet value contains a known key, or vice versa
-  for (const [key, val] of Object.entries(LOCATION_TABLE)) {
-    if (n.includes(key) || key.includes(n)) return val;
-  }
-  return null;
-}
-
-// Geocode cache — for locations not in the table
-const geoCache = {};
-
-async function geocodeForDetail(locationName) {
-  // No location in sheet → fall back to Kerry base
-  if (!locationName) return { lat: FALLBACK_LAT, lon: FALLBACK_LON, name: FALLBACK_LOCATION };
-
-  // 1. Check lookup table first (instant, reliable)
-  const tableMatch = lookupLocation(locationName);
-  if (tableMatch) return tableMatch;
-
-  // 2. Try geocoding API
-  const cacheKey = locationName.toLowerCase().trim();
-  if (geoCache[cacheKey]) return geoCache[cacheKey];
-  try {
-    const res  = await fetch('https://geocoding-api.open-meteo.com/v1/search?name='
-      + encodeURIComponent(locationName) + '&count=1&language=en&format=json');
-    const data = await res.json();
-    if (data.results && data.results.length > 0) {
-      const r      = data.results[0];
-      const result = { lat: r.latitude, lon: r.longitude,
-        name: r.name + (r.admin1 ? ', ' + r.admin1 : '') };
-      geoCache[cacheKey] = result;
-      return result;
-    }
-  } catch(_) {}
-
-  // 3. All else fails → Kerry with a visible note
-  return { lat: FALLBACK_LAT, lon: FALLBACK_LON,
-    name: FALLBACK_LOCATION + ' (' + locationName + ' not found)' };
 }
 
 (async function init() {
@@ -1443,54 +781,26 @@ async function geocodeForDetail(locationName) {
   if (SHEET_CSV_URL && SHEET_CSV_URL !== 'PASTE_YOUR_PUBLISHED_CSV_URL_HERE') {
     try {
       status.className = 'planner-status loading';
-      status.innerHTML = '\u23F3 Loading schedule from Google Sheets\u2026';
+      status.innerHTML = '⏳ Loading schedule from Google Sheets…';
       const res = await fetch(SHEET_CSV_URL);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       map = buildScheduleMap(parseCSV(await res.text()));
-      scheduleMap = map;
       status.className = 'planner-status ok';
     } catch(err) {
       status.className = 'planner-status error';
-      status.innerHTML = '\u26A0\uFE0F Could not load schedule. Check the published CSV URL. <em>(' + err.message + ')</em>';
+      status.innerHTML = `⚠️ Could not load schedule. Check the published CSV URL. <em>(${err.message})</em>`;
     }
   } else {
     status.className = 'planner-status error';
-    status.innerHTML = '\u2699\uFE0F <strong>Setup needed:</strong> paste your Google Sheet published CSV URL into the <code>SHEET_CSV_URL</code> variable in this file.';
+    status.innerHTML = '⚙️ <strong>Setup needed:</strong> paste your Google Sheet published CSV URL into the <code>SHEET_CSV_URL</code> variable in this file.';
   }
 
-  // Geocode once using today's activity location (or fall back to Kerry, Powys)
-  const todayEntry   = map[dateKey(today)];
-  const locationName = (todayEntry && todayEntry.location && todayEntry.location.trim())
-    ? todayEntry.location.trim()
-    : FALLBACK_LOCATION;
-  await geocodeWeatherLocation(locationName);
-
-  // Initial render
-  fetchWeekWeather(new Date(monday));
   renderWeek(monday, map, today);
-
-  // Week navigation — calendar and weather strip update together
-  prev.addEventListener('click', () => {
-    closeDayDetail();
-    monday.setDate(monday.getDate()-7);
-    renderWeek(monday, map, today);
-    fetchWeekWeather(new Date(monday));
-  });
-  next.addEventListener('click', () => {
-    closeDayDetail();
-    monday.setDate(monday.getDate()+7);
-    renderWeek(monday, map, today);
-    fetchWeekWeather(new Date(monday));
-  });
-  todayB.addEventListener('click', () => {
-    closeDayDetail();
-    monday = weekStart(today);
-    renderWeek(monday, map, today);
-    fetchWeekWeather(new Date(monday));
-  });
+  prev.addEventListener('click', () => { monday.setDate(monday.getDate()-7); renderWeek(monday,map,today); });
+  next.addEventListener('click', () => { monday.setDate(monday.getDate()+7); renderWeek(monday,map,today); });
+  todayB.addEventListener('click', () => { monday = weekStart(today); renderWeek(monday,map,today); });
 })();
 </script>
-
 
 </body>
 </html>
