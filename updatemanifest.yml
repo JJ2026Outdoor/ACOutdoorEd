@@ -157,9 +157,13 @@ jobs:
               print(f"{output_file} updated — {len(units_out)} units written.")
 
           # ── IGNORE list (files never treated as unit resources) ────────────────
+          # Static site pages and their per-subject Scheme of Work pages live here.
+          # Pattern for a new subject's scheme of work: "<subject>-scheme-of-work.html"
+          # (e.g. btec-scheme-of-work.html, agored3-scheme-of-work.html) — add it
+          # below so the scanner never mistakes it for a unit resource file.
           IGNORE = {
               "index.html", "agored.html", "agored3.html", "agored_level.html",
-              "btec.html", "locations.html", "pse.html",
+              "btec.html", "locations.html", "pse.html", "pse-scheme-of-work.html",
               "files.json", "files3.json", "btec.json", "pse.json",
               ".gitignore", "README.md", "LICENSE", ".nojekyll",
               "update-manifest.yml",
@@ -278,22 +282,41 @@ jobs:
           # Extended Certificate 127712). Fixed 14-unit teaching sequence — every
           # unit is listed regardless of whether files exist yet (mirrors the
           # "mandatory" behaviour above, since there are no optional units here).
-          # Order matches the confirmed Scheme of Work; do not reorder this dict.
+          #
+          # INTERLEAVED ORDER (adopted 2026-09-19, superseding the earlier
+          # all-Level-1-then-all-Level-2 block order): each Level 1 unit is
+          # immediately followed by the Level 2 unit that extends it, so students
+          # meet the foundation and its extension back-to-back instead of up to
+          # 8 units apart. Decision-Making has two extensions (Personal Money
+          # Management, Problem-Solving Skills) taught consecutively after it;
+          # Healthy Lifestyles has no Level 2 extension and simply keeps its slot.
+          #
+          # Certificate 127711 needs 13 credits (Level 1 capped at 6 + Level 2
+          # uncapped). In this order that threshold is crossed one unit later
+          # than Anti-bullying Awareness — Anti-bullying alone only banks 12 of
+          # 13 — so the "checkpoint": "certificate" flag now sits on Healthy
+          # Lifestyles (sequence 10), not Anti-bullying Awareness. Extended
+          # Certificate 127712 needs all 18 credits, so it still lands on the
+          # final unit (Crime Prevention and Keeping Safe) as before.
+          #
+          # The Scheme of Work for this order is documented in pse-scheme-of-work.html
+          # and in the project's PSE-Scheme-of-Work.md — keep both in sync with
+          # this dict if the sequence ever changes again.
           # ══════════════════════════════════════════════════════════════════════
           UNIT_META_PSE = {
               "HB31CY011": {"sequence": 1,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 9,   "title": "Anger Management",                          "checkpoint": None},
-              "HB61CY011": {"sequence": 2,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 18,  "title": "Assertiveness Skills",                       "checkpoint": None},
-              "AF21CY003": {"sequence": 3,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 27,  "title": "Decision-Making",                            "checkpoint": None},
-              "HB71CY018": {"sequence": 4,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 36,  "title": "Negotiation Skills",                         "checkpoint": None},
-              "PA91CY015": {"sequence": 5,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 45,  "title": "Healthy Lifestyles",                         "checkpoint": None},
-              "QJ21CY002": {"sequence": 6,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 54,  "title": "Fire Safety in the Home",                    "checkpoint": None},
-              "HB11CY075": {"sequence": 7,  "level": 1, "credits": 1, "glh": 10, "cumGLH": 64,  "title": "Social and Legal Aspects of Personal Safety", "checkpoint": None},
-              "HB32CY014": {"sequence": 8,  "level": 2, "credits": 1, "glh": 9,  "cumGLH": 73,  "title": "Understanding Stress",                       "checkpoint": None},
-              "HB12CY079": {"sequence": 9,  "level": 2, "credits": 2, "glh": 10, "cumGLH": 83,  "title": "Emotional Intelligence",                     "checkpoint": None},
-              "HE12CY001": {"sequence": 10, "level": 2, "credits": 2, "glh": 19, "cumGLH": 102, "title": "Personal Money Management",                   "checkpoint": None},
-              "AF72CY003": {"sequence": 11, "level": 2, "credits": 1, "glh": 9,  "cumGLH": 111, "title": "Problem-Solving Skills",                      "checkpoint": None},
-              "HB12CY057": {"sequence": 12, "level": 2, "credits": 2, "glh": 18, "cumGLH": 129, "title": "Anti-bullying Awareness",                     "checkpoint": "certificate"},
-              "HD22CY028": {"sequence": 13, "level": 2, "credits": 2, "glh": 5,  "cumGLH": 134, "title": "Staying Safe Online",                         "checkpoint": None},
+              "HB32CY014": {"sequence": 2,  "level": 2, "credits": 1, "glh": 9,  "cumGLH": 18,  "title": "Understanding Stress",                       "checkpoint": None},
+              "HB61CY011": {"sequence": 3,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 27,  "title": "Assertiveness Skills",                       "checkpoint": None},
+              "HB12CY079": {"sequence": 4,  "level": 2, "credits": 2, "glh": 10, "cumGLH": 37,  "title": "Emotional Intelligence",                     "checkpoint": None},
+              "AF21CY003": {"sequence": 5,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 46,  "title": "Decision-Making",                            "checkpoint": None},
+              "HE12CY001": {"sequence": 6,  "level": 2, "credits": 2, "glh": 19, "cumGLH": 65,  "title": "Personal Money Management",                   "checkpoint": None},
+              "AF72CY003": {"sequence": 7,  "level": 2, "credits": 1, "glh": 9,  "cumGLH": 74,  "title": "Problem-Solving Skills",                      "checkpoint": None},
+              "HB71CY018": {"sequence": 8,  "level": 1, "credits": 1, "glh": 9,  "cumGLH": 83,  "title": "Negotiation Skills",                         "checkpoint": None},
+              "HB12CY057": {"sequence": 9,  "level": 2, "credits": 2, "glh": 18, "cumGLH": 101, "title": "Anti-bullying Awareness",                     "checkpoint": None},
+              "PA91CY015": {"sequence": 10, "level": 1, "credits": 1, "glh": 9,  "cumGLH": 110, "title": "Healthy Lifestyles",                         "checkpoint": "certificate"},
+              "QJ21CY002": {"sequence": 11, "level": 1, "credits": 1, "glh": 9,  "cumGLH": 119, "title": "Fire Safety in the Home",                    "checkpoint": None},
+              "HD22CY028": {"sequence": 12, "level": 2, "credits": 2, "glh": 5,  "cumGLH": 124, "title": "Staying Safe Online",                         "checkpoint": None},
+              "HB11CY075": {"sequence": 13, "level": 1, "credits": 1, "glh": 10, "cumGLH": 134, "title": "Social and Legal Aspects of Personal Safety", "checkpoint": None},
               "QH52CY004": {"sequence": 14, "level": 2, "credits": 1, "glh": 9,  "cumGLH": 143, "title": "Crime Prevention and Keeping Safe",           "checkpoint": "extended_certificate"},
           }
 
