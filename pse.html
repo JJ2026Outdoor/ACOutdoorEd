@@ -62,14 +62,6 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
 .section-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--teal-dark); margin-bottom: 8px; padding-bottom: 10px; border-bottom: 2px solid var(--teal-light); }
 .section-note { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
 
-.checkpoint-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 14px; font-size: 12px; color: var(--muted); }
-.checkpoint-legend span.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -2px; }
-
-.pairing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 12px; margin-bottom: 40px; }
-.pairing-card { background: var(--teal-xlight); border: 1.5px solid var(--teal-light); border-radius: 10px; padding: 12px 14px; font-size: 12.5px; color: #234; line-height: 1.6; }
-.pairing-card strong { color: var(--teal-dark); }
-.pairing-card.gap { background: var(--gold-light); border-color: #e8d48a; color: #5a4800; }
-
 .folder-section { margin-bottom: 14px; }
 .folder-group { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 10px; }
 .folder-group-header { display: flex; align-items: center; gap: 12px; padding: 15px 18px; cursor: pointer; background: var(--teal-dark); color: #fff; user-select: none; transition: background 0.15s; }
@@ -145,7 +137,7 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
     <div class="info-card">
       <div class="info-card-icon">i</div>
       <h3>About this Programme</h3>
-      <p>Delivered as a 6th-form Life Skills programme, this suite covers emotional regulation, assertiveness, decision-making, personal safety, money management, problem-solving and online safety. Units are taught in a fixed, interleaved order: each Level 2 unit follows directly after the Level 1 unit it extends.</p>
+      <p>Delivered as a 6th-form Life Skills programme, this suite covers emotional regulation, assertiveness, decision-making, personal safety, money management, problem-solving and online safety. Units are taught in a fixed, interleaved order: each Level 2 unit follows directly after the Level 1 unit it extends. Full unit-by-unit order, weeks and award checkpoints are on the <a href="pse-scheme-of-work.html" style="color:var(--teal);font-weight:600;">Scheme of Work</a> page.</p>
     </div>
 
     <div class="info-card">
@@ -176,42 +168,9 @@ body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color
 
   </div>
 
-  <!-- SEQUENCE & CHECKPOINTS -->
-  <h2 class="section-title">Unit Sequence &amp; Award Checkpoints</h2>
-  <p class="section-note">Units are taught in this fixed, interleaved order (each Level 2 unit follows the Level 1 unit it extends). The Certificate (127711) becomes claimable at <strong>Unit 10 (Healthy Lifestyles)</strong> — the point where both the 7-credit Level 2 floor and the 13-credit overall total are met; Anti-bullying Awareness (Unit 9) alone banks the Level 2 floor but only 12 of the 13 credits needed. The Extended Certificate (127712) completes at Unit 14, unchanged, since it needs the full 18 credits regardless of order. A printable week-by-week version of this table is on the <a href="pse-scheme-of-work.html" style="color:var(--teal);font-weight:600;">Scheme of Work</a> page.</p>
-
-  <div class="checkpoint-legend">
-    <span><span class="sw" style="background:#E8F5EE;border:1px solid #0F4525"></span>Certificate (127711) claimable from this row</span>
-    <span><span class="sw" style="background:#FFF8E1;border:1px solid #7a5c00"></span>Extended Certificate (127712) complete</span>
-  </div>
-
-  <div style="overflow-x:auto;margin-bottom:12px;">
-    <table class="credit-table">
-      <thead>
-        <tr><th>#</th><th>Unit</th><th>Code</th><th>Level</th><th>Credits</th><th>GLH</th><th>Cum. GLH</th></tr>
-      </thead>
-      <tbody id="sequence-table-body"></tbody>
-    </table>
-  </div>
-
-  <p class="section-note" style="margin-bottom:0;">Programme total: 143 GLH against confirmed unit specifications — 26 hours under Agored's published 169 GLH figure for the suite. At 4 hours/week this is roughly 36 sessions, leaving 9–13 hours of contingency for absence, resits, moderation and portfolio catch-up across a 38–39 week year.</p>
-
-  <h2 class="section-title" style="margin-top:32px;">Foundation &#8594; Progression Pairings</h2>
-  <p class="section-note">Each Level 2 unit is taught immediately after the Level 1 unit whose vocabulary and concepts it extends.</p>
-  <div class="pairing-grid">
-    <div class="pairing-card"><strong>Understanding Stress</strong> (Unit 2) extends <strong>Anger Management</strong> (Unit 1)</div>
-    <div class="pairing-card"><strong>Emotional Intelligence</strong> (Unit 4) extends <strong>Assertiveness Skills</strong> (Unit 3)</div>
-    <div class="pairing-card"><strong>Personal Money Management</strong> (Unit 6) extends <strong>Decision-Making</strong> (Unit 5)</div>
-    <div class="pairing-card"><strong>Problem-Solving Skills</strong> (Unit 7) extends <strong>Decision-Making</strong> (Unit 5)</div>
-    <div class="pairing-card"><strong>Anti-bullying Awareness</strong> (Unit 9) extends <strong>Negotiation Skills</strong> (Unit 8)</div>
-    <div class="pairing-card"><strong>Staying Safe Online</strong> (Unit 12) extends <strong>Fire Safety in the Home</strong> (Unit 11)</div>
-    <div class="pairing-card"><strong>Crime Prevention and Keeping Safe</strong> (Unit 14) extends <strong>Social/Legal Aspects of Personal Safety</strong> (Unit 13)</div>
-    <div class="pairing-card gap"><strong>Healthy Lifestyles</strong> (Unit 10) has no Level 2 partner in this programme — a deliberate, agreed gap. It also carries the Certificate checkpoint, since it's the unit that completes the 13-credit threshold.</div>
-  </div>
-
   <!-- RESOURCES — rendered dynamically from pse.json -->
   <h2 class="section-title">Unit Resources</h2>
-  <p class="section-note">Click a unit folder to see available resources. New files appear automatically once uploaded to the repository with the correct unit code in the filename.</p>
+  <p class="section-note">Click a unit folder to see available resources. New files appear automatically once uploaded to the repository with the correct unit code in the filename. For teaching order, weeks and award checkpoints, see the <a href="pse-scheme-of-work.html" style="color:var(--teal);font-weight:600;">Scheme of Work</a>.</p>
 
   <div id="resources-l1" class="folder-section"></div>
   <div id="resources-l2" class="folder-section"></div>
@@ -279,22 +238,6 @@ document.addEventListener('DOMContentLoaded', function() {
       var units = data.units.slice().sort(function(a, b) { return a.sequence - b.sequence; });
       var l1 = units.filter(function(u) { return u.level === 1; });
       var l2 = units.filter(function(u) { return u.level === 2; });
-
-      // Sequence table
-      var rows = units.map(function(u) {
-        var rowClass = u.checkpoint === 'certificate' ? ' class="row-cert"' :
-                        u.checkpoint === 'extended_certificate' ? ' class="row-extcert"' : '';
-        return '<tr' + rowClass + '>' +
-          '<td>' + u.sequence + '</td>' +
-          '<td>' + u.title + (u.checkpoint === 'certificate' ? ' <strong>&larr; Certificate claimable</strong>' : '') + (u.checkpoint === 'extended_certificate' ? ' <strong>&larr; Extended Certificate complete</strong>' : '') + '</td>' +
-          '<td>' + u.id + '</td>' +
-          '<td>L' + u.level + '</td>' +
-          '<td>' + u.credits + '</td>' +
-          '<td>' + u.glh + '</td>' +
-          '<td>' + u.cumGLH + '</td>' +
-        '</tr>';
-      }).join('');
-      document.getElementById('sequence-table-body').innerHTML = rows;
 
       document.getElementById('resources-l1').innerHTML =
         buildGroup('Level 1 Foundation Units', '7 units · 7 credits · 64 GLH total', l1, true);
