@@ -1,0 +1,88 @@
+{
+  "units": [
+    {
+      "id": "HC12CY014",
+      "sequence": 1,
+      "level": 2,
+      "credits": 2,
+      "glh": 16,
+      "cumGLH": 16,
+      "title": "Career Exploration",
+      "checkpoint": null,
+      "levelLabel": null,
+      "files": []
+    },
+    {
+      "id": "HB12CY060",
+      "sequence": 2,
+      "level": 2,
+      "credits": 3,
+      "glh": 24,
+      "cumGLH": 40,
+      "title": "Developing Personal Confidence and Self Awareness",
+      "checkpoint": "award",
+      "levelLabel": null,
+      "files": []
+    },
+    {
+      "id": "HC61CY015",
+      "sequence": 3,
+      "level": 1,
+      "credits": 3,
+      "glh": 28,
+      "cumGLH": 68,
+      "title": "Creating a Tailored Curriculum Vitae",
+      "checkpoint": "extended_award",
+      "levelLabel": null,
+      "files": []
+    },
+    {
+      "id": "HC62CY008",
+      "sequence": 4,
+      "level": 2,
+      "credits": 2,
+      "glh": 16,
+      "cumGLH": 84,
+      "title": "Applying for a Job",
+      "checkpoint": null,
+      "levelLabel": null,
+      "files": []
+    },
+    {
+      "id": "HC61CY012",
+      "sequence": 5,
+      "level": 1,
+      "credits": 3,
+      "glh": 30,
+      "cumGLH": 114,
+      "title": "Interview Skills",
+      "checkpoint": "certificate",
+      "levelLabel": null,
+      "files": []
+    },
+    {
+      "id": "HC42CY004",
+      "sequence": 6,
+      "level": 2,
+      "credits": 3,
+      "glh": 30,
+      "cumGLH": 144,
+      "title": "Work Experience",
+      "checkpoint": null,
+      "levelLabel": null,
+      "files": []
+    },
+    {
+      "id": "HC12CY015",
+      "sequence": 7,
+      "level": 2,
+      "credits": 3,
+      "glh": 24,
+      "cumGLH": 168,
+      "title": "Building a Personal Career Portfolio",
+      "checkpoint": "extended_certificate",
+      "levelLabel": null,
+      "files": []
+    }
+  ]
+}
