@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WRE Scheme of Work — Level Two</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --teal: #7A4E8C;
+  --teal-dark: #4A2A56;
+  --teal-light: #F1E9F4;
+  --teal-xlight: #F9F5FA;
+  --text: #1A1A1A;
+  --muted: #6B7B8C;
+  --border: #D4D4CC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', system-ui, sans-serif; background: #F5F7F5; color: var(--text); min-height: 100vh; }
+
+.site-header { background: var(--teal-dark); }
+.header-inner { max-width: 900px; margin: 0 auto; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
+.header-title { font-family: 'DM Serif Display', serif; color: #fff; font-size: 17px; }
+.header-sub { color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.header-back { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); white-space: nowrap; }
+.header-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+.main { max-width: 900px; margin: 0 auto; padding: 32px 24px 60px; }
+
+h1 { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--teal-dark); margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+.meta-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+.meta-pill { background: #fff; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 12px; color: var(--teal-dark); }
+.meta-pill strong { color: var(--text); }
+
+.note { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; padding: 10px 14px; background: var(--teal-xlight); border-left: 3px solid var(--teal); border-radius: 4px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--teal); color: #fff; padding: 9px 10px; text-align: left; font-weight: 600; }
+td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) td { background: var(--teal-xlight); }
+tr.row-award td { background: #F1E9F4; font-weight: 700; color: #4A2A56; }
+tr.row-cert td { background: #E8F5EE; font-weight: 700; color: #0F4525; }
+tr.row-extcert td { background: #FFF8E1; font-weight: 700; color: #7a5c00; }
+.table-wrap { overflow-x: auto; margin-bottom: 8px; }
+
+.foot-note { font-size: 12px; color: var(--muted); margin-top: 14px; }
+
+@media (max-width: 700px) {
+  table { min-width: 640px; }
+}
+@media print {
+  .site-header { position: static; }
+  .header-back { display: none; }
+  body { background: #fff; }
+}
+h2 { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--teal-dark); margin: 30px 0 10px; }
+ul.why { padding-left: 18px; font-size: 13.5px; line-height: 1.7; }
+ul.why li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="header-sub">Agored Cymru &middot; Level Two</div>
+      <div class="header-title">WRE — Scheme of Work</div>
+    </div>
+    <a class="header-back" href="wre.html">&#8592; Back to WRE Resources</a>
+  </div>
+</header>
+
+<main class="main">
+  <h1>Work Related Education — Scheme of Work</h1>
+  <p class="subtitle">Award / Extended Award / Certificate / Extended Certificate &middot; fixed teaching order</p>
+
+  <div class="meta-strip">
+    <div class="meta-pill"><strong>7</strong> units</div>
+    <div class="meta-pill"><strong>168</strong> GLH total</div>
+    <div class="meta-pill"><strong>19</strong> credits (13 L2 + 6 L1)</div>
+    <div class="meta-pill"><strong>4</strong> award checkpoints</div>
+  </div>
+
+  <p class="note">Do not reorder this table without recalculating the checkpoints — moving a unit changes exactly when each credit threshold is crossed. The order here must match <code>UNIT_META_WRE</code> in <code>.github/workflows/main.yml</code>.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Unit</th><th>Code</th><th>Level</th><th>Credits</th><th>GLH</th><th>Cum. GLH</th><th>Cum. L2</th><th>Cum. L1</th><th>Cum. total</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Career Exploration</td><td>HC12CY014</td><td>L2</td><td>2</td><td>16</td><td>16</td><td>2</td><td>0</td><td>2</td></tr>
+        <tr class="row-award"><td>2</td><td>Developing Personal Confidence and Self Awareness &larr; Award claimable</td><td>HB12CY060</td><td>L2</td><td>3</td><td>24</td><td>40</td><td>5</td><td>0</td><td>5</td></tr>
+        <tr class="row-award"><td>3</td><td>Creating a Tailored Curriculum Vitae &larr; Extended Award complete</td><td>HC61CY015</td><td>L1</td><td>3</td><td>28</td><td>68</td><td>5</td><td>3</td><td>8</td></tr>
+        <tr><td>4</td><td>Applying for a Job</td><td>HC62CY008</td><td>L2</td><td>2</td><td>16</td><td>84</td><td>7</td><td>3</td><td>10</td></tr>
+        <tr class="row-cert"><td>5</td><td>Interview Skills &larr; Certificate complete</td><td>HC61CY012</td><td>L1</td><td>3</td><td>30</td><td>114</td><td>7</td><td>6</td><td>13</td></tr>
+        <tr><td>6</td><td>Work Experience</td><td>HC42CY004</td><td>L2</td><td>3</td><td>30</td><td>144</td><td>10</td><td>6</td><td>16</td></tr>
+        <tr class="row-extcert"><td>7</td><td>Building a Personal Career Portfolio &larr; Extended Certificate complete</td><td>HC12CY015</td><td>L2</td><td>3</td><td>24</td><td>168</td><td>13</td><td>6</td><td>19</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="foot-note">Totals: 5 Level Two units (13 credits, 110 GLH) + 2 Level One units (6 credits, 58 GLH) = 19 credits, 168 GLH. Level One credits (6) sit inside the Extended Certificate's cap of 8.</p>
+
+  <h2>Qualification claim rules</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Award</th><th>Level Two minimum</th><th>Level One maximum</th><th>Total credits</th></tr></thead>
+      <tbody>
+        <tr><td>Award</td><td>3</td><td>0</td><td>3</td></tr>
+        <tr><td>Extended Award</td><td>5</td><td>3</td><td>8</td></tr>
+        <tr><td>Certificate</td><td>7</td><td>6</td><td>13</td></tr>
+        <tr><td>Extended Certificate</td><td>10</td><td>8</td><td>18</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="foot-note">This build delivers 19 credits against the Extended Certificate's 18. Career Planning (Level One) was left out because it would take Level One credits to 9, over the cap of 8; Developing Personal Confidence and Self Awareness (Level Two) replaces it. Check against Agored's registration paperwork the first time a learner is entered. No barred combinations: each unit title is used at one level only.</p>
+
+  <h2>Why this order</h2>
+  <ul class="why">
+    <li><strong>Career Exploration first</strong> — sets a career direction everything else is built around.</li>
+    <li><strong>Personal Confidence and Self Awareness second</strong> — the self-awareness work feeds every later reflective task (CV strengths, interview self-assessment, portfolio goals).</li>
+    <li><strong>CV before Applying for a Job</strong> — the application needs a CV to attach.</li>
+    <li><strong>Interview Skills straight after Applying for a Job</strong> — both cover interviews from different angles; back-to-back reinforces the skill. Not a barred pair, so both count.</li>
+    <li><strong>Work Experience before the Portfolio</strong> — gives real placement evidence to include.</li>
+    <li><strong>Career Portfolio last</strong> — it assembles the CV, achievement evidence and a goals action plan built on Units 1 and 2. A genuine capstone.</li>
+  </ul>
+</main>
+
+</body>
+</html>
