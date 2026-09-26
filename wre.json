@@ -10,7 +10,18 @@
       "title": "Career Exploration",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "CareerExploration_HC12CY014_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "CareerExploration_HC12CY014_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HB12CY060",
@@ -22,7 +33,18 @@
       "title": "Developing Personal Confidence and Self Awareness",
       "checkpoint": "award",
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "DevelopingPersonalConfidenceandSelfAwareness_HB12CY060_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "DevelopingPersonalConfidenceandSelfAwareness_HB12CY060_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HC61CY015",
@@ -34,7 +56,18 @@
       "title": "Creating a Tailored Curriculum Vitae",
       "checkpoint": "extended_award",
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "CreatingaTailoredCurriculumVitae_HC61CY015_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "CreatingaTailoredCurriculumVitae_HC61CY015_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HC62CY008",
@@ -46,7 +79,18 @@
       "title": "Applying for a Job",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "ApplyingforaJob_HC62CY008_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "ApplyingforaJob_HC62CY008_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HC61CY012",
@@ -58,7 +102,18 @@
       "title": "Interview Skills",
       "checkpoint": "certificate",
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "InterviewSkills_HC61CY012_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "InterviewSkills_HC61CY012_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HC42CY004",
@@ -70,7 +125,18 @@
       "title": "Work Experience",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "WorkExperience_HC42CY004_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "WorkExperience_HC42CY004_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HC12CY015",
@@ -82,7 +148,18 @@
       "title": "Building a Personal Career Portfolio",
       "checkpoint": "extended_certificate",
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "BuildingaPersonalCareerPortfolio_HC12CY015_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "BuildingaPersonalCareerPortfolio_HC12CY015_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     }
   ]
 }

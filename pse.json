@@ -22,8 +22,18 @@
           "type": "DOCX"
         },
         {
+          "name": "Printable",
+          "filename": "AngerManagement_HB31CY011_Printable.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "Teaching Slides",
           "filename": "AngerManagement_HB31CY011_Teaching.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "AngerManagement_HB31CY011_Teaching_Slides.pptx",
           "type": "PPTX"
         },
         {
@@ -43,7 +53,23 @@
       "title": "Understanding Stress",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "UnderstandingStress_HB32CY014_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Printable",
+          "filename": "UnderstandingStress_HB32CY014_Printable.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "UnderstandingStress_HB32CY014_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HB61CY011",
@@ -67,8 +93,18 @@
           "type": "DOCX"
         },
         {
+          "name": "Printable",
+          "filename": "AssertivenessSkills_HB61CY011_Printable.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "Teaching Slides",
           "filename": "AssertivenessSkills_HB61CY011_Teaching.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "AssertivenessSkills_HB61CY011_Teaching_Slides.pptx",
           "type": "PPTX"
         },
         {
@@ -88,7 +124,23 @@
       "title": "Emotional Intelligence",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "EmotionalIntelligence_HB12CY079_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Printable",
+          "filename": "EmotionalIntelligence_HB12CY079_Printable.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "EmotionalIntelligence_HB12CY079_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "AF21CY003",
@@ -107,8 +159,18 @@
           "type": "HTML"
         },
         {
+          "name": "Printable",
+          "filename": "DecisionMaking_AF21CY003_Printable.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "Teaching Slides",
           "filename": "DecisionMaking_AF21CY003_Teaching.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "DecisionMaking_AF21CY003_Teaching_Slides.pptx",
           "type": "PPTX"
         },
         {
@@ -128,7 +190,23 @@
       "title": "Personal Money Management",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "PersonalMoneyManagement_HE12CY001_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Printable",
+          "filename": "PersonalMoneyManagement_HE12CY001_Printable.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "PersonalMoneyManagement_HE12CY001_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "AF72CY003",
@@ -140,7 +218,23 @@
       "title": "Problem-Solving Skills",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "ProblemSolvingSkills_AF72CY003_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Printable",
+          "filename": "ProblemSolvingSkills_AF72CY003_Printable.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "ProblemSolvingSkills_AF72CY003_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HB71CY018",
@@ -159,8 +253,18 @@
           "type": "HTML"
         },
         {
+          "name": "Printable",
+          "filename": "NegotiationSkills_HB71CY018_Printable.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "Teaching Slides",
           "filename": "NegotiationSkills_HB71CY018_Teaching.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "NegotiationSkills_HB71CY018_Teaching_Slides.pptx",
           "type": "PPTX"
         },
         {
@@ -180,7 +284,23 @@
       "title": "Anti-bullying Awareness",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "AntiBullyingAwareness_HB12CY057_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Printable",
+          "filename": "AntiBullyingAwareness_HB12CY057_Printable.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "AntiBullyingAwareness_HB12CY057_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "PA91CY015",
@@ -199,8 +319,18 @@
           "type": "HTML"
         },
         {
+          "name": "Printable",
+          "filename": "HealthyLifestyles_PA91CY015_Printable.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "Teaching Slides",
           "filename": "HealthyLifestyles_PA91CY015_Teaching.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "HealthyLifestyles_PA91CY015_Teaching_Slides.pptx",
           "type": "PPTX"
         },
         {
@@ -227,8 +357,18 @@
           "type": "HTML"
         },
         {
+          "name": "Printable",
+          "filename": "FireSafety_QJ21CY002_Printable.docx",
+          "type": "DOCX"
+        },
+        {
           "name": "Teaching Slides",
           "filename": "FireSafety_QJ21CY002_Teaching.pptx",
+          "type": "PPTX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "FireSafety_QJ21CY002_Teaching_Slides.pptx",
           "type": "PPTX"
         },
         {
@@ -248,7 +388,23 @@
       "title": "Staying Safe Online",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "StayingSafeOnline_HD22CY028_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Printable",
+          "filename": "StayingSafeOnline_HD22CY028_Printable.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "StayingSafeOnline_HD22CY028_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "HB11CY075",
@@ -260,7 +416,23 @@
       "title": "Social and Legal Aspects of Personal Safety",
       "checkpoint": null,
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "SocialLegalPersonalSafety_HB11CY075_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Printable",
+          "filename": "SocialLegalPersonalSafety_HB11CY075_Printable.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "SocialLegalPersonalSafety_HB11CY075_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     },
     {
       "id": "QH52CY004",
@@ -272,7 +444,23 @@
       "title": "Crime Prevention and Keeping Safe",
       "checkpoint": "extended_certificate",
       "levelLabel": null,
-      "files": []
+      "files": [
+        {
+          "name": "Digital Workbook",
+          "filename": "CrimePreventionKeepingSafe_QH52CY004_Digital.html",
+          "type": "HTML"
+        },
+        {
+          "name": "Printable",
+          "filename": "CrimePreventionKeepingSafe_QH52CY004_Printable.docx",
+          "type": "DOCX"
+        },
+        {
+          "name": "Teaching Slides",
+          "filename": "CrimePreventionKeepingSafe_QH52CY004_Teaching_Slides.pptx",
+          "type": "PPTX"
+        }
+      ]
     }
   ]
 }
